@@ -1,0 +1,43 @@
+/* Reproduce blog aspect */
+body {
+    background-color: #eeeeee;
+}
+
+div.post-body {
+    font-family: verdana, arial, sans-serif;
+    font-size: 16px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 20px 0px;
+    background-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(238, 238, 238);
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0px;
+    border-image-repeat: stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-left-color: rgb(238, 238, 238);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgb(238, 238, 238);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgb(238, 238, 238);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 20px 0px;
+    padding-bottom: 7px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 7px;
+    width: 586px;
+    margin-left: 64px;
+}
+
+div.post-body p {
+    line-height: 22px;
+}

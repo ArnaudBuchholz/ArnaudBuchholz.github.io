@@ -5,9 +5,10 @@
         baseUrl = "http://ArnaudBuchholz.github.io",
         gpfUrl,
         blogJsUrl,
-        blogCssUrl;
+        blogCssUrl,
+        fileAccess = window.location.protocol === "file:";
 
-    if (window.location.protocol === "file:") {
+    if (fileAccess) {
         window.gpfSourcesPath = "../../../gpf-js/";
         gpfUrl = "../../../gpf-js/boot.js";
         blogJsUrl = "../blog.js";
@@ -37,10 +38,12 @@
                 result = document.createElement(name),
                 att;
             for (att in attributes) {
-                result.setAttribute(att, attributes[att]);
+                if (attributes.hasOwnProperty(att)) {
+                    result.setAttribute(att, attributes[att]);
+                }
             }
             return result;
-        }
+        };
         head.insertBefore(tag("script", {
             language: "javascript",
             src: gpfUrl
@@ -49,6 +52,13 @@
             language: "javascript",
             src: blogJsUrl
         }), head.firstChild);
+        if (fileAccess) {
+            head.appendChild(tag("link", {
+                rel: "stylesheet",
+                type: "text/css",
+                href: "../file.css"
+            }));
+        }
         head.appendChild(tag("link", {
             rel: "stylesheet",
             type: "text/css",
