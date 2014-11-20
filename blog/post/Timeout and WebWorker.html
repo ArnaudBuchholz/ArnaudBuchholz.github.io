@@ -1,0 +1,38 @@
+<script language="javascript" src="../include.js"></script>
+<h3 class="post-title entry-title">
+    Timeout and WebWorker
+</h3>
+<div class="post-body">
+<!-- The above must be replaced with -->
+<!-- <script language="javascript"
+     src="http://ArnaudBuchholz.github.io/blog/include.js"></script> -->
+
+<h2>The context</h2>
+
+<p>At work, I have to design a JavaScript layer which is responsible of the
+communication with the server. Besides the use of AJAX calls, the interaction is
+complex and requires lots of asynchronous handling.
+That's why I had to implement a custom
+<a href="https://www.promisejs.org/" target="_blank">promise</a> API.</p>
+
+<p>Like most of the promise implementations, the <a
+href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers.setTimeout"
+target="_blank">setTimeout</a> function is used to 'defer' actual execution of
+code and let the caller build the chain of callbacks.</p>
+
+<p>Also, the user interface has been designed to provide the best user
+experience. It means that long JavaScript operations are split into chunks and
+chained using setTimeout to prevent any UI freeze and get rid of the
+annoying long-script running message.</p>
+
+<p>As a consequence, the code heavily relies on this function and we have to
+make sure it works properly.</p>
+
+<h2>setTimeout in an inactive tab</h2>
+
+<p>Chrome and FireFox share a particularity that we discovered when using
+several tabs. At some point, the application appeared to be 'frozen' when the
+tab was active.</p>
+
+<!-- Drop those two lines -->
+</div>
