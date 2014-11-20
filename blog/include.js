@@ -2,19 +2,19 @@
     "use strict";
 
     var
-        baseUrl = "http://buchholz.free.fr/gpf-js/",
+        baseUrl = "http://ArnaudBuchholz.github.io",
         gpfUrl,
         blogJsUrl,
         blogCssUrl;
 
     if (window.location.protocol === "file:") {
-        window.gpfSourcesPath = "../";
-        gpfUrl = "../boot.js";
-        blogJsUrl = "blog.js";
-        blogCssUrl = "blog.css";
+        window.gpfSourcesPath = "../../../gpf-js/";
+        gpfUrl = "../../../gpf-js/boot.js";
+        blogJsUrl = "../blog.js";
+        blogCssUrl = "../blog.css";
 
     } else {
-        gpfUrl = baseUrl + "release.js";
+        gpfUrl = baseUrl + "gpf.js";
         blogJsUrl = baseUrl + "/blog/blog.js";
         blogCssUrl = baseUrl + "/blog/blog.css";
     }
