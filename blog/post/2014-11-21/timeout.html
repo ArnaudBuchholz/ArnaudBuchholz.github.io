@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Timeout</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <style>
+
+body {
+    background-color: white;
+    background-image: none;
+    background-repeat: repeat;
+    background-position: center;
+    color: black;
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Arial, Courier, Sans-Serif;
+    font-size: 10pt;
+    font-weight: normal;
+    height: 100%;
+    /* Prevent selection */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#timer {
+    width: 100;
+    font-size: 64pt;
+    text-align: center;
+}
+
+        </style>
+        <script language="javascript">
+
+if (-1 < window.location.search.indexOf("fix")) {
+    document.write("<" + "script language=\"javascript\" src=\"http://arnaudbuchholz.github.io/timeout.js\"><" + "/script>");
+}
+
+        </script>
+        <script language="javascript">
+
+/**
+ * Return a string representing the value padded with 0 on its left.
+ *
+ * @param {Number} value Value to convert
+ * @param {Number} [length=2] length Expected result string length
+ * @return {String}
+ */
+function zero(value, length) {
+    var result,
+        pad;
+    if (undefined === length) {
+        length = 2;
+    }
+    result = value.toString();
+    pad = length - result.length;
+    if (0 < pad) {
+        result = (new Array(pad + 1)).join("0") + result;
+    }
+    return result;
+}
+
+function onInterval() {
+    var now = new Date(),
+        value = zero(now.getHours()) + ':' + zero(now.getMinutes()) + ":" + zero(now.getSeconds()) + "." + zero(now.getMilliseconds(), 3);
+    document.getElementById("timer").innerHTML = value;
+    document.title = value;
+}
+
+function onLoad() {
+    setInterval(onInterval, 100);
+}
+
+        </script>
+    </head>
+    <body onload="onLoad()">
+        <div id="timer"></div>
+    </body>
+</html>
