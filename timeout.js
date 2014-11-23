@@ -2,20 +2,48 @@
     "use strict";
 
     var
+        /**
+         * The following 3 constants are used to determine the type of action
+         * (using bitwise comparison, see _workerMessage)
+         *
+         * For instance:
+         *  _TIMEOUT = setTimeout
+         *  _TIMEOUT + CLEAR = clearTimeout
+         */
         _TIMEOUT    = 0,
         _INTERVAL   = 1,
         _CLEAR      = 2,
-        Func        = Function, // Bypass JSHint W054
+        // Bypass JSHint W054
+        Func        = Function,
 
+        // Last allocated timeoutID
         _timeoutID = 0,
+
+        /**
+         * WINDOW:
+         *  Map allocated timeoutID to an array of parameters (see _register)
+         * WEBWORKER
+         *  Map real timeoutID to allocated one
+         */
         _timeouts   = {},
+
+        // Last allocated intervalID
         _intervalID = 0,
+
+        /**
+         * WINDOW:
+         *  Map allocated intervalID to an array of parameters (see _register)
+         * WEBWORKER
+         *  Map real intervalID to allocated one
+         */
         _intervals  = {},
 
+        // WebWorker handle
         _worker;
 
     /**
-     * Window worker.onmessage handler
+     * Handle messages sent to the WINDOW by the WEBWORKER: receive
+     * notifications of timeout and interval.
      *
      * @param {{data: Object}} event
      * @private
@@ -23,27 +51,34 @@
     function _windowMessage(event) {
         var type = event.data.type,
             id = event.data.id,
-            definition;
+            definition,
+            remove;
         if (_TIMEOUT === type) {
             definition = _timeouts[id];
-            // Works even if definition is undefined
-            delete _timeouts[id];
+            remove = true;
         } else {
             definition = _intervals[id];
+            remove = false;
         }
         if (undefined !== definition) {
+            if (remove) {
+                delete _timeouts[id];
+            }
             definition[0].apply(window, definition.slice(1));
         }
     }
 
     /**
-     * Register the timeout/interval specification and sends a message to the
+     * Register the timeout/interval parameters and send a message to the
      * worker thread to be notified back when necessary.
+     *
+     * Note: all parameters as well as the callback function are stored within
+     * an array containing the callback first and then any additional parameter
      *
      * @param {Number} type
      * @param {Object} map
      * @param {Number} id
-     * @param {Array} initialArguments
+     * @param {Array} initialArguments arguments of setTimeout / setInterval
      * @returns {Number}
      * @private
      */
@@ -53,7 +88,8 @@
         if ("string" === typeof callback) {
             callback = new Func(callback);
         }
-        map[id] = [callback].concat(initialArguments.slice(2));
+        map[id] = [callback]
+            .concat(Array.prototype.slice.apply(initialArguments, [2]));
         _worker.postMessage({
             type: type,
             delay: delay,
@@ -111,7 +147,8 @@
     }
 
     /**
-     * Notify the main window that the timeout/interval occurred.
+     * Callback function for the WEBWORKER setTimeout / setInterval:
+     * Notify the WINDOW that the timeout / interval event occurred.
      *
      * @param {Number} type
      * @param {Number} id
@@ -125,7 +162,11 @@
     }
 
     /**
-     * Worker worker.onmessage handler
+     * Handle messages sent to the WEBWORKER by the WINDOW: receive
+     * registrations and clearings.
+     *
+     * NOTE: the additional parameters of setTimeout / setInterval are leveraged
+     * to prevent creation of useless closures.
      *
      * @param {{data: Object}} event
      * @private
@@ -159,12 +200,47 @@
         }
     }
 
+    /**
+     * Try to retrieve the URL of timeout.js
+     *
+     * return {String}
+     * @private
+     */
+    function _getTimeoutURL() {
+        var
+            elem,
+            elems,
+            len,
+            idx,
+            src,
+            name;
+        // Check if a script tag with the id timeout exists
+        elem = document.getElementById("timeout"),
+        if (elem && elem.tagName.toUpperCase() === "SCRIPT") {
+            return elem.getAttribute("src");
+        }
+        // Check all script tags for the one finishing with timeout.js
+        elems = document.getElementsByTagName("script");
+        len = elems.length;
+        for (idx = 0; idx < len; ++idx) {
+            elem = elems[idx];
+            src = elem.getAttribute("src");
+            if (src.split("/").pop() === "timeout.js") {
+                return src;
+            }
+        }
+        // Default
+        return "timeout.js";
+    }
+
     if ("undefined" !== typeof window) {
         /**
          * The Web Worker does not have access to the window, this is a good
          * condition to detect if we are in the page or in the thread.
+         *
+         * However, to create a worker, we need the URL of the script to load.
          */
-        _worker = new Worker("timeout.js");
+        _worker = new Worker(_getTimeoutURL());
         _worker.addEventListener("message", _windowMessage);
         window.setTimeout = _setTimeout;
         window.clearTimeout = _clearTimeout;
