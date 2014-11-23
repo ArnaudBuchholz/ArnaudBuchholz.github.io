@@ -212,10 +212,9 @@
             elems,
             len,
             idx,
-            src,
-            name;
+            src;
         // Check if a script tag with the id timeout exists
-        elem = document.getElementById("timeout"),
+        elem = document.getElementById("timeout");
         if (elem && elem.tagName.toUpperCase() === "SCRIPT") {
             return elem.getAttribute("src");
         }
