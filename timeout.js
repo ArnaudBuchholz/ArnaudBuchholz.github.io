@@ -224,7 +224,7 @@
         for (idx = 0; idx < len; ++idx) {
             elem = elems[idx];
             src = elem.getAttribute("src");
-            if (src.split("/").pop() === "timeout.js") {
+            if (src && src.split("/").pop() === "timeout.js") {
                 return src;
             }
         }
