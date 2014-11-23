@@ -195,7 +195,7 @@
                 delete map[incomingID];
             }
         } else {
-            systemID = setCmd(_notify, event.data.delay, [type, incomingID]);
+            systemID = setCmd(_notify, event.data.delay, type, incomingID);
             map[incomingID] = systemID;
         }
     }
