@@ -9,6 +9,7 @@ h3.post-title {
 div.post-body {
     font-family: verdana, arial, sans-serif;
     font-size: 16px;
+    text-align: justify;
 }
 
 div.post-body a {
@@ -80,6 +81,14 @@ div.post-body div.note {
     color: #8696A2;
     font-weight: bold;
     font-size: 12px;
+}
+
+div.post-body div.note a {
+    color: #8696A2;
+}
+
+div.post-body div.note a:hover {
+    color: #8696A2;
 }
 
 div.post-body table {
