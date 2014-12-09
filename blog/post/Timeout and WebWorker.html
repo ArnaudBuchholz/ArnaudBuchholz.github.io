@@ -9,30 +9,65 @@
 
 <h2>The context</h2>
 
-<p>At work, I have to design a JavaScript layer which is responsible of the
-communication with the server. Besides the use of AJAX calls, the interaction is
-complex and requires lots of asynchronous handling.
-That's why I had to implement a custom
-<a href="https://www.promisejs.org/" target="_blank">promise</a> API.</p>
+<p>Like in most complex JavaScript implementations, I am currently developing
+a layer that extensively uses asynchronous executions controlled by
+<a href="https://www.promisejs.org/" target="_blank">promises</a>.</p>
 
-<p>Like most of the promise implementations, the <a
+<p>As a result, the code deeply relies on the <a
 href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers.setTimeout"
-target="_blank">setTimeout</a> function is used to 'defer' actual execution of
-code and let the caller build the chain of callbacks.</p>
+target="_blank">setTimeout</a> function to defer the actual execution of
+the promise completion and let the caller build the chain of callbacks.</p>
+
+<code class="javascript">
+function myPromiseBasedFunction() {
+    var promise = new Promise();
+    /*
+        Execute the content of the function and signal the completion with
+        promise.resolve()
+    */
+    return promise;
+}
+
+// An example of use:
+myPromiseBasedFunction().then(function() {
+    // Triggered only when the promise is fulfilled (i.e. resolve was called)
+});
+</code>
 
 <p>Also, the user interface has been designed to provide the best user
 experience. It means that long JavaScript operations are split into chunks and
 chained using setTimeout to prevent any UI freeze and get rid of the
 annoying long-script running message.</p>
 
-<p>As a consequence, the code heavily relies on this function and we have to
-make sure it works properly.</p>
-
 <h2>setTimeout in an inactive tab</h2>
 
-<p>Chrome and FireFox share a particularity that we discovered when using
-several tabs. At some point, the application appeared to be 'frozen' when the
-tab was active.</p>
+<p>Chrome and FireFox share a particularity that I discovered when using
+several tabs (later, I found that Opera was doing the same).
+At some point, the application appeared to be 'frozen' when the tab was not
+active.</p>
+
+<p>For instance, use the following <a target="_blank"
+href="http://arnaudbuchholz.github.io/blog/post/2014-11-21/timeout.html">example
+page</a>.<br/>
+It was designed to print the current time every 100 milliseconds both in the
+page title and in the page content. If the tab is not the active one, you will
+notice that it seems to refresh slower (every second).
+</p>
+
+<p>You can find good explanations of the reasons why as well as some possible
+workarounds:
+<ul>
+    <li><a target="_blank" href="http://stackoverflow.com/questions/6032429/
+chrome-timeouts-interval-suspended-in-background-tabs">Chrome: timeouts/interval
+suspended in background tabs?</a></li>
+    <li><a target="_blank" href="http://pivotallabs.com/
+chrome-and-firefox-throttle-settimeout-setinterval-in-inactive-tabs/">Chrome and
+Firefox throttle setTimeout/setInterval in inactive tabs</a></li>
+</ul></p>
+
+<p>As it seems that the setTimeout function works fine in a Web Worker thread, I
+decided to explore this possibility.</p>
+
 
 <!-- Drop those two lines -->
 </div>
