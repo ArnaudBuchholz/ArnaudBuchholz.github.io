@@ -10,7 +10,7 @@
 <h2>The context</h2>
 
 <p>Like in most complex JavaScript implementations, I am currently developing
-a layer that extensively uses asynchronous executions controlled by
+a library that extensively uses asynchronous executions controlled by
 <a href="https://www.promisejs.org/" target="_blank">promises</a>.</p>
 
 <p>As a result, the code deeply relies on the <a
@@ -18,8 +18,7 @@ href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers.setTimeout"
 target="_blank">setTimeout</a> function to defer the actual execution of
 the promise completion and let the caller build the chain of callbacks.</p>
 
-<code class="javascript">
-function myPromiseBasedFunction() {
+<code class="javascript">function myPromiseBasedFunction() {
     var promise = new Promise();
     /*
         Execute the content of the function and signal the completion with
@@ -34,15 +33,16 @@ myPromiseBasedFunction().then(function() {
 });
 </code>
 
-<p>Also, the user interface has been designed to provide the best user
-experience. It means that long JavaScript operations are split into chunks and
-chained using setTimeout to prevent any UI freeze and get rid of the
-annoying long-script running message.</p>
+<p>On top of that library, I designed the user interface with the desire to
+provide the best user experience. It means that long JavaScript operations are
+split into chunks and sequenced using setTimeout to prevent any UI freeze and
+get rid of the annoying long-script running message.</p>
 
 <h2>setTimeout in an inactive tab</h2>
 
 <p>Chrome and FireFox share a particularity that I discovered when using
-several tabs (later, I found that Opera was doing the same).
+several tabs (later, I found that Opera was doing the same but IE and Safari are
+safe).
 At some point, the application appeared to be 'frozen' when the tab was not
 active.</p>
 
@@ -50,12 +50,15 @@ active.</p>
 href="http://arnaudbuchholz.github.io/blog/post/2014-11-21/timeout.html">example
 page</a>.<br/>
 It was designed to print the current time every 100 milliseconds both in the
-page title and in the page content. If the tab is not the active one, you will
-notice that it seems to refresh slower (every second).
-</p>
+page title and in the page content. If the tab is not active, you will notice
+that it seems to refresh slower (nearly every second).<br/>
+I also added a real-time monitor that displays red dots if the interval between
+two calls is greater than 120 ms.</p>
 
 <p>You can find good explanations of the reasons why as well as some possible
-workarounds:
+workarounds by <a target="_blank"
+href="https://www.google.ca/search?q=settimeout+inactive+tab">crawling the web
+</a>:
 <ul>
     <li><a target="_blank" href="http://stackoverflow.com/questions/6032429/
 chrome-timeouts-interval-suspended-in-background-tabs">Chrome: timeouts/interval
@@ -68,6 +71,86 @@ Firefox throttle setTimeout/setInterval in inactive tabs</a></li>
 <p>As it seems that the setTimeout function works fine in a Web Worker thread, I
 decided to explore this possibility.</p>
 
+<h2>Timeout project</h2>
+
+<p>I created a new <a target="_blank"
+href="https://github.com/ArnaudBuchholz/timeout">GitHub repository</a> and
+started to work on a small library that would solve the issue.</p>
+
+<h3>Hooking the APIs</h3>
+
+<p>First of all, the JavaScript language is really flexible and, depending on the
+host, you can even redefine some of the 'standard' APIs.</p>
+
+<p>In a browser, the main context object (the one that contains everything)
+is the <a target="_blank"
+href="https://developer.mozilla.org/en-US/docs/Web/API/Window">window object</a>
+. Keep that information in mind, this will be important for the next part.</p>
+
+<p>Hence it is possible to redefine window.setTimeout by assigning a new handler
+. I decided to cover the whole timer API, that's why I <a target="_blank"
+href="https://github.com/ArnaudBuchholz/timeout/blob/master/timeout.js#L244">
+redefined</a> the followings:
+<ul>
+    <li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/
+API/WindowTimers.setTimeout">setTimeout</a></li>
+    <li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/
+API/WindowTimers.clearTimeout">clearTimeout</a></li>
+    <li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/
+API/WindowTimers.setInterval">setInterval</a></li>
+    <li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/
+API/WindowTimers.clearInterval">clearInterval</a></li>
+</ul></p>
+
+<h3>Creating a Web Worker</h3>
+
+<p>To create an <a target="_blank"
+href="https://developer.mozilla.org/en-US/docs/Web/API/Worker">HTML5 Web Worker
+</a> you need several things:
+<ul>
+    <li>An HTML5 browser (most modern browsers are)</li>
+    <li>An URL to load
+<div class="note">WARNING: the <a target="_blank"
+href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">
+same-origin policy</a> applies to this URL, you should read the documentation
+</div>
+    </li>
+    <li>A JavaScript code to create it:
+<code class="javascript">var worker = new Worker("source.js");
+</code>
+    </li>
+    <li>A way to communicate with the worker (will be covered in the next part)
+</li>
+</ul>
+</p>
+
+<p>One difficulty that I started with is that I wanted the same script to be
+used not only to redefine the APIs in the main context but also to implement
+the Web Worker (so that only one file must be distributed).</p>
+
+<p>Another difficulty was that it is really hard for a script to know how it has
+been loaded.</p>
+
+<p>One easy way to know if the script is run as a separate thread or in the main
+one is to check the window object. Indeed, a worker thread can't manipulate the
+window. That's why the distinction is made on the <a target="_blank"
+href="https://github.com/ArnaudBuchholz/timeout/blob/master/timeout.js#L235">
+window typeof result</a>.</p>
+
+<h3>Main thread / WebWorker communication</h3>
+
+<p>The communication between the two is realized using messages: it is
+asynchronous by nature.</p>
+
+<h3>Implementation details</h3>
+
+
+
+<h2>Conclusion</h2>
+
+<p>Please check the following <a target="_blank"
+href="http://arnaudbuchholz.github.io/blog/post/2014-11-21/timeout.html?fix">
+example page</a>.</p>
 
 <!-- Drop those two lines -->
 </div>
