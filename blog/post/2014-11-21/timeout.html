@@ -27,9 +27,38 @@ body {
 }
 
 #timer {
-    width: 100;
+    width: 100%;
     font-size: 64pt;
     text-align: center;
+}
+
+#intervals {
+    background-color: lightgrey;
+    border: solid 1px white;
+    border-radius: 8px;
+    padding: 6px;
+    overflow: hidden;
+    height: 14px;
+}
+
+#intervals span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: darkgreen;
+    border: solid 2px white;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    margin: 2px;
+    font-size: 8pt;
+}
+
+#intervals .ko {
+    background-color: darkred;
+    border: solid 1px black;
+    width: 10px;
+    height: 10px;
 }
 
         </style>
@@ -63,14 +92,35 @@ function zero(value, length) {
     return result;
 }
 
+var lastInterval;
+
 function onInterval() {
     var now = new Date(),
-        value = zero(now.getHours()) + ':' + zero(now.getMinutes()) + ":" + zero(now.getSeconds()) + "." + zero(now.getMilliseconds(), 3);
+        value = zero(now.getHours()) + ':' + zero(now.getMinutes()) + ":" + zero(now.getSeconds()) + "." + zero(now.getMilliseconds(), 3),
+        interval,
+        intervals,
+        span;
     document.getElementById("timer").innerHTML = value;
     document.title = value;
+    // Report the time waited to get there
+    interval = (now - lastInterval);
+    intervals = document.getElementById("intervals");
+    // Limit the number of intervals reported
+    if (intervals.childNodes.length === 200) {
+        intervals.removeChild(intervals.lastChild);
+    }
+    span = document.createElement("span");
+    span.title = interval;
+    span.innerHTML = " "
+    if (interval > 120) {
+        span.className = "ko";
+    }
+    intervals.insertBefore(span, intervals.firstChild);
+    lastInterval = new Date();
 }
 
 function onLoad() {
+    lastInterval = new Date();
     setInterval(onInterval, 100);
 }
 
@@ -78,5 +128,6 @@ function onLoad() {
     </head>
     <body onload="onLoad()">
         <div id="timer"></div>
+        <div id="intervals"></div>
     </body>
 </html>
