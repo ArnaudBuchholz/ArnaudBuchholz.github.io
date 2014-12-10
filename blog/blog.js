@@ -67,10 +67,17 @@
             window.setTimeout(waitForLoad, 100);
             return;
         }
-        console.log("Applying blog changes...");
         var
             codes = document.getElementsByTagName("code"),
-            idx;
+            idx,
+            progressDiv;
+        if (codes.length) {
+            progressDiv = document.createElement("div");
+            progressDiv.className = "code_formatting";
+            progressDiv.innerHTML = "<span class=\"gear spin\"></span>"
+                + "<span>Formatting code...</span>";
+            document.body.appendChild(progressDiv);
+        }
         for (idx = 0; idx < codes.length; ++idx) {
             reformatCode(codes[idx]);
         }
