@@ -13,10 +13,12 @@
 a library that extensively uses asynchronous executions controlled by
 <a href="https://www.promisejs.org/" target="_blank">promises</a>.</p>
 
+<p>To work correctly, the promise must deferred its completion execution to let
+the caller build the chain of callbacks.</p>
+
 <p>As a result, the code deeply relies on the <a
 href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers.setTimeout"
-target="_blank">setTimeout</a> function to defer the actual execution of
-the promise completion and let the caller build the chain of callbacks.</p>
+target="_blank">setTimeout</a> function</p>
 
 <code class="javascript">function myPromiseBasedFunction() {
     var promise = new Promise();
