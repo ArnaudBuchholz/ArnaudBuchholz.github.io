@@ -5,6 +5,27 @@ h3.post-title {
 
 }
 
+/* Blog specific waiting screen */
+.waiting {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 14px;
+    border: 1px dashed #CCCCCC;
+    background: #f0f0f0;
+    padding: 2px;
+}
+
+.waiting span.gear {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-image: url("gear.png");
+    background-position: right top;
+    background-repeat: no-repeat;
+    margin-right: 4px;
+}
+
 /* Post content container */
 div.post-body {
     font-family: verdana, arial, sans-serif;
@@ -108,26 +129,6 @@ div.post-body table thead tr {
 
 div.post-body table tr.even {
     background-color: #DEEED6;
-}
-
-.code_formatting {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    font-size: 14px;
-    border: 1px dashed #CCCCCC;
-    background: #f0f0f0;
-    padding: 2px;
-}
-
-.code_formatting span.gear {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    background-image: url("gear.png");
-    background-position: right top;
-    background-repeat: no-repeat;
-    margin-right: 4px;
 }
 
 pre.code {
