@@ -69,21 +69,13 @@
 
     // As the blog may load posts asynchronously, monitor the DOM layout
     // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
-
-    function waitForLoad () {
-        if ("undefined" === typeof gpf
-            || !gpf.loaded()
-            || document.readyState && document.readyState !== "complete") {
-            window.setTimeout(waitForLoad, 100);
-            return;
-        }
+    window.blog = function () {
         var
             codes = document.getElementsByTagName("code"),
             idx;
         for (idx = 0; idx < codes.length; ++idx) {
             reformatCode(codes[idx]);
         }
-    }
-    window.setTimeout(waitForLoad, 0);
+    };
 
 }());
