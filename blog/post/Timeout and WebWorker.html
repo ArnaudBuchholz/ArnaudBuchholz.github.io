@@ -9,12 +9,12 @@
 
 <h2>The context</h2>
 
-<p>Like in most complex JavaScript implementations, I am currently developing
+<p>Working on a complex JavaScript implementation, I am currently developing
 a library that extensively uses asynchronous executions controlled by
 <a href="https://www.promisejs.org/" target="_blank">promises</a>.</p>
 
-<p>To work correctly, the promise must deferred its completion execution to let
-the caller build the chain of callbacks.</p>
+<p>To work appropriately, the promise must defer its completion execution to let
+the caller build first the chain of callbacks.</p>
 
 <p>As a result, the code deeply relies on the <a
 href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers.setTimeout"
@@ -35,7 +35,7 @@ myPromiseBasedFunction().then(function() {
 });
 </code>
 
-<p>On top of that library, I designed the user interface with the desire to
+<p>On top of the library, I designed the user interface with the desire to
 provide the best user experience. It means that long JavaScript operations are
 split into chunks and sequenced using setTimeout to prevent any UI freeze and
 get rid of the annoying long-script running message.</p>
@@ -48,7 +48,7 @@ safe).
 At some point, the application appeared to be 'frozen' when the tab was not
 active.</p>
 
-<p>For instance, use the following <a target="_blank"
+<p>For instance, have a look to the following <a target="_blank"
 href="http://arnaudbuchholz.github.io/blog/post/2014-11-21/timeout.html">example
 page</a>.<br/>
 It was designed to print the current time every 100 milliseconds both in the
@@ -81,16 +81,17 @@ started to work on a small library that would solve the issue.</p>
 
 <h3>Hooking the APIs</h3>
 
-<p>First of all, the JavaScript language is really flexible and, depending on the
-host, you can even redefine some of the 'standard' APIs.</p>
+<p>First of all, the JavaScript language is really flexible and, depending on
+the host, you can even redefine some of the 'built-in' APIs.</p>
 
 <p>In a browser, the main context object (the one that contains everything)
 is the <a target="_blank"
-href="https://developer.mozilla.org/en-US/docs/Web/API/Window">window object</a>
-. Keep that information in mind, this will be important for the next part.</p>
+href="https://developer.mozilla.org/en-US/docs/Web/API/Window">window
+object</a>.
+Keep that information in mind, this will be important for the next part.</p>
 
-<p>Hence it is possible to redefine window.setTimeout by assigning a new handler
-. I decided to cover the whole timer API, that's why I <a target="_blank"
+<p>Hence it is possible to redefine window.setTimeout by assigning a new
+handler. I decided to cover the whole timer API, that's why I <a target="_blank"
 href="https://github.com/ArnaudBuchholz/timeout/blob/master/timeout.js#L244">
 redefined</a> the followings:
 <ul>
@@ -110,7 +111,9 @@ API/WindowTimers.clearInterval">clearInterval</a></li>
 href="https://developer.mozilla.org/en-US/docs/Web/API/Worker">HTML5 Web Worker
 </a> you need several things:
 <ul>
-    <li>An HTML5 browser (most modern browsers are)</li>
+    <li>An HTML5 browser (most <a target="_blank"
+href="https://developer.mozilla.org/en-US/docs/Web/API/
+Worker#AutoCompatibilityTable">modern browsers</a> are)</li>
     <li>An URL to load
 <div class="note">WARNING: the <a target="_blank"
 href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">
@@ -141,11 +144,28 @@ window typeof result</a>.</p>
 
 <h3>Main thread / WebWorker communication</h3>
 
-<p>The communication between the two is realized using messages: it is
-asynchronous by nature.</p>
+<p>The communication between the main thread and the web worker is realized
+using messages: it is asynchronous by nature.</p>
+
+
 
 <h3>Implementation details</h3>
 
+<h2>Possible improvements</h2>
+
+<p>Several aspects of this implementation can be improved:
+<ul>
+    <li><b>Startup time</b>: sometimes, the web worker requires several seconds
+to be running. Because of that, all timeouts may be delayed during this phase.
+An improvement would consist in switching to the new API only when the new
+thread is ready.</li>
+    <br/>
+    <li><b>URL to load</b>: digging on the net, I found a sample where the web worker
+was initialised using a <a target="_blank"
+href="http://dataurl.net/#about">data: URL</a>. This clearly reduces the
+dependency with the source script but, then, we need a bootstrap to load the
+code inside the web worker.</li>
+</ul></p>
 
 
 <h2>Conclusion</h2>
