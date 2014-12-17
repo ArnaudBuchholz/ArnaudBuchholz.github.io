@@ -14,6 +14,8 @@ h3.post-title {
     border: 1px dashed #CCCCCC;
     background: #f0f0f0;
     padding: 2px;
+    margin-top: 20px;
+    margin-left: 20px;
 }
 
 .waiting span.gear {
@@ -234,4 +236,10 @@ pre.code.output {
 @keyframes spin {
     from    { transform:rotate(0deg); }
     to      { transform:rotate(360deg); }
+}
+
+/* Global helpers */
+
+.hide {
+    display: none;
 }

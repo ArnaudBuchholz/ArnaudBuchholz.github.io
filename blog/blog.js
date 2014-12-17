@@ -62,7 +62,7 @@
     // Create a waiting dialog that will appear / disappear on need
     // It remains on top of the screen (i.e. follow scroll)
     var _waitingDialog = document.createElement("div");
-    _waitingDialog.className = "waiting";
+    _waitingDialog.className = "waiting gpf-top";
     _waitingDialog.innerHTML = "<span class=\"gear spin\"></span>"
                                + "<span class=\"label\">Waiting for GPF</span>";
     _waitingDialog = document.body.appendChild(_waitingDialog);
@@ -70,12 +70,19 @@
     // As the blog may load posts asynchronously, monitor the DOM layout
     // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
     window.blog = function () {
+        gpf.html.responsive({
+            monitorTop: true // will create .gpf-top CSS class
+        });
         var
             codes = document.getElementsByTagName("code"),
-            idx;
-        for (idx = 0; idx < codes.length; ++idx) {
+            len = codes.length,
+            idx,
+            waitingLabel = _waitingDialog.querySelector(".label");
+        for (idx = 0; idx < len; ++idx) {
+            waitingLabel.innerHTML = "Reformatting " + (idx + 1) + "/" + len;
             reformatCode(codes[idx]);
         }
+        gpf.html.addClass(_waitingDialog, "hide");
     };
 
 }());
