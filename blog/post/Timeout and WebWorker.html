@@ -110,7 +110,7 @@ API/WindowTimers.clearInterval">clearInterval</a></li>
 <p>To create an <a target="_blank"
 href="https://developer.mozilla.org/en-US/docs/Web/API/Worker">HTML5 Web Worker
 </a> you need several things:
-<ul>
+<ol>
     <li>An HTML5 browser (most <a target="_blank"
 href="https://developer.mozilla.org/en-US/docs/Web/API/
 Worker#AutoCompatibilityTable">modern browsers</a> are)</li>
@@ -126,37 +126,74 @@ same-origin policy</a> applies to this URL, you should read the documentation
     </li>
     <li>A way to communicate with the worker (will be covered in the next part)
 </li>
-</ul>
+</ol>
 </p>
 
-<p>One difficulty that I started with is that I wanted the same script to be
+<p>Regarding the point 2,
+one challenge that I started with is that I wanted the same script to be
 used not only to redefine the APIs in the main context but also to implement
-the Web Worker (so that only one file must be distributed).</p>
+the Web Worker (so that only one file must be distributed).<br/>
+But it is impossible for a script to know how it has been loaded (you don't
+have its 'current' URL).<br/>
+So I created the <a target="_blank"
+href="https://github.com/ArnaudBuchholz/timeout/blob/master/timeout.js#L209">
+<b>_getTimeoutURL</b></a> method to extract this URL:<ul>
+<li>It checks if a script tag with the id "timeout" exists</li>
+<li>Or it checks all script tags for the one finishing with "timeout.js"</li>
+<li>Or it returns "timeout.js"</li>
+</ul></p>
 
-<p>Another difficulty was that it is really hard for a script to know how it has
-been loaded.</p>
-
-<p>One easy way to know if the script is run as a separate thread or in the main
-one is to check the window object. Indeed, a worker thread can't manipulate the
-window. That's why the distinction is made on the <a target="_blank"
+<p>Regarding the point 3, as the same script is used for the main context as
+well as the web worker, I needed a way to distinguish the two situations.<br/>
+This is where the <a target="_blank"
+href="https://developer.mozilla.org/en-US/docs/Web/API/Window">window
+object</a> can help. Indeed, a worker thread can't access it.<br/>
+That explains why the distinction is made by <a target="_blank"
 href="https://github.com/ArnaudBuchholz/timeout/blob/master/timeout.js#L235">
-window typeof result</a>.</p>
+checking the window typeof</a>.</p>
 
 <h3>Main thread / WebWorker communication</h3>
 
-<p>The communication between the main thread and the web worker is realized
-using messages: it is asynchronous by nature.</p>
+<p>The communication between the main thread and the web worker is based on
+<a target="_blank" href="https://developer.mozilla.org/en/docs/Web/API/
+Worker.postMessage">messages</a>: they are asynchronous by nature.</p>
 
+<p>Unless you start messing with the transferList parameter, you can only
+transmit types that are convertible to a JSON representation (this is a highly
+simplified truth. To be exact, HTML5 introduces the notion of
+<a target="_blank"
+href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/
+The_structured_clone_algorithm">structured clone algorithm</a> used for
+serializing complex objects).</p>
 
+<p>To receive messages, you must register on the "message" event using
+<a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/
+EventTarget.addEventListener">addEventListener</a><ul>
+<li>Either on the worker object to listen to messages sent from the worker to
+the main thread</li>
+<li>Or on
+    object to listen to its messages in the main thread</li>
+</ul></p>
 
-<h3>Implementation details</h3>
+<h3>Other implementation details</h3>
+
+<p>To make a long story short, every time you call setTimeout or setInterval,
+a new record is created in the corresponding dictionary (_timeouts or
+_intervals) to store the parameters of the call.<br/>
+Its key is a number that is allocated (incremented) from _timeoutID or
+_intervalID.<br/>
+Then a message is sent to the worker thread to execute the timeout function:
+only the key and the delay are transmitted.<br/>
+On timeout, the worker sends back a message with the key to the main thread
+which retrieves the parameters and executes the callback.</p>
 
 <h2>Possible improvements</h2>
 
 <p>Several aspects of this implementation can be improved:
 <ul>
     <li><b>Startup time</b>: sometimes, the web worker requires several seconds
-to be running. Because of that, all timeouts may be delayed during this phase.
+to run. Because of that, all timeouts may be delayed more than necessary during
+this phase.<br/>
 An improvement would consist in switching to the new API only when the new
 thread is ready.</li>
     <br/>
@@ -170,7 +207,7 @@ code inside the web worker.</li>
 
 <h2>Conclusion</h2>
 
-<p>Please check the following <a target="_blank"
+<p>It works! please check the following <a target="_blank"
 href="http://arnaudbuchholz.github.io/blog/post/2014-11-21/timeout.html?fix">
 example page</a>.</p>
 
