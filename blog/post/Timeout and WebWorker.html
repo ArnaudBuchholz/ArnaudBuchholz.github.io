@@ -6,25 +6,36 @@
 <!-- The above must be replaced with -->
 <!-- <script language="javascript"
      src="http://ArnaudBuchholz.github.io/blog/include.js"></script> -->
+<code class="markdown">
 
-<h2>The context</h2>
+## The context
 
-<p>Working on a complex JavaScript implementation, I am currently developing
-a library that extensively uses asynchronous executions controlled by
-<a href="https://www.promisejs.org/" target="_blank">promises</a>.</p>
+I am currently working on a complex JavaScript application divided into several
+layers. On one hand, the communication with the server is centralized in a
+dedicated framework that extensively uses asynchronous executions controlled by
+[promises](https://www.promisejs.org/). On the other hand, the application is
+contained inside a [SPA](http://en.wikipedia.org/wiki/Single-page_application)
+and is designed to provide the best user experience.
 
-<p>To work appropriately, the promise must defer its completion execution to let
-the caller build first the chain of callbacks.</p>
+### Promises
 
-<p>As a result, the code deeply relies on the <a
-href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers.setTimeout"
-target="_blank">setTimeout</a> function</p>
+To make a long story short, a promise represents the result of an asynchronous
+operation. It can be pending (by default), fulfilled (i.e. succeeded) or
+rejected (i.e. the operation failed).
 
-<code class="javascript">function myPromiseBasedFunction() {
+The most common usage is to wait for the operation completion and chain with a
+callback. This is done by calling the method **then** with one parameter: the
+function to call on completion.
+
+For instance:
+<code class="javascript">
+// An example of function that uses a promise to signal its completion
+function myPromiseBasedFunction() {
     var promise = new Promise();
     /*
         Execute the content of the function and signal the completion with
-        promise.resolve()
+        promise.resolve(). This can be asynchronous (for instance, using an AJAX
+        call) or synchronous. The caller does not need to know.
     */
     return promise;
 }
@@ -35,75 +46,83 @@ myPromiseBasedFunction().then(function() {
 });
 </code>
 
-<p>On top of the library, I designed the user interface with the desire to
-provide the best user experience. It means that long JavaScript operations are
-split into chunks and sequenced using setTimeout to prevent any UI freeze and
-get rid of the annoying long-script running message.</p>
+<!-- TODO explain the specific syntax with execution and chaining -->
 
-<h2>setTimeout in an inactive tab</h2>
+To work appropriately, a promise must defer its completion execution to let
+the caller build first the chain of callbacks.
 
-<p>Chrome and FireFox share a particularity that I discovered when using
-several tabs (later, I found that Opera was doing the same but IE and Safari are
-safe).
+The only reliable way to implement such a code sequence is to use the
+[setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers
+.setTimeout) function in order to have the resolve method implementation be
+called after the registration of the callback function (i.e. calls of method
+**then**).
+
+### Responsive user interface
+
+As any user interface, the design is polished to provide the best user
+experience possible.
+It means that long JavaScript operations are split into chunks and sequenced
+using setTimeout to prevent any interface freeze and get rid of the annoying
+long-script running message.
+
+## setTimeout in an inactive tab
+
+Chrome and FireFox share a particularity that I discovered when using
+several tabs (later, I found that Opera was doing the same but Internet Explorer
+and Safari are safe).
 At some point, the application appeared to be 'frozen' when the tab was not
-active.</p>
+active.
 
-<p>For instance, have a look to the following <a target="_blank"
-href="http://arnaudbuchholz.github.io/blog/post/2014-11-21/timeout.html">example
-page</a>.<br/>
+For instance, have a look to the following [example page](http://arnaudbuchholz.
+github.io/blog/post/2014-11-21/timeout.html).
 It was designed to print the current time every 100 milliseconds both in the
 page title and in the page content. If the tab is not active, you will notice
-that it seems to refresh slower (nearly every second).<br/>
+that it seems to refresh slower (nearly every second).
 I also added a real-time monitor that displays red dots if the interval between
-two calls is greater than 120 ms.</p>
+two calls is greater than 120 ms.
 
-<p>You can find good explanations of the reasons why as well as some possible
-workarounds by <a target="_blank"
-href="https://www.google.ca/search?q=settimeout+inactive+tab">crawling the web
-</a>:
-<ul>
-    <li><a target="_blank" href="http://stackoverflow.com/questions/6032429/
-chrome-timeouts-interval-suspended-in-background-tabs">Chrome: timeouts/interval
-suspended in background tabs?</a></li>
-    <li><a target="_blank" href="http://pivotallabs.com/
-chrome-and-firefox-throttle-settimeout-setinterval-in-inactive-tabs/">Chrome and
-Firefox throttle setTimeout/setInterval in inactive tabs</a></li>
-</ul></p>
+You can find good explanations of the reasons why as well as some possible
+workarounds by [crawling the web](https://www.google.ca/search
+?q=settimeout+inactive+tab):
 
-<p>As it seems that the setTimeout function works fine in a Web Worker thread, I
-decided to explore this possibility.</p>
+* [Chrome: timeouts/interval suspended in background tabs?](http://
+stackoverflow.com/questions/6032429/chrome-timeouts-interval-suspended-in-
+background-tabs)
+* [Chrome and Firefox throttle setTimeout/setInterval in inactive tabs](http://
+pivotallabs.com/chrome-and-firefox-throttle-settimeout-setinterval-in-inactive-
+tabs/)
 
-<h2>Timeout project</h2>
+As it seems that the setTimeout function works fine in a Web Worker thread, I
+decided to explore this possibility.
 
-<p>I created a new <a target="_blank"
-href="https://github.com/ArnaudBuchholz/timeout">GitHub repository</a> and
-started to work on a small library that would solve the issue.</p>
+##Timeout project
 
-<h3>Hooking the APIs</h3>
+I created a new [GitHub repository](https://github.com/ArnaudBuchholz/
+timeout) and started to work on a small library that would solve the issue.
 
-<p>First of all, the JavaScript language is really flexible and, depending on
-the host, you can even redefine some of the 'built-in' APIs.</p>
+### Hooking the APIs
 
-<p>In a browser, the main context object (the one that contains everything)
-is the <a target="_blank"
-href="https://developer.mozilla.org/en-US/docs/Web/API/Window">window
-object</a>.
-Keep that information in mind, this will be important for the next part.</p>
+<!-- TODO talk about binding -->
 
-<p>Hence it is possible to redefine window.setTimeout by assigning a new
-handler. I decided to cover the whole timer API, that's why I <a target="_blank"
-href="https://github.com/ArnaudBuchholz/timeout/blob/master/timeout.js#L244">
-redefined</a> the followings:
-<ul>
-    <li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/
-API/WindowTimers.setTimeout">setTimeout</a></li>
-    <li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/
-API/WindowTimers.clearTimeout">clearTimeout</a></li>
-    <li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/
-API/WindowTimers.setInterval">setInterval</a></li>
-    <li><a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/
-API/WindowTimers.clearInterval">clearInterval</a></li>
-</ul></p>
+First of all, the JavaScript language is really flexible and, depending on
+the host, you can even redefine some of the 'built-in' APIs.
+
+In a browser, the main context object (the one that contains everything)
+is the [window object](https://developer.mozilla.org/en-US/docs/Web/API/Window).
+Keep that information in mind, this will be important for the next part.
+
+Hence it is possible to redefine window.setTimeout by assigning a new
+handler. I decided to cover the whole timer API, that's why I [redefined](https:
+//github.com/ArnaudBuchholz/timeout/blob/
+8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L244) the followings:
+* [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers
+.setTimeout)
+* [clearTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers
+.clearTimeout)
+* [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers
+.setInterval)
+* [clearInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers
+.clearInterval)
 
 <h3>Creating a Web Worker</h3>
 
@@ -136,7 +155,7 @@ the Web Worker (so that only one file must be distributed).<br/>
 But it is impossible for a script to know how it has been loaded (you don't
 have its 'current' URL).<br/>
 So I created the <a target="_blank"
-href="https://github.com/ArnaudBuchholz/timeout/blob/master/timeout.js#L209">
+href="https://github.com/ArnaudBuchholz/timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L209">
 <b>_getTimeoutURL</b></a> method to extract this URL:<ul>
 <li>It checks if a script tag with the id "timeout" exists</li>
 <li>Or it checks all script tags for the one finishing with "timeout.js"</li>
@@ -149,7 +168,7 @@ This is where the <a target="_blank"
 href="https://developer.mozilla.org/en-US/docs/Web/API/Window">window
 object</a> can help. Indeed, a worker thread can't access it.<br/>
 That explains why the distinction is made by <a target="_blank"
-href="https://github.com/ArnaudBuchholz/timeout/blob/master/timeout.js#L235">
+href="https://github.com/ArnaudBuchholz/timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L235">
 checking the window typeof</a>.</p>
 
 <h3>Main thread / WebWorker communication</h3>
@@ -211,5 +230,6 @@ code inside the web worker.</li>
 href="http://arnaudbuchholz.github.io/blog/post/2014-11-21/timeout.html?fix">
 example page</a>.</p>
 
+</code>
 <!-- Drop those two lines -->
 </div>
