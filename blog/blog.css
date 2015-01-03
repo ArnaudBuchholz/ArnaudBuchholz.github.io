@@ -133,36 +133,24 @@ div.post-body table tr.even {
     background-color: #DEEED6;
 }
 
-pre.code {
-	font-family: courier, sans-serif;
-	font-size: 12px;
-	border: 1px dashed #CCCCCC;
-	width:99%;
-	height: auto;
-	overflow: auto;
-	background: #f0f0f0;
-    padding: 4px;
-}
-
-/*
-pre.code div.toolbar {
-    background-image: url("gear.png");
-    background-position: right top;
-    background-repeat: no-repeat;
-    height: 16px;
-    cursor: hand;
-}
-*/
-
 code {
     display: none;
 }
 
-pre code {
+code.gpf-blog {
     display: block;
 }
 
 code.javascript {
+    font-family: courier, sans-serif;
+    font-size: 12px;
+    border: 1px dashed #CCCCCC;
+    width:99%;
+    height: auto;
+    overflow: auto;
+    background: #f0f0f0;
+    padding: 4px;
+    white-space: pre-wrap;
 }
 
 code.javascript span.comment {

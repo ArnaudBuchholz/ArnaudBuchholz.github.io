@@ -2,7 +2,7 @@
     "use strict";
 
     /**
-     * Event handler for the tokenizer
+     * Event handler for the tokenizer (javascript parsing)
      *
      * @param {gpf.events.Event} event
      */
@@ -31,33 +31,60 @@
     }
 
     /**
-     * Reformat the code element
+     * Dictionary mapping known class type to a specific handler that knows how
+     * to reformat its content.
+     * The handler must have the following signature:
+     * param {*} codeElement the HTML code element to format
+     * result {Boolean} True if the element must be removed
      *
-     * @param {HTMLDomElement} codeElement
+     * @type {Object}
      */
-    function reformatCode (codeElement) {
-        var
-            codeClass = codeElement.className,
-            pre;
-        /**
-         * Transform the <CODE class="X"></CODE> structure into the following:
-         * <PRE class="code X"><CODE class="X"></CODE></PRE>
-         */
-        pre = document.createElement("pre");
-        pre.className = "code " + codeClass;
-        pre = codeElement.parentNode.insertBefore(pre, codeElement);
-        codeElement = pre.appendChild(codeElement);
-        // Use tokenizer to format the content
-        if ("javascript" === codeClass) {
+    var knownCodeClasses = {
+
+        javascript: function (codeElement) {
+            // Use tokenizer to format the content
             // https://github.com/ArnaudBuchholz/gpf-js/issues/5
             var content = codeElement.innerHTML
-                            .replace(/(&lt;)/g, "<")
-                            .replace(/(&gt;)/g, ">")
-                            .replace(/(&amp;)/g, "&");
+                .replace(/(&lt;)/g, "<")
+                .replace(/(&gt;)/g, ">")
+                .replace(/(&amp;)/g, "&");
             codeElement.innerHTML = ""; // Easy way to clear current content
             gpf.js.tokenize.apply(codeElement, [content, onTokenFound]);
+            return false;
+        },
+
+        markdown: function (codeElement) {
+            // Parse first level text nodes as markdown streams
+            var
+                codeParent = codeElement.parentNode,
+                parser,
+                output,
+                fragment,
+                child,
+                next;
+            child = codeElement.firstChild;
+            while (child) {
+                next = child.nextSibling;
+                if (gpf.html.TEXT_NODE === child.nodeType) {
+                    // Parse and append
+                    parser = new gpf.html.MarkdownParser();
+                    output = [];
+                    parser.setOutputHandler(output);
+                    parser.parse(child.textContent, gpf.Parser.FINALIZE);
+                    fragment = document.createElement("div");
+                    fragment.className = "code " + codeElement.className;
+                    fragment.innerHTML = output.join("");
+                    // Need to transform the A into A target="_blank"
+                    codeParent.insertBefore(fragment, codeElement);
+                } else {
+                    codeParent.insertBefore(child, codeElement);
+                }
+                child = next;
+            }
+            // Remove element from the DOM tree
+            return true;
         }
-    }
+    };
 
     // Create a waiting dialog that will appear / disappear on need
     // It remains on top of the screen (i.e. follow scroll)
@@ -67,20 +94,42 @@
                                + "<span class=\"label\">Waiting for GPF</span>";
     _waitingDialog = document.body.appendChild(_waitingDialog);
 
-    // As the blog may load posts asynchronously, monitor the DOM layout
+    // TODO: As the blog may load posts asynchronously, monitor the DOM layout
     // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
     window.blog = function () {
         gpf.html.responsive({
             monitorTop: true // will create .gpf-top CSS class
         });
         var
+            waitingLabel = _waitingDialog.querySelector(".label"),
+            // Use a live list as it gives a better support than
+            // document.querySelectorAll("code:not(.gpf-blog)")
             codes = document.getElementsByTagName("code"),
-            len = codes.length,
-            idx,
-            waitingLabel = _waitingDialog.querySelector(".label");
-        for (idx = 0; idx < len; ++idx) {
-            waitingLabel.innerHTML = "Reformatting " + (idx + 1) + "/" + len;
-            reformatCode(codes[idx]);
+            len,
+            idx = 0,
+            code,
+            knownHandler;
+        len = codes.length;
+        while (idx < len) {
+            for (idx = 0; idx < len; ++idx) {
+                code = codes[idx];
+                if (!gpf.html.hasClass(code, "gpf-blog")) {
+                    waitingLabel.innerHTML = "Reformatting (" + (idx + 1)
+                        + "/" + len + ")";
+                    knownHandler = knownCodeClasses[code.className];
+                    if (undefined !== knownHandler) {
+                        if (knownHandler(code)) {
+                            code.parentNode.removeChild(code);
+                            code = null;
+                        }
+                    }
+                    if (code) {
+                        gpf.html.addClass(code, "gpf-blog");
+                    }
+                    len = codes.length;
+                    break;
+                }
+            }
         }
         gpf.html.addClass(_waitingDialog, "hide");
     };
