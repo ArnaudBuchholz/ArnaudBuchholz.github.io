@@ -31,6 +31,28 @@
     }
 
     /**
+     * Configure the IMG image to open in a new target and fit the max-width
+     *
+     * @param {Number} idx
+     * @param {*} image IMG element
+     */
+    function configureImage (idx, image) {
+        gpf.interfaces.ignoreParameter(idx);
+        var
+            anchor = document.createElement("a"),
+            parent = image.parentNode,
+            title;
+        image.setAttribute("border", 0);
+        image.setAttribute("style", "max-width: 100%");
+        title = image.getAttribute("alt");
+        anchor.setAttribute("href", image.getAttribute("src"));
+        anchor = parent.insertBefore(anchor, image);
+        anchor.appendChild(document.createTextNode(title));
+        anchor.appendChild(document.createElement("br"));
+        anchor.appendChild(image);
+    }
+
+    /**
      * Configure the A link to open in a new target
      *
      * @param {Number} idx
@@ -85,6 +107,8 @@
                     fragment = document.createElement("div");
                     fragment.className = "code " + codeElement.className;
                     fragment.innerHTML = output.join("");
+                    gpf.each(fragment.getElementsByTagName("img"),
+                        configureImage);
                     gpf.each(fragment.getElementsByTagName("a"),
                         configureAnchor);
                     codeParent.insertBefore(fragment, codeElement);
