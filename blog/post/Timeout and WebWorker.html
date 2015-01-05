@@ -23,8 +23,8 @@ To make a long story short, a promise represents the result of an asynchronous
 operation. It can be pending (by default), fulfilled (i.e. succeeded) or
 rejected (i.e. the operation failed).
 
-The most common usage is to wait for the operation completion and chain with a
-callback. This is done by calling the method **then** with one parameter: the
+The most common usage is to wait for the operation completion and chain it with
+a callback. This is done by calling the method **then** with one parameter: the
 function to call on completion.
 
 For instance:
@@ -33,7 +33,7 @@ For instance:
 function myPromiseBasedFunction() {
     var promise = new Promise();
     /*
-        Execute the content of the function and signal the completion with
+        Execute the content of the function and signal the completion using
         promise.resolve(). This can be asynchronous (for instance, using an AJAX
         call) or synchronous. The caller does not need to know.
     */
@@ -46,10 +46,19 @@ myPromiseBasedFunction().then(function() {
 });
 </code>
 
-<!-- TODO explain the specific syntax with execution and chaining -->
+This offers a convenient way to write asynchronous code that can be chained
+easily. When the promise is created, the execution starts and even if the
+result is available immediately (or synchronously), the promise allows you to
+register the callback function **before** it signals the completion.
 
-To work appropriately, a promise must defer its completion execution to let
-the caller build first the chain of callbacks.
+Hence, to work appropriately, a promise must defer its completion execution to
+let the caller build first the chain of callbacks.
+
+![Promise asynchronous](http://arnaudbuchholz.github.io/blog/post/
+Timeout and WebWorker/Promise asynchronous.png)
+
+![Promise synchronous](http://arnaudbuchholz.github.io/blog/post/
+Timeout and WebWorker/Promise synchronous.png)
 
 The only reliable way to implement such a code sequence is to use the
 [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers
@@ -74,7 +83,7 @@ At some point, the application appeared to be 'frozen' when the tab was not
 active.
 
 For instance, have a look to the following [example page](http://arnaudbuchholz.
-github.io/blog/post/2014-11-21/timeout.html).
+github.io/blog/post/Timeout and WebWorker/timeout.html).
 It was designed to print the current time every 100 milliseconds both in the
 page title and in the page content. If the tab is not active, you will notice
 that it seems to refresh slower (nearly every second).
@@ -227,7 +236,8 @@ code inside the web worker.</li>
 <h2>Conclusion</h2>
 
 <p>It works! please check the following <a target="_blank"
-href="http://arnaudbuchholz.github.io/blog/post/2014-11-21/timeout.html?fix">
+href="http://arnaudbuchholz.github.io/blog/post/Timeout and WebWorker/
+timeout.html?fix">
 example page</a>.</p>
 
 </code>
