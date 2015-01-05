@@ -31,6 +31,17 @@
     }
 
     /**
+     * Configure the A link to open in a new target
+     *
+     * @param {Number} idx
+     * @param {*} anchor A element
+     */
+    function configureAnchor (idx, anchor) {
+        gpf.interfaces.ignoreParameter(idx);
+        anchor.setAttribute("target", "_blank");
+    }
+
+    /**
      * Dictionary mapping known class type to a specific handler that knows how
      * to reformat its content.
      * The handler must have the following signature:
@@ -74,7 +85,8 @@
                     fragment = document.createElement("div");
                     fragment.className = "code " + codeElement.className;
                     fragment.innerHTML = output.join("");
-                    // Need to transform the A into A target="_blank"
+                    gpf.each(fragment.getElementsByTagName("a"),
+                        configureAnchor);
                     codeParent.insertBefore(fragment, codeElement);
                 } else {
                     codeParent.insertBefore(child, codeElement);
