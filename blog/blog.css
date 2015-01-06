@@ -134,6 +134,7 @@ div.post-body table tr.even {
 }
 
 code {
+    line-height: normal;
     display: none;
 }
 
