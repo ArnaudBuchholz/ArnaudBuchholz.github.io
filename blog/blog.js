@@ -31,6 +31,19 @@
     }
 
     /**
+     * Configure the CODE element to detect the language (javascript by default)
+     *
+     * @param {Number} idx
+     * @param {*} code CODE element
+     */
+    function configureCode (idx, code) {
+        gpf.interfaces.ignoreParameter(idx);
+        if (!code.getAttribute("class")) {
+            code.setAttribute("class", "javascript");
+        }
+    }
+
+    /**
      * Configure the IMG image to open in a new target and fit the max-width
      *
      * @param {Number} idx
@@ -107,6 +120,8 @@
                     fragment = document.createElement("div");
                     fragment.className = "code " + codeElement.className;
                     fragment.innerHTML = output.join("");
+                    gpf.each(fragment.getElementsByTagName("code"),
+                        configureCode);
                     gpf.each(fragment.getElementsByTagName("img"),
                         configureImage);
                     gpf.each(fragment.getElementsByTagName("a"),
