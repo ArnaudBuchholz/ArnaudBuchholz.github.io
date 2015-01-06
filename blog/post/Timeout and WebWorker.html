@@ -20,16 +20,17 @@ and is designed to provide the best user experience.
 ### Promises
 
 To make a long story short, a promise represents the result of an asynchronous
-operation. It can be pending (by default), fulfilled (i.e. succeeded) or
-rejected (i.e. the operation failed).
+operation. It can be:
+* pending (by default)
+* fulfilled (i.e. succeeded)
+* or rejected (i.e. the operation failed)
 
 The most common usage is to wait for the operation completion and chain it with
 a callback. This is done by calling the method **then** with one parameter: the
 function to call on completion.
 
 For instance:
-<code class="javascript">
-// An example of function that uses a promise to signal its completion
+`// An example of function that uses a promise to signal its completion
 function myPromiseBasedFunction() {
     var promise = new Promise();
     /*
@@ -43,11 +44,10 @@ function myPromiseBasedFunction() {
 // An example of use:
 myPromiseBasedFunction().then(function() {
     // Triggered only when the promise is fulfilled (i.e. resolve was called)
-});
-</code>
+});`
 
 This offers a convenient way to write asynchronous code that can be chained
-easily. When the promise is created, the execution starts and even if the
+easily. After creating the promise, the execution starts and even if the
 result is available immediately (or synchronously), the promise allows you to
 register the callback function **before** it signals the completion.
 
@@ -104,24 +104,37 @@ tabs/)
 As it seems that the setTimeout function works fine in a Web Worker thread, I
 decided to explore this possibility.
 
-##Timeout project
+## Timeout project
 
 I created a new [GitHub repository](https://github.com/ArnaudBuchholz/
 timeout) and started to work on a small library that would solve the issue.
 
 ### Hooking the APIs
 
-<!-- TODO talk about binding -->
+First of all, the JavaScript language is really flexible as it relies on
+[late binding](http://programmers.stackexchange.com/questions/200115/
+what-is-early-and-late-binding). It means that every time you call a function
+using a name, the name is first resolved (as any variable) to get the function
+object.
 
-First of all, the JavaScript language is really flexible and, depending on
-the host, you can even redefine some of the 'built-in' APIs.
+for instance:
+`/*
+    In the following example, the JavaScript engine must:
+    - first resolve the variable "gpf"
+    - the member "bin" on the previous result
+    - the member "toHexa" on the previous result
+    This last result is considered as a function
+    and called with the parameter 255
+*/
+var result = gpf.bin.toHexa(255); // result is FF`
 
 In a browser, the main context object (the one that contains everything)
 is the [window object](https://developer.mozilla.org/en-US/docs/Web/API/Window).
 Keep that information in mind, this will be important for the next part.
 
-Hence it is possible to redefine window.setTimeout by assigning a new
-handler. I decided to cover the whole timer API, that's why I [redefined](https:
+Hence it is possible to redefine the **setTimeout** function by assigning a new
+function to the variable **window.setTimeout**.
+I decided to cover the whole timer API, that's why I [redefined](https:
 //github.com/ArnaudBuchholz/timeout/blob/
 8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L244) the followings:
 * [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers
@@ -133,112 +146,100 @@ handler. I decided to cover the whole timer API, that's why I [redefined](https:
 * [clearInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers
 .clearInterval)
 
-<h3>Creating a Web Worker</h3>
+### Creating a Web Worker
 
-<p>To create an <a target="_blank"
-href="https://developer.mozilla.org/en-US/docs/Web/API/Worker">HTML5 Web Worker
-</a> you need several things:
-<ol>
-    <li>An HTML5 browser (most <a target="_blank"
-href="https://developer.mozilla.org/en-US/docs/Web/API/
-Worker#AutoCompatibilityTable">modern browsers</a> are)</li>
-    <li>An URL to load
+To create an [HTML5 Web Worker](https://developer.mozilla.org/en-US/docs/Web/
+API/Worker)  you need several things:
+* An HTML5 browser (most [modern browsers](https://developer.mozilla.org/en-US/
+docs/Web/API/Worker#AutoCompatibilityTable) are)
+* An URL to load
 <div class="note">WARNING: the <a target="_blank"
 href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">
 same-origin policy</a> applies to this URL, you should read the documentation
 </div>
-    </li>
-    <li>A JavaScript code to create it:
-<code class="javascript">var worker = new Worker("source.js");
-</code>
-    </li>
-    <li>A way to communicate with the worker (will be covered in the next part)
-</li>
-</ol>
-</p>
+* A JavaScript code to create it:
+`var worker = new Worker("source.js");`
+* A way to communicate with the worker (will be covered in the next part)
 
-<p>Regarding the point 2,
+Regarding the point 2,
 one challenge that I started with is that I wanted the same script to be
 used not only to redefine the APIs in the main context but also to implement
-the Web Worker (so that only one file must be distributed).<br/>
+the Web Worker (so that only one file must be distributed).
+
 But it is impossible for a script to know how it has been loaded (you don't
-have its 'current' URL).<br/>
-So I created the <a target="_blank"
-href="https://github.com/ArnaudBuchholz/timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L209">
-<b>_getTimeoutURL</b></a> method to extract this URL:<ul>
-<li>It checks if a script tag with the id "timeout" exists</li>
-<li>Or it checks all script tags for the one finishing with "timeout.js"</li>
-<li>Or it returns "timeout.js"</li>
-</ul></p>
+have its 'current' URL).
 
-<p>Regarding the point 3, as the same script is used for the main context as
-well as the web worker, I needed a way to distinguish the two situations.<br/>
-This is where the <a target="_blank"
-href="https://developer.mozilla.org/en-US/docs/Web/API/Window">window
-object</a> can help. Indeed, a worker thread can't access it.<br/>
-That explains why the distinction is made by <a target="_blank"
-href="https://github.com/ArnaudBuchholz/timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L235">
-checking the window typeof</a>.</p>
+So I created the method [_getTimeoutURL](https://github.com/ArnaudBuchholz/
+timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L209) to
+extract this URL:
+* It checks if a script tag with the id "timeout" exists
+* Or it checks all script tags for the one finishing with "timeout.js"
+* Or it returns "timeout.js"
 
-<h3>Main thread / WebWorker communication</h3>
+Regarding the point 3, as the same script is used for the main context as
+well as the web worker, I needed a way to distinguish the two situations.
 
-<p>The communication between the main thread and the web worker is based on
-<a target="_blank" href="https://developer.mozilla.org/en/docs/Web/API/
-Worker.postMessage">messages</a>: they are asynchronous by nature.</p>
+This is where the [window object](https://developer.mozilla.org/en-US/docs/Web/
+API/Window") can help. Indeed, a worker thread can't access it.
 
-<p>Unless you start messing with the transferList parameter, you can only
-transmit types that are convertible to a JSON representation (this is a highly
-simplified truth. To be exact, HTML5 introduces the notion of
-<a target="_blank"
-href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/
-The_structured_clone_algorithm">structured clone algorithm</a> used for
-serializing complex objects).</p>
+That explains why the distinction is made by
+[checking the window typeof](https://github.com/ArnaudBuchholz/timeout/
+blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L235).
 
-<p>To receive messages, you must register on the "message" event using
-<a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/
-EventTarget.addEventListener">addEventListener</a><ul>
-<li>Either on the worker object to listen to messages sent from the worker to
-the main thread</li>
-<li>Or on
-    object to listen to its messages in the main thread</li>
-</ul></p>
+### Main thread / WebWorker communication
 
-<h3>Other implementation details</h3>
+The communication between the main thread and the web worker is based on
+[messages](https://developer.mozilla.org/en/docs/Web/API/Worker.postMessage"):
+they are asynchronous by nature.
 
-<p>To make a long story short, every time you call setTimeout or setInterval,
+Unless you start messing with the **transferList** parameter, you can only
+transmit types that are convertible to a JSON representation.
+
+This is a highly simplified truth. To be exact, HTML5 introduces the notion of
+[structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/Guide/
+API/DOM/The_structured_clone_algorithm) used for serializing complex objects).
+
+To receive messages, you must register on the "message" event using
+[addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/
+EventTarget.addEventListener)
+
+* Either on the worker object to listen to messages sent from the worker to
+the main thread
+* Or on object to listen to its messages in the main thread
+
+### Other implementation details
+
+To make a long story short, every time you call setTimeout or setInterval,
 a new record is created in the corresponding dictionary (_timeouts or
-_intervals) to store the parameters of the call.<br/>
+_intervals) to store the parameters of the call.
+
 Its key is a number that is allocated (incremented) from _timeoutID or
-_intervalID.<br/>
+_intervalID.
+
 Then a message is sent to the worker thread to execute the timeout function:
-only the key and the delay are transmitted.<br/>
+only the key and the delay are transmitted.
+
 On timeout, the worker sends back a message with the key to the main thread
-which retrieves the parameters and executes the callback.</p>
+which retrieves the parameters and executes the callback.
 
-<h2>Possible improvements</h2>
+## Possible improvements
 
-<p>Several aspects of this implementation can be improved:
-<ul>
-    <li><b>Startup time</b>: sometimes, the web worker requires several seconds
+Several aspects of this implementation can be improved:
+* **Startup time**: sometimes, the web worker requires several seconds
 to run. Because of that, all timeouts may be delayed more than necessary during
-this phase.<br/>
-An improvement would consist in switching to the new API only when the new
-thread is ready.</li>
-    <br/>
-    <li><b>URL to load</b>: digging on the net, I found a sample where the web worker
-was initialised using a <a target="_blank"
-href="http://dataurl.net/#about">data: URL</a>. This clearly reduces the
-dependency with the source script but, then, we need a bootstrap to load the
-code inside the web worker.</li>
-</ul></p>
+this phase. An improvement would consist in switching to the new API only when the new
+thread is ready.
 
+* **URL to load**: digging on the net, I found a sample where the web worker
+was initialised using a [data: URL](http://dataurl.net/#about).
+This clearly reduces the dependency with the source script but, then, we need a
+bootstrap to load the code inside the web worker.
 
-<h2>Conclusion</h2>
+## Conclusion
 
-<p>It works! please check the following <a target="_blank"
-href="http://arnaudbuchholz.github.io/blog/post/Timeout and WebWorker/
-timeout.html?fix">
-example page</a>.</p>
+It works! please check the following [example page](http://
+arnaudbuchholz.github.io/blog/post/Timeout and WebWorker/timeout.html?fix) (and
+don't forget to switch tab).
 
 </code>
 <!-- Drop those two lines -->
