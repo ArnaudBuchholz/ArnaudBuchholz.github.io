@@ -2,7 +2,7 @@
     "use strict";
 
     var
-        baseUrl = "http://ArnaudBuchholz.github.io",
+        baseUrl = "http://ArnaudBuchholz.github.io/",
         gpfUrl,
         blogJsUrl,
         blogCssUrl,
@@ -16,8 +16,8 @@
 
     } else {
         gpfUrl = baseUrl + "gpf.js";
-        blogJsUrl = baseUrl + "/blog/blog.js";
-        blogCssUrl = baseUrl + "/blog/blog.css";
+        blogJsUrl = baseUrl + "blog/blog.js";
+        blogCssUrl = baseUrl + "blog/blog.css";
     }
 
     /**
