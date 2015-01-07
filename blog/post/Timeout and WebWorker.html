@@ -12,7 +12,7 @@
 
 I am currently working on a complex JavaScript application divided into several
 layers. On one hand, the communication with the server is centralized in a
-dedicated framework that extensively uses asynchronous executions controlled by
+dedicated framework that extensively uses asynchronous executions sequenced by
 [promises](https://www.promisejs.org/). On the other hand, the application is
 contained inside a [SPA](http://en.wikipedia.org/wiki/Single-page_application)
 and is designed to provide the best user experience.
@@ -180,14 +180,12 @@ same-origin policy</a> applies to this URL, you should read the documentation
 `var worker = new Worker("source.js");`
 * A way to communicate with the worker (will be covered in the next part)
 
-Regarding the point 2,
+Regarding the URL to load,
 one challenge that I started with is that I wanted the same script to be
 used not only to redefine the APIs in the main context but also to implement
 the Web Worker (so that only one file must be distributed).
-
-But it is impossible for a script to know how it has been loaded (you don't
-have its 'current' URL).
-
+But it is impossible for a script to know how it has been loaded as you don't
+have its 'current' URL.
 So I created the method [_getTimeoutURL](https://github.com/ArnaudBuchholz/
 timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L209) to
 extract this URL:
@@ -195,12 +193,11 @@ extract this URL:
 * Or it checks all script tags for the one finishing with "timeout.js"
 * Or it returns "timeout.js"
 
-Regarding the point 3, as the same script is used for the main context as
-well as the web worker, I needed a way to distinguish the two situations.
-
+Regarding the worker creation, the same script is used for the main context as
+well as the web worker. So I needed a way to distinguish the two situations.
 This is where the [window object](https://developer.mozilla.org/en-US/docs/Web/
-API/Window") can help. Indeed, a worker thread can't access it.
-
+API/Window") can help. Indeed, a worker thread can't access it: the worker
+object itself is the global context of the thread.
 That explains why the distinction is made by
 [checking the window typeof](https://github.com/ArnaudBuchholz/timeout/
 blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L235).
@@ -214,9 +211,9 @@ they are asynchronous by nature.
 Unless you start messing with the **transferList** parameter, you can only
 transmit types that are convertible to a JSON representation.
 
-This is a highly simplified truth. To be exact, HTML5 introduces the notion of
+(This is a highly simplified truth. To be exact, HTML5 introduces the notion of
 [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/Guide/
-API/DOM/The_structured_clone_algorithm) used for serializing complex objects.
+API/DOM/The_structured_clone_algorithm) used for serializing complex objects.)
 
 To receive messages, you must register on the "message" event using
 [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/
@@ -232,17 +229,28 @@ messages received from the main thread
 ### Other implementation details
 
 To make a long story short, every time you call setTimeout or setInterval,
-a new record is created in the corresponding dictionary (_timeouts or
-_intervals) to store the parameters of the call.
+a new record is created in the corresponding dictionary ([_timeouts](https://
+github.com/ArnaudBuchholz/timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/
+timeout.js#L28) or [_intervals](https://github.com/ArnaudBuchholz/timeout/blob/
+8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L39)) to store the
+parameters of the call.
 
-Its key is a number that is allocated (incremented) from _timeoutID or
-_intervalID.
+Its key is a number that is allocated (incremented) from [_timeoutID](https://
+github.com/ArnaudBuchholz/timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/
+timeout.js#L20) or [_intervalID](https://github.com/ArnaudBuchholz/timeout/blob/
+8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L31).
 
-Then a message is sent to the worker thread to execute the timeout function:
-only the key and the delay are transmitted.
+Then a message is [sent](https://github.com/ArnaudBuchholz/timeout/blob/
+8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L93) to the worker thread to
+execute the timeout function: only the key and the delay are transmitted.
 
-On timeout, the worker sends back a message with the key to the main thread
-which retrieves the parameters and executes the callback.
+On timeout, the worker [sends](https://github.com/ArnaudBuchholz/timeout/blob/
+8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L157) back a message with
+the key to the main thread which retrieves the parameters and executes the
+callback.
+
+![setTimeout sequence](http://arnaudbuchholz.github.io/blog/post/
+Timeout and WebWorker/setTimeout sequence.png)
 
 ## Possible improvements
 
@@ -259,9 +267,10 @@ bootstrap to load the code inside the web worker.
 
 ## Conclusion
 
-It works! please check the following [example page](http://
-arnaudbuchholz.github.io/blog/post/Timeout and WebWorker/timeout.html?fix) (and
-don't forget to switch tab).
+It works and, more important, **without modifying the original code**!
+please check the following [example page with fix](http://
+arnaudbuchholz.github.io/blog/post/Timeout and WebWorker/timeout.html?fix)
+(and don't forget to switch tab).
 
 </code>
 <!-- Drop those two lines -->
