@@ -139,50 +139,54 @@
 
     // Create a waiting dialog that will appear / disappear on need
     // It remains on top of the screen (i.e. follow scroll)
-    var _waitingDialog = document.createElement("div");
-    _waitingDialog.className = "waiting gpf-top";
-    _waitingDialog.innerHTML = "<span class=\"gear spin\"></span>"
+    var
+        waitingDialog,
+        waitingLabel,
+        codes,
+        len,
+        idx = 0,
+        code,
+        knownHandler;
+
+    // Create a small waiting dialog
+    waitingDialog = document.createElement("div");
+    waitingDialog.className = "waiting gpf-top";
+    waitingDialog.innerHTML = "<span class=\"gear spin\"></span>"
                                + "<span class=\"label\">Waiting for GPF</span>";
-    _waitingDialog = document.body.appendChild(_waitingDialog);
+    waitingDialog = document.body.appendChild(waitingDialog);
+    waitingLabel = waitingDialog.querySelector(".label");
 
     // TODO: As the blog may load posts asynchronously, monitor the DOM layout
     // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
-    window.blog = function () {
-        gpf.html.responsive({
-            monitorTop: true // will create .gpf-top CSS class
-        });
-        var
-            waitingLabel = _waitingDialog.querySelector(".label"),
-            // Use a live list as it gives a better support than
-            // document.querySelectorAll("code:not(.gpf-blog)")
-            codes = document.getElementsByTagName("code"),
-            len,
-            idx = 0,
-            code,
-            knownHandler;
-        len = codes.length;
-        while (idx < len) {
-            for (idx = 0; idx < len; ++idx) {
-                code = codes[idx];
-                if (!gpf.html.hasClass(code, "gpf-blog")) {
-                    waitingLabel.innerHTML = "Reformatting (" + (idx + 1)
-                        + "/" + len + ")";
-                    knownHandler = knownCodeClasses[code.className];
-                    if (undefined !== knownHandler) {
-                        if (knownHandler(code)) {
-                            code.parentNode.removeChild(code);
-                            code = null;
-                        }
+    gpf.html.responsive({
+        monitorTop: true // will create .gpf-top CSS class
+    });
+
+    // Use a live list as it gives a better support than
+    // document.querySelectorAll("code:not(.gpf-blog)")
+    codes = document.getElementsByTagName("code");
+    len = codes.length;
+    while (idx < len) {
+        for (idx = 0; idx < len; ++idx) {
+            code = codes[idx];
+            if (!gpf.html.hasClass(code, "gpf-blog")) {
+                waitingLabel.innerHTML = "Reformatting (" + (idx + 1)
+                    + "/" + len + ")";
+                knownHandler = knownCodeClasses[code.className];
+                if (undefined !== knownHandler) {
+                    if (knownHandler(code)) {
+                        code.parentNode.removeChild(code);
+                        code = null;
                     }
-                    if (code) {
-                        gpf.html.addClass(code, "gpf-blog");
-                    }
-                    len = codes.length;
-                    break;
                 }
+                if (code) {
+                    gpf.html.addClass(code, "gpf-blog");
+                }
+                len = codes.length;
+                break;
             }
         }
-        gpf.html.addClass(_waitingDialog, "hide");
-    };
+    }
+    gpf.html.addClass(waitingDialog, "hide");
 
 }());

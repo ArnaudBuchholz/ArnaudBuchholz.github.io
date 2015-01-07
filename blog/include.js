@@ -58,16 +58,10 @@
                 return; // OK, script already inserted
             }
         }
-        // First insert blog JavaScript (will be triggered with gpf-loaded)
-        head.insertBefore(_el("script", {
-            language: "javascript",
-            src: blogJsUrl
-        }), head.firstChild);
-        // Then GPF
         head.insertBefore(_el("script", {
             language: "javascript",
             src: gpfUrl,
-            "gpf-loaded": "blog"
+            "gpf-loaded": blogJsUrl
         }), head.firstChild);
         // Style sheets
         if (fileAccess) {
