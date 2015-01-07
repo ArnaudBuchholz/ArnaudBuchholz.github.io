@@ -74,6 +74,13 @@ It means that long JavaScript operations are split into chunks and sequenced
 using setTimeout to prevent any interface freeze and get rid of the annoying
 long-script running message.
 
+![Long running example in Chrome](http://arnaudbuchholz.github.io/blog/post/
+Timeout and WebWorker/Chrome long running script.png)
+
+This [long running sampler](http://arnaudbuchholz.github.io/blog/post/
+Timeout and WebWorker/long running.html) will allow you to see this dialog.
+Enter a number of seconds to wait for (usually 100s) and click go!
+
 ## setTimeout in an inactive tab
 
 Chrome and FireFox share a particularity that I discovered when using
@@ -108,6 +115,18 @@ decided to explore this possibility.
 
 I created a new [GitHub repository](https://github.com/ArnaudBuchholz/
 timeout) and started to work on a small library that would solve the issue.
+
+### Skeleton
+
+This script is based on an [immediately-invoked function expression](http:
+//en.wikipedia.org/wiki/Immediately-invoked_function_expression). It has
+two advantages:
+* A private scope for variables and functions
+* When invoked, **[this](https://github.com/ArnaudBuchholz/timeout/blob/
+8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L252)** is translated into
+the parameter **[self](https://github.com/ArnaudBuchholz/timeout/blob/
+8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L1)** to provide
+the global context object
 
 ### Hooking the APIs
 
@@ -197,15 +216,18 @@ transmit types that are convertible to a JSON representation.
 
 This is a highly simplified truth. To be exact, HTML5 introduces the notion of
 [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/Guide/
-API/DOM/The_structured_clone_algorithm) used for serializing complex objects).
+API/DOM/The_structured_clone_algorithm) used for serializing complex objects.
 
 To receive messages, you must register on the "message" event using
 [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/
 EventTarget.addEventListener)
 
-* Either on the worker object to listen to messages sent from the worker to
-the main thread
-* Or on object to listen to its messages in the main thread
+* Either on the [created worker object](https://github.com/ArnaudBuchholz/
+timeout/blob/8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L243) to listen
+to messages sent from the worker to the main thread
+* Or the [worker global context](https://github.com/ArnaudBuchholz/timeout/blob/
+8bd8e05556d6cc1cf4f8310b24ab23f024a663f7/timeout.js#L249) to listen to the
+messages received from the main thread
 
 ### Other implementation details
 
