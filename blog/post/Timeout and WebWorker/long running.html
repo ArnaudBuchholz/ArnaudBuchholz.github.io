@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Long running sample</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <style>
+
+body {
+    background-color: white;
+    background-image: none;
+    background-repeat: repeat;
+    background-position: center;
+    color: black;
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Arial, Courier, Sans-Serif;
+    font-size: 10pt;
+    font-weight: normal;
+    height: 100%;
+    /* Prevent selection */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+        </style>
+        <script language="javascript">
+
+/**
+ * Return a string representing the value padded with 0 on its left.
+ *
+ * @param {Number} value Value to convert
+ * @param {Number} [length=2] length Expected result string length
+ * @return {String}
+ */
+function zero(value, length) {
+    var result,
+            pad;
+    if (undefined === length) {
+        length = 2;
+    }
+    result = value.toString();
+    pad = length - result.length;
+    if (0 < pad) {
+        result = (new Array(pad + 1)).join("0") + result;
+    }
+    return result;
+}
+
+function onGo() {
+    var start = new Date(),
+        delay = 1000 * document.getElementById("delay").value,
+        now;
+    do {
+        now = new Date();
+        document.title = zero(now.getHours()) + ':' + zero(now.getMinutes()) + ":" + zero(now.getSeconds()) + "." + zero(now.getMilliseconds(), 3);
+    } while (now - start < delay);
+}
+
+function onLoad() {
+    lastInterval = new Date();
+    setInterval(onInterval, 100);
+}
+
+        </script>
+    </head>
+    <body onload="onLoad()">
+        <span>Running time: </span>
+        <input type="number" id="delay">
+        <span>s </span>
+        <input type="button" value="go!" onclick="onGo()">
+    </body>
+</html>
