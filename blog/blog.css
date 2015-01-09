@@ -56,8 +56,8 @@ div.post-body h2 {
     font-family: verdana, arial, sans-serif;
     font-size: 18px;
     color: #5A7ECE;
-    margin-bottom: 8px;
-    border-bottom: solid #5A7ECE 1px;
+    margin-bottom: 8px !important;
+    border-bottom: solid #5A7ECE 1px !important;
 }
 
 div.post-body h3 {
