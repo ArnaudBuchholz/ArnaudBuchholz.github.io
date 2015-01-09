@@ -25,7 +25,7 @@
 h3.post-title {
     font-family: Verdana, Arial, sans-serif;
     font-size: 24px;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     background-color: #5A7ECE;
     border: solid #FFFFFF 1px;
     border-radius: 16px;
