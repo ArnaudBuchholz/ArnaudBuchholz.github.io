@@ -3,7 +3,7 @@ body {
     background-color: #eeeeee;
 }
 
-div.post-body {
+div.post {
     font-family: verdana, arial, sans-serif;
     font-size: 16px;
     -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 20px 0px;
@@ -38,6 +38,6 @@ div.post-body {
     margin-left: 64px;
 }
 
-div.post-body p {
-    line-height: 22px;
+div.post-body {
+    line-height: 1.4;
 }
