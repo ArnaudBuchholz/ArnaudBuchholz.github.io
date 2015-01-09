@@ -71,8 +71,7 @@
                 href: "../file.css"
             }));
         }
-        // Blog CSS is appended to the end of the page
-        document.body.appendChild(_el("link", {
+        head.appendChild(_el("link", {
             rel: "stylesheet",
             type: "text/css",
             href: blogCssUrl
