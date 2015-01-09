@@ -25,7 +25,7 @@
 h3.post-title {
     font-family: Verdana, Arial, sans-serif;
     font-size: 24px;
-    color: #FFFFFF !important;
+    color: #FFFFFF;
     background-color: #5A7ECE;
     border: solid #FFFFFF 1px;
     border-radius: 16px;
@@ -41,6 +41,18 @@ h3.post-title:before {
     border: solid #5A7ECE 1px;
     background-color: white;
     border-radius: 16px;
+}
+
+h3.post-title a {
+    color: #FFFFFF !important;
+}
+
+h3.post-title a:visited {
+    color: #FFFFFF !important;
+}
+
+h3.post-title a:hover {
+    color: #FFFFFF !important;
 }
 
 /* Post content container */
@@ -73,6 +85,7 @@ div.post-body h2 {
     color: #5A7ECE;
     border-bottom: solid #5A7ECE 1px !important;
     margin: 0 !important;
+    padding: 0 !important;
 }
 
 div.post-body h3 {
