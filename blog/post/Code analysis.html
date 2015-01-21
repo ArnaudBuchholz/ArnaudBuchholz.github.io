@@ -1,0 +1,233 @@
+<script language="javascript" src="../include.js"></script>
+<div class="post">
+<h3 class="post-title entry-title">
+  Code analysis
+</h3>
+<div class="post-header">
+  <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<code class="markdown">
+
+### Linting is necessary...
+
+In a previous post, I already talked about the benefits of using
+[code linting tools](http://gpf-js.blogspot.ca/2013/11/
+why-lint-tool-can-reduce-development.html) as it really saves the developer time
+during the coding phase:
+* It highlights common mistakes (undeclared variables, unused parameters,
+use of [hasOwnProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+Reference/Global_Objects/Object/hasOwnProperty), == vs ===...)
+* It maintains code consistency (formatting, naming conventions...)
+* It checks code complexity, in particular the [cyclomatic complexity](http://
+en.wikipedia.org/wiki/Cyclomatic_complexity)
+
+Regarding JavaScript, one of the best options is to apply
+[JSHint](http://www.jshint.com/).
+
+### ...but not sufficient
+
+However, this kind of tool has limits as it tends to apply general validation
+rules without considering the context in which the code is executed.
+
+To illustrate the problem, let me show you the following code:
+
+`(function () {
+  "use strict";
+
+  /*global $, freezeInterface, updateInterfaceUsingData, unfreezeInterface*/
+
+  // Handles the click on a specific button
+  function onClick () {
+    freezeInterface("Please wait, updating information...");
+    $.ajax("getInformation.aspx", {
+      success: function (data) {
+        updateInterfaceUsingData(data);
+      }
+    });
+    unfreezeInterface();
+  }
+
+})();`
+
+
+Using the "global" comment, JSHint is configured to be aware of the global
+variables to be defined. Besides the fact the **onClick** function is not used,
+the code successfully pass JSHint validation.
+
+But do you see any problem here?
+
+### Understanding the code
+
+The method [$.ajax](http://api.jquery.com/jquery.ajax/) comes from the
+[jQuery](http://jquery.com/) framework and it encapsulates the necessary code to
+handle AJAX calls with the server.
+
+There are two important things to remember about AJAX calls:
+* They are asynchronous
+* Like everything else, they may fail
+
+### Parsing JavaScript
+
+### esprima
+
+`{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "FunctionExpression",
+          "id": null,
+          "params": [],
+          "defaults": [],
+          "body": {
+            "type": "BlockStatement",
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "Literal",
+                  "value": "use strict",
+                  "raw": "\"use strict\""
+                }
+              },
+              {
+                "type": "FunctionDeclaration",
+                "id": {
+                  "type": "Identifier",
+                  "name": "onClick"
+                },
+                "params": [],
+                "defaults": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Identifier",
+                          "name": "freezeInterface"
+                        },
+                        "arguments": [
+                          {
+                            "type": "Literal",
+                            "value": "Please wait, updating information...",
+                            "raw": "\"Please wait, updating information...\""
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "Identifier",
+                            "name": "$"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "ajax"
+                          }
+                        },
+                        "arguments": [
+                          {
+                            "type": "Literal",
+                            "value": "getInformation.aspx",
+                            "raw": "\"getInformation.aspx\""
+                          },
+                          {
+                            "type": "ObjectExpression",
+                            "properties": [
+                              {
+                                "type": "Property",
+                                "key": {
+                                  "type": "Identifier",
+                                  "name": "success"
+                                },
+                                "value": {
+                                  "type": "FunctionExpression",
+                                  "id": null,
+                                  "params": [
+                                    {
+                                      "type": "Identifier",
+                                      "name": "data"
+                                    }
+                                  ],
+                                  "defaults": [],
+                                  "body": {
+                                    "type": "BlockStatement",
+                                    "body": [
+                                      {
+                                        "type": "ExpressionStatement",
+                                        "expression": {
+                                          "type": "CallExpression",
+                                          "callee": {
+                                            "type": "Identifier",
+                                            "name": "updateInterfaceUsingData"
+                                          },
+                                          "arguments": [
+                                            {
+                                              "type": "Identifier",
+                                              "name": "data"
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  "rest": null,
+                                  "generator": false,
+                                  "expression": false
+                                },
+                                "kind": "init",
+                                "method": false,
+                                "shorthand": false
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Identifier",
+                          "name": "unfreezeInterface"
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ]
+                },
+                "rest": null,
+                "generator": false,
+                "expression": false
+              }
+            ]
+          },
+          "rest": null,
+          "generator": false,
+          "expression": false
+        },
+        "arguments": []
+      }
+    }
+  ]
+}`
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
