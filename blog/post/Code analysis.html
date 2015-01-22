@@ -60,13 +60,23 @@ But do you see any problem here?
 
 ### Understanding the code
 
-The method [$.ajax](http://api.jquery.com/jquery.ajax/) comes from the
+The method **[$.ajax](http://api.jquery.com/jquery.ajax/)** comes from the
 [jQuery](http://jquery.com/) framework and it encapsulates the necessary code to
 handle AJAX calls with the server.
 
 There are two important things to remember about AJAX calls:
-* They are asynchronous
-* Like everything else, they may fail
+* They are asynchronous: this is why callbacks are used to be notified when the
+answer comes back from the server
+* Like any function call, it may fail
+
+Consequently, there are two problems with the way the method **onClick** was
+implemented:
+* The use of **unfreezeInterface** is done right after the call to **$.ajax**.
+It means that it does not even wait for the call to succeed.
+* Furthermore, if the call fails, nothing will happen. The error is ignored.
+
+There are some situations where it is acceptable to ignore errors but, in a
+general manner, all errors must be handled.
 
 ### Parsing JavaScript
 
