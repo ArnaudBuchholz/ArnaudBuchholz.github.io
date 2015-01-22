@@ -172,6 +172,7 @@ code {
 
 code.gpf-blog {
     display: block;
+    max-height: 400px;
 }
 
 code.javascript {
