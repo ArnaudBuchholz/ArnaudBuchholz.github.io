@@ -4,19 +4,19 @@
     var
         baseUrl = "http://ArnaudBuchholz.github.io/",
         gpfUrl,
-        blogJsUrl,
+        gpfLoadedUrls,
         blogCssUrl,
         fileAccess = window.location.protocol === "file:";
 
     if (fileAccess) {
         window.gpfSourcesPath = "../../../gpf-js/";
         gpfUrl = "../../../gpf-js/boot.js";
-        blogJsUrl = "../blog.js";
+        gpfLoadedUrls = "../jshint.js,../blog.js";
         blogCssUrl = "../blog.css";
 
     } else {
         gpfUrl = baseUrl + "gpf.js";
-        blogJsUrl = baseUrl + "blog/blog.js";
+        gpfLoadedUrls = baseUrl + "blog/jshint.js, " + baseUrl + "blog/blog.js";
         blogCssUrl = baseUrl + "blog/blog.css";
     }
 
@@ -61,7 +61,7 @@
         head.insertBefore(_el("script", {
             language: "javascript",
             src: gpfUrl,
-            "gpf-loaded": blogJsUrl
+            "gpf-loaded": gpfLoadedUrls
         }), head.firstChild);
         // Style sheets
         if (fileAccess) {
