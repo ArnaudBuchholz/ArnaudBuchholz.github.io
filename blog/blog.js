@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    /*global JSHINT*/
+
     /**
      * Event handler for the tokenizer (javascript parsing)
      *
