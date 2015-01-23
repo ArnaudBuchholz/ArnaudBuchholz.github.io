@@ -96,6 +96,19 @@
                 .replace(/(&amp;)/g, "&");
             codeElement.innerHTML = ""; // Easy way to clear current content
             gpf.js.tokenize.apply(codeElement, [content, onTokenFound]);
+            // JSHint integration
+            var
+                result = JSHINT(content),
+                jshintTooltip = document.createElement("div"),
+                jshintResult = document.createElement("div");
+            jshintTooltip.appendChild(jshintResult);
+            gpf.html.addClass(jshintTooltip, "gpf-jshint");
+            if (result) {
+                gpf.html.addClass(jshintResult, "gpf-jshint-ok");
+            } else {
+                gpf.html.addClass(jshintResult, "gpf-jshint-ko");
+            }
+            code.appendChild(jshintTooltip);
             return false;
         },
 
