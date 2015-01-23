@@ -168,6 +168,33 @@ div.post-body table tr.even {
 code {
     line-height: normal;
     display: none;
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+
+code div.gpf-jshint {
+    position: absolute;
+    top: 0px;
+    right: 16px;
+    width: 32px;
+    height: 16px;
+    background: transparent url(jshint.png) no-repeat;
+}
+
+div.gpf-jshint div {
+    position: absolute;
+    left: 32px;
+    width: 16px;
+    height: 16px;
+}
+
+div.gpf-jshint div.gpf-jshint-ok {
+    background: transparent url(ok.png) no-repeat;
+}
+
+div.gpf-jshint div.gpf-jshint-ko{
+    background: transparent url(ko.png) no-repeat;
 }
 
 code.gpf-blog {
