@@ -2,6 +2,136 @@
     "use strict";
 
     /*global JSHINT*/
+    var
+        jsHintConfig = {
+            "bitwise"       : false,
+            "curly"         : true,
+            "eqeqeq"        : true,
+            "forin"         : true,
+            "immed"         : true,
+            "latedef"       : true,
+            "newcap"        : true,
+            "noarg"         : true,
+            "noempty"       : true,
+            "nonew"         : true,
+            "plusplus"      : false,
+            "regexp"        : true,
+            "undef"         : true,
+            "strict"        : true,
+            "trailing"      : true,
+
+            "asi"           : false,
+            "boss"          : false,
+            "debug"         : false,
+            "eqnull"        : false,
+            "es5"           : false,
+            "esnext"        : false,
+            "evil"          : false,
+            "expr"          : false,
+            "funcscope"     : false,
+            "globalstrict"  : false,
+            "iterator"      : false,
+            "lastsemic"     : false,
+            "laxbreak"      : true,
+            "laxcomma"      : false,
+            "loopfunc"      : false,
+            "multistr"      : false,
+            "onecase"       : false,
+            "proto"         : false,
+            "regexdash"     : false,
+            "scripturl"     : false,
+            "smarttabs"     : false,
+            "shadow"        : false,
+            "sub"           : false,
+            "supernew"      : false,
+            "validthis"     : false,
+
+            "browser"       : true,
+            "couch"         : false,
+            "devel"         : true,
+            "dojo"          : false,
+            "jquery"        : false,
+            "mootools"      : false,
+            "node"          : true,
+            "nonstandard"   : false,
+            "prototypejs"   : false,
+            "rhino"         : false,
+            "wsh"           : true,
+
+            "nomen"         : false,
+            "onevar"        : false,
+            "passfail"      : false,
+            "white"         : false,
+
+            "unused"        : "strict",
+
+            "maxerr"        : 100,
+
+            "camelcase"     : true,
+            "indent"        : 4,
+            "quotmark"      : "double",
+            "maxstatements" : 128,
+            "maxparams"     : 6,
+            "maxcomplexity" : 10,
+            "maxlen"        : 80,
+
+            "predef"        : [
+                "gpf"
+            ]
+        };
+
+    function showJSHintError (codeElement, error) {
+        var target = error.line,
+            position = 1,
+            current = codeElement.firstChild,
+            len,
+            array,
+            offset;
+        // line (1-based)
+        while (current && position !== target) {
+            if (-1 < current.textContent.indexOf("\n")) {
+                array = current.textContent.split("\n");
+                position += array.length - 1;
+                // Get the length of the last line
+                offset = array.pop().length;
+            }
+            current = current.nextSibling;
+        }
+        // character (1-based)
+        target = error.character;
+        position = offset + 1;
+        while (current && target > position) {
+            len = current.textContent.length;
+            if (position + len > target) {
+                break;
+            }
+            position += len;
+            current = current.nextSibling;
+        }
+    }
+
+    function applyJSHint (content, codeElement) {
+        // JSHint integration
+        var
+            result = JSHINT(content, jsHintConfig),
+            jshintTooltip = document.createElement("div"),
+            jshintResult = document.createElement("div"),
+            len,
+            idx;
+        jshintTooltip.appendChild(jshintResult);
+        gpf.html.addClass(jshintTooltip, "gpf-jshint");
+        if (result) {
+            gpf.html.addClass(jshintResult, "gpf-jshint-ok");
+        } else {
+            var data = JSHINT.data();
+            len = data.errors.length;
+            for (idx = 0; idx < len; ++idx) {
+//                showJSHintError(codeElement, data.errors[idx]);
+            }
+            gpf.html.addClass(jshintResult, "gpf-jshint-ko");
+        }
+        codeElement.appendChild(jshintTooltip);
+    }
 
     /**
      * Event handler for the tokenizer (javascript parsing)
@@ -98,19 +228,7 @@
                 .replace(/(&amp;)/g, "&");
             codeElement.innerHTML = ""; // Easy way to clear current content
             gpf.js.tokenize.apply(codeElement, [content, onTokenFound]);
-            // JSHint integration
-            var
-                result = JSHINT(content),
-                jshintTooltip = document.createElement("div"),
-                jshintResult = document.createElement("div");
-            jshintTooltip.appendChild(jshintResult);
-            gpf.html.addClass(jshintTooltip, "gpf-jshint");
-            if (result) {
-                gpf.html.addClass(jshintResult, "gpf-jshint-ok");
-            } else {
-                gpf.html.addClass(jshintResult, "gpf-jshint-ko");
-            }
-            code.appendChild(jshintTooltip);
+            applyJSHint(content, codeElement);
             return false;
         },
 
