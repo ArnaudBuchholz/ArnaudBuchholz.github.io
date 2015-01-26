@@ -26,6 +26,25 @@ en.wikipedia.org/wiki/Cyclomatic_complexity)
 Regarding JavaScript, one of the best options is to apply
 [JSHint](http://www.jshint.com/).
 
+In the following example:
+
+`(function () {
+  "use strict";
+
+  // Handles the click on a specific button
+  function onClick (ctrl) {
+    freezeInterface("Please wait, updating information...")
+    $.ajax ('getInformation.aspx', {
+      success: function (data) {
+        updateInterfaceUsingData(data);
+      }
+    })
+    unfreezeInterface();
+  }
+
+})();`
+
+
 ### ...but not sufficient
 
 However, this kind of tool has limits as it tends to apply general validation
