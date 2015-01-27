@@ -23,24 +23,36 @@ Reference/Global_Objects/Object/hasOwnProperty), == vs ===...)
 * It checks code complexity, in particular the [cyclomatic complexity](http://
 en.wikipedia.org/wiki/Cyclomatic_complexity)
 
-Regarding JavaScript, one of the best options is to apply
+Regarding JavaScript, in my opinion, one of the best options is to apply
 [JSHint](http://www.jshint.com/).
 
-In the following example:
+In the following example, several errors are raised because of:
+* quotes inconsistencies
+* undeclared functions (let say they are declared in other sources)
+* missing semicolon
+* undeclared or improper variable names
+* ...
 
-`(function () {
+Move your mouse over the underlined errors to read them.
+
+`(function () {/*gpf:apply-jshint*/
   "use strict";
 
   // Handles the click on a specific button
-  function onClick (ctrl) {
+  function on_click (ctrl) {
     freezeInterface("Please wait, updating information...")
     $.ajax ('getInformation.aspx', {
       success: function (data) {
-        updateInterfaceUsingData(data);
+        resultCode = data.resultCode;
+        if (resultCode == 0)
+            updateInterfaceUsingData(data);
       }
     })
     unfreezeInterface();
   }
+
+    document.getElementById('myButton')
+        .addEventListener("click", on_click);
 
 })();`
 
@@ -50,9 +62,9 @@ In the following example:
 However, this kind of tool has limits as it tends to apply general validation
 rules without considering the context in which the code is executed.
 
-To illustrate the problem, let me show you the following code:
+To illustrate the problem, let me first fix the JSHint errors:
 
-`(function () {
+`(function () {/*gpf:apply-jshint*/
   "use strict";
 
   /*global $, freezeInterface, updateInterfaceUsingData, unfreezeInterface*/
@@ -62,22 +74,38 @@ To illustrate the problem, let me show you the following code:
     freezeInterface("Please wait, updating information...");
     $.ajax("getInformation.aspx", {
       success: function (data) {
-        updateInterfaceUsingData(data);
+        var resultCode = data.resultCode;
+        if (resultCode === 0) {
+            updateInterfaceUsingData(data);
+        }
       }
     });
     unfreezeInterface();
   }
 
+  document.getElementById("myButton")
+    .addEventListener("click", onClick);
+
 })();`
 
 
 Using the "global" comment, JSHint is configured to be aware of the global
-variables to be defined. Besides the fact the **onClick** function is not used,
-the code successfully pass JSHint validation.
+variables to be defined. With this declaration, the code successfully passes
+JSHint validation.
 
 But do you see any problem here?
 
-### Understanding the code
+...
+
+no?
+
+...
+
+really?
+
+...
+
+### Incorrect use of the API
 
 The method **[$.ajax](http://api.jquery.com/jquery.ajax/)** comes from the
 [jQuery](http://jquery.com/) framework and it encapsulates the necessary code to
@@ -85,21 +113,74 @@ handle AJAX calls with the server.
 
 There are two important things to remember about AJAX calls:
 * They are asynchronous: this is why callbacks are used to be notified when the
-answer comes back from the server
-* Like any function call, it may fail
+answer comes back from the server.
 
-Consequently, there are two problems with the way the method **onClick** was
+* Like any function call, they may generate errors: either because the API that
+was invoked can't provide the requested result or because a network failure
+prevents the call to complete.
+
+Consequently, there are two problems with the way the method **onClick** is
 implemented:
 * The use of **unfreezeInterface** is done right after the call to **$.ajax**.
 It means that it does not even wait for the call to succeed.
+
 * Furthermore, if the call fails, nothing will happen. The error is ignored.
 
 There are some situations where it is acceptable to ignore errors but, in a
 general manner, all errors must be handled.
 
-### Parsing JavaScript
+### Understanding the code
 
-### esprima
+To detect such a misconception, one must first locate any function call to
+**$.ajax** and then analyse the parameters to verify that it has been used the
+right way.
+
+One easy solution could be to consider the whole source as a big string, look
+for the "$.ajax" and then check that the "success" as well as the "error"
+keywords appear just after.
+
+But how reliable is that?
+
+`(function () {/*gpf:apply-jshint*/
+  "use strict";
+
+  /*global $, freezeInterface, updateInterfaceUsingData, unfreezeInterface*/
+  /*global showError*/
+
+  // Handles the click on a specific button
+  function onClick () {
+    freezeInterface("Please wait, updating information...");
+    $.ajax("getInformation.aspx", {
+      success: function (data) {
+        var resultCode = data.resultCode;
+        if (resultCode === 0) {
+            updateInterfaceUsingData(data);
+        } else {
+            // The 'error' keyword is here but inside a string
+            showError("An error occurred");
+        }
+      }
+    });
+    unfreezeInterface();
+  }
+
+  document.getElementById("myButton")
+    .addEventListener("click", onClick);
+
+})();`
+
+In the above example, the error keyword appears in a comment and a string.
+
+In the end, it means that we need to parse the JavaScript in order to
+verify that the object passed to the **$.ajax** function contains a member named
+"error".
+
+JavaScript parsing is a wide topic... In my [library](https://github.com/
+ArnaudBuchholz/gpf-js), I created a [tokenizer](https://github.com/
+ArnaudBuchholz/gpf-js/blob/master/tokenizer.js) that is used in this website to
+apply syntax coloring but it does not really provides the program structure.
+
+### esprima a JavaScript parser
 
 `{
   "type": "Program",
