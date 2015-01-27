@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    //region JSHint integration
+
     /*global JSHINT*/
     var
         // Based on my .jshintrc
@@ -153,6 +155,8 @@
         codeElement.appendChild(jshintTooltip);
     }
 
+    //endregion
+
     /**
      * Event handler for the tokenizer (javascript parsing)
      *
@@ -287,6 +291,12 @@
                         configureImage);
                     gpf.each(fragment.getElementsByTagName("a"),
                         configureAnchor);
+                    /**
+                     * TODO
+                     * - Substitute " with &laquo; and &raquo;
+                     * - First char of a paragraph that appears after a title
+                     *   could be formatted in a special way (bigger)
+                     */
                     codeParent.insertBefore(fragment, codeElement);
                 } else {
                     codeParent.insertBefore(child, codeElement);
