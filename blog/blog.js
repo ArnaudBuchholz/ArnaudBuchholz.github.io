@@ -3,6 +3,7 @@
 
     /*global JSHINT*/
     var
+        // Based on my .jshintrc
         jsHintConfig = {
             "bitwise"       : false,
             "curly"         : true,
@@ -86,7 +87,9 @@
             current = codeElement.firstChild,
             len,
             array,
-            offset;
+            offset,
+            title,
+            fake;
         // line (1-based)
         while (current && position !== target) {
             if (-1 < current.textContent.indexOf("\n")) {
@@ -108,6 +111,23 @@
             position += len;
             current = current.nextSibling;
         }
+        // Reached the end of the line?
+        if (-1 < current.textContent.indexOf("\n")) {
+            // Insert a fake placeholder
+            fake = document.createElement("span");
+            fake.className = "space";
+            fake.appendChild(document.createTextNode(" "));
+            current = current.parentNode.insertBefore(fake, current);
+        }
+        // Show the error
+        gpf.html.addClass(current, "gpf-jshint-error");
+        title = current.getAttribute("title");
+        if (title) {
+            title += "\n" + error.reason;
+        } else {
+            title = error.reason;
+        }
+        current.setAttribute("title", title);
     }
 
     function applyJSHint (content, codeElement) {
@@ -126,7 +146,7 @@
             var data = JSHINT.data();
             len = data.errors.length;
             for (idx = 0; idx < len; ++idx) {
-//                showJSHintError(codeElement, data.errors[idx]);
+                showJSHintError(codeElement, data.errors[idx]);
             }
             gpf.html.addClass(jshintResult, "gpf-jshint-ko");
         }
