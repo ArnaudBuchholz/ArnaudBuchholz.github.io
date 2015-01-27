@@ -175,7 +175,7 @@ code {
 
 code div.gpf-jshint {
     position: absolute;
-    top: 0px;
+    top: 4px;
     right: 16px;
     width: 32px;
     height: 16px;
@@ -184,7 +184,8 @@ code div.gpf-jshint {
 
 div.gpf-jshint div {
     position: absolute;
-    left: 32px;
+    left: 28px;
+    top: -2px;
     width: 16px;
     height: 16px;
 }
@@ -193,8 +194,12 @@ div.gpf-jshint div.gpf-jshint-ok {
     background: transparent url(ok.png) no-repeat;
 }
 
-div.gpf-jshint div.gpf-jshint-ko{
+div.gpf-jshint div.gpf-jshint-ko {
     background: transparent url(ko.png) no-repeat;
+}
+
+span.gpf-jshint-error {
+    border-bottom: dotted 2px red;
 }
 
 code.gpf-blog {
