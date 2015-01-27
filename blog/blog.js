@@ -174,6 +174,12 @@
             token = gpf.replaceEx(token, {
                 "\t": "    "
             });
+        } else if ("comment" === type) {
+            // Not perfect but acceptable solution
+            if ("/*gpf:apply-jshint*/" === token) {
+                gpf.html.addClass(codeElement, "gpf-jshint");
+                return;
+            }
         }
         // Concatenate to the code ele,ent
         tag = document.createElement("span");
@@ -248,7 +254,9 @@
                 .replace(/(&amp;)/g, "&");
             codeElement.innerHTML = ""; // Easy way to clear current content
             gpf.js.tokenize.apply(codeElement, [content, onTokenFound]);
-            applyJSHint(content, codeElement);
+            if (gpf.html.hasClass(codeElement, "gpf-jshint")) {
+                applyJSHint(content, codeElement);
+            }
             return false;
         },
 
