@@ -196,8 +196,8 @@
      */
     function configureCode (idx, code) {
         gpf.interfaces.ignoreParameter(idx);
-        if (!code.getAttribute("class")) {
-            code.setAttribute("class", "javascript");
+        if (!code.className) {
+            code.className = "javascript";
         }
     }
 
