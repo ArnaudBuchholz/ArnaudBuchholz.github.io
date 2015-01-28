@@ -136,26 +136,9 @@ try {
 }
 
 // Load the provided file
-gpf.fs.getInfo(parameters.path, {
+gpf.stringFromFile(parameters.path, gpf.encoding.UTF_8, {
     error: exitWithError,
-    ready: function (event) {
-        var infos = event.get("info");
-        if (infos.type === gpf.fs.TYPE_NOT_FOUND) {
-            exitWithError("File not found");
-        }
-        gpf.fs.readAsBinaryStream(parameters.path, {
-            error: exitWithError,
-            ready: function (event) {
-                var stream = event.get("stream");
-                var decoder = gpf.encoding.createDecoder(stream,
-                    gpf.encoding.UTF_8);
-                gpf.stringFromStream(decoder, {
-                    error: exitWithError,
-                    data: function (event) {
-                        verify(event.get("buffer"));
-                    }
-                });
-            }
-        });
+    data: function (event) {
+        verify(event.get("buffer"));
     }
 });
