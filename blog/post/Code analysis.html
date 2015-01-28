@@ -33,7 +33,8 @@ In the following example, several errors are raised because of:
 * undeclared or improper variable names
 * ...
 
-Move your mouse over the underlined errors to read them.
+Move your mouse over the underlined errors to read them *(note that this is
+using live JSHint parsing)*.
 
 `(function () {/*gpf:apply-jshint*/
   "use strict";
@@ -136,7 +137,7 @@ To detect such a misconception, one must first locate any function call to
 right way.
 
 One easy solution could be to consider the whole source as a big string, look
-for the "$.ajax" and then check that the "success" as well as the "error"
+for "$.ajax" and then check that the "success" as well as the "error"
 keywords appear just after.
 
 But how reliable is that?
@@ -169,19 +170,38 @@ But how reliable is that?
 
 })();`
 
-In the above example, the error keyword appears in a comment and a string.
+In the above example, the "error" keyword appears in a comment and a string.
 
-In the end, it means that we need to parse the JavaScript in order to
-verify that the object passed to the **$.ajax** function contains a member named
-"error".
+Furthermore, how can you make sure that no instruction is executed after the
+call to **$.ajax**?
+
+### Parsing the code
+
+The only good way to analyze the JavaScript code is to parse the source in order
+to build a structured representation of the instructions it contains.
+
+Consequently, the **$.ajax** would appear as a function call and it would be
+possible to enumerate and check its parameters.
+In particular, we could verify that the second one is an object with a member
+named "error".
 
 JavaScript parsing is a wide topic... In my [library](https://github.com/
 ArnaudBuchholz/gpf-js), I created a [tokenizer](https://github.com/
 ArnaudBuchholz/gpf-js/blob/master/tokenizer.js) that is used in this website to
-apply syntax coloring but it does not really provides the program structure.
+apply syntax coloring but it does not really provides the program structure: it
+just identifies the keywords, strings, comments and symbols.
 
-### esprima a JavaScript parser
+### esprima: a free JavaScript parser
 
+On the other hand, there are existing libraries that do the job for you. I will
+focus on [esprima](http://esprima.org/index.html).
+
+To make a long story short, esprima is a JavaScript library that parses
+JavaScript sources. It generates a [Sensible syntax tree](http://esprima.org/
+doc/index.html#ast) format, compatible with [Mozilla Parser AST](https://
+developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API).
+
+The above example is converted into:
 `{
   "type": "Program",
   "body": [
@@ -278,17 +298,85 @@ apply syntax coloring but it does not really provides the program structure.
                                     "type": "BlockStatement",
                                     "body": [
                                       {
-                                        "type": "ExpressionStatement",
-                                        "expression": {
-                                          "type": "CallExpression",
-                                          "callee": {
-                                            "type": "Identifier",
-                                            "name": "updateInterfaceUsingData"
-                                          },
-                                          "arguments": [
-                                            {
+                                        "type": "VariableDeclaration",
+                                        "declarations": [
+                                          {
+                                            "type": "VariableDeclarator",
+                                            "id": {
                                               "type": "Identifier",
-                                              "name": "data"
+                                              "name": "resultCode"
+                                            },
+                                            "init": {
+                                              "type": "MemberExpression",
+                                              "computed": false,
+                                              "object": {
+                                                "type": "Identifier",
+                                                "name": "data"
+                                              },
+                                              "property": {
+                                                "type": "Identifier",
+                                                "name": "resultCode"
+                                              }
+                                            }
+                                          }
+                                        ],
+                                        "kind": "var"
+                                      },
+                                      {
+                                        "type": "IfStatement",
+                                        "test": {
+                                          "type": "BinaryExpression",
+                                          "operator": "===",
+                                          "left": {
+                                            "type": "Identifier",
+                                            "name": "resultCode"
+                                          },
+                                          "right": {
+                                            "type": "Literal",
+                                            "value": 0,
+                                            "raw": "0"
+                                          }
+                                        },
+                                        "consequent": {
+                                          "type": "BlockStatement",
+                                          "body": [
+                                            {
+                                              "type": "ExpressionStatement",
+                                              "expression": {
+                                                "type": "CallExpression",
+                                                "callee": {
+                                                  "type": "Identifier",
+                                                  "name": "updateInterfaceUsingData"
+                                                },
+                                                "arguments": [
+                                                  {
+                                                    "type": "Identifier",
+                                                    "name": "data"
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          ]
+                                        },
+                                        "alternate": {
+                                          "type": "BlockStatement",
+                                          "body": [
+                                            {
+                                              "type": "ExpressionStatement",
+                                              "expression": {
+                                                "type": "CallExpression",
+                                                "callee": {
+                                                  "type": "Identifier",
+                                                  "name": "showError"
+                                                },
+                                                "arguments": [
+                                                  {
+                                                    "type": "Literal",
+                                                    "value": "An error occurred",
+                                                    "raw": "\"An error occurred\""
+                                                  }
+                                                ]
+                                              }
                                             }
                                           ]
                                         }
@@ -324,6 +412,53 @@ apply syntax coloring but it does not really provides the program structure.
                 "rest": null,
                 "generator": false,
                 "expression": false
+              },
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "MemberExpression",
+                    "computed": false,
+                    "object": {
+                      "type": "CallExpression",
+                      "callee": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "Identifier",
+                          "name": "document"
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "getElementById"
+                        }
+                      },
+                      "arguments": [
+                        {
+                          "type": "Literal",
+                          "value": "myButton",
+                          "raw": "\"myButton\""
+                        }
+                      ]
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "name": "addEventListener"
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Literal",
+                      "value": "click",
+                      "raw": "\"click\""
+                    },
+                    {
+                      "type": "Identifier",
+                      "name": "onClick"
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -336,6 +471,51 @@ apply syntax coloring but it does not really provides the program structure.
     }
   ]
 }`
+
+
+In particular, the **$.ajax** call is:
+`// [...]
+                     {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "Identifier",
+                            "name": "$"
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "ajax"
+                          }
+                        },
+                        "arguments": [
+                          {
+                            "type": "Literal",
+                            "value": "getInformation.aspx",
+                            "raw": "\"getInformation.aspx\""
+                          },`
+
+And, at the same level, you find the call to **unfreezeInterface**:
+`// [...]
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Identifier",
+                          "name": "unfreezeInterface"
+                        },
+                        "arguments": []
+                      }
+                    }`
+
+So it is possible to write a program that uses esprima to parse the JavaScript
+source and then analyze the result structure to do the necessary checks.
+
+### verify.js
 
 </code>
 <!-- Drop those two lines -->
