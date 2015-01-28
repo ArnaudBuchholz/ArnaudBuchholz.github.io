@@ -61,7 +61,7 @@ using live JSHint parsing)*.
 ### ...but not sufficient
 
 However, this kind of tool has limits as it tends to apply general validation
-rules without considering the context in which the code is executed.
+rules without considering the meaning of the code that is executed.
 
 To illustrate the problem, let me first fix the JSHint errors:
 
@@ -177,8 +177,8 @@ call to **$.ajax**?
 
 ### Parsing the code
 
-The only good way to analyze the JavaScript code is to parse the source in order
-to build a structured representation of the instructions it contains.
+The only good way to understand the JavaScript code is to parse the source in
+order to build a structured representation of the instructions it contains.
 
 Consequently, the **$.ajax** would appear as a function call and it would be
 possible to enumerate and check its parameters.
@@ -193,7 +193,7 @@ just identifies the keywords, strings, comments and symbols.
 
 ### esprima: a free JavaScript parser
 
-On the other hand, there are existing libraries that do the job for you. I will
+Fortunately, there are existing libraries that do the job for you. I will
 focus on [esprima](http://esprima.org/index.html).
 
 To make a long story short, esprima is a JavaScript library that parses
@@ -201,7 +201,7 @@ JavaScript sources. It generates a [Sensible syntax tree](http://esprima.org/
 doc/index.html#ast) format, compatible with [Mozilla Parser AST](https://
 developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API).
 
-The above example is converted into:
+The previous example is converted into:
 `{
   "type": "Program",
   "body": [
@@ -498,7 +498,7 @@ In particular, the **$.ajax** call is:
                             "raw": "\"getInformation.aspx\""
                           },`
 
-And, at the same level, you find the call to **unfreezeInterface**:
+And, at the same level, you find the call to **unfreezeInterface** call:
 `// [...]
                     {
                       "type": "ExpressionStatement",
