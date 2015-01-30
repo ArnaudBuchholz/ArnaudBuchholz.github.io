@@ -14,7 +14,7 @@ function exitWithError(e) {
     process.exit();
 }
 
-// Bootstrap, load & check dependencies
+// Load & check dependencies
 try {
     var gpf = require("gpf-js");
 } catch (e) {
@@ -35,15 +35,15 @@ try {
  */
 function checkAjaxCallbacks(ast) {
     var
-        callbacks = ast.arguments[1],
+        callbackObj = ast.arguments[1],
         len,
         idx,
         property,
         checked = false;
-    if (callbacks.type === "ObjectExpression") {
-        len = callbacks.properties.length;
+    if (callbackObj.type === "ObjectExpression") {
+        len = callbackObj.properties.length;
         for (idx = 0; idx < len; ++idx) {
-            property = callbacks.properties[idx];
+            property = callbackObj.properties[idx];
             // look for "complete" or "error" callback function
             if (property.type
                 && (property.key.name === "complete"
@@ -54,7 +54,7 @@ function checkAjaxCallbacks(ast) {
 
     } else {
         console.warn("Unable to process ajax callbacks: type= "
-            + callbacks.type);
+            + callbackObj.type);
     }
     if (!checked) {
         console.error("@" + ast.loc.start.line
@@ -76,9 +76,11 @@ function walk(ast) {
         idx,
         child,
         wasAjaxCall;
+    // ExpressionStatement AST is not relevant here, replace it with expression
     if (ast.type === "ExpressionStatement") {
         ast = ast.expression;
     }
+    // $.ajax call?
     if (ast.type === "CallExpression"
         && ast.callee.type === "MemberExpression"
         && ast.callee.object.name === "$"
@@ -88,12 +90,13 @@ function walk(ast) {
     } else {
         result = false;
     }
+    // Explore children
     if (ast.type === "CallExpression") {
         children = ast.callee;
         // ignore arguments
     } else {
         // default
-        children = ast.body;
+        children = ast.body; // may be undefined
     }
     if (children) {
         if (children instanceof Array) {
@@ -114,16 +117,12 @@ function walk(ast) {
     return result;
 }
 
-// Verification function
-function verify(source) {
-    var
-        ast = esprima.parse(source, {
-            loc: true // Nodes have line and column-based location info
-        });
-    walk(ast);
-}
-
-// Parameters parsing
+/**
+ * Parameters parsing
+ *
+ * The GPF library provides an helper to parse parameters with a given syntax
+ * In this case, the command expects only one required parameter
+ */
 try {
     var parameters = gpf.Parameter.parse([{
         name: "path",
@@ -131,14 +130,30 @@ try {
         type: "string"
     }, gpf.Parameter.VERBOSE], process.argv.slice(2));
 } catch (e) {
+    console.log("node verify <path>");
     console.error(e.message);
     process.exit();
 }
 
-// Load the provided file
+/**
+ * File loading
+ *
+ * The GPF library handles streams.
+ * The gpf.stringFromFile0 API provides a way to load the content of a file as a
+ * text decoded with a given encoding (only UTF-8 supported).
+ * Stream reading is asynchronous.
+ * The end is signaled using a typed event that contains parameters.
+ *
+ * In that case, when the string is fully loaded, the event "data" is generated
+ * and the result is available through the parameter named buffer.
+ */
 gpf.stringFromFile(parameters.path, gpf.encoding.UTF_8, {
     error: exitWithError,
     data: function (event) {
-        verify(event.get("buffer"));
+        var
+            ast = esprima.parse(event.get("buffer"), {
+                loc: true // Nodes have line and column-based location info
+            });
+        walk(ast);
     }
 });
