@@ -84,6 +84,10 @@
         };
 
     function showJSHintError (codeElement, error) {
+        if (!error) {
+            // Usually associated with a lexer panic
+            return;
+        }
         var target = error.line,
             position = 1,
             current = codeElement.firstChild,
@@ -112,6 +116,9 @@
             }
             position += len;
             current = current.nextSibling;
+        }
+        if (!current) {
+            return;
         }
         // Reached the end of the line?
         if (-1 < current.textContent.indexOf("\n")) {
