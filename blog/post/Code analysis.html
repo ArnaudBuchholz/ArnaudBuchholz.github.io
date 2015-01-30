@@ -12,7 +12,7 @@
 
 ### Linting is necessary...
 
-In a previous post, I already talked about the benefits of using
+In a previous post, I have been talking about the benefits of using
 [code linting tools](http://gpf-js.blogspot.ca/2013/11/
 why-lint-tool-can-reduce-development.html) as it really saves the developer time
 during the coding phase:
@@ -133,7 +133,7 @@ general manner, all errors must be handled.
 ### Understanding the code
 
 To detect such a misconception, one must first locate any function call to
-**$.ajax** and then analyse the parameters to verify that it has been used the
+**$.ajax** and then analyze the parameters to verify that it has been used the
 right way.
 
 One easy solution could be to consider the whole source as a big string, look
@@ -517,165 +517,66 @@ source and then analyze the result structure to do the necessary checks.
 
 ### verify.js
 
-`"use strict";/*gpf:apply-jshint*/
-/*global gpf:true*/ // Overrides .jshintrc configuration
+So I created the program [verify.js](https://github.com/ArnaudBuchholz/
+ArnaudBuchholz.github.io/blob/master/blog/post/Code%20analysis/verify.js) that
+relies on esprima to parse a file and locate the two problems described above.
 
-/**
- * Quick exit helper
- *
- * @param {*} e
- */
-function exitWithError(e) {
-    if (e instanceof gpf.events.Event) {
-        e = e.get("error");
-    }
-    console.error(e);
-    process.exit();
-}
+The main algorithm relies on the structure exploration done in the function
+[walk](https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/blob/
+65e9bf2164a3081a90f92fe2ff4805479880ea6b/blog/post/Code%20analysis/
+verify.js#L71) and, once the **$.ajax** structure is detected, the function
+[checkAjaxCallbacks](https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/
+blob/65e9bf2164a3081a90f92fe2ff4805479880ea6b/blog/post/Code%20analysis/
+verify.js#L36) takes care of checking the parameters.
 
-// Load & check dependencies
-try {
-    var gpf = require("gpf-js");
-} catch (e) {
-    console.error("require(gpf-js) failed: use npm install gpf-js");
-    exitWithError(e);
-}
-try {
-    var esprima = require("esprima");
-} catch (e) {
-    console.error("require(esprima) failed: use npm install esprima");
-    exitWithError(e);
-}
+To use it, first get it from the GitHub repository
+(use the [raw](https://raw.githubusercontent.com/ArnaudBuchholz/
+ArnaudBuchholz.github.io/master/blog/post/Code%20analysis/verify.js) button).
 
-/**
- * $.ajax AST has been identified, check parameters
- *
- * @param {Object} ast
- */
-function checkAjaxCallbacks(ast) {
-    var
-        callbackObj = ast.arguments[1],
-        len,
-        idx,
-        property,
-        checked = false;
-    if (callbackObj.type === "ObjectExpression") {
-        len = callbackObj.properties.length;
-        for (idx = 0; idx < len; ++idx) {
-            property = callbackObj.properties[idx];
-            // look for "complete" or "error" callback function
-            if (property.type
-                && (property.key.name === "complete"
-                    ||property.key.name === "error")) {
-                checked = true;
-            }
-        }
+Supposing you have [nodeJs](http://nodejs.org/) installed, open a command prompt
+and type:
+* npm install gpf-js
+* npm install esprima
 
-    } else {
-        console.warn("Unable to process ajax callbacks: type= "
-            + callbackObj.type);
-    }
-    if (!checked) {
-        console.error("@" + ast.loc.start.line
-            + ": missing error / complete handler on $.ajax call");
-    }
-}
+![Setup](https://arnaudbuchholz.github.io/blog/post/Code%20analysis/setup.png)
 
-/**
- * Walk down the AST structure and locate $.ajax calls
- *
- * @param {Object} ast
- * @return {Boolean} the AST is a $.ajax call
- */
-function walk(ast) {
-    var
-        result,
-        children,
-        len,
-        idx,
-        child,
-        wasAjaxCall;
-    // ExpressionStatement AST is not relevant here, replace it with expression
-    if (ast.type === "ExpressionStatement") {
-        ast = ast.expression;
-    }
-    // $.ajax call?
-    if (ast.type === "CallExpression"
-        && ast.callee.type === "MemberExpression"
-        && ast.callee.object.name === "$"
-        && ast.callee.property.name === "ajax") {
-        checkAjaxCallbacks(ast);
-        result = true;
-    } else {
-        result = false;
-    }
-    // Explore children
-    if (ast.type === "CallExpression") {
-        children = ast.callee;
-        // ignore arguments
-    } else {
-        // default
-        children = ast.body; // may be undefined
-    }
-    if (children) {
-        if (children instanceof Array) {
-            len = children.length;
-            wasAjaxCall = false;
-            for (idx = 0; idx < len; ++idx) {
-                child = children[idx];
-                if (wasAjaxCall) {
-                    console.warn("@" + child.loc.start.line
-                        + ": Instruction found after $.ajax");
-                }
-                wasAjaxCall = walk(child);
-            }
-        } else {
-            walk(children);
-        }
-    }
-    return result;
-}
+Then you are ready to go.
 
-/**
- * Parameters parsing
- *
- * The GPF library provides an helper to parse parameters with a given syntax
- * In this case, the command expects only one required parameter
- */
-try {
-    var parameters = gpf.Parameter.parse([{
-        name: "path",
-        required: true,
-        type: "string"
-    }, gpf.Parameter.VERBOSE], process.argv.slice(2));
-} catch (e) {
-    console.log("node verify &amp;lt;path&amp;gt;");
-    console.error(e.message);
-    process.exit();
-}
+Type "node verify"
 
-/**
- * File loading
- *
- * The GPF library handles streams.
- * The gpf.stringFromFile0 API provides a way to load the content of a file as a
- * text decoded with a given encoding (only UTF-8 supported).
- * Stream reading is asynchronous.
- * The end is signaled using a typed event that contains parameters.
- *
- * In that case, when the string is fully loaded, the event "data" is generated
- * and the result is available through the parameter named buffer.
- */
-gpf.stringFromFile(parameters.path, gpf.encoding.UTF_8, {
-    error: exitWithError,
-    data: function (event) {
-        var
-            ast = esprima.parse(event.get("buffer"), {
-                loc: true // Nodes have line and column-based location info
-            });
-        walk(ast);
-    }
-});`
+![Help](https://arnaudbuchholz.github.io/blog/post/Code%20analysis/help.png)
+
+Or download the two samples and test them:
+* [sample1.js](https://arnaudbuchholz.github.io/blog/post/Code%20analysis/
+sample1.js)
+
+![Sample 1](https://arnaudbuchholz.github.io/blog/post/Code%20analysis/
+sample1.png)
+
+* [sample2.js](https://arnaudbuchholz.github.io/blog/post/Code%20analysis/
+sample2.js)
+
+![Sample 2](https://arnaudbuchholz.github.io/blog/post/Code%20analysis/
+sample2.png)
+
+### To conclude
+
+JavaScript linting with JSHint is necessary. However, you might need a more
+advanced tool that is capable of understanding the meaning of the algorithm
+to get a deeper validation of your code.
+
+With this article, I tried to demonstrate only a fragment of what can be done
+with the AST structure generated by esprima.
+
+But once the door is opened:
+* You can also check function signatures or dependencies, keep track of closures,
+handle variable types...
+
+* You may also think of generating statistics, documentation...
+
+* Why not modifying the AST structure in order to manipulate the code and
+generate a modified version of it: have a look on
+[escodegen](https://github.com/estools/escodegen).
 
 </code>
 <!-- Drop those two lines -->
