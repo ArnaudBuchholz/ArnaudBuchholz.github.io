@@ -251,6 +251,16 @@ pre.code.output {
     color: #C0C0C0;
 }
 
+/* Summary part (Used for LinkedIn integration) */
+
+div.summary {
+    background-color: #F0F0F0;
+}
+
+div.icon-licence {
+    font-size: 8pt;
+}
+
 /* CSS spinning animation */
 
 .spin {
