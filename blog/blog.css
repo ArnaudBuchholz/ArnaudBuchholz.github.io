@@ -255,10 +255,10 @@ pre.code.output {
 
 div.summary {
     background-color: #F0F0F0;
-    margin: 2px;
-    padding: 3px;
+    margin: 4px;
+    padding: 4px;
     font-size: 14px;
-    min-height: 128px;
+    min-height: 140px;
 }
 
 /* CSS spinning animation */
