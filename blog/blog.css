@@ -255,10 +255,10 @@ pre.code.output {
 
 div.summary {
     background-color: #F0F0F0;
-}
-
-div.icon-licence {
-    font-size: 8pt;
+    margin: 2px;
+    padding: 3px;
+    font-size: 14px;
+    min-height: 128px;
 }
 
 /* CSS spinning animation */
