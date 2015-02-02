@@ -11,21 +11,82 @@
 <div class="summary">
     <img src="..\ninja.png" align="left">
     As a technical support, I had to deal with situations where a quick and
-    dirty fix was necessary to get things and wait for the official patch.
+    dirty fix was necessary to get things done while waiting for the official
+    patch.<br/>
     I learned a lot by doing so and I would like to share some of these stories
     with you.
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Javascript and development",
+    "author": {
+        "@type": "Person",
+        "name": "Arnaud Buchholz",
+        "image": "https://en.gravatar.com/userimage/57789459/524bdffdc1fa6e86619b548c2ed70cac.jpg",
+        "url": "http://gpf-js.blogspot.ca/"
+    },
+    "headline": "Sneaky JavaScript Technics I",
+    "url": "http://gpf-js.blogspot.ca/sneaky-javascript-technics-i.html",
+    "datePublished": "2015-01-01T18:46:00.000Z",
+    "dateModified": "2015-01-02T18:47:11.984Z",
+    "description": "As a technical support, I had to deal with situations where a quick and dirty fix was necessary to get things done while waiting for the official patch. I learned a lot by doing so and I would like to share some of these stories with you."
+}
+    </script>
 </div>
 <code class="markdown">
 ### The context
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at
-sollicitudin purus, non vestibulum lorem. In rhoncus fermentum laoreet.
-Suspendisse enim magna, maximus id sodales laoreet, tristique quis tortor. Nam
-sit amet nibh lorem. Maecenas nec ornare elit, et dapibus tellus. In euismod
-semper varius. Phasellus vitae cursus lectus. Fusce posuere tortor vel felis
-pretium, at convallis erat accumsan. Phasellus posuere leo ac tellus iaculis,
-ac commodo dolor gravida. Cras quis suscipit nibh, quis sodales est. Nullam
-pharetra metus ac nunc mollis bibendum.
+Maybe you already know it, but a
+[input type=hidden](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/
+Input) field does not generate any [change event](https://developer.mozilla.org/
+en-US/docs/Web/Events/change).
+
+For some reasons, I had to detect when the value of a hidden field was changed
+in order to trigger additional code. I had no way to change the code that was
+updating the field so I had to find a solution that was field-centric.
+
+A quick note before going any further: I don't pretend that any of the solutions
+below is the right thing to do and, as a matter of fact, I learned a lot by
+these kind of mistakes.
+The key here is that I tried several ways to solve my problem and finally kept
+the one that suited my needs at that moment (knowing that a more stable solution
+would come).
+
+### First attempt: active monitoring
+
+My first thought was to monitor the field using a timer in order to check if the
+field changed.
+
+`(function () {/*gpf:apply-jshint*/
+    "use strict";
+
+    var
+        _fieldHandle = document.getElementById("hiddenFieldID"),
+        lastValue = _fieldHandle.value;
+
+    function actionToBeTriggered(/*value*/) {
+        // What needs to be done when the value changed
+    }
+
+    function didTheHiddenFieldChanged() {
+        if (_fieldHandle.value !== lastValue) {
+            lastValue = _fieldHandle.value;
+            actionToBeTriggered(lastValue);
+        }
+    }
+
+    window.setTimer(didTheHiddenFieldChanged, 10);
+
+})();`
+
+This has two disadvantages:
+* As for any polling mechanism, it uselessly consumes CPU
+
+* The detection occurs only when the JavaScript engine has some free CPU time to
+executes the timer function. It means that if the value changes twice, we might
+see only one of the two changes. In the worst situation, if the value is set
+back to the initial value, this was not event detecting the change.
 
 </code>
 <!-- Drop those two lines -->
