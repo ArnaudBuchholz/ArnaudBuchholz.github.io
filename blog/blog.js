@@ -246,6 +246,26 @@
     }
 
     /**
+     * Check if the P starts with (...) then place it inside a div.note
+     * @param idx
+     * @param p
+     */
+    function configureParagraph (idx, p) {
+        gpf.interfaces.ignoreParameter(idx);
+        if (0 === p.textContent.indexOf("(...)")) {
+            var
+                div = document.createElement("div"),
+                text;
+            div.className = "note";
+            div = p.parentNode.insertBefore(div, p);
+            div.appendChild(p);
+            // Remove (...)
+            text = p.firstChild;
+            text.textContent = text.textContent.substr(5);
+        }
+    }
+
+    /**
      * Dictionary mapping known class type to a specific handler that knows how
      * to reformat its content.
      * The handler must have the following signature:
@@ -298,6 +318,8 @@
                         configureImage);
                     gpf.each(fragment.getElementsByTagName("a"),
                         configureAnchor);
+                    gpf.each(fragment.getElementsByTagName("p"),
+                        configureParagraph);
                     /**
                      * TODO
                      * - Substitute " with &laquo; and &raquo;
