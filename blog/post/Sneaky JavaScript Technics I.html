@@ -9,7 +9,7 @@
 <div class="post-body">
 <!-- Copy from the next line -->
 <div class="summary">
-    <img src="..\ninja.png" align="left">
+    <img src="http://ArnaudBuchholz.github.io/blog/ninja.png" align="left">
     As a technical support, I had to deal with situations where a quick and
     dirty fix was necessary to get things done while waiting for the official
     patch.<br/>
@@ -42,14 +42,15 @@ Maybe you already know it, but a
 Input) field does not generate any [change event](https://developer.mozilla.org/
 en-US/docs/Web/Events/change).
 
-For some reasons, I had to detect when the value of a hidden field was changed
-in order to trigger additional code. I had no way to change the code that was
-updating the field so I had to find a solution that was field-centric.
+For some reasons, I had to detect when the value of one specific hidden field
+was changed in order to trigger the execution of a custom function.
+I had no way to change the code that was setting the value of the field so I had
+to find a solution that was field-centric.
 
-A quick note before going any further: I don't pretend that any of the solutions
-below is the right thing to do and, as a matter of fact, I learned a lot by
-these kind of mistakes.
-The key here is that I tried several ways to solve my problem and finally kept
+(...) A quick note before going any further: I don't pretend that any of the
+solutions below is the right thing to do but, as a matter of fact, I learned a
+lot by trying and doing mistakes.
+The key here is that I tried several ways to solve my problem and I finally kept
 the one that suited my needs at that moment (knowing that a more stable solution
 would come).
 
@@ -80,14 +81,56 @@ field changed.
 
 })();`
 
-This has two disadvantages:
-* As for any polling mechanism, it uselessly consumes CPU
+Considering that this script is loaded (and evaluated) **after** the field has
+been created, it has two big disadvantages:
 
-* The detection occurs only when the JavaScript engine has some free CPU time to
-executes the timer function. It means that if the value changes twice, we might
-see only one of the two changes. In the worst situation, if the value is set
-back to the initial value, this was not event detecting the change.
+* As for any polling mechanism, it uselessly consumes CPU on a regular basis.
 
+* Because of the timer use, the detection occurs only when the JavaScript engine
+has some free CPU time to executes the function.
+
+Indeed, the following code will generate trouble:
+`document.getElementById("hiddenFieldID").value = 1;
+// Some code
+document.getElementById("hiddenFieldID").value = 2;`
+
+Only the value "2" would be seen.
+
+Worst case, let say that the last value detected was "2", then no change would
+be detected.
+
+### Second attempt: hooking "set"
+
+After reading an interesting article about one of the new features of the
+ECMAScript 5.1: [Object.defineProperty](https://developer.mozilla.org/en-US/
+docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty), I wanted to
+see if Chrome would allow me to redefine the value property of the hidden field.
+
+I tried the following:
+
+`(function () {/*gpf:apply-jshint*/
+    "use strict";
+
+    function actionToBeTriggered(/*value*/) {
+        // What needs to be done when the value changed
+    }
+
+    Object.defineProperty(document.getElementById("hiddenFieldID"), "value", {
+        get: function () { return 0; },
+        set: actionToBeTriggered
+    });
+
+})();`
+
+And... it worked.
+
+This solution, beside the questionable support of such a mechanism, allowed me
+to hook a callback that was called every time the value was changed.
+
+### Conclusion
+
+Once the patch has been delivered, we decided that the hidden field was no more
+necessary and replaced it with a direct call to the function.
 </code>
 <!-- Drop those two lines -->
 </div>
