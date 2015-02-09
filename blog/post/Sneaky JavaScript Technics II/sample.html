@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Timeout</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <style>
+
+body {
+    background-color: white;
+    background-image: none;
+    background-repeat: repeat;
+    background-position: center;
+    color: black;
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Arial, Courier, Sans-Serif;
+    font-size: 10pt;
+    font-weight: normal;
+    height: 100%;
+    /* Prevent selection */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.big_button {
+    display: inline-block;
+    width: 160px;
+    height: 100px;
+    border-radius: 50%;
+    border: solid 4px black;
+    background-color: white;
+    text-align: center;
+    vertical-align: middle;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 32px;
+    text-decoration: none;
+    color: black;
+    padding-top: 60px;
+}
+
+a.big_button:hover {
+    color: darkred;
+    background: repeating-radial-gradient(
+            circle,
+            white,
+            white 5px,
+            #FFF0F0 5px,
+            #FFF0F0 10px
+    );
+}
+
+a.big_button:active {
+    color: white;
+    background: repeating-radial-gradient(
+            circle,
+            #FF4040,
+            #FF4040 5px,
+            #FF0000 5px,
+            #FF0000 10px
+    );
+    border: solid 4px white;
+}
+
+#console {
+    width: 320px;
+    height: 200px;
+    border: solid 2px gray;
+    border-radius: 8px;
+    padding: 8px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: white;
+    background-color: black;
+    overflow: scroll;
+}
+
+        </style>
+        <script language="javascript">
+
+// Overrides the console.log method
+var _log = console.log;
+console.log = function (text) {
+    var newLine = document.createElement("div");
+    newLine.appendChild(document.createTextNode(text));
+    document.getElementById("console").appendChild(newLine);
+}
+
+        </script>
+        <script language="javascript">
+
+            if (-1 < window.location.search.indexOf("fix")) {
+                document.write("<" + "script language=\"javascript\" src=\"http://ArnaudBuchholz.github.io/blog/post/Sneaky%20JavaScript%20Technics%20II\fix.js"><" + "/script>");
+            }
+
+        </script>
+        <script language="javascript">
+
+            function onClick() {
+                console.log('Did you click me?')
+            }
+
+        </script>
+    </head>
+    <body onload="onLoad()">
+        <table>
+            <tr>
+                <td>
+                    <a class="big_button" href="javascript:onClick()" style="">Click me</a>
+                </td>
+                <td>
+                    <div id="console"></div>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
