@@ -254,7 +254,13 @@ pre.code.output {
 /* Summary part (Used for LinkedIn integration) */
 
 div.summary {
-    background-color: #F0F0F0;
+    background: repeating-radial-gradient(
+        circle at left center,
+        #F0F0F0,
+        #F0F0F0 10px,
+        #FFFFFF 10px,
+        #FFFFFF 20px
+    );
     margin: 4px;
     padding: 4px;
     font-size: 14px;
