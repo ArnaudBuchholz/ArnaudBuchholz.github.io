@@ -1,0 +1,160 @@
+<script language="javascript" src="../include.js"></script>
+<div class="post">
+<h3 class="post-title entry-title">
+    Asynchronous synchronisation
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
+    In this article, I would like to talk about a problem that is typical
+    whenever you have to deal with asynchronous APIs (such as AJAX requests):
+    how do you synchronize your calls to trigger an action when everything
+    completed?
+    <br/>
+    There are great tools to address this issue (such as promises) but I want to
+    explore a different (and simplest?) path.
+</div>
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Asynchronous synchronisation",
+    "author": {
+        "@type": "Person",
+        "name": "Arnaud Buchholz",
+        "image": "https://en.gravatar.com/userimage/57789459/524bdffdc1fa6e86619b548c2ed70cac.jpg",
+        "url": "http://gpf-js.blogspot.ca/"
+    },
+    "headline": "Asynchronous synchronisation",
+    "url": "http://gpf-js.blogspot.ca/asynchronous-synchronisation.html",
+    "datePublished": "",
+    "dateModified": "",
+    "description": "In this article, I would like to talk about a problem that is typical whenever you have to deal with asynchronous APIs (such as AJAX requests): how do you synchronize your calls to trigger an action when everything completed? There are great tools to address this issue (such as promises) but I want to explore a different (and simplest?) path."}
+</script>
+<code class="markdown">
+## Promises
+
+I already talked about [promises](http://gpf-js.blogspot.ca/2015/01/
+timeout-and-webworker.html) and this is clearly one of the best solution to
+handle sequencing of events.
+
+I also recommend reading this awesome presentation from
+[Trevor Burnham](https://twitter.com/trevorburnham):
+[Flow control with promises](http://trevorburnham.com/presentations/
+flow-control-with-promises/)
+
+However, not all APIs are using promises and, sometimes, you have to be creative
+to workaround the lack of helpers.
+
+## NodeJS folder exploration
+
+One example I recently came through was that I had to recursively list all files
+of a folder in order to find specific ones.
+
+NodeJS exposes its [file API](http://nodejs.org/api/fs.html) in two flavors:
+* Synchronous version (for instance: [fs.statSync](http://nodejs.org/api/
+fs.html#fs_fs_statsync_path), [fs.readFileSync](http://nodejs.org/api/
+fs.html#fs_fs_readfilesync_filename_options))
+* Asynchronous version (for instance: [fs.stat](http://nodejs.org/api/
+fs.html#fs_fs_stat_path_callback), [fs.readFile](http://nodejs.org/api/
+fs.html#fs_fs_readfile_filename_options_callback))
+
+### Synchronous version
+
+Obviously, the synchronous version is easier to apply as you can use the result
+of each file API immediately after the call.
+This simplifies a lot the development of the folder exploration function.
+
+
+`var fs = require("fs"),/*gpf:apply-jshint*/
+    path = require("path"),
+    files = {};
+function exploreSync(currentPath) {
+    "use strict";
+    var stat = fs.statSync(currentPath);
+    if (stat.isDirectory()) {
+        // Folder
+        var list = fs.readdirSync(currentPath),
+            len,
+            idx;
+        len = list.length;
+        for (idx = 0; idx < len; ++idx) {
+            exploreSync(path.join(currentPath, list[idx]));
+        }
+    } else {
+        files[currentPath] = fs.readFileSync(currentPath);
+    }
+}
+exploreSync(process.argv[2]);
+console.log("Now we can use files dictionary");`
+
+(...) You might notice that there is no result testing in the above example.
+It is because an exception would be thrown by nodeJS if an error occurs.
+
+### Synchronous vs Asynchronous
+
+As it is so easy to develop the algorithm with the synchronous version, why does
+nodeJS exposes the asynchronous ones?
+
+I see two main reasons:
+* As expressed above, in the synchronous version, error management is done
+through exceptions. Even if it is my preferred way (as it simplifies the code
+writing), it gives less control on error filtering. Indeed, filtering some
+errors would be made by catching all errors and throwing again those you want to
+be thrown.
+
+* You must remember that the JavaScript engine is mono-threaded? If you develop
+a web server that needs - whatever the reason - to use the above exploreSync
+function. It means that the server won't be available to process any other
+request until the folder exploration is done. This is bad.
+
+Asynchronous versions allows time sharing.
+
+### Asynchronous version
+
+`var fs = require("fs"),/*gpf:apply-jshint*/
+    path = require("path"),
+    files = {};
+
+function explore(currentPath) {
+    "use strict";
+    fs.stat(currentPath, function (err, stat) {
+        if (err) {
+            console.error(err);
+        } else if (stat && stat.isDirectory()) {
+            // Folder
+            fs.readdir(currentPath, function (err, list) {
+                var
+                    len,
+                    idx;
+                if (err) {
+                    console.error(err);
+                } else {
+                    len = list.length;
+                    for (idx = 0; idx < len; ++idx) {
+                        explore(path.join(currentPath, list[idx]));
+                    }
+                }
+            });
+        } else {
+            fs.readFile(currentPath, function (err, data) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    files[currentPath] = data;
+                }
+            });
+        }
+    });
+}
+explore(process.argv[2]);
+console.log("Can we use files dictionary ?");`
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
