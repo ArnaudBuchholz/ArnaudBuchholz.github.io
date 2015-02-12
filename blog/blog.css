@@ -71,13 +71,20 @@ div.post-body a {
     background-position: left bottom;
     background-repeat: no-repeat;
     padding-left: 16px;
-    color: #5A7ECE;
     text-decoration: none;
+    border: solid 1px white;
+    border-radius: 4px;
+}
+
+div.post-body a:visited {
+    color: black;
 }
 
 div.post-body a:hover {
-    color: #32356E;
-    text-decoration: underline;
+    transition: all 250ms ease;
+    background-color: #C0C0C0;
+    color: white;
+    border: solid 1px black;
 }
 
 div.post-body h2 {
