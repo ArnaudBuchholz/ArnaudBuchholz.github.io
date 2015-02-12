@@ -254,6 +254,8 @@ pre.code.output {
 /* Summary part (Used for LinkedIn integration) */
 
 div.summary {
+    border: solid 1px #F0F0F0;
+    border-radius: 8px;
     background: repeating-radial-gradient(
         circle at left center,
         #F0F0F0,
@@ -265,6 +267,12 @@ div.summary {
     padding: 4px;
     font-size: 14px;
     min-height: 140px;
+    text-shadow:
+        0px 1px 0 #F0F0F0,
+        0px -1px 0 #F0F0F0,
+        1px 0px 0 #F0F0F0,
+        -1px 0px 0 #F0F0F0,
+        1px 1px 0 #C0C0C0;
 }
 
 /* CSS spinning animation */
