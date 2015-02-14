@@ -1,4 +1,4 @@
-var fs = require("fs"),/*gpf:apply-jshint*/
+var fs = require("fs"),
     path = require("path"),
     start = new Date(),
     files,
