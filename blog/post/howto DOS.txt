@@ -1,2 +1,0 @@
-promt ARTICLE$g
-title ARTICLE
