@@ -65,17 +65,26 @@ fs.html#fs_fs_readfile_filename_options_callback))
 
 ### Synchronous version
 
-Obviously, the synchronous version is easier to apply as you can use the result
-of each file API immediately after the call.
-This simplifies a lot the development of the folder exploration function.
+Obviously, the synchronous version is easier to develop as you can use the
+result of each file API immediately after the call.
+This simplifies a lot the folder exploration function.
 
-
+[download](https://ArnaudBuchholz.github.io/blog/post/
+Asynchronous synchronisation/sample1.js)
 `var fs = require("fs"),/*gpf:apply-jshint*/
     path = require("path"),
-    files = {};
-function exploreSync(currentPath) {
+    start = new Date(),
+    files,
+    key,
+    count;
+
+function exploreSync(currentPath, result) {
     "use strict";
     var stat = fs.statSync(currentPath);
+    if (undefined === result) {
+        // Allocate result dictionary that will be passed to the sub calls
+        result = {};
+    }
     if (stat.isDirectory()) {
         // Folder
         var list = fs.readdirSync(currentPath),
@@ -83,45 +92,76 @@ function exploreSync(currentPath) {
             idx;
         len = list.length;
         for (idx = 0; idx < len; ++idx) {
-            exploreSync(path.join(currentPath, list[idx]));
+            exploreSync(path.join(currentPath, list[idx]), result);
         }
     } else {
-        files[currentPath] = fs.readFileSync(currentPath);
+        // File
+        result[currentPath] = fs.readFileSync(currentPath);
+    }
+    return result;
+}
+
+files = exploreSync(process.argv[2]);
+
+console.log("Here we can use files dictionary:");
+count = 0;
+for (key in files) {
+    if (files.hasOwnProperty(key)) {
+        ++count;
+        console.log(key + " " + files[key].length);
     }
 }
-exploreSync(process.argv[2]);
-console.log("Now we can use files dictionary");`
+console.log("Count: " + count);
+console.log("Spent " + (new Date() - start) + "ms");`
 
 (...) You might notice that there is no result testing in the above example.
 It is because an exception would be thrown by nodeJS if an error occurs.
 
+![sample 1](https://ArnaudBuchholz.github.io/blog/post/
+Asynchronous synchronisation/sample1.png)
+
 ### Synchronous vs Asynchronous
 
-As it is so easy to develop the algorithm with the synchronous version, why does
-nodeJS exposes the asynchronous ones?
+While it is so easy to develop the algorithm with the synchronous APIs,
+why does nodeJS exposes asynchronous ones?
 
-I see two main reasons:
+There are two main reasons:
 * As expressed above, in the synchronous version, error management is done
 through exceptions. Even if it is my preferred way (as it simplifies the code
-writing), it gives less control on error filtering. Indeed, filtering some
-errors would be made by catching all errors and throwing again those you want to
-be thrown.
+writing), it complexifies error filtering. Indeed, filtering some errors would
+be made by catching all exceptions and throwing again those you want to
+be thrown. Less practical but not a big deal.
 
-* You must remember that the JavaScript engine is mono-threaded? If you develop
-a web server that needs - whatever the reason - to use the above exploreSync
-function. It means that the server won't be available to process any other
-request until the folder exploration is done. This is bad.
+* On the other hand, you must remember that the JavaScript engine is
+mono-threaded. If you develop a nodeJS web server that needs - whatever the
+reason - to use the above exploreSync function, then your server won't
+be available to process any other request until the folder exploration is done.
+This is clearly bad and not scalable.
 
-Asynchronous versions allows time sharing.
+The asynchronous versions of the file APIs rely on a simple idea: file access is
+done by the operating system. While doing that, the JavaScript engine could be
+used to do something else!
+
+As a consequence, asynchronous versions of the API allow time sharing and -
+somehow - simulates multi-threading.
 
 ### Asynchronous version
 
+[download](https://ArnaudBuchholz.github.io/blog/post/
+Asynchronous synchronisation/sample2.js)
 `var fs = require("fs"),/*gpf:apply-jshint*/
     path = require("path"),
-    files = {};
+    start = new Date(),
+    files,
+    key,
+    count;
 
-function explore(currentPath) {
+function exploreAsync(currentPath, result) {
     "use strict";
+    if (undefined === result) {
+        // Allocate result dictionary that will be passed to the sub calls
+        result = {};
+    }
     fs.stat(currentPath, function (err, stat) {
         if (err) {
             console.error(err);
@@ -136,7 +176,7 @@ function explore(currentPath) {
                 } else {
                     len = list.length;
                     for (idx = 0; idx < len; ++idx) {
-                        explore(path.join(currentPath, list[idx]));
+                        exploreAsync(path.join(currentPath, list[idx]), result);
                     }
                 }
             });
@@ -145,14 +185,113 @@ function explore(currentPath) {
                 if (err) {
                     console.error(err);
                 } else {
-                    files[currentPath] = data;
+                    result[currentPath] = data;
                 }
             });
         }
     });
 }
-explore(process.argv[2]);
-console.log("Can we use files dictionary ?");`
+
+files = exploreAsync(process.argv[2]);
+
+console.log("Here we can use files dictionary?");
+count = 0;
+for (key in files) {
+    if (files.hasOwnProperty(key)) {
+        ++count;
+        console.log(key + " " + files[key].length);
+    }
+}
+console.log("Count: " + count);
+console.log("Spent " + (new Date() - start) + "ms");`
+
+(...) As you can see here, for each API used, a callback function is needed to
+receive the result as well as the error (if any).
+
+![sample 2](https://ArnaudBuchholz.github.io/blog/post/
+Asynchronous synchronisation/sample2.png)
+
+Hold on a second, why don't I get any result?
+
+Let put some traces
+
+[download](https://ArnaudBuchholz.github.io/blog/post/
+Asynchronous synchronisation/sample3.js)
+`var fs = require("fs"),/*gpf:apply-jshint*/
+    path = require("path"),
+    start = new Date(),
+    files,
+    key,
+    count;
+
+function exploreAsync(currentPath, result) {
+    "use strict";
+    if (undefined === result) {
+        // Allocate result dictionary that will be passed to the sub calls
+        result = {};
+    }
+    console.log(">> fs.stat(" + currentPath + ")");
+    fs.stat(currentPath, function (err, stat) {
+        console.log("<< fs.stat(" + currentPath + ")");
+        if (err) {
+            console.error(err);
+        } else if (stat && stat.isDirectory()) {
+            // Folder
+            console.log(">> fs.readdir(" + currentPath + ")");
+            fs.readdir(currentPath, function (err, list) {
+                console.log("<< fs.readdir(" + currentPath + ")");
+                var
+                    len,
+                    idx;
+                if (err) {
+                    console.error(err);
+                } else {
+                    len = list.length;
+                    for (idx = 0; idx < len; ++idx) {
+                        exploreAsync(path.join(currentPath, list[idx]), result);
+                    }
+                }
+            });
+        } else {
+            console.log(">> fs.readFile(" + currentPath + ")");
+            fs.readFile(currentPath, function (err, data) {
+                console.log("<< fs.readFile(" + currentPath + ")");
+                if (err) {
+                    console.error(err);
+                } else {
+                    result[currentPath] = data;
+                }
+            });
+        }
+    });
+}
+
+files = exploreAsync(process.argv[2]);
+
+console.log("Here we can use files dictionary?");
+count = 0;
+for (key in files) {
+    if (files.hasOwnProperty(key)) {
+        ++count;
+        console.log(key + " " + files[key].length);
+    }
+}
+console.log("Count: " + count);
+console.log("Spent " + (new Date() - start) + "ms");`
+
+![sample 3 (beginning)](https://ArnaudBuchholz.github.io/blog/post/
+Asynchronous synchronisation/sample3a.png)
+![sample 3 (end)](https://ArnaudBuchholz.github.io/blog/post/
+Asynchronous synchronisation/sample3b.png)
+
+See? as those file API are asynchronous, the file dictionary is used before it
+is actually filled. But the filling **does** occur.
+
+So the question is: how do you know the exploration ended?
+
+## The good old way
+
+
 
 </code>
 <!-- Drop those two lines -->
