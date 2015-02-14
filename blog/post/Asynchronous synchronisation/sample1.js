@@ -2,7 +2,8 @@ var fs = require("fs"),
     path = require("path"),
     start = new Date(),
     files,
-    key;
+    key,
+    count;
 
 function exploreSync(currentPath, result) {
     "use strict";
@@ -29,10 +30,13 @@ function exploreSync(currentPath, result) {
 
 files = exploreSync(process.argv[2]);
 
-console.log("Spent " + (new Date() - start) + "ms");
 console.log("Here we can use files dictionary:");
+count = 0;
 for (key in files) {
     if (files.hasOwnProperty(key)) {
+        ++count;
         console.log(key + " " + files[key].length);
     }
 }
+console.log("Count: " + count);
+console.log("Spent " + (new Date() - start) + "ms");
