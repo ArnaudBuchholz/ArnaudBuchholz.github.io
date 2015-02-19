@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - JavaScript Introspection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <script>
+    var __options = {"title":"GPF-JS","flags":{"complexity":{"logicalor":true,"switchcase":true,"forin":false,"trycatch":false,"newmi":true},"jshint":{"globals":{},"options":{"bitwise":false,"curly":true,"eqeqeq":true,"forin":true,"immed":true,"latedef":true,"newcap":true,"noarg":true,"noempty":true,"nonew":true,"plusplus":false,"regexp":true,"undef":true,"strict":true,"trailing":true,"asi":false,"boss":false,"debug":false,"eqnull":false,"es5":false,"esnext":false,"evil":false,"expr":false,"funcscope":false,"globalstrict":false,"iterator":false,"lastsemic":false,"laxbreak":true,"laxcomma":false,"loopfunc":false,"multistr":false,"onecase":false,"proto":false,"regexdash":false,"scripturl":false,"smarttabs":false,"shadow":false,"sub":false,"supernew":false,"validthis":false,"browser":true,"couch":false,"devel":true,"dojo":false,"jquery":false,"mootools":false,"node":true,"nonstandard":false,"prototypejs":false,"rhino":false,"wsh":true,"nomen":false,"onevar":false,"passfail":false,"white":false,"unused":"strict","maxerr":100,"camelcase":true,"indent":4,"quotmark":"double","maxstatements":128,"maxparams":6,"maxcomplexity":10,"maxlen":80,"predef":["gpf"]}}}}
+  </script>
+
+  <link href="assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="assets/css/plato.css" rel="stylesheet">
+  <link href="assets/css/plato-display.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+    <h1>GPF-JS</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="reportBlock lineCount">
+                <div class="reportContent">
+                    <small class="chart-label">Total / Average Lines</small>
+                    <h1>13499 / 374</h1>
+                </div>
+                <div id="chart_historical_sloc" class="chart js-chart"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="reportBlock maintainability">
+                <div class="reportContent">
+                    <small class="chart-label">Average Maintainability</small>
+                    <h1>66.47</h1>
+                </div>
+                <div id="chart_historical_maint" class="chart js-chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="reportBlock maintainabilityList">
+                <h2 class="reportTitle">Worst Maintainability Scores</h2>
+                <ul class="list-unstyled">
+
+                    <li>
+                        <strong>54 score</strong>
+                        <small>params.js</small>
+                    </li>
+
+                    <li>
+                        <strong>55 score</strong>
+                        <small>error.js</small>
+                    </li>
+
+                    <li>
+                        <strong>59 score</strong>
+                        <small>att_json.js</small>
+                    </li>
+
+                    <li>
+                        <strong>61 score</strong>
+                        <small>html.js</small>
+                    </li>
+
+                    <li>
+                        <strong>62 score</strong>
+                        <small>string.js</small>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="reportBlock locList">
+                <h2 class="reportTitle">Largest Files</h2>
+                <ul class="list-unstyled">
+
+                    <li>
+                        <strong>1366 lines</strong>
+                        <small>parser.js</small>
+                    </li>
+
+                    <li>
+                        <strong>1345 lines</strong>
+                        <small>xml.js</small>
+                    </li>
+
+                    <li>
+                        <strong>1301 lines</strong>
+                        <small>html.js</small>
+                    </li>
+
+                    <li>
+                        <strong>1071 lines</strong>
+                        <small>i_stream.js</small>
+                    </li>
+
+                    <li>
+                        <strong>784 lines</strong>
+                        <small>class.js</small>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="reportBlock lintList">
+                <h2 class="reportTitle">Lint Warnings</h2>
+                <ul class="list-unstyled">
+
+                    <li>
+                        <strong>10 lint errors</strong>
+                        <small>coding_convention.js</small>
+                   </li>
+
+                    <li>
+                        <strong>2 lint errors</strong>
+                        <small>engine.js</small>
+                   </li>
+
+                    <li>
+                        <strong>2 lint errors</strong>
+                        <small>parser.js</small>
+                   </li>
+
+                    <li>
+                        <strong>1 lint errors</strong>
+                        <small>boot.js</small>
+                   </li>
+
+                    <li>
+                        <strong>1 lint errors</strong>
+                        <small>html_include.js</small>
+                   </li>
+
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<script type="text/javascript" src="assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="assets/scripts/plato-display.js"></script>
+
+</body>
+</html>

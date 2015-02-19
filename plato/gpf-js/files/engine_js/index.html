@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - engine.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>engine.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">70.77</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">153</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">44.46</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.99</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+(function () { /* Begin of privacy scope */
+    &quot;use strict&quot;;
+/*#endif*/
+
+    // TODO: refactor!
+    
+    var
+        TYPE_NUMBER         = &quot;N&quot;, // number
+        TYPE_STRING         = &quot;S&quot;, // string
+        TYPE_ID             = &quot;I&quot;, // IdString(exec:false)
+        TYPE_EXECUTABLEID   = &quot;E&quot;, // IdString(exec:true)
+        TYPE_ARRAY          = &quot;A&quot;, // array
+        TYPE_DICTIONARY     = &quot;D&quot;, // object
+        TYPE_CODE           = &quot;C&quot;, // CodeArray
+
+        toType = function(value) {
+            var type = typeof value;
+            if (&quot;number&quot; === type) {
+                return TYPE_NUMBER;
+            } else if (&quot;string&quot; === type) {
+                return TYPE_STRING;
+            } else if (value instanceof IdString) {
+                if (value.executable()) {
+                    return TYPE_EXECUTABLEID;
+                } else {
+                    return TYPE_ID;
+                }
+            } else if (value instanceof CodeArray) {
+                return TYPE_CODE;
+            } else if (value instanceof Array) {
+                return TYPE_ARRAY;
+            } else {
+                return TYPE_DICTIONARY;
+            }
+        },
+
+        SYS_DICT = {
+
+            add: function(engineState) {
+                var args = engineState.checkAndPop(&quot;NN&quot;);
+                engineState.push(args[0] + args[1]);
+            },
+
+            mul: function(engineState) {
+                var args = engineState.checkAndPop(&quot;NN&quot;);
+                engineState.push(args[0] * args[1]);
+            },
+
+            sub: function(engineState) {
+                var args = engineState.checkAndPop(&quot;NN&quot;);
+                engineState.push(args[0] - args[1]);
+            },
+
+            div: function(engineState) {
+                var args = engineState.checkAndPop(&quot;NN&quot;);
+                engineState.push(args[0] / args[1]);
+            }
+
+        },
+
+        CodeArray = gpf.define(&quot;CodeArray&quot;, {
+
+            constructor: function() {
+                this._items = [];
+            }
+
+        }),
+
+        IdString = gpf.define(&quot;IdString&quot;, {
+
+            constructor: function(label, executable) {
+                this._label = [];
+                this._executable = executable;
+            },
+
+            executable: function() {
+                return this._executable;
+            }
+
+        }),
+
+        EngineState = gpf.define(&quot;EngineState&quot;, {
+
+            constructor: function() {
+                this._stack = [];
+                // &quot;Top&quot; dictionary is SYS_DICT
+                this._userDict = {};     // Then user dictionary
+                this._dictionaries = []; // Then any other enqueued
+            },
+
+            push: function() {
+                var idx;
+                for (idx = 0; idx &lt; arguments.length; ++idx) {
+                    this._stack.push(arguments[idx]);
+                }
+                // Handle stackoverflow
+            },
+
+            pop: function() {
+                if (0 === this._stack.length) {
+                    throw gpf.Error.EngineStackUnderflow();
+                }
+                return this._stack.pop();
+            },
+
+            checkAndPop: function(types) {
+                var result, idx, value;
+                if (this.length() &lt; types.length) {
+                    throw gpf.Error.EngineStackUnderflow();
+                }
+                result = [];
+                for (idx = 0; idx &lt; types.length; ++idx) {
+                    value = this.internalGet(idx);
+                    if (toType(value) !== types[idx]) {
+                        throw gpf.Error.EngineTypeCheck();
+                    }
+                    result.push(value);
+                }
+                // TODO: optimize
+                while (idx) {
+                    this.pop();
+                    --idx;
+                }
+                return result;
+            },
+
+            internalGet: function(offset) {
+                // WARNING: no check on stack size
+                return this._stack[this._stack.length - offset - 1];
+            },
+
+            length: function() {
+                return this._stack.length;
+            }
+
+        });
+
+
+    gpf.define(&quot;gpf.Engine&quot;, {
+
+        constructor: function() {
+            this._state = new EngineState();
+        },
+
+        execute: function(src) {
+            gpf.interfaces.ignoreParameter(src);
+
+        }
+
+    });
+
+/*#ifndef(UMD)*/
+}()); /* End of privacy scope */
+/*#endif*/</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

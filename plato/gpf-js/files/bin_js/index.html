@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - bin.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>bin.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">64.32</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">197</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">80.35</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.87</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+(function () { /* Begin of privacy scope */
+    &quot;use strict&quot;;
+/*#endif*/
+
+    var
+        _b64 = gpf._ALPHA + gpf._alpha + gpf._digit + &quot;+/&quot;,
+        _b16 = &quot;0123456789ABCDEF&quot;,
+
+        _toBaseANY = function (base, value, length, safepad) {
+            var
+                baseLength = base.length,
+                pow = gpf.bin.isPow2(baseLength),
+                bits,
+                mask,
+                result = [],
+                digit;
+            if (-1 &lt; pow &amp;&amp; (undefined === length || length * pow &lt;= 32)) {
+                /*
+                 * Good conditions to use bits masking &amp; shifting,
+                 * will work with negative values and will be faster
+                 */
+                if (undefined === length) {
+                    bits = 32;
+                } else {
+                    bits = length * pow;
+                }
+                mask = (1 &lt;&lt; (bits - pow)) - 1;
+                bits = (1 &lt;&lt; pow) - 1;
+                while (0 !== value) {
+                    digit = value &amp; bits;
+                    result.unshift(base.charAt(digit));
+                    value = (value &gt;&gt; pow) &amp; mask;
+                }
+            } else {
+                while (0 !== value) {
+                    digit = value % baseLength;
+                    result.unshift(base.charAt(digit));
+                    value = (value - digit) / baseLength;
+                }
+            }
+            if (undefined !== length) {
+                if (undefined === safepad) {
+                    safepad = base.charAt(0);
+                }
+                while (result.length &lt; length) {
+                    result.unshift(safepad.charAt(result.length
+                        % safepad.length));
+                }
+            } else if (0 === result.length) {
+                result = [base.charAt(0)]; // 0
+            }
+            return result.join(&quot;&quot;);
+        },
+
+        _fromBaseANY = function (base, text, safepad) {
+            var
+                baseLength = base.length,
+                result = 0,
+                idx = 0;
+            if (undefined === safepad) {
+                safepad = base.charAt(0);
+            }
+            while (idx &lt; text.length) {
+                if (-1 === safepad.indexOf(text.charAt(idx))) {
+                    break;
+                } else {
+                    ++idx;
+                }
+            }
+            while (idx &lt; text.length) {
+                result = baseLength * result + base.indexOf(text.charAt(idx++));
+            }
+            return result;
+        };
+
+    gpf.bin = {
+
+        /**
+         * Computes the power of 2
+         *
+         * @param {Number} n the power to compute
+         * @return {Number}
+         */
+        pow2: function (n) {
+            return 1 &lt;&lt; n;
+        },
+
+        /**
+         * Check if the given value is a power of 2
+         *
+         * @param {Number} value the value to check
+         * @return {Number} the power of 2 or -1
+         */
+        isPow2: function (value) {
+            // http://en.wikipedia.org/wiki/Power_of_two
+            if (0 &lt; value &amp;&amp; (0 === (value &amp; (value - 1)))) {
+                var result = 0;
+                while (1 &lt; value) {
+                    ++result;
+                    value &gt;&gt;= 1;
+                }
+                return result;
+            } else {
+                return -1;
+            }
+        },
+
+        /**
+         * Encodes the value within the specified base.
+         * Result string length can be defined and missing characters will be
+         * added with safepad.
+         * 
+         * @param {String} base values
+         * @param {Number} value to encode
+         * @param {Number} length of encoding
+         * @param {String} safepad [safepad=base.charAt(0)]
+         * @return {String}
+         */
+        toBaseANY: _toBaseANY,
+
+        /**
+         * Decodes the text value using the specified base.
+         * @param {String} base
+         * @param {String} text
+         * @param {String} safepad [safepad=&quot;&quot;]
+         * @return {Number}
+         */
+        fromBaseANY: _fromBaseANY,
+
+        /**
+         * Returns the hexadecimal encoding of value.
+         * @param {Number} value
+         * @param {Number} length of encoding
+         * @param {String} safepad [safepad=&quot;0&quot;]
+         * @return {String}
+         */
+        toHexa: function (value, length, safepad) {
+            return _toBaseANY(_b16, value, length, safepad);
+        },
+
+        /**
+         * Decodes the hexadecimal text value.
+         * @param {String} text
+         * @param {String} safepad [safepad=&quot;0&quot;]
+         * @return {Number}
+         */
+        fromHexa: function (text, safepad) {
+            return _fromBaseANY(_b16, text, safepad);
+        },
+
+        /**
+         * Returns the base 64 encoding of value.
+         * @param {Number} value
+         * @param {Number} length of encoding
+         * @param {String} safepad [safepad=&quot;0&quot;]
+         * @return {String}
+         */
+        toBase64: function (value, length, safepad) {
+            return _toBaseANY(_b64, value, length, safepad);
+        },
+
+        /**
+         * Decodes the hexadecimal text value.
+         * @param {String} text
+         * @param {String} safepad [safepad=&quot;0&quot;]
+         * @return {Number}
+         */
+        fromBase64: function (text, safepad) {
+            return _fromBaseANY(_b64, text, safepad);
+        },
+
+        /**
+         * Test if the value contains the bitmask.
+         *
+         * @param {Number} value
+         * @param {Number} bitmask
+         * @returns {Boolean}
+         */
+        test: function /*gpf:inline*/ (value, bitmask) {
+            return (value &amp; bitmask) === bitmask;
+        },
+
+        /**
+         * Clear the bitmask inside the value
+         *
+         * @param {Number} value
+         * @param {Number} bitmask
+         * @returns {Number}
+         */
+        clear: function /*gpf:inline*/ (value, bitmask) {
+            return value &amp; ~bitmask;
+        }
+
+    };
+
+/*#ifndef(UMD)*/
+}()); /* End of privacy scope */
+/*#endif*/</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

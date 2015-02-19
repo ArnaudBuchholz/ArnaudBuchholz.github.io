@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - parser.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>parser.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">62.87</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">1366</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">107.55</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">5.65</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+(function () { /* Begin of privacy scope */
+    &quot;use strict&quot;;
+/*#endif*/
+
+    //region Parser
+
+    /**
+     * This parser base class maintain the current stream position
+     * And also offers some basic features to ease parsing and improve speed
+     *
+     * The output has to be transmitted through the protected _output function.
+     *
+     * @class gpf.Parser
+     */
+    gpf.define(&quot;gpf.Parser&quot;, {
+
+        public: {
+
+            constructor: function () {
+                this.reset();
+            },
+
+            /**
+             * Resets the parser position &amp; state
+             *
+             * @param {Function} [state=null] state
+             */
+            reset: function (state) {
+                this._pos = 0;
+                this._line = 0;
+                this._column = 0;
+                this._setParserState(state);
+            },
+
+            /**
+             * Get current position
+             *
+             * @return {{pos: number, line: number, column: number}}
+             */
+            currentPos: function () {
+                return {
+                    pos: this._pos,
+                    line: this._line,
+                    column: this._column
+                };
+            },
+
+            /**
+             * Parser entry point
+             *
+             * @param {...String|null} var_args
+             */
+            parse : function () {
+                var
+                    len = arguments.length,
+                    idx,
+                    arg;
+                for (idx = 0; idx &lt; len; ++idx) {
+                    arg = arguments[idx];
+                    if (null === arg) {
+                        this._finalizeParserState();
+                    } else {
+                        gpf.ASSERT(&quot;string&quot; === typeof arg, &quot;string expected&quot;);
+                        this._parse(arg);
+                    }
+                }
+            },
+
+            /**
+             * Defines an handler for the parser output
+             *
+             * @param {Array|Function|gpf.Callback) handler
+             * @private
+             */
+            setOutputHandler: function (handler) {
+                gpf.ASSERT(handler instanceof Array || handler.apply,
+                    &quot;Invalid output handler&quot;);
+                this._outputHandler = handler;
+            }
+
+        },
+
+        protected: {
+
+            // Configuration / pre-defined handlers
+
+            /**
+             * Initial parser state (set with reset)
+             *
+             * @type {Function|null}
+             * @protected
+             */
+            _initialParserState: null,
+
+            /**
+             * Ignore \r  (i.e. no parsing function called)
+             *
+             * @type {Boolean}
+             * @protected
+             */
+            _ignoreCarriageReturn: false,
+
+            /**
+             * Ignore \n (i.e. no parsing function called)
+             *
+             * @type {Boolean}
+             * @protected
+             */
+            _ignoreLineFeed: false,
+
+//            /**
+//             * Sometimes, common handling of new line can be achieved by a
+//             * single function called automatically
+//             *
+//             * @protected
+//             */
+//            _parsedEndOfLine: function () {}
+
+            /**
+             * No more character will be entered, parser must end
+             * Default implementation consists in calling current state with 0
+             * as parameter. Can be overridden.
+             *
+             * @protected
+             */
+            _finalizeParserState: function () {
+                this._pState(0);
+            },
+
+            /**
+             * Change parser state
+             *
+             * @param {Function} [state=null] state
+             * @protected
+             */
+            _setParserState: function (state) {
+                if (!state) {
+                    state = this._initialParserState;
+                }
+                if (state !== this._pState) {
+                    // TODO trigger state transition
+                    this._pState = state;
+                }
+            },
+
+            /**
+             * The parser generates an output
+             *
+             * @param {*} item
+             * @protected
+             */
+            _output: function (item) {
+                var handler = this._outputHandler;
+                if (handler instanceof Array) {
+                    handler.push(item);
+                } else if (null !== handler) {
+                    // Assuming a Function or a gpf.Callback
+                    handler.apply(this, [item]);
+                }
+            }
+        },
+
+        private: {
+
+            /**
+             * Absolute parser current position
+             *
+             * @type {Number}
+             * @private
+             */
+            _pos: 0,
+
+            /**
+             * Parser current line
+             *
+             * @type {Number}
+             * @private
+             */
+            _line: 0,
+
+            /**
+             * Parser current column
+             *
+             * @type {Number}
+             * @private
+             */
+            _column: 0,
+
+            /**
+             * Parser current state function
+             *
+             * @type {Function}
+             * @private
+             */
+            _pState: null,
+
+            /**
+             * Output handler
+             *
+             * @type {Array|Function|gpf.Callback)
+             * @private
+             */
+            _outputHandler: null,
+
+            /**
+             * Parser internal entry point
+             *
+             * @param {String} buffer
+             * @private
+             */
+            _parse : function (buffer) {
+                var
+                    len,
+                    idx,
+                    char,
+                    state,
+                    newLine = false;
+                len = buffer.length;
+                for (idx = 0; idx &lt; len; ++idx) {
+                    char = buffer.charAt(idx);
+                    if (&quot;\r&quot; === char &amp;&amp; this._ignoreCarriageReturn) {
+                        char = 0;
+                    }
+                    if (&quot;\n&quot; === char &amp;&amp; this._ignoreLineFeed) {
+                        newLine = true;
+                        char = 0;
+                    }
+                    if (char) {
+                        state = this._pState.apply(this, [char]);
+                        if (undefined !== state) {
+                            this._setParserState(state);
+                        }
+                    }
+                    ++this._pos;
+                    if (&quot;\n&quot; === char || newLine) {
+                        ++this._line;
+                        this._column = 0;
+//                        this._parsedEndOfLine();
+                    } else {
+                        ++this._column;
+                    }
+                }
+            }
+        },
+
+        static: {
+
+            /**
+             * Use to finalize the parser state
+             */
+            FINALIZE: null
+        }
+    });
+
+    //endregion
+
+    //region ParserStream
+
+    /**
+     * Encapsulate a parser inside a ReadableStream interface
+     *
+     * @class gpf.ParserStream
+     * @extends gpf.stream.BufferedOnRead
+     * @implements gpf.interfaces.IReadableStream
+     */
+    gpf.define(&quot;gpf.ParserStream&quot;, gpf.stream.BufferedOnRead, {
+
+        public: {
+
+            /**
+             * @param {gpf.Parser} parser
+             * @param {gpf.interfaces.IReadableStream} input
+             * @constructor
+             */
+            constructor: function (parser, input) {
+                this._super(input);
+                this._parser = parser;
+                this._parser.setOutputHandler(new gpf.Callback(this._output,
+                    this));
+            }
+
+        },
+
+        protected: {
+
+            /**
+             * @inheritdoc gpf.stream.BufferedOnRead:_addToBuffer
+             */
+            _addToBuffer: function (buffer) {
+                this._parser.parse(buffer);
+            },
+
+            /**
+             * @inheritdoc gpf.stream.BufferedOnRead:_endOfInputStream
+             */
+            _endOfInputStream: function () {
+                this._parser.parse(gpf.Parser.FINALIZE);
+            },
+
+            /**
+             * @inheritdoc gpf.stream.BufferedOnRead:_readFromBuffer
+             */
+            _readFromBuffer:
+                gpf.stream.BufferedOnRead.prototype._readFromStringBuffer
+
+        },
+
+        private: {
+
+            /**
+             * Callback used to grab the parser output that is concatenated to
+             * the buffer
+             *
+             * @param {String} text
+             * @private
+             */
+            _output: function (text) {
+                this._buffer.push(text);
+                this._bufferLength += text.length;
+            }
+
+        }
+
+    });
+
+    //endregion
+
+    var
+        bitTest = gpf.bin.test,
+        bitClear = gpf.bin.clear,
+
+    //region ITokenizer
+
+        /**
+         * Tokenizer interface
+         *
+         * @interface gpf.interfaces.ITokenizer
+         * @extends gpf.interfaces.Interface
+         */
+        _ITokenizer = gpf._defIntrf(&quot;ITokenizer&quot;, {
+
+            /**
+             * Submit a character to the tokenizer, result indicates if the
+             * token is recognized
+             *
+             * @param {String} char One character to analyze
+             * @return {Number} &lt; 0 means won&#039;t recognize
+             *                    0 means need more chars
+             *                  &gt; 0 means a token is recognized (length result)
+             *
+             * NOTE: if the result is positive, you may submit more chars and
+             * check if it changes.
+             */
+            write: function (char) {
+                gpf.interfaces.ignoreParameter(char);
+                return -1;
+            }
+
+        }),
+
+    // endregion
+
+    //region Pattern
+
+    /**
+     * Pattern structure
+     * -----------------
+     *
+     * [a-zA-Z][a-zA-Z0-9]* is represented by
+     *
+     * PatternGroup
+     * |
+     * +- PatternRange
+     * |
+     * +- PatternRange(max:0)
+     *
+     *
+     * Pattern &#039;grammar&#039;
+     * -----------------
+     *
+     * pattern
+     *      : expression+
+     *
+     * expression
+     *      : item ( &#039;|&#039; item )*
+     *
+     * item
+     *      : match count?
+     *
+     * count
+     *      : &#039;?&#039;
+     *      | &#039;*&#039;
+     *      | &#039;+&#039;
+     *      | &#039;{&#039; &lt;number&gt; &#039;}&#039;
+     *
+     * match
+     *      : &#039;[&#039; char_match_include
+     *      | &#039;(&#039; expression &#039;)&#039;
+     *      | char
+     *
+     * char_match_include : &#039;^&#039; char_match_exclude
+     *                    | &#039;]&#039;
+     *                    | char char_range_sep? char_match_include
+     *
+     * char_match_exclude : &#039;]&#039;
+     *                    | char char_range_sep? char_match_exclude
+     *
+     * char_range_sep : &#039;-&#039; char
+     *
+     * char : &#039;\&#039; escaped_char
+     *      | &lt;any char but ?*+{[(-[&gt;
+     */
+
+        /**
+         * Pattern item: an atomic character matching item
+         *
+         * @class PatternItem
+         * @abstract
+         * @private
+         * @abstract
+         */
+        PatternItem = gpf.define(&quot;PatternItem&quot;, {
+
+            private: {
+
+                /**
+                 * Min number of item iteration
+                 *
+                 * @type {Number}
+                 * @private
+                 */
+                &quot;[_min]&quot;: [gpf.$ClassProperty(true)],
+                _min: 1,
+
+                /**
+                 * Maximum number of item iteration
+                 * 0 means unlimited
+                 *
+                 * @type {Number}
+                 * @private
+                 */
+                &quot;[_max]&quot;: [gpf.$ClassProperty(true)],
+                _max: 1
+
+            },
+
+            public: {
+
+                //region Parsing time
+
+                /**
+                 * Parse the character (in the context of the pattern item)
+                 *
+                 * @param {String} char Character to parse
+                 * @return {Number} see PatternItem.PARSE_xxx
+                 * @abstract
+                 */
+                parse: function (char) {
+                    gpf.interfaces.ignoreParameter(char);
+                    throw gpf.Error.Abstract();
+                    return PatternItem.PARSE_IGNORED;
+                },
+
+                /**
+                 * finalize the item
+                 *
+                 * @abstract
+                 */
+                finalize: function () {
+                },
+
+                //endregion
+
+                //region Execution time
+
+                /**
+                 * item will be evaluated, reset tokenizer state
+                 *
+                 * @param {Object} state Free structure to add values to
+                 * @abstract
+                 */
+                reset: function (state) {
+                    gpf.interfaces.ignoreParameter(state);
+                },
+
+                /**
+                 * item evaluation with a character
+                 *
+                 * @param {Object} state Free structure containing current state
+                 * @param {String} char character to test the pattern with
+                 * @return {Number} Matching result, see PatternItem.WRITE_xxx
+                 * @abstract
+                 */
+                write: function (state, char) {
+                    gpf.interfaces.ignoreParameter(state);
+                    gpf.interfaces.ignoreParameter(char);
+                    throw gpf.Error.Abstract();
+                    return -1;
+                }
+
+                //endregion
+
+            },
+
+            static: {
+
+                PARSE_IGNORED: 0,
+                PARSE_PROCESSED: 1,
+                PARSE_END_OF_PATTERN: 2,
+                PARSE_PROCESSED_EOP: 3, // PROCESSED + END OF PATTERN
+
+                CHARS_QUANTIFICATION: &quot;?*+&quot;,
+
+                WRITE_NO_MATCH: -1,
+                WRITE_NEED_DATA: 0,
+                WRITE_MATCH: 1,
+                WRITE_PATTERN_END: 2,
+                WRITE_FINAL_MATCH: 3
+
+            }
+
+        }),
+
+        /**
+         * Char pattern: recognizes one character
+         *
+         * @class PatternChar
+         * @extend PatternItem
+         * @private
+         */
+        PatternChar = gpf.define(&quot;PatternChar&quot;, PatternItem, {
+
+            private: {
+
+                /**
+                 * The character to match
+                 *
+                 * @type {string}
+                 * @private
+                 */
+                _match: &quot;&quot;
+
+            },
+
+            public: {
+
+                /**
+                 * @inheritDoc PatternItem:parse
+                 */
+                parse: function (char) {
+                    this._match = char;
+                    return PatternItem.PARSE_PROCESSED_EOP;
+                },
+
+                /**
+                 * @inheritDoc PatternItem:write
+                 */
+                write: function (state, char) {
+                    gpf.interfaces.ignoreParameter(state);
+                    if (char === this._match) {
+                        return PatternItem.WRITE_FINAL_MATCH;
+                    }
+                    return PatternItem.WRITE_NO_MATCH;
+                }
+
+            }
+
+        }),
+
+        /**
+         * Range pattern: recognizes one char defined by a range
+         * (using include/exclude patterns)
+         *
+         * @class PatternRange
+         * @extend PatternItem
+         * @private
+         */
+        PatternRange = gpf.define(&quot;PatternRange&quot;, PatternItem, {
+
+            private: {
+
+                /**
+                 * Included characters
+                 *
+                 * @type {string|string[]}
+                 * @private
+                 */
+                _inc: &quot;&quot;,
+
+                /**
+                 * Excluded characters
+                 *
+                 * @type {string|string[]}
+                 * @private
+                 */
+                _exc: &quot;&quot;,
+
+                /**
+                 * While parsing: the next char is used for a range
+                 * specification
+                 *
+                 * @type {Boolean}
+                 * @private
+                 */
+                _inRange: false,
+
+                /**
+                 * Reduce the cyclomatic complexity of parse
+                 *
+                 * @param {String} char Character to parse
+                 * @param {String[]} chars Character array of already parsed
+                 * chars
+                 * @return {Boolean} True means PARSE_PROCESSED_EOP, otherwise
+                 * PARSE_PROCESSED is returned
+                 */
+                _parse: function (char, chars) {
+                    var
+                        first,
+                        last;
+                    if (&quot;^&quot; === char) {
+                        this._exc = [];
+                    } else if (&quot;]&quot; === char) {
+                        if (this._inRange) {
+                            throw gpf.Error.PatternInvalidSyntax();
+                        }
+                        return true;
+                    } else if (&quot;-&quot; === char) {
+                        if (this._inRange || 0 === chars.length) {
+                            throw gpf.Error.PatternInvalidSyntax();
+                        }
+                        this._inRange = true;
+                    } else {
+                        if (this._inRange) {
+                            first = chars[chars.length - 1].charCodeAt(0);
+                            last = char.charCodeAt(0);
+                            while (--last &gt; first) {
+                                chars.push(String.fromCharCode(last));
+                            }
+                            chars.push(char);
+                            delete this._inRange;
+                        } else {
+                            // First char of a range
+                            chars.push(char);
+                        }
+                    }
+                    return false;
+                }
+
+            },
+
+            public: {
+
+                /**
+                 * @inheritDoc PatternItem:parse
+                 */
+                parse: function (char) {
+                    var
+                        chars;
+                    if (this.hasOwnProperty(&quot;_exc&quot;)) {
+                        if (&quot;^&quot; === char) {
+                            throw gpf.Error.PatternInvalidSyntax();
+                        }
+                        chars = this._exc;
+                    } else {
+                        chars = this._inc;
+                    }
+                    if (&quot;[&quot; === char) {
+                        if (this.hasOwnProperty(&quot;_inc&quot;)) {
+                            throw gpf.Error.PatternInvalidSyntax();
+                        }
+                        this._inc = [];
+                    } else if (this._parse(char, chars)) {
+                        return PatternItem.PARSE_PROCESSED_EOP;
+                    }
+                    return PatternItem.PARSE_PROCESSED;
+                },
+
+                /**
+                 * @inheritDoc PatternItem:finalize
+                 */
+                finalize: function () {
+                    this._inc = this._inc.join(&quot;&quot;);
+                    if (this.hasOwnProperty(&quot;_exc&quot;)) {
+                        this._exc = this._exc.join(&quot;&quot;);
+                    }
+                },
+
+                /**
+                 * @inheritDoc PatternItem:write
+                 */
+                write: function (state, char) {
+                    gpf.interfaces.ignoreParameter(state);
+                    var match;
+                    if (this._inc.length) {
+                        match = -1 &lt; this._inc.indexOf(char);
+                    } else {
+                        match = true;
+                    }
+                    if (match &amp;&amp; this._exc.length) {
+                        match = -1 === this._exc.indexOf(char);
+                    }
+                    if (match) {
+                        return PatternItem.WRITE_FINAL_MATCH;
+                    } else {
+                        return PatternItem.WRITE_NO_MATCH;
+                    }
+                }
+
+            }
+
+        }),
+
+        /**
+         * Group pattern: group several patterns
+         * May also be a &#039;choice&#039; pattern
+         *
+         * @class PatternGroup
+         * @extend PatternItem
+         * @private
+         */
+        PatternGroup = gpf.define(&quot;PatternGroup&quot;, PatternItem, {
+
+            private: {
+
+                /**
+                 * Contains either an item list or a list of item list
+                 * (if transformed into a choice)
+                 *
+                 * @type {PatternItem[]|(PatternItem[])[]}
+                 * @private
+                 */
+                _items: [],
+
+                /**
+                 * Choice group (with |)
+                 *
+                 * @type {Boolean}
+                 * @private
+                 */
+                _choice: false,
+
+                /**
+                 * Computed during the finalization phase, this array keep track
+                 * of the index of last item that is not optional in the group.
+                 *
+                 * @type {Number[]}
+                 * @private
+                 */
+                _optionals: [],
+
+                /**
+                 * True if the opening parenthesis has been parsed
+                 *
+                 * @type {Boolean}
+                 * @private
+                 */
+                _parsedParenthesis: false,
+
+                /**
+                 * Currently parsed item
+                 *
+                 * @type {PatternItem}
+                 * @private
+                 */
+                _parsedItem: null,
+
+                /**
+                 * Get the current list of items
+                 *
+                 * @param {Number} [pos=undefined] When choices, get the items
+                 * at the given position (last one when undefined). Ignored
+                 * otherwise.
+                 * @return {PatternItem[]}
+                 * @private
+                 */
+                _getItems: function (pos) {
+                    if (this._choice) {
+                        if (undefined === pos) {
+                            pos = this._items.length - 1;
+                        }
+                        return this._items[pos];
+                    }
+                    return this._items;
+                },
+
+                /**
+                 * Get the last parsed item
+                 *
+                 * @type {PatternItem}
+                 * @private
+                 */
+                _lastItem: function () {
+                    var
+                        items = this._getItems();
+                    return items[items.length - 1];
+                },
+
+                /**
+                 * Push a new item to be parsed
+                 *
+                 * @param {PatternItem} item
+                 * @return {PatternItem}
+                 * @private
+                 */
+                _push: function (item) {
+                    this._getItems().push(item);
+                    this._parsedItem = item;
+                    return item;
+                },
+
+                /**
+                 * Reduce the cyclomatic complexity of parse
+                 * Process current item
+                 *
+                 * @param {String} char
+                 * @returns {Number}
+                 * @private
+                 */
+                _parseItem: function (char) {
+                    var
+                        parsedItem = this._parsedItem,
+                        result;
+                    if (parsedItem) {
+                        result = parsedItem.parse(char);
+                        if (bitTest(result, PatternItem.PARSE_END_OF_PATTERN)) {
+                            parsedItem.finalize();
+                            this._parsedItem = null;
+                            // Remove the flag
+                            result = bitClear(result,
+                                PatternItem.PARSE_END_OF_PATTERN);
+                        }
+                    } else {
+                        result = 0;
+                    }
+                    return result;
+                },
+
+                /**
+                 * Reduce the cyclomatic complexity of parse
+                 * Process quantification char
+                 *
+                 * @param {String} char
+                 * @returns {Number}
+                 * @private
+                 */
+                _parseQuantity: function (char) {
+                    var
+                        parsedItem = this._lastItem();
+                    if (&quot;*&quot; === char) {
+                        parsedItem._min = 0;
+                        parsedItem._max = 0;
+                    } else if (&quot;+&quot; === char) {
+                        parsedItem._max = 0;
+                    } else if (&quot;?&quot; === char) {
+                        parsedItem._min = 0;
+                    }
+                    return PatternItem.PARSE_PROCESSED;
+                },
+
+                /**
+                 * Return the position from which all items can be optional
+                 *
+                 * @param {PatterItem[]} items
+                 * @return {Number}
+                 * @private
+                 */
+                _getOptional: function (items) {
+                    var
+                        idx;
+                    idx = items.length;
+                    while (idx--) {
+                        if (0 !== items[idx].min()) {
+                            ++idx;
+                            break;
+                        }
+                    }
+                    return idx;
+                },
+
+                /**
+                 * Reset for the provided item
+                 *
+                 * @param {PatternItem} item
+                 * @param {Object} state
+                 * @private
+                 */
+                _reset: function (item, state) {
+                    state.count = 0;
+                    state.sub = {};
+                    item.reset(state.sub);
+                },
+
+                /**
+                 * Modify state to move to (and get) the next item (if any)
+                 *
+                 * @param {Object} state
+                 * @param {Number} index
+                 * @return {PatternItem}
+                 * @private
+                 */
+                _getItem: function (state, index) {
+                    var items = this._getItems(state.choice);
+                    if (index &lt; items.length) {
+                        return items[index];
+                    }
+                    return null;
+                },
+
+                /**
+                 * Handles situation when current item does not match on char
+                 *
+                 * @param {PatternItem} item
+                 * @param {Object} state
+                 * @param {String} char
+                 * @return {Number} write result
+                 * @private
+                 */
+                _writeNoMatch: function (item, state, char) {
+                    if (state.count &lt; item.min() // Not enough match
+                        // or at least two characters went through
+                        || state.length &gt; state.matchingLength + 1) {
+                        // Terminal error
+                        return PatternItem.WRITE_NO_MATCH;
+                    }
+                    item = this._getItem(state, state.index + 1);
+                    if (null === item) {
+                        return PatternItem.WRITE_NO_MATCH;
+                    }
+                    ++state.index;
+                    this._reset(item, state);
+                    return this.write(state, char); // Try with this one
+                },
+
+                /**
+                 * Handles situation when current item matches on char
+                 *
+                 * @param {PatternItem} item
+                 * @return {Number} write result
+                 * @private
+                 */
+                _writeMatch: function (item, state) {
+                    var
+                        nextItem = this._getItem(state, state.index + 1),
+                        optional;
+                    if (this._choice &amp;&amp; -1 &lt; state.choice) {
+                        optional = this._optionals[state.choice];
+                    } else {
+                        optional = this._optionals[0];
+                    }
+                    ++state.count;
+                    if (0 === item.max()) {
+                        // Unlimited
+                        this._reset(item, state);
+                        if (null !== nextItem &amp;&amp; optional &gt; state.index) {
+                            return PatternItem.WRITE_NEED_DATA;
+                        } else {
+                            // Last (or equivalent) so...
+                            return PatternItem.WRITE_MATCH;
+                        }
+                    } else if (state.count === item.max()) {
+                        if (null === nextItem) {
+                            return PatternItem.WRITE_FINAL_MATCH;
+                        }
+                        ++state.index;
+                        this._reset(nextItem, state);
+                        if (optional &lt;= state.index) {
+                            return PatternItem.WRITE_MATCH;
+                        }
+                    }
+                    return PatternItem.WRITE_NEED_DATA;
+                }
+
+            },
+
+            public: {
+
+                /**
+                 * @constructor
+                 */
+                constructor: function () {
+                    this._items = [];
+                },
+
+                /**
+                 * @inheritDoc PatternItem:parse
+                 */
+                parse: function (char) {
+                    var
+                        result = this._parseItem(char);
+                    if (0 !== result) {
+                        return result;
+                    }
+                    if (-1 &lt; PatternItem.CHARS_QUANTIFICATION.indexOf(char)) {
+                        return this._parseQuantity(char);
+                    }
+                    if (&quot;|&quot; === char) {
+                        if (!this._choice) {
+                            this._items = [this._items];
+                            this._choice = true;
+                        }
+                        this._items.push([]);
+                        return PatternItem.PARSE_PROCESSED;
+                    } else if (&quot;[&quot; === char) {
+                        this._push(new PatternRange());
+                    } else if (&quot;(&quot; === char) {
+                        if (this._parsedParenthesis) {
+                            this._push(new PatternGroup());
+                        } else {
+                            this._parsedParenthesis = true;
+                            return PatternItem.PARSE_PROCESSED;
+                        }
+                    } else if (&quot;)&quot; === char) {
+                        return PatternItem.PARSE_PROCESSED_EOP;
+                    } else {
+                        this._push(new PatternChar());
+                    }
+                    return this._parseItem(char);
+                },
+
+                /**
+                 * @inheritDoc PatternItem:finalize
+                 */
+                finalize: function () {
+                    var
+                        len,
+                        idx,
+                        array;
+                    // Compute optionals
+                    array = this._optionals = [];
+                    if (this._choice) {
+                        len = this._items.length;
+                        for (idx = 0; idx &lt; len; ++idx) {
+                            array.push(this._getOptional(this._items[idx]));
+                        }
+                    } else {
+                        array.push(this._getOptional(this._items));
+                    }
+                    // TODO in case of choice, verify they are exclusive
+                },
+
+                /**
+                 * @inheritDoc PatternItem:reset
+                 */
+                reset: function (state) {
+                    var item;
+                    state.index = 0;
+                    if (this._choice) {
+                        state.choice = -1;
+                    }
+                    item = this._getItems(0)[0];
+                    this._reset(item, state);
+                },
+
+                /**
+                 * @inheritDoc PatternItem:write
+                 */
+                write: function (state, char) {
+                    var
+                        len,
+                        idx,
+                        item,
+                        result;
+                    if (this._choice &amp;&amp; -1 === state.choice) {
+                        // Enumerate items and stop on first !== NO_MATCH
+                        len = this._items.length;
+                        for (idx = 0; idx &lt; len; ++idx) {
+                            item = this._items[idx][0];
+                            this._reset(item, state);
+                            result = item.write(state.sub, char);
+                            if (PatternItem.WRITE_NO_MATCH !== result) {
+                                state.choice = idx;
+                                return this._writeMatch(item, state);
+                            }
+                        }
+                        if (idx === len) {
+                            return PatternItem.WRITE_NO_MATCH;
+                        }
+                    }
+                    item = this._getItem(state, state.index);
+                    result = item.write(state.sub, char);
+                    if (PatternItem.WRITE_NEED_DATA === result) {
+                        return result;
+                    } else if (PatternItem.WRITE_NO_MATCH === result) {
+                        return this._writeNoMatch(item, state, char);
+                    } else {
+                        return this._writeMatch(item, state);
+                    }
+                }
+
+            }
+
+        }),
+
+//        /**
+//         * Choice pattern: includes several items, matching only one among
+// them
+//         *
+//         * @class PatternChoice
+//         * @extend PatternItem
+//         * @private
+//         */
+//        PatternChoice = gpf.define(&quot;PatternChoice&quot;, PatternItem, {
+//
+//            public: {
+//
+////                /**
+////                 * @inheritDoc PatternItem:next
+////                 *
+////                 * Overridden to &#039;add&#039; the choice
+////                 */
+////                next: function (item) {
+////                    if (undefined === item) {
+////                        /*
+////                         * The only way to have something *after* is to use
+// ()
+////                         * In that case, it would go through the parent
+////                         */
+////                        return null;
+////                    } else {
+////                        var
+////                            parent = item.parent(),
+////                            pos;
+////                        this._choices.push(item);
+////                        item.parent(this);
+////                        if (1 === this._choices.length) {
+////                            // Care about parent
+////                            if (null === parent) {
+////                                return; // Nothing to care about
+////                            }
+////                            if (parent.type() !== PatternItem.TYPE_GROUP) {
+////                                gpf.Error.PatternUnexpected();
+////                            }
+////                            // TODO should be the last
+////                            pos = gpf.test(parent._items, item);
+////                            if (undefined === pos) {
+////                                gpf.Error.PatternUnexpected();
+////                            }
+////                            parent._items[pos] = this;
+////                            this._parent = parent;
+////                        }
+////                    }
+////                },
+//
+//                /**
+//                 * @inheritDoc PatternItem:write
+//                 */
+//                write: function (state, char) {
+//                    // Try all choices and stop on the first one that works
+//                    var
+//                        tmpState = {},
+//                        idx,
+//                        item,
+//                        result;
+//                    for (idx = this._choices.length; idx &gt; 0;) {
+//                        item = this._choices[--idx];
+//                        item.reset(tmpState);
+//                        result = item.write(tmpState, char);
+//                        if (PatternItem.WRITE_NO_MATCH !== result) {
+//                            state.replaceItem = item;
+//                            gpf.extend(state, tmpState);
+//                            return result;
+//                        }
+//                    }
+//                    return PatternItem.WRITE_NO_MATCH;
+//                }
+//
+//            }
+//
+//        }),
+
+        /**
+         * Pattern parser context.
+         * Class used to parse a pattern, will allocated and consolidate
+         * PatternItems
+         *
+         * @class PatternParserContext
+         * @extend gpf.Parser
+         * @private
+         */
+        PatternParser = gpf.define(&quot;PatternParser&quot;,  gpf.Parser, {
+
+            private: {
+
+                /**
+                 * @type {PatternGroup}
+                 * @private
+                 */
+                &quot;[_patternItem]&quot;: [gpf.$ClassProperty()],
+                _patternItem: null
+
+            },
+
+            protected: {
+
+                /**
+                 * @inheritdoc gpf.Parser:_initialParserState
+                 */
+                _initialParserState: function (char) {
+                    this._patternItem.parse(char);
+                },
+
+                /**
+                 * @inheritdoc gpf.Parser:_finalizeParserState
+                 */
+                _finalizeParserState: function () {
+                    var patternItem = this._patternItem;
+                    patternItem.parse(&quot;)&quot;);
+                    patternItem.finalize();
+                }
+
+            },
+
+            public: {
+
+                constructor: function () {
+                    this._super.apply(this, arguments);
+                    this._patternItem = new PatternGroup();
+                    this._patternItem.parse(&quot;(&quot;);
+                }
+
+            }
+
+        }),
+
+        /**
+         * Pattern tokenizer
+         *
+         * @class {PatternTokenizer}
+         * @implements gpf.interfaces.ITokenizer
+         * @private
+         */
+        PatternTokenizer = gpf.define(&quot;PatternTokenizer&quot;, {
+
+            &quot;[Class]&quot;: [gpf.$InterfaceImplement(_ITokenizer)],
+
+            private: {
+
+                /**
+                 * @type {PatternItem}
+                 * @private
+                 */
+                _patternItem: null,
+
+                /**
+                 * @type {Boolean}
+                 * @private
+                 */
+                _stopMatching: false,
+
+                /**
+                 * @type {Number}
+                 * @private
+                 */
+                _lastResult: 0,
+
+                /**
+                 * @type {Number}
+                 * @private
+                 */
+                _totalLength : 0,
+
+                /**
+                 * Pattern state
+                 *
+                 * @type {Object}
+                 * @private
+                 */
+                _state: {}
+            },
+
+            public: {
+
+                /**
+                 * @param {PatternItem} patternItem
+                 */
+                constructor: function (patternItem) {
+                    this._patternItem = patternItem;
+                    this._state = {};
+                    this._patternItem.reset(this._state);
+                },
+
+                //region ITokenizer
+
+                /**
+                 * @implements gpf.interfaces.ITokenizer:write
+                 */
+                write: function (char) {
+                    var
+                        result;
+                    if (this._stopMatching) {
+                        return this._lastResult;
+                    }
+                    ++this._totalLength;
+                    result = this._patternItem.write(this._state, char);
+                    if (0 &lt; result) {
+                        this._lastResult = this._totalLength;
+                        this._stopMatching =
+                            bitTest(result, PatternItem.WRITE_PATTERN_END);
+                    } else if (PatternItem.WRITE_NO_MATCH === result) {
+                        this._stopMatching = true;
+                        if (0 === this._lastResult) {
+                            this._lastResult = -1;
+                        }
+                    }
+                    return this._lastResult;
+                }
+
+                //endregion
+            }
+        });
+
+    /**
+     * Patterns are designed to be an efficient and stream-able alternative to
+     * regular expressions. However, the coverage is not the same
+     *
+     * Supported operators:
+     *  [a-z^0-9], [^abc], ., ?, +, *
+     *  [^a-z] exclude
+     *  . any character
+     *
+     *
+     * @class gpf.Pattern
+     */
+    gpf.define(&quot;gpf.Pattern&quot;, {
+
+        private: {
+
+            /**
+             * @type {PatternItem}
+             * @private
+             */
+            _patternItem: null
+
+        },
+
+        public: {
+
+            /**
+             * Constructor, check and compile the pattern
+             *
+             * @param {String} pattern
+             */
+            constructor: function (pattern) {
+                var
+                    parser = new PatternParser();
+                parser.parse(pattern, null);
+                this._patternItem = parser.patternItem();
+            },
+
+            /**
+             * Allocate a tokenizer based on the pattern
+             *
+             * @return {gpf.interfaces.ITokenizer}
+             */
+            allocate: function () {
+                return new PatternTokenizer(this._patternItem);
+            }
+
+        }
+
+    });
+
+    //endregion
+
+/*#ifndef(UMD)*/
+}()); /* End of privacy scope */
+/*#endif*/</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

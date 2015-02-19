@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - http.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>http.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">62.23</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">255</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">40.40</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.23</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+(function () { /* Begin of privacy scope */
+    &quot;use strict&quot;;
+/*#endif*/
+
+/*
+FIXME: IE10 does not detect when the script does not exist.
+    One workaround would be to use XHR to load the script source and add
+    a script tag inside the head (and finally remove it).
+    Must evaluate the impacts before implementing (knowing that we rarely need
+    to load a script that does not exist).
+ */
+
+    var
+        _id = 0,
+        _includeContexts = {},
+
+        _detachInclude = function (context) {
+            // Handle memory leak in IE
+            var
+                scriptTag = context.scriptTag,
+                headTag = context.headTag;
+            scriptTag.onerror
+                = scriptTag.onload
+                = scriptTag.onreadystatechange
+                = null;
+            if (headTag &amp;&amp; scriptTag.parentNode) {
+                headTag.removeChild(scriptTag);
+            }
+            // Destroy context
+            delete _includeContexts[context.id];
+        },
+
+        _includeOnLoad = function () {
+            // &#039;this&#039; is the script element
+            var context = _includeContexts[this.id];
+            if (!context.done
+                    &amp;&amp; (!this.readyState || this.readyState === &quot;loaded&quot;
+                     || this.readyState === &quot;complete&quot;)) {
+                _detachInclude(context);
+                // IE10: the event is triggered *before* the source is evaluated
+                setTimeout(function() {
+                    context.done = true;
+                    gpf.events.fire(&quot;load&quot;, {url: context.src},
+                        context.eventsHandler);
+                }, 0);
+            }
+        },
+
+        _includeOnError = function () {
+            // &#039;this&#039; is the script element
+            var context = _includeContexts[this.id];
+            // TODO: implement a verbose mode
+            if (!context.done) {
+                // TODO: provide error reason
+                context.done = true;
+                gpf.events.fire(&quot;error&quot;, {url: context.src},
+                    context.eventsHandler);
+                _detachInclude(context);
+            }
+        },
+
+        /**
+         * Object used to generate _mimeTypesFromExtension and
+         * _mimeTypesToExtension
+         *
+         * @type {Object}
+         * @private
+         */
+        _hardCodedMimeTypes = {
+            application: {
+                javascript: &quot;js&quot;
+            },
+            image: {
+                gif: 0,
+                jpeg: &quot;jpg,jpeg&quot;,
+                png: 0
+            },
+            text: {
+                css: 0,
+                html: &quot;htm,html&quot;,
+                plain: &quot;txt,text,log&quot;
+            }
+        },
+
+        /**
+         * Dictionary of mime type to extension
+         *
+         * @type {Object}
+         * @private
+         */
+        _mimeTypesToExtension = null,
+
+        /**
+         * Dictionary of extension to mime type
+         *
+         * @type {Object}
+         * @private
+         */
+        _mimeTypesFromExtension = null,
+
+        _buildMimeTypeFromMappings = function (path, mappings) {
+            var
+                key,
+                mimeType,
+                fileExtension,
+                extensions,
+                len,
+                idx;
+            for (key in mappings) {
+                if (mappings.hasOwnProperty(key)) {
+                    if (path) {
+                        mimeType = path + &quot;/&quot; + key;
+                    } else {
+                        mimeType = key;
+                    }
+                    extensions = mappings[key];
+                    if (0 === extensions) {
+                        fileExtension = &quot;.&quot; + key;
+                        _mimeTypesFromExtension[fileExtension] = mimeType;
+                        if (undefined === _mimeTypesToExtension[mimeType]) {
+                            _mimeTypesToExtension[mimeType] = fileExtension;
+                        }
+                    } else if (&quot;string&quot; === typeof extensions) {
+                        extensions = extensions.split(&quot;,&quot;);
+                        len = extensions.length;
+                        for (idx = 0; idx &lt; len; ++idx) {
+                            fileExtension = &quot;.&quot; + extensions[idx];
+                            _mimeTypesFromExtension[fileExtension] = mimeType;
+                            if (undefined === _mimeTypesToExtension[mimeType]) {
+                                _mimeTypesToExtension[mimeType] = fileExtension;
+                            }
+                        }
+                    } else { // Assuming extensions is an object
+                        _buildMimeTypeFromMappings(mimeType, extensions);
+                    }
+                }
+            }
+        },
+
+        /**
+         * Initialize _mimeTypesFromExtension and _mimeTypesToExtension
+         *
+         * @private
+         */
+        _initMimeTypes = function () {
+            if (null === _mimeTypesFromExtension) {
+                _mimeTypesFromExtension = {};
+                _mimeTypesToExtension = {};
+                _buildMimeTypeFromMappings(&quot;&quot;, _hardCodedMimeTypes);
+            }
+        };
+
+    gpf.http = {
+
+        /**
+         * Loads dynamically any script
+         * Waits for the script to be loaded and calls a eventsHandler when done
+         * The following is an easy way to handle eventsHandlers whenever the
+         * process is asychronous (window.setTimeout, onload eventsHandler).
+         * The function returns an object that can be overriden with our own
+         * loaded handler (if needed)
+         * 
+         * @param {String} src
+         * @param {gpf.events.Handler} eventsHandler
+         *
+         * @eventParam {string} url URL of the included resource
+         * 
+         * @event load The resource has been successfully loaded
+         * 
+         * @event error An error occurred when loading the resource
+         * 
+         * Inspired from http://stackoverflow.com/questions/4845762/
+         * 
+         */
+        include: function (src, eventsHandler) {
+            var
+                context = {
+                    src: src,
+                    id: &quot;__gpf_http_&quot; + (++_id),
+                    headTag: document.getElementsByTagName(&quot;head&quot;)[0]
+                        || document.documentElement,
+                    scriptTag: document.createElement(&quot;script&quot;),
+                    done: false
+                },
+                scriptTag;
+            // Handler
+            if (undefined === eventsHandler) {
+                eventsHandler = new gpf.events.Broadcaster([&quot;load&quot;, &quot;error&quot;]);
+            }
+            context.eventsHandler = eventsHandler;
+            // Declare global context
+            _includeContexts[context.id] = context;
+            // Configure script tag
+            scriptTag = context.scriptTag;
+            scriptTag.language = &quot;javascript&quot;;
+            scriptTag.src = src;
+            scriptTag.id = context.id;
+            // Attach handlers for all browsers
+            scriptTag.onload = scriptTag.onreadystatechange = _includeOnLoad;
+            scriptTag.onerror = _includeOnError;
+            if (undefined !== scriptTag.async) {
+                scriptTag.async = true;
+            }
+            /*
+             * Use insertBefore instead of appendChild  to avoid an IE6 bug.
+             * This arises when a base node is used (#2709 and #4378).
+             * Also found a bug in IE10 that loads &amp; triggers immediately
+             * script, use timeout
+             */
+            setTimeout(function () {
+                context.headTag.insertBefore(scriptTag,
+                    context.headTag.firstChild);
+            }, 0);
+        },
+
+        /**
+         * Retrieve the mime type associates with the file extension (default is
+         * &quot;application/octet-stream&quot;)
+         *
+         * @param {String} fileExtension
+         * @return {String}
+         */
+        getMimeType: function (fileExtension) {
+            var mimeType;
+            _initMimeTypes();
+            mimeType = _mimeTypesFromExtension[fileExtension.toLowerCase()];
+            if (undefined === mimeType) {
+                // Default
+                mimeType = &quot;application/octet-stream&quot;;
+            }
+            return mimeType;
+        },
+
+        /**
+         * Retrieve the file extension associated with the mime type (default is
+         * &quot;.bin&quot;)
+         *
+         * @param {String} mimeType
+         * @return {String}
+         */
+        getFileExtension: function (mimeType) {
+            var fileExtension;
+            _initMimeTypes();
+            fileExtension = _mimeTypesToExtension[mimeType.toLowerCase()];
+            if (undefined === fileExtension) {
+                // Default
+                fileExtension = &quot;.bin&quot;;
+            }
+            return fileExtension;
+        }
+
+    };
+
+/*#ifndef(UMD)*/
+}()); /* End of privacy scope */
+/*#endif*/</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
