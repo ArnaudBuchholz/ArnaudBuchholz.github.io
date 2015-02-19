@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">337</p>
+      <p class="stat">339</p>
     </div>
   </div>
   <div class="row historical">
@@ -369,6 +369,7 @@
                 attributes.addTo(objPrototype.constructor);
                 if (!this._builder) {
                     // Fill the missing methods
+                    /*jshint -W089*/ // Because I also want inherited ones
                     for (member in iProto) {
                         if (!(member in objPrototype)) {
                             objPrototype[member] = iProto[member];
@@ -401,6 +402,7 @@
                         [gpf.$InterfaceImplement(gpf.interfaces.IUnknown)]);
                 }
             }
+            /*jshint +W089*/
 
         },
 

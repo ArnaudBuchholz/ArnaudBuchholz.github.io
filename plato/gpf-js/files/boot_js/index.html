@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">65.52</p>
+      <p class="stat">65.42</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">329</p>
+      <p class="stat">335</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">44.15</p>
+      <p class="stat">43.22</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.61</p>
+      <p class="stat">1.62</p>
     </div>
   </div>
 </div>
@@ -100,7 +100,8 @@
     var
         VERSION = &quot;0.1&quot;,
         _host,
-        _context;
+        _context,
+        _hostNamespace;
 
 /*#ifdef(DEBUG)*/
 
@@ -112,6 +113,7 @@
     if (&quot;undefined&quot; !== typeof WScript) {
         _host = &quot;wscript&quot;;
         _context = (function () {return this;}).apply(null, []);
+        _hostNamespace = &quot;ms&quot;; // Microsoft
 
         // Define console APIs
         _context.console = {
@@ -126,19 +128,21 @@
     } else if (&quot;undefined&quot; !== typeof phantom &amp;&amp; phantom.version) {
         _host = &quot;phantomjs&quot;;
         _context = window;
+        _hostNamespace = &quot;node&quot;;
 
     // Nodejs
-        /*global module:true*/
+    /*global module:true*/
     } else if (&quot;undefined&quot; !== typeof module &amp;&amp; module.exports) {
         _host = &quot;nodejs&quot;;
         _context = global;
+        _hostNamespace = &quot;node&quot;;
 
     // Browser
     } else if (&quot;undefined&quot; !== typeof window) {
         _host = &quot;browser&quot;;
         _context = window;
 
-    // Default: unknown
+        // Default: unknown
     } else {
         _host = &quot;unknown&quot;;
         _context = this;
@@ -150,6 +154,11 @@
     _context.gpf = {};
 
 /*#endif*/
+
+    // Install host specific namespace (if any)
+    if (_hostNamespace) {
+        gpf[_hostNamespace] = {};
+    }
 
     /**
      * Returns the current version
@@ -164,20 +173,17 @@
      * Returns a string identifying the detected host
      *
      * @return {String}
-     * - &quot;wscript&quot; for cscript and wscript
-     * - &quot;nodejs&quot; for nodejs
-     * - &quot;phantomjs&quot; for phantomjs
-     * - &quot;browser&quot; for any browser
-     * - &quot;unknown&quot; if not detected
+     * &lt;ul&gt;
+     *      &lt;li&gt;&quot;wscript&quot; for cscript and wscript&lt;/li&gt;
+     *      &lt;li&gt;&quot;nodejs&quot; for nodejs&lt;/li&gt;
+     *      &lt;li&gt;&quot;phantomjs&quot; for phantomjs&lt;/li&gt;
+     *      &lt;li&gt;&quot;browser&quot; for any browser&lt;/li&gt;
+     *      &lt;li&gt;&quot;unknown&quot; if not detected&lt;/li&gt;
+     * &lt;/ul&gt;
      */
     gpf.host = function () {
         return _host;
     };
-
-    // Prepare node namespace to handle node specific helpers
-    if (&quot;nodejs&quot; === gpf.host() || &quot;phantomjs&quot; === gpf.host()) {
-        gpf.node = {};
-    }
 
     /**
      * Resolve the provided evaluation path and returns the result
