@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Native toString and JS toString</title>
+</head>
+<body>
+<script language="javascript">
+
+    /**
+     * Very simple log function
+     *
+     * @param {String} text
+     */
+    function log(text) {
+        if (undefined === text) {
+            document.body.appendChild(document.createElement("hr"));
+        } else {
+            console.log(text);
+            var div = document.body.appendChild(document.createElement("div"));
+            div.appendChild(document.createTextNode(text));
+        }
+    }
+
+    function dumpApplies(methodName, method) {
+        log(methodName + ".apply({}, [])= " + method.apply({}, []));
+        log(methodName + ".apply(null, [])= " + method.apply(null, []));
+        log(methodName + ".apply(undefined, [])= " + method.apply(undefined, []));
+        log(methodName + ".apply(window, [])= " + method.apply(window, []));
+        log(methodName + ".apply(0, [])= " + method.apply(0, []));
+        log(methodName + ".apply(\"\", [])= " + method.apply("", []));
+        log(methodName + ".apply(\"abc\", [])= " + method.apply("abc", []));
+    }
+
+    log("Problem illustration");
+    log();
+    log("with native function:");
+    var nativeToString = {}.toString;
+    dumpApplies("nativeToString", nativeToString);
+
+    log();
+    log("with JavaScript function:");
+    var jsToString = function () {
+        return nativeToString.apply(this, []);
+    };
+    dumpApplies("jsToString", jsToString);
+
+</script>
+</body>
+</html>
