@@ -37,6 +37,12 @@
 ### What are TDD and BDD?
 
 TDD stands for Test Driven Development: the idea is to write tests first, then write the code that passes the test.
+According to [uncle Bob](http://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html), the exact steps are:
+
+1. You must write a failing test before you write any production code.
+2. You must not write more of a test than is sufficient to fail, or fail to compile.
+3. You must not write more production code than is sufficient to make the currently failing test pass.
+
 BDD is just a renaming of TDD to make it more behavior oriented but, in the end, it is still TDD.
 
 ### Writing BDD
@@ -58,9 +64,10 @@ it function with a done parameter
 ### Executing BDD
 
 There are mainly three steps
-- Load the test files to collect the descriptions
-- Executes the tests
-- Report on execution
+
+* Load the test files to collect the descriptions
+* Executes the tests
+* Report on execution
 
 ### Implementing BDD
 
