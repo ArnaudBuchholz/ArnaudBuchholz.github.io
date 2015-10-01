@@ -39,7 +39,14 @@
 
 ### Let's talk about test
 
-TDD stands for Test Driven Development: the idea is to write tests first, then write the code that passes the test.
+TDD stands for Test Driven Development: long story short, the idea is to write tests first,
+then write the code that passes the test.
+
+The benefits are huge:
+
+* **Efficiency**: you develop only what is needed
+* **Quality**: you ensure that any modification does not break what was working before
+* **Maintainability**: you don't fear to change the code as you know it is tested
 
 According to [uncle Bob](http://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html), the exact steps are:
 
@@ -47,19 +54,20 @@ According to [uncle Bob](http://blog.cleancoder.com/uncle-bob/2014/12/17/TheCycl
 2. You must not write more of a test than is sufficient to fail, or fail to compile.
 3. You must not write more production code than is sufficient to make the currently failing test pass.
 
-BDD is just a renaming of TDD to make it more behavior oriented but, in the end, it is still TDD.
+BDD is just a rewording of TDD to make it more behavior-oriented when it comes to writing the tests.
+In the end, it is still TDD.
 
 ### Frameworks
 
 There are lots of framework to implement TDD.
 Each one have its own PROs and CONs in terms of:
 
-* Features: testing helpers (asserts, hooks, mockups), integration with existing frameworks (such as AngularJS, ExtJS),
-support of automation, support of asynchronous calls
-* Implementation: how much effort it takes to implement the framework, how much effort it takes to write tests
-* Performance: how much time it takes to run the tests
+* **Features**: testing helpers (asserts, hooks, mockups), integration with existing frameworks (such as AngularJS, ExtJS),
+support of automation, support of asynchronous calls, support of browsers...
+* **Implementation:** how much effort it takes to implement the framework, how much effort it takes to write tests
+* **Performance**: how much time it takes to run the tests
  
-I will not pretend I know them all but, at least, I seriously experimented the following 3:
+I will not pretend I know them all but, at least, I seriously experimented the following:
 
 * [Siesta](https://www.sencha.com/blog/introducing-siesta-a-testing-tool-for-ext-js/): the ExtJS specific testing tool
 * [Mocha](https://mochajs.org/): the JavaScript test framework
