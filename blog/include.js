@@ -64,7 +64,7 @@
             "gpf-loaded": gpfLoadedUrls
         }), head.firstChild);
         // Style sheets
-        if (fileAccess) {
+        if (fileAccess) { // TODO remove because HTML sources should have it
             head.appendChild(_el("link", {
                 rel: "stylesheet",
                 type: "text/css",
