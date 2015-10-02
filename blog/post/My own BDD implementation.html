@@ -104,9 +104,27 @@ and, when executed, it should define specs.
 The label is used to identify the spec, the function is executed to evaluate the test. 
 The test function usually relies on methods to evaluate conditions, I will introduce the simplest one: assert.
 
-asserts
+* **assert** is used to evaluate a condition, the signature of assert may depend but, at least,
+you should have a boolean condition. Usually, when the boolean condition is false, the assertion fails.
+This consequently fails the spec (test).
 
-describe items are hierarchical
+The level of granularity (details) you can grab from a spec depends on the framework you implemented.
+Sometimes, you have the call stack (showing you which line of the spec failed) but you may only have a
+failure notification (saying the spec did not pass the test).
+
+That's why I advise to limit the spec content to a mimimum number of assertions.
+
+Here is an example of a simple test file:
+
+`describe("My first test", function () {/*gpf:apply-jshint*/
+
+    it("always succeed", function () {
+
+        assert(true);
+
+    });
+
+});`
 
 ### Setting up the contexts
 
