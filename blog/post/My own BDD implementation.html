@@ -63,8 +63,8 @@ There are lots of framework to implement TDD.
 Each one have its own PROs and CONs in terms of:
 
 * **Features**: testing helpers (asserts, hooks, mockups), integration with existing frameworks (such as AngularJS, ExtJS),
-support of automation, support of asynchronous calls, support of browsers...
-* **Implementation:** how much effort it takes to implement the framework, how much effort it takes to write tests
+support of UI automation, support of asynchronous calls, support of browsers...
+* **Implementation**: how much effort it takes to implement the framework, how much effort it takes to write tests
 * **Performance**: how much time it takes to run the tests
  
 I will not pretend I know them all but, at least, I seriously experimented the following:
@@ -75,12 +75,12 @@ I will not pretend I know them all but, at least, I seriously experimented the f
 
 ### Comparing to reality
 
-OK, let's be honest: I did not start the gpf-js library by doing TDD (can you believe it?).
+OK, let's be honest: I did not start the [gpf-js](https://github.com/ArnaudBuchholz/gpf-js) library by doing TDD first
+(can you believe it?).
 By the time I write this article, I am catching up on a big refactoring that makes me change all of its sources
 (I applied very strict JSHint validation rules which broke everything).
-Having around 200 tests running, I really see the value of testing !
 
-I see several advantages of having tests:
+Having around 200 tests running, I really see the value of testing !
 
 * Code is always valid: I can quickly detect issues whenever I change some code
 * Writing tests is a way to validate an API: indeed, whenever I want to develop a new feature, I first write the code 
@@ -93,7 +93,18 @@ Tests provides you free (and valid) samples.
 
 ### Basics
 
-describe, it, asserts
+Whatever the code / UI you want to validate, you first have to describe the tests you want to apply.
+BDD syntax introduces several keywords (functions) that helps you organize your tests:
+
+* **describe** is used to build a test suite, it takes two parameters: a label and a function.
+The label is used to identify the test suite, the function has the advantage of providing a controlled scope
+and, when executed, it should define specs.
+
+* **it** is used to define a spec (a test), it takes two parameters: a label and a function.
+The label is used to identify the spec, the function is executed to evaluate the test. 
+The test function usually relies on methods to evaluate conditions, I will introduce the simplest one: assert.
+
+asserts
 
 describe items are hierarchical
 
