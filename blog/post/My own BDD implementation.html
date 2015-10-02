@@ -93,11 +93,11 @@ Tests provides you free (and valid) samples.
 
 ### Basics
 
-Whatever the code / UI you want to validate, you first have to describe the tests you want to apply.
+Whatever the code / UI you want to validate, you first have to define the tests you want to apply.
 BDD syntax introduces several keywords (functions) that helps you organize your tests:
 
 * **describe** is used to build a test suite, it takes two parameters: a label and a function.
-The label is used to identify the test suite, the function has the advantage of providing a controlled scope
+The label is used to identify the test suite, the function has the advantage of providing a private scope
 and, when executed, it should define specs.
 
 * **it** is used to define a spec (a test), it takes two parameters: a label and a function.
@@ -116,7 +116,8 @@ That's why I advise to limit the spec content to a mimimum number of assertions.
 
 Here is an example of a simple test file:
 
-`describe("My first test", function () {/*gpf:apply-jshint*/
+`/*global describe, it, assert*//*gpf:apply-jshint*/
+describe("My first test", function () {
 
     it("always succeed", function () {
 
