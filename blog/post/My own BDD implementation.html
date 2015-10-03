@@ -62,8 +62,8 @@ In the end, it is still TDD.
 There are lots of framework to implement TDD.
 Each one have its own PROs and CONs in terms of:
 
-* **Features**: testing helpers (asserts, hooks, mockups), integration with existing frameworks (such as AngularJS, ExtJS),
-support of UI automation, support of asynchronous calls, support of browsers...
+* **Features**: testing helpers (asserts, hooks, mockups), integration with existing frameworks (such as AngularJS,
+ExtJS), support of UI automation, support of asynchronous calls, support of browsers...
 * **Implementation**: how much effort it takes to implement the framework, how much effort it takes to write tests
 * **Performance**: how much time it takes to run the tests
  
@@ -84,8 +84,8 @@ Having around 200 tests running, I really see the value of testing !
 
 * Code is always valid: I can quickly detect issues whenever I change some code
 * Writing tests is a way to validate an API: indeed, whenever I want to develop a new feature, I first write the code 
-in the most elegant manner. I don't even pay attention if it is technically feasible, I first target a natural way of using
-it. So, I start by writing tests.
+in the most elegant manner. I don't even pay attention if it is technically feasible, I first target a natural way of
+using it. So, I start by writing tests.
 * Tests are like documentation: have you ever checked the documentation of a big API? it is usually full of samples.
 Tests provides you free (and valid) samples.
 
@@ -101,8 +101,12 @@ The label is used to identify the test suite, the function has the advantage of 
 and, when executed, it should define specs.
 
 * **it** is used to define a spec (a test), it takes two parameters: a label and a function.
-The label is used to identify the spec, the function is executed to evaluate the test. 
+The label is used to identify the spec, the function is executed to evaluate the test.
+You may have several it in a describe.
 The test function usually relies on methods to evaluate conditions, I will introduce the simplest one: assert.
+
+
+(...) Sometimes, the function is not provided: the spec is considered pending
 
 * **assert** is used to evaluate a condition, the signature of assert may depend but, at least,
 you should have a boolean condition. Usually, when the boolean condition is false, the assertion fails.
@@ -120,24 +124,102 @@ Here is an example of a simple test file:
 "use strict";
 
 describe("My first test", function () {
-
     it("always succeed", function () {
-
         assert(true);
-
     });
-
 });`
+
+Here is an example of the output:
+
+![First test](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/First test.png)
 
 ### Organizing the test suites
 
+With these three functions, you can then organize your tests as you want.
+
+* You may create one describe per functional module of your application.
+* You may also have describe inside describe: this allows you to create a test suite tree.
+
+(...) Something important to remember: describe functions are executed to define specs but **not** to evaluate
+them. I can't tell for the other frameworks, but I expect the describe function to be called inside another describe,
+**not** in an it function.
+
+Here is an example of a describe in a describe:
+
+`/*global describe, it, assert*//*gpf:apply-jshint*/
+"use strict";
+
+describe("My first test", function () {
+    it("always succeed", function () {
+        assert(true);
+    });
+    describe("An error example", function () {
+        it("will fail", function () {
+            assert(false);
+        });
+    });
+});`
+
+Here is an example of the output:
+
+![Second test](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/Second test.png)
+
 ### Setting up the contexts
 
-beforeEach, afterEach, before, after
+Sometimes, you need context around the tests: you may need to mock some APIs by loading fake data or wrapping the
+functions, you may want to setup a page...
+The same way, you might need some cleanup code once your tests executed.
+
+All the following keywords (functions) must be used in a describe, in any order. They all accept a function as the only
+parameter.
+
+* **before** is triggered only once before executing any content (describe, it) in the describe
+* **after** is triggered only once after executing any content (describe, it) in the describe
+* **beforeEach** is triggered before each it of this describe (direct or recursive)
+* **afterEach** is triggered after each it of this describe (direct or recursive)
+
+Here is an example of use:
+
+`/*global describe, it, assert*//*gpf:apply-jshint*/
+"use strict";
+
+describe("My first test", function () {
+    it("always succeed", function () {
+        assert(true);
+    });
+    describe("An error example", function () {
+        it("will fail", function () {
+            var exception;
+            try {
+                assert(false);
+            } catch (e) {
+                exception = e;
+            }
+            if (undefined === exception) {
+                throw {
+                    message: "Exception not thrown by assert"
+                };
+            }
+        });
+    });
+});`
+
+Here is an example of the output:
+
+![Third test](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/Third test.png)
+
 
 ### Asynchronous testing
 
-it function with a done parameter
+This is my favorite part and this functionality piqued my curiosity the first time I played with
+[Mocha](https://mochajs.org/).
+
+Whenever you have to develop an asychronous spec or if setting up the context involves an asynchronous call,
+how do you wait for the call to complete and how do you signal the completion to the test framework?
+
+Every before/after or it functions may be declared with one parameter. If so, this parameter receives a function
+used to signal the completion of the function.
+
 
 ## Executing BDD
 
