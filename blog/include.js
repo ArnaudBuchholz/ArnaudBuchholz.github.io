@@ -9,8 +9,9 @@
         fileAccess = window.location.protocol === "file:";
 
     if (fileAccess) {
-        window.gpfSourcesPath = "../../../gpf-js/";
-        gpfUrl = "../../../gpf-js/boot.js";
+        //window.gpfSourcesPath = "../../../gpf-js/";
+        //gpfUrl = "../../gpf-js/boot.js";
+        gpfUrl = "../../gpf.js";
         gpfLoadedUrls = "../jshint.js,../blog.js";
         blogCssUrl = "../blog.css";
 
@@ -64,13 +65,6 @@
             "gpf-loaded": gpfLoadedUrls
         }), head.firstChild);
         // Style sheets
-        if (fileAccess) { // TODO remove because HTML sources should have it
-            head.appendChild(_el("link", {
-                rel: "stylesheet",
-                type: "text/css",
-                href: "../file.css"
-            }));
-        }
         head.appendChild(_el("link", {
             rel: "stylesheet",
             type: "text/css",
