@@ -202,6 +202,8 @@ describe("My first test", function () {
             }
         });
     });
+    describe("Settings the context", function () {
+    });
 });`
 
 Here is an example of the output:
@@ -217,9 +219,19 @@ This is my favorite part and this functionality piqued my curiosity the first ti
 Whenever you have to develop an asychronous spec or if setting up the context involves an asynchronous call,
 how do you wait for the call to complete and how do you signal the completion to the test framework?
 
-Every before/after or it functions may be declared with one parameter. If so, this parameter receives a function
-used to signal the completion of the function.
+Depending on the framework, there are basically two ways (each framework may implement one, the other or even both of
+them):
 
+* The spec/context function returns a promise: the framework waits for the promise to be resolved (or rejected which
+signals an error).
+* The spec/context function accepts one parameter: if so, this parameter receives a callback function used to signal the
+completion. This function also accepts a parameter to signal an error (when specified).
+
+Here is an example of use (using callbacks):
+
+Here is an example of the output:
+
+![Fourth test](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/Fourth test.png)
 
 ## Executing BDD
 
