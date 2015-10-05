@@ -183,26 +183,31 @@ Here is an example of use:
 `/*global describe, it, assert*//*gpf:apply-jshint*/
 "use strict";
 
-describe("My first test", function () {
-    it("always succeed", function () {
-        assert(true);
-    });
-    describe("An error example", function () {
-        it("will fail", function () {
-            var exception;
-            try {
-                assert(false);
-            } catch (e) {
-                exception = e;
-            }
-            if (undefined === exception) {
-                throw {
-                    message: "Exception not thrown by assert"
-                };
-            }
+describe("Context handling", function () {
+    var context1 = 0,
+        context2 = 0;
+    describe("Setting the context1 only once", function () {
+        after(function () {
+            // The position does not count, it will be executed when terminating the describe
+            assert(1 === context1);
+            context1 = 0; // Clean-up: back to 0
+        });
+        before(function () {
+            // The position does not count, it will be executed when starting the describe
+            assert(0 === context1);
+            context1 = 1; // Initialization: set to 1
+        });
+        it("uses context1 value (1)", function () {
+            assert(1 === context1);
+        });
+        it("uses context1 value (2)", function () {
+            assert(1 === context1);
         });
     });
-    describe("Settings the context", function () {
+    describe("Sibling describe lost context1", function () {
+        it("context1 should not be set", function () {
+            assert(0 === context1);
+        });
     });
 });`
 
