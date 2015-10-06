@@ -181,27 +181,81 @@ parameter.
 Here is an example of use:
 
 `/*global describe, it, assert*//*gpf:apply-jshint*/
+/*global before, after, beforeEach, afterEach*/
+
 "use strict";
 
 describe("Context handling", function () {
-    var context1 = 0,
-        context2 = 0;
+	var context1;
     describe("Setting the context1 only once", function () {
+    	var MAX_LOOPS = 10,
+    		numberOfLoops,
+    		sumOfContext1,
+    		idx,
+            label;
         after(function () {
-            // The position does not count, it will be executed when terminating the describe
-            assert(1 === context1);
+            // It will be executed after terminating the describe
+            assert(0 !== context1);
+            assert(MAX_LOOPS === numberOfLoops);
+            assert(sumOfContext1 / numberOfLoops === context1);
             context1 = 0; // Clean-up: back to 0
         });
         before(function () {
-            // The position does not count, it will be executed when starting the describe
-            assert(0 === context1);
-            context1 = 1; // Initialization: set to 1
+            // It will be executed before starting the describe
+            assert(undefined === context1); // not initialized
+            assert(undefined === sumOfContext1); // not initialized
+            assert(undefined === numberOfLoops); // not initialized
+             // Initialization: set to a random value
+            context1 = Math.floor(1 + 100 * Math.random());
+            sumOfContext1 = 0;
+            numberOfLoops = 0;
         });
-        it("uses context1 value (1)", function () {
-            assert(1 === context1);
-        });
-        it("uses context1 value (2)", function () {
-            assert(1 === context1);
+        // loop 10 times and check that context1 always have the same value
+        function testIfTheSame() {
+            sumOfContext1 += context1;
+            ++numberOfLoops;
+            assert(sumOfContext1 / numberOfLoops === context1);
+        }
+        for (idx = 1; idx <= MAX_LOOPS; ++idx) {
+            label = "context1 remains the same (" + idx + "/" + MAX_LOOPS + ")";
+            it(label, testIfTheSame);
+        }
+        /* In this sub context, 
+         * the value of context1 will be changed for each it using beforeEach
+         */
+        describe("Changing context1 for each test", function () {
+            var context1Backup,
+                lastContext1;
+            before(function () {
+            	// The parent describe defined context1
+                assert(0 !== context1);
+            	// When leaving this describe, we will restore the value
+                context1Backup = context1;
+            	// This remembers the last encountered value
+                lastContext1 = -1;
+            });
+            after(function () {
+                context1 = context1Backup; // Clean-up: restore the value
+            });
+            beforeEach(function () {
+                var newValue = context1;
+                while (newValue === context1) {
+                    newValue = Math.floor(1 + 100 * Math.random());
+                }
+                context1 = newValue;
+            });
+            afterEach(function () {
+            	assert(lastContext1 === context1);
+            });
+            // loop 10 times and check that context1 changes every time
+            function testIfDifferent() {
+                assert(lastContext1 !== context1);
+                lastContext1 = context1;
+            }
+            for (idx = 1; idx <= MAX_LOOPS; ++idx) {
+            	label = "context1 changes (" + idx + "/" + MAX_LOOPS + ")";
+                it(label, testIfDifferent);
+            }
         });
     });
     describe("Sibling describe lost context1", function () {
