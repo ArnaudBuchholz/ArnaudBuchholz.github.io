@@ -80,14 +80,14 @@ OK, let's be honest: I did not start the [gpf-js](https://github.com/ArnaudBuchh
 By the time I write this article, I am catching up on a big refactoring that makes me change all of its sources
 (I applied very strict JSHint validation rules which broke everything).
 
-Having around 200 tests running, I really see the value of testing !
+Having around 200 tests running, I really see the value of automated testing !
 
 * Code is always valid: I can quickly detect issues whenever I change some code
 * Writing tests is a way to validate an API: indeed, whenever I want to develop a new feature, I first write the code 
 in the most elegant manner. I don't even pay attention if it is technically feasible, I first target a natural way of
 using it. So, I start by writing tests.
 * Tests are like documentation: have you ever checked the documentation of a big API? it is usually full of samples.
-Tests provides you free (and valid) samples.
+Tests provides you free, always up-to-date and valid samples.
 
 ## Writing BDD
 
@@ -102,8 +102,8 @@ and, when executed, it should define specs.
 
 * **it** is used to define a spec (a test), it takes two parameters: a label and a function.
 The label is used to identify the spec, the function is executed to evaluate the test.
-You may have several it in a describe.
-The test function usually relies on methods to evaluate conditions, I will introduce the simplest one: assert.
+You may have several **it** in a **describe**.
+The test function usually relies on methods to validate conditions, I will introduce the simplest one: assert.
 
 
 (...) Sometimes, the function is not provided: the spec is considered pending
@@ -137,14 +137,14 @@ Here is an example of the output:
 
 With these three functions, you can then organize your tests as you want.
 
-* You may create one describe per functional module of your application.
-* You may also have describe inside describe: this allows you to create a test suite tree.
+* You may create one **describe** per functional module of your application.
+* You may also have **describe** inside **describe**: this allows you to create a test suite tree.
 
-(...) Something important to remember: describe functions are executed to define specs but **not** to evaluate
+(...) Something important to remember: **describe** functions are executed to define specs but **not** to evaluate
 them. I can't tell for the other frameworks, but I expect the describe function to be called inside another describe,
 **not** in an it function.
 
-Here is an example of a describe in a describe:
+Here is an example of a describe in a describe with a failing spec:
 
 `/*global describe, it, assert*//*gpf:apply-jshint*/
 "use strict";
@@ -170,8 +170,8 @@ Sometimes, you need context around the tests: you may need to mock some APIs by 
 functions, you may want to setup a page...
 The same way, you might need some cleanup code once your tests executed.
 
-All the following keywords (functions) must be used in a describe, in any order. They all accept a function as the only
-parameter.
+All the following keywords (functions) must be used in a **describe**, in any order.
+They all accept a function as the only parameter.
 
 * **before** is triggered only once before executing any content (describe, it) in the describe
 * **after** is triggered only once after executing any content (describe, it) in the describe
@@ -186,12 +186,12 @@ Here is an example of use:
 "use strict";
 
 describe("Context handling", function () {
-	var context1;
+    var context1;
     describe("Setting the context1 only once", function () {
-    	var MAX_LOOPS = 10,
-    		numberOfLoops,
-    		sumOfContext1,
-    		idx,
+        var MAX_LOOPS = 10,
+            numberOfLoops,
+            sumOfContext1,
+            idx,
             label;
         after(function () {
             // It will be executed after terminating the describe
@@ -220,18 +220,18 @@ describe("Context handling", function () {
             label = "context1 remains the same (" + idx + "/" + MAX_LOOPS + ")";
             it(label, testIfTheSame);
         }
-        /* In this sub context, 
+        /* In this sub context,
          * the value of context1 will be changed for each it using beforeEach
          */
         describe("Changing context1 for each test", function () {
             var context1Backup,
                 lastContext1;
             before(function () {
-            	// The parent describe defined context1
+                // The parent describe defined context1
                 assert(0 !== context1);
-            	// When leaving this describe, we will restore the value
+                // When leaving this describe, we will restore the value
                 context1Backup = context1;
-            	// This remembers the last encountered value
+                // This remembers the last encountered value
                 lastContext1 = -1;
             });
             after(function () {
@@ -245,7 +245,7 @@ describe("Context handling", function () {
                 context1 = newValue;
             });
             afterEach(function () {
-            	assert(lastContext1 === context1);
+                assert(lastContext1 === context1);
             });
             // loop 10 times and check that context1 changes every time
             function testIfDifferent() {
@@ -253,7 +253,7 @@ describe("Context handling", function () {
                 lastContext1 = context1;
             }
             for (idx = 1; idx <= MAX_LOOPS; ++idx) {
-            	label = "context1 changes (" + idx + "/" + MAX_LOOPS + ")";
+                label = "context1 changes (" + idx + "/" + MAX_LOOPS + ")";
                 it(label, testIfDifferent);
             }
         });
@@ -272,21 +272,24 @@ Here is an example of the output:
 
 ### Asynchronous testing
 
-This is my favorite part and this functionality piqued my curiosity the first time I played with
-[Mocha](https://mochajs.org/).
+This is my favorite part and also probably the most tricky to implement.
+This functionality piqued my curiosity the first time I played with [Mocha](https://mochajs.org/).
 
 Whenever you have to develop an asychronous spec or if setting up the context involves an asynchronous call,
-how do you wait for the call to complete and how do you signal the completion to the test framework?
+how do you wait for the call to complete and how do you signal this completion to the test framework?
 
 Depending on the framework, there are basically two ways (each framework may implement one, the other or even both of
 them):
 
 * The spec/context function returns a promise: the framework waits for the promise to be resolved (or rejected which
 signals an error).
-* The spec/context function accepts one parameter: if so, this parameter receives a callback function used to signal the
+* The spec/context function accepts one parameter: if so, this parameter is a callback function used to signal the
 completion. This function also accepts a parameter to signal an error (when specified).
 
 Here is an example of use (using callbacks):
+
+(...) To be able to test error cases and report on success, I added a third parameter to **it** in order to specify
+that an error is expected. If no error occurs, the test fails: it inverts the logic.
 
 Here is an example of the output:
 
