@@ -129,7 +129,7 @@ describe("My first test", function () {
     });
 });`
 
-Here is an example of the output:
+And the associated output:
 
 ![First test](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/First test.png)
 
@@ -160,7 +160,7 @@ describe("My first test", function () {
     });
 });`
 
-Here is an example of the output:
+And the associated output:
 
 ![Second test](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/Second test.png)
 
@@ -265,10 +265,9 @@ describe("Context handling", function () {
     });
 });`
 
-Here is an example of the output:
+And the associated output:
 
 ![Third test](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/Third test.png)
-
 
 ### Asynchronous testing
 
@@ -291,7 +290,50 @@ Here is an example of use (using callbacks):
 (...) To be able to test error cases and report on success, I added a third parameter to **it** in order to specify
 that an error is expected. If no error occurs, the test fails: it inverts the logic.
 
-Here is an example of the output:
+`/*global describe, it, assert*//*gpf:apply-jshint*/
+
+"use strict";
+
+describe("Asynchronous tests", function () {
+    describe("using callbacks", function () {
+        describe("synchronously", function () {
+            it("supports synchronous call to done", function (done) {
+                done();
+            });
+            it("fails if a parameter is given to done", function (done) {
+                done({
+                    message: "Error sample"
+                });
+            }, true);
+            it("fails if an exception occurs", function (done) {
+                assert(false);
+                done();
+            }, true);
+            it("fails if done is called twice", function (done) {
+                done();
+                done();
+            }, true);
+        });
+        describe("asynchronous", function () {
+            it("waits for call to done", function (done) {
+                setTimeout(done, 100);
+            });
+            it("fails if done is never called", function (done) {
+            }, true);
+            it("fails if a parameter is given to done", function (done) {
+                setTimeout(function () {
+                    done({
+                        message: "Error sample"
+                    });
+                }, 100);
+            }, true);
+        });
+    });
+});`
+
+(...) You may notice that JSHint reports the missing call to done
+
+And the associated output:
 
 ![Fourth test](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/Fourth test.png)
 
