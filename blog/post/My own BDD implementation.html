@@ -13,7 +13,7 @@
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
     I consider myself as curious and I am always eager to understand / learn how things are working. 
     For the gpf-js library, I wanted to follow TDD practice.
-    However, tools such as mocha / jasmine were not existing for cscript.
+    However, tools such as Mocha / Jasmine were not existing for cscript.
     Hence, I had to develop my own.
 </div>
 <script type="application/ld+json">
@@ -407,7 +407,51 @@ a bunch of interesting visualisation for the output).
 
 ### Forewords
 
-    https://github.com/ArnaudBuchholz/gpf-js/blob/31744da2e17f05599cdeb8ab63d3afc63a12421e/test/host/bdd.js
+The last part of this article provides information on how I implemented BDD for the sake of testing the
+[gpf-js](https://github.com/ArnaudBuchholz/gpf-js) library on
+[cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx) and later on
+[Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino).
+I had to develop a simple but yet functional testing framework that understands the test files develop for
+[Mocha](https://mochajs.org/).
+
+Since I read [Clean Code](http://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) and
+[The Clean Coder](http://www.amazon.ca/Clean-Coder-Conduct-Professional-Programmers-ebook/dp/B0050JLC9Y/
+ref=sr_1_1?s=books&ie=UTF8&qid=1444776426&sr=1-1&keywords=clean+coders), both books from
+[Robert Martin](https://en.wikipedia.org/wiki/Robert_Cecil_Martin), I try to stick to very strict development rules.
+Indeed, I have defined very strict JSHint settings (even stricter than the ones validating sources on the blog) and this
+is visible in the way the source code is written: small functions with very little
+[cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity).
+Also, the testing framework is tested (through [test_bdd.html](https://github.com/ArnaudBuchholz/gpf-js/blob/
+ecc49966e67ba3316d77b2f120e0465a5836ca77/test/host/test_bdd.html)).
+
+By the time I write this article, [bdd.js](https://github.com/ArnaudBuchholz/gpf-js/blob/
+31744da2e17f05599cdeb8ab63d3afc63a12421e/test/host/bdd.js) seems to be in a stable state and, unless I find a bug,
+it should remain as-is for a long time.
+
+Last but not least, usual disclaimers:
+
+* I do **not** believe or even pretend this is the best implementation ever: I would definitely recommend using
+well-known and widely used / tested framework such as [Mocha](https://mochajs.org/) or
+[Jasmine](http://jasmine.github.io/). This was created because of the lack of support in specific scripting
+environment.
+* I learned a lot by doing this but this felt - a lot - like re-inventing the wheel. Obviously, this has to be avoided
+whenever possible.
+* There are certainly things that can be improved, I always welcome feedback, please do by adding comments to this
+article.
+
+### General structure of bdd.js
+
+* **IIFE**
+
+* **Helpers**
+
+* **Hierarchical model to define test suites and specs**
+
+* **Global functions**
+
+* **Default output handling**
+
+* **Tests runner**
 
 </code>
 <!-- Drop those two lines -->
