@@ -341,11 +341,73 @@ And the associated output:
 
 There are mainly three steps
 
-* Load the test files to collect the descriptions
-* Executes the tests
-* Report on execution
+1 Load the test suites
+2 Execute them
+3 Report on execution
+
+### Load the test suites
+
+This part really depends on the framework you decided to implement.
+But, most of the time, it consists in loading (in this order):
+
+* the code you want to test (the library or the application),
+* the framework that implements BDD
+* and, eventually, the files describing the test suites
+
+Here is the source I use to test on [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino):
+
+(...) You can check the file (and its revisions) on [GitHub](https://github.com/ArnaudBuchholz/gpf-js/blob/
+a641c81183b162342a9d7d0e4b000daa726e72c5/test/host/rhino.js)
+
+`/*jshint rhino:true*//*gpf:apply-jshint*/
+/*global run*/
+
+print("Rhino showcase");
+/*exported gpfSourcesPath*/
+var gpfSourcesPath = "src/";
+load("src/boot.js");
+
+load("test/host/bdd.js");
+load("test/host/console.js");
+
+var sources = gpf.sources(),
+    len = sources.length,
+    idx,
+    src;
+for (idx = 0; idx < len; ++idx) {
+    src = sources[idx];
+    if (!src) {
+        break;
+    }
+    load("test/" + src + ".js");
+}
+
+run();
+gpf.handleTimeout();`
+
+(...) **run** is the entry point that trigger the execution of the test suites.
+
+(...) **gpf.handleTimeout** provides asynchronous support to hosts that misses it. I will soon write an article about
+it.
+
+### Execute and report on BDD
+
+Here again, this highly depends on the implemented framework. Execution can be done in standalone page, script or
+within an application (like in [Siesta](https://www.sencha.com/blog/introducing-siesta-a-testing-tool-for-ext-js/)).
+The outcome may differ but it must let you know:
+
+* How much tests were run
+* How many succeeded (and consequently how many failed)
+* The list of failed tests
+
+I recommend checking the documentation of the framework to know more about it ([Mocha](https://mochajs.org/) comes with
+a bunch of interesting visualisation for the output).
 
 ## Implementing BDD
+
+### Forewords
+
+    https://github.com/ArnaudBuchholz/gpf-js/blob/31744da2e17f05599cdeb8ab63d3afc63a12421e/test/host/bdd.js
 
 </code>
 <!-- Drop those two lines -->
