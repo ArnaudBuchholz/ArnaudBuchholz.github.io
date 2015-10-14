@@ -13,7 +13,7 @@
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
     I consider myself as curious and I am always eager to understand / learn how things are working. 
     For the gpf-js library, I wanted to follow TDD practice.
-    However, tools such as Mocha / Jasmine were not existing for cscript.
+    However, tools such as Mocha / Jasmine were not compatible with all supported environments.
     Hence, I had to develop my own.
 </div>
 <script type="application/ld+json">
@@ -104,7 +104,6 @@ and, when executed, it should define specs.
 The label is used to identify the spec, the function is executed to evaluate the test.
 You may have several **it** in a **describe**.
 The test function usually relies on methods to validate conditions, I will introduce the simplest one: assert.
-
 
 (...) Sometimes, the function is not provided: the spec is considered pending
 
@@ -414,10 +413,10 @@ The last part of this article provides information on how I implemented BDD for 
 I had to develop a simple but yet functional testing framework that understands the test files develop for
 [Mocha](https://mochajs.org/).
 
-Since I read [Clean Code](http://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) and
+Since I have read [Clean Code](http://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) and
 [The Clean Coder](http://www.amazon.ca/Clean-Coder-Conduct-Professional-Programmers-ebook/dp/B0050JLC9Y/
 ref=sr_1_1?s=books&ie=UTF8&qid=1444776426&sr=1-1&keywords=clean+coders), both books from
-[Robert Martin](https://en.wikipedia.org/wiki/Robert_Cecil_Martin), I try to stick to very strict development rules.
+[Robert Martin](https://en.wikipedia.org/wiki/Robert_Cecil_Martin), I try to stick to very drastic development rules.
 Indeed, I have defined very strict JSHint settings (even stricter than the ones validating sources on the blog) and this
 is visible in the way the source code is written: small functions with very little
 [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity).
@@ -425,27 +424,76 @@ Also, the testing framework is tested (through [test_bdd.html](https://github.co
 ecc49966e67ba3316d77b2f120e0465a5836ca77/test/host/test_bdd.html)).
 
 By the time I write this article, [bdd.js](https://github.com/ArnaudBuchholz/gpf-js/blob/
-31744da2e17f05599cdeb8ab63d3afc63a12421e/test/host/bdd.js) seems to be in a stable state and, unless I find a bug,
-it should remain as-is for a long time.
+6465f7131003184c3707b59eba9c9456df77ea38/test/host/bdd.js) seems to be in a stable state and, unless I find a bug or I
+get constructive feedback, it should remain as-is for a long time.
 
 Last but not least, usual disclaimers:
 
 * I do **not** believe or even pretend this is the best implementation ever: I would definitely recommend using
 well-known and widely used / tested framework such as [Mocha](https://mochajs.org/) or
-[Jasmine](http://jasmine.github.io/). This was created because of the lack of support in specific scripting
+[Jasmine](http://jasmine.github.io/). Again, this was created because of the lack of support in specific scripting
 environment.
-* I learned a lot by doing this but this felt - a lot - like re-inventing the wheel. Obviously, this has to be avoided
-whenever possible.
-* There are certainly things that can be improved, I always welcome feedback, please do by adding comments to this
-article.
+
+* I learned a lot by doing this but this felt - a lot - like re-inventing the wheel. Obviously, in a real project,
+this has to be avoided whenever possible. But because it is a personal project, I have time.
+In the end, the lessons learned overcomes the time spent.
+
+* Things can obviously be improved, I always welcome feedback, please do by adding comments to this article.
 
 ### General structure of bdd.js
 
-* **IIFE**
+The file itself [starts](https://github.com/ArnaudBuchholz/gpf-js/blob/
+6465f7131003184c3707b59eba9c9456df77ea38/test/host/bdd.js#L1) with an [IIFE](https://en.wikipedia.org/wiki/
+Immediately-invoked_function_expression) to create a private scope. One parameter (context) is expected.
+On the [last line](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/test/host/
+bdd.js#L730) the function is invoked with **this** as a parameter.
 
-* **Helpers**
+Using this syntax allows me to receive the global scope object in the parameter context.
+Adding members on it will make them available globally in the scripting environment.
+This how **define**, **it** and the others will be defined.
 
-* **Hierarchical model to define test suites and specs**
+There is one exception: for NodeJS, each module (loaded with
+[require](https://nodejs.org/api/globals.html#globals_require)) as its own scope, that's why we must use the
+**[global](https://nodejs.org/api/globals.html#globals_global)** object, after
+[detecting the environment](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/test/
+host/bdd.js#L4-L6).
+
+(...) Now that I see again this code, I realize I should have detected NodeJS the proper way (like in
+[gpf-js](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/src/boot.js#L299)).
+
+### The helpers
+
+As I wanted the file to be standalone, I had to include some helpers in it to ease the development:
+
+* [_objectForEach](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/test/host/
+bdd.js#L12-L19) mimics the behavior of [Array.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+Reference/Global_Objects/Array/forEach)
+
+* [_toClass](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/
+test/host/bdd.js#L21-L34) is used to create classes with inheritance, members and even some 'static' members.
+
+### Hierarchical classes to define test suites and specs
+
+To work properly, we must remember all the test suites and specs that are defined. As **describe** may contain other
+**describe**, this generates a hierarchical relationship between them.
+
+The class **[BDDAbstract](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/test/
+host/bdd.js#L38-L65)** defines this parent / children relationship and offers a placeholder for a label.
+When the constructor is called with a parent parameter, this parent is modified to add a child.
+
+The following code portion is really important and deserves some explanations:
+`if (!parent.hasOwnProperty("children")) {
+    // Make the array unique to the instance
+    parent.children = [];
+}
+parent.children.push(this);`
+
+**children** is actually defined on the prototype of **BDDAbstract** as an array. Adding the child to this array would
+make all instances of **BDDAbstract** to have this new child. In order to distinguish the collections, we first verify
+if the children array is defined at the instance level (using **hasOwnProperty**). If not, the property is set with a
+new array.
+
+* **
 
 * **Global functions**
 
