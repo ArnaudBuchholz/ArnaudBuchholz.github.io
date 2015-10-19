@@ -442,7 +442,7 @@ In the end, the lessons learned were worth the invested spent.
 
 The file itself [starts](%BDD%#L1) with an [IIFE](https://en.wikipedia.org/wiki/Immediately-invoked_function_expression)
 to create a private scope. One parameter (context) is expected.
-On the [last line](%BDD$#L730) the function is invoked with **this** as a parameter.
+On the [last line](%BDD%#L731) the function is invoked with **this** as a parameter.
 
 Using this syntax allows me to receive the global scope object in the parameter context.
 Adding members on it will make them available globally in the scripting environment.
@@ -450,7 +450,7 @@ This is how **define**, **it** and the others will be defined.
 
 There is one exception: for NodeJS, each module (loaded with
 [require](https://nodejs.org/api/globals.html#globals_require)) has its own scope, that's why we must use the
-**[global](https://nodejs.org/api/globals.html#globals_global)** object after [detecting the environment](%BDD%#L4-L6).
+**[global](https://nodejs.org/api/globals.html#globals_global)** object after [detecting the environment](%BDD%#L6-L9).
 
 (...) Now that I review this code, I realize I should have detected NodeJS the proper way (like in
 [gpf-js](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/src/boot.js#L299)).
@@ -459,39 +459,69 @@ There is one exception: for NodeJS, each module (loaded with
 
 Since I wanted the file to be standalone, I had to include some helpers in it to ease the development:
 
-* [_objectForEach](%BDD%#L12-L19) mimics the behavior of [Array.forEach](https://developer.mozilla.org/en-US/docs/Web/
+* [_objectForEach](%BDD%#L15-L22) mimics the behavior of [Array.forEach](https://developer.mozilla.org/en-US/docs/Web/
 JavaScript/Reference/Global_Objects/Array/forEach)
 
-* [_toClass](%BDD%#L21-L34) is used to create classes with inheritance, members and even some 'static' members.
+* [_toClass](%BDD%#L24-L37) is used to create classes with inheritance, members and even some 'static' members
+(introduced with the keyword **statics**).
 
 ### Hierarchical classes to define test suites and specs
 
 To work properly, we must remember all the test suites and specs that are defined. As **describe** may contain other
 **describe**, this generates a hierarchical relationship between them.
 
-The class **[BDDAbstract](%BDD%#L38-L65)** defines this parent / children relationship and offers a placeholder for a
+The class **[BDDAbstract](%BDD%#L41-L68)** defines this parent / children relationship and offers a placeholder for a
 label. When the constructor is called with a parent parameter, this parent is modified to include the current instance
 as its child.
 
-The following code portion is really important and deserves some explanations:
+The following [code portion](%BDD%#L50-L54) is really important and deserves some explanations:
 `if (!parent.hasOwnProperty("children")) {
     // Make the array unique to the instance
     parent.children = [];
 }
 parent.children.push(this);`
 
-**children** is actually defined on the prototype of **BDDAbstract** as an array. Adding the child to this array would
-make all instances of **BDDAbstract** have this new child. In order to distinguish the collections, we first verify
-if the children array is defined at the instance level (using **hasOwnProperty**). If not, the property is set with a
-new array.
+**[children](%BDD%#L62-L63)** is actually defined on the prototype of **BDDAbstract** as an array.
+Adding the child to this array would make all instances of **BDDAbstract** have this new child.
+In order to distinguish the collections,
+we first verify if the children array is defined at the instance level (using **hasOwnProperty**).
+If not, the property is set with a new array.
 
-* **
+The class **[BDDDescribe](%BDD%#L70-L118)** inherits from **BDDAbstract** and contains arrays to remember the before,
+beforeEach, after and afterEach callbacks defined within the describe.
+Also, some 'static' members are define to keep track of the [root](%BDD%#L96-L97) and the [current ](%BDD%#L99-L100)
+describe item (used during the first pass). An [helper](%BDD%#L102-L115) is also defined to add a callback to the
+current describe.
 
-* **Global functions**
+Finally, the **[BDDIt](%BDD%#L120-L140)** inherits from **BDDAbstract** and keeps track of the spec callback.
 
-* **Default output handling**
+### Providing the BDD keywords
 
-* **Tests runner**
+The [next part](%BDD%#L144-L220) declares the BDD keywords.
+
+The [_output](%BDD%#L146-L155) function is designed to integrate with another module that is capable of detecting
+unexpected outputs (this is part of some tests). The [exit](%BDD%#L2018-L214) function is required to end the tests.
+The [iteration function](%BDD%#L216-L220) checks first if the method exists before overriding it: this is helpful
+if you want to integrate your own version of **assert** or **exit**.
+But it is not recommended to override any other BDD keyword.
+
+### Default output handling
+
+The [next part](%BDD%#L224-L301) takes care of the default output. The main idea is to provide all information to the
+caller through a callback so that he can format the output as needed.
+However, if no handler is specified, there must be a default behavior.
+
+Three callbacks are defined:
+
+* **describe**: is called whenever the content of a **describe** will be tested
+* **it**: is called whenever the result of a spec is known (success or error)
+* **results**: is called to finalize the tests execution
+
+### Tests runner
+
+### Main entry point
+
+The [run function](%BDD%#L718-L727) is declared at the very end of the file.
 
 </code>
 <script language="javascript">
