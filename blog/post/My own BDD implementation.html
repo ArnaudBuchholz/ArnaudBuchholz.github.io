@@ -11,7 +11,7 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
-    I consider myself as curious and I am always eager to understand / learn how things are working. 
+    I consider myself a curious person and I am always eager to understand / learn how things work.
     For the gpf-js library, I wanted to follow TDD practice.
     However, tools such as Mocha / Jasmine were not compatible with all supported environments.
     Hence, I had to develop my own.
@@ -37,16 +37,16 @@
 <code class="markdown">
 ## What are TDD and BDD?
 
-### Let's talk about test
+### Let's talk about testing
 
 TDD stands for Test Driven Development: long story short, the idea is to write tests first,
-then write the code that passes the test.
+then write the code that passes these tests.
 
 The benefits are huge:
 
 * **Efficiency**: you develop only what is needed
 * **Quality**: you ensure that any modification does not break what was working before
-* **Maintainability**: you don't fear to change the code as you know it is tested
+* **Maintainability**: you don't fear changing the code as you know it is tested
 
 According to [uncle Bob](http://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html), the exact steps are:
 
@@ -59,15 +59,15 @@ In the end, it is still TDD.
 
 ### Frameworks
 
-There are lots of framework to implement TDD.
-Each one have its own PROs and CONs in terms of:
+There are lots of frameworks to implement TDD.
+Each one has its own PROs and CONs in terms of:
 
 * **Features**: testing helpers (asserts, hooks, mockups), integration with existing frameworks (such as AngularJS,
 ExtJS), support of UI automation, support of asynchronous calls, support of browsers...
 * **Implementation**: how much effort it takes to implement the framework, how much effort it takes to write tests
 * **Performance**: how much time it takes to run the tests
  
-I will not pretend I know them all but, at least, I seriously experimented the following:
+I will not pretend that I know them all, but, at the very least, I thoroughly experimented with the following:
 
 * [Siesta](https://www.sencha.com/blog/introducing-siesta-a-testing-tool-for-ext-js/): the ExtJS specific testing tool
 * [Mocha](https://mochajs.org/): the JavaScript test framework
@@ -77,24 +77,24 @@ I will not pretend I know them all but, at least, I seriously experimented the f
 
 OK, let's be honest: I did not start the [gpf-js](https://github.com/ArnaudBuchholz/gpf-js) library by doing TDD first
 (can you believe it?).
-By the time I write this article, I am catching up on a big refactoring that makes me change all of its sources
+By the time I started writing this article, I was entrenched in a big refactoring of my code that changed it drastically
 (I applied very strict JSHint validation rules which broke everything).
 
-Having around 200 tests running, I really see the value of automated testing !
+Now, having around 200 tests running, I really see the value of automated testing !
 
 * Code is always valid: I can quickly detect issues whenever I change some code
-* Writing tests is a way to validate an API: indeed, whenever I want to develop a new feature, I first write the code 
-in the most elegant manner. I don't even pay attention if it is technically feasible, I first target a natural way of
-using it. So, I start by writing tests.
+* Writing tests is a way to validate an API: indeed, whenever I want to develop a new feature, I don't even pay
+attention to whether or not it is technically feasible; I first write the code so that it can be used in an elegant
+manner. Thus, I start by writing tests.
 * Tests are like documentation: have you ever checked the documentation of a big API? it is usually full of samples.
-Tests provides you free, always up-to-date and valid samples.
+Tests provide you with free, always up-to-date and valid samples.
 
 ## Writing BDD
 
 ### Basics
 
 Whatever the code / UI you want to validate, you first have to define the tests you want to apply.
-BDD syntax introduces several keywords (functions) that helps you organize your tests:
+BDD syntax introduces several keywords (functions) that help you organize your tests:
 
 * **describe** is used to build a test suite, it takes two parameters: a label and a function.
 The label is used to identify the test suite, the function has the advantage of providing a private scope
@@ -107,15 +107,15 @@ The test function usually relies on methods to validate conditions, I will intro
 
 (...) Sometimes, the function is not provided: the spec is considered pending
 
-* **assert** is used to evaluate a condition, the signature of assert may depend but, at least,
-you should have a boolean condition. Usually, when the boolean condition is false, the assertion fails.
+* **assert** is used to evaluate a condition, the signature of assert an assert may vary but, you should at least have a
+boolean condition. Usually, when the boolean condition is false, the assertion fails.
 This consequently fails the spec (test).
 
 The level of granularity (details) you can grab from a spec depends on the framework you implemented.
 Sometimes, you have the call stack (showing you which line of the spec failed) but you may only have a
 failure notification (saying the spec did not pass the test).
 
-That's why I advise to limit the spec content to a mimimum number of assertions.
+That's why I advise to limit the spec content to a minimum number of assertions.
 
 Here is an example of a simple test file:
 
@@ -166,8 +166,7 @@ And the associated output:
 ### Setting up the contexts
 
 Sometimes, you need context around the tests: you may need to mock some APIs by loading fake data or wrapping the
-functions, you may want to setup a page...
-The same way, you might need some cleanup code once your tests executed.
+functions, you may want to set up a page, or you might need some cleanup code once your tests get executed.
 
 All the following keywords (functions) must be used in a **describe**, in any order.
 They all accept a function as the only parameter.
@@ -177,7 +176,7 @@ They all accept a function as the only parameter.
 * **beforeEach** is triggered before each it of this describe (direct or recursive)
 * **afterEach** is triggered after each it of this describe (direct or recursive)
 
-Here is an example of use:
+Here is a usage example:
 
 `/*global describe, it, assert*//*gpf:apply-jshint*/
 /*global before, after, beforeEach, afterEach*/
@@ -284,7 +283,7 @@ signals an error).
 * The spec/context function accepts one parameter: if so, this parameter is a callback function used to signal the
 completion. This function also accepts a parameter to signal an error (when specified).
 
-Here is an example of use (using callbacks):
+Here is an example (using callbacks):
 
 (...) To be able to test error cases and report on success, I added a third parameter to **it** in order to specify
 that an error is expected. If no error occurs, the test fails: it inverts the logic.
@@ -338,7 +337,7 @@ And the associated output:
 
 ## Executing BDD
 
-There are mainly three steps
+There are mainly three steps:
 
 1 Load the test suites
 2 Execute them
@@ -347,7 +346,7 @@ There are mainly three steps
 ### Load the test suites
 
 This part really depends on the framework you decided to implement.
-But, most of the time, it consists in loading (in this order):
+But, most of the time, it consists of loading (in this order):
 
 * the code you want to test (the library or the application),
 * the framework that implements BDD
@@ -384,23 +383,23 @@ for (idx = 0; idx < len; ++idx) {
 run();
 gpf.handleTimeout();`
 
-(...) **run** is the entry point that trigger the execution of the test suites.
+(...) **run** is the entry point that triggers the execution of the test suites.
 
-(...) **gpf.handleTimeout** provides asynchronous support to hosts that misses it. I will soon write an article about
+(...) **gpf.handleTimeout** provides asynchronous support to hosts that lacks it. I will soon write an article about
 it.
 
 ### Execute and report on BDD
 
-Here again, this highly depends on the implemented framework. Execution can be done in standalone page, script or
+Again, this highly depends on the implemented framework. Execution can be done in a standalone page, script or
 within an application (like in [Siesta](https://www.sencha.com/blog/introducing-siesta-a-testing-tool-for-ext-js/)).
 The outcome may differ but it must let you know:
 
-* How much tests were run
+* How many tests were run
 * How many succeeded (and consequently how many failed)
 * The list of failed tests
 
 I recommend checking the documentation of the framework to know more about it ([Mocha](https://mochajs.org/) comes with
-a bunch of interesting visualisation for the output).
+a bunch of interesting visualisations for the output).
 
 ## Implementing BDD
 
@@ -410,35 +409,35 @@ The last part of this article provides information on how I implemented BDD for 
 [gpf-js](https://github.com/ArnaudBuchholz/gpf-js) library on
 [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx) and later on
 [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino).
-I had to develop a simple but yet functional testing framework that understands the test files develop for
+I had to develop a simple but yet functional testing framework that understands the test files developed for
 [Mocha](https://mochajs.org/).
 
 Since I have read [Clean Code](http://www.amazon.ca/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) and
 [The Clean Coder](http://www.amazon.ca/Clean-Coder-Conduct-Professional-Programmers-ebook/dp/B0050JLC9Y/
 ref=sr_1_1?s=books&ie=UTF8&qid=1444776426&sr=1-1&keywords=clean+coders), both books from
-[Robert Martin](https://en.wikipedia.org/wiki/Robert_Cecil_Martin), I try to stick to very drastic development rules.
+[Robert Martin](https://en.wikipedia.org/wiki/Robert_Cecil_Martin), I try to stick to very firm development rules.
 Indeed, I have defined very strict JSHint settings (even stricter than the ones validating sources on the blog) and this
 is visible in the way the source code is written: small functions with very little
 [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity).
 Also, the testing framework is tested (through [test_bdd.html](https://github.com/ArnaudBuchholz/gpf-js/blob/
 ecc49966e67ba3316d77b2f120e0465a5836ca77/test/host/test_bdd.html)).
 
-By the time I write this article, [bdd.js](https://github.com/ArnaudBuchholz/gpf-js/blob/
+As I write this article, [bdd.js](https://github.com/ArnaudBuchholz/gpf-js/blob/
 6465f7131003184c3707b59eba9c9456df77ea38/test/host/bdd.js) seems to be in a stable state and, unless I find a bug or I
 get constructive feedback, it should remain as-is for a long time.
 
-Last but not least, usual disclaimers:
+Last but not least, the usual disclaimers:
 
-* I do **not** believe or even pretend this is the best implementation ever: I would definitely recommend using
-well-known and widely used / tested framework such as [Mocha](https://mochajs.org/) or
-[Jasmine](http://jasmine.github.io/). Again, this was created because of the lack of support in specific scripting
+* I do **not** believe or even pretend that this is the best implementation ever: I would definitely recommend using
+well-known and widely used / tested frameworks such as [Mocha](https://mochajs.org/) or
+[Jasmine](http://jasmine.github.io/). Again, this was created because of the lack of support in a specific scripting
 environment.
 
-* I learned a lot by doing this but this felt - a lot - like re-inventing the wheel. Obviously, in a real project,
-this has to be avoided whenever possible. But because it is a personal project, I have time.
-In the end, the lessons learned overcomes the time spent.
+* I learned a lot by doing this but the process felt - a lot - like re-inventing the wheel. Obviously, in a real
+project, this has to be avoided whenever possible. But because it is a personal project, I have time.
+In the end, the lessons learned were worth the invested spent.
 
-* Things can obviously be improved, I always welcome feedback, please do by adding comments to this article.
+* Things can obviously be improved, I always welcome feedback, please do so by adding comments to this article.
 
 ### General structure of bdd.js
 
@@ -450,20 +449,20 @@ bdd.js#L730) the function is invoked with **this** as a parameter.
 
 Using this syntax allows me to receive the global scope object in the parameter context.
 Adding members on it will make them available globally in the scripting environment.
-This how **define**, **it** and the others will be defined.
+This is how **define**, **it** and the others will be defined.
 
 There is one exception: for NodeJS, each module (loaded with
-[require](https://nodejs.org/api/globals.html#globals_require)) as its own scope, that's why we must use the
-**[global](https://nodejs.org/api/globals.html#globals_global)** object, after
+[require](https://nodejs.org/api/globals.html#globals_require)) has its own scope, that's why we must use the
+**[global](https://nodejs.org/api/globals.html#globals_global)** object after
 [detecting the environment](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/test/
 host/bdd.js#L4-L6).
 
-(...) Now that I see again this code, I realize I should have detected NodeJS the proper way (like in
+(...) Now that I review this code, I realize I should have detected NodeJS the proper way (like in
 [gpf-js](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/src/boot.js#L299)).
 
 ### The helpers
 
-As I wanted the file to be standalone, I had to include some helpers in it to ease the development:
+Since I wanted the file to be standalone, I had to include some helpers in it to ease the development:
 
 * [_objectForEach](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/test/host/
 bdd.js#L12-L19) mimics the behavior of [Array.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
@@ -479,7 +478,8 @@ To work properly, we must remember all the test suites and specs that are define
 
 The class **[BDDAbstract](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/test/
 host/bdd.js#L38-L65)** defines this parent / children relationship and offers a placeholder for a label.
-When the constructor is called with a parent parameter, this parent is modified to add a child.
+When the constructor is called with a parent parameter, this parent is modified to include the current instance
+as its child.
 
 The following code portion is really important and deserves some explanations:
 `if (!parent.hasOwnProperty("children")) {
@@ -489,7 +489,7 @@ The following code portion is really important and deserves some explanations:
 parent.children.push(this);`
 
 **children** is actually defined on the prototype of **BDDAbstract** as an array. Adding the child to this array would
-make all instances of **BDDAbstract** to have this new child. In order to distinguish the collections, we first verify
+make all instances of **BDDAbstract** have this new child. In order to distinguish the collections, we first verify
 if the children array is defined at the instance level (using **hasOwnProperty**). If not, the property is set with a
 new array.
 
