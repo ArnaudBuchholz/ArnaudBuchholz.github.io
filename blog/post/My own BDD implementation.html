@@ -519,6 +519,62 @@ Three callbacks are defined:
 
 ### Tests runner
 
+The [test runner](%BDD%#L305-L716) is probably the code where I spent most of the time.
+You may check the file history to see how many times I had to rewrite the algorithm.
+
+Long story short, my biggest challenge was to found a way to conciliate the asynchronous callbacks with the synchronous
+ones in order to sequence everything the right way.
+
+I came up with two ideas:
+
+* I use a finite state engine to sequence the execution of callbacks (beforeEach, it, afterEach)
+* Each steps returns a boolean to know if the processing remains synchronous or not.
+
+**The finite state engine**
+
+It all starts with a [main loop](%BDD%#L563-L578).
+This function executes any pending callback (synchronously or not) and then invoke the state method.
+Indeed, each state is represented by a [constant](%BDD%#L693-L700) that provides a member name to execute on
+the **Runner** instance.
+
+STATE_DESCRIBE_BEFORE [_onDescribeBefore](%BDD%#L580-L586)
+
+* set state to STATE_DESCRIBE_CHILDREN
+* Execute **before** callbacks (if any)
+
+STATE_DESCRIBE_CHILDREN [_onDescribeChildren](%BDD%#L588-L603)
+
+* if no more child, set state to STATE_DESCRIBE_AFTER (and exit)
+* if child is an **it** set state to STATE_DESCRIBE_CHILDIT_BEFORE
+* if child is a **describe** stack current describe and set state to STATE_DESCRIBE_BEFORE
+
+STATE_DESCRIBE_CHILDIT_BEFORE [_onItBefore](%BDD%#L622-L627)
+
+* set state to STATE_DESCRIBE_CHILDIT_EXECUTE
+* Execute **beforeEach** callbacks
+
+STATE_DESCRIBE_CHILDIT_EXECUTE [_onItExecute](%BDD%#L629-L645)
+
+* set state to STATE_DESCRIBE_CHILDIT_AFTER
+* execute the callback
+
+STATE_DESCRIBE_CHILDIT_AFTER [_onItAfter](%BDD%#L647-L652)
+
+* set state to STATE_DESCRIBE_CHILDREN
+* Execute **afterEach** callbacks
+
+STATE_DESCRIBE_AFTER [_onDescribeAfter](%BDD%#L654-L660)
+
+* set state to STATE_DESCRIBE_DONE
+* Execute **after** callbacks
+
+STATE_DESCRIBE_DONE [_onDescribeDone](%BDD%#L662-L674)
+
+* if no more stacked **describe**, set state to STATE_FINISHED (and exit)
+* unstack describe, set state to STATE_DESCRIBE_CHILDREN
+
+**The finite state engine**
+
 ### Main entry point
 
 The [run function](%BDD%#L718-L727) is declared at the very end of the file.
