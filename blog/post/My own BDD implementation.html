@@ -442,7 +442,7 @@ In the end, the lessons learned were worth the invested spent.
 
 The file itself [starts](%BDD%#L1) with an [IIFE](https://en.wikipedia.org/wiki/Immediately-invoked_function_expression)
 to create a private scope. One parameter (context) is expected.
-On the [last line](%BDD%#L731) the function is invoked with **this** as a parameter.
+On the [last line](%BDD%#L732) the function is invoked with **this** as a parameter.
 
 Using this syntax allows me to receive the global scope object in the parameter context.
 Adding members on it will make them available globally in the scripting environment.
@@ -450,7 +450,7 @@ This is how **define**, **it** and the others will be defined.
 
 There is one exception: for NodeJS, each module (loaded with
 [require](https://nodejs.org/api/globals.html#globals_require)) has its own scope, that's why we must use the
-**[global](https://nodejs.org/api/globals.html#globals_global)** object after [detecting the environment](%BDD%#L6-L9).
+**[global](https://nodejs.org/api/globals.html#globals_global)** object after [detecting the environment](%BDD%#L7-L10).
 
 (...) Now that I review this code, I realize I should have detected NodeJS the proper way (like in
 [gpf-js](https://github.com/ArnaudBuchholz/gpf-js/blob/6465f7131003184c3707b59eba9c9456df77ea38/src/boot.js#L299)).
@@ -459,10 +459,10 @@ There is one exception: for NodeJS, each module (loaded with
 
 Since I wanted the file to be standalone, I had to include some helpers in it to ease the development:
 
-* [_objectForEach](%BDD%#L15-L22) mimics the behavior of [Array.forEach](https://developer.mozilla.org/en-US/docs/Web/
+* [_objectForEach](%BDD%#L16-L23) mimics the behavior of [Array.forEach](https://developer.mozilla.org/en-US/docs/Web/
 JavaScript/Reference/Global_Objects/Array/forEach)
 
-* [_toClass](%BDD%#L24-L37) is used to create classes with inheritance, members and even some 'static' members
+* [_toClass](%BDD%#L25-L41) is used to create classes with inheritance, members and even some 'static' members
 (introduced with the keyword **statics**).
 
 ### Hierarchical classes to define test suites and specs
@@ -470,44 +470,44 @@ JavaScript/Reference/Global_Objects/Array/forEach)
 To work properly, we must remember all the test suites and specs that are defined. As **describe** may contain other
 **describe**, this generates a hierarchical relationship between them.
 
-The class **[BDDAbstract](%BDD%#L41-L68)** defines this parent / children relationship and offers a placeholder for a
+The class **[BDDAbstract](%BDD%#L45-L72)** defines this parent / children relationship and offers a placeholder for a
 label. When the constructor is called with a parent parameter, this parent is modified to include the current instance
 as its child.
 
-The following [code portion](%BDD%#L50-L54) is really important and deserves some explanations:
+The following [code portion](%BDD%#L54-L58) is really important and deserves some explanations:
 `if (!parent.hasOwnProperty("children")) {
     // Make the array unique to the instance
     parent.children = [];
 }
 parent.children.push(this);`
 
-**[children](%BDD%#L62-L63)** is actually defined on the prototype of **BDDAbstract** as an array.
+**[children](%BDD%#L66-L67)** is actually defined on the prototype of **BDDAbstract** as an array.
 Adding the child to this array would make all instances of **BDDAbstract** have this new child.
 In order to distinguish the collections,
 we first verify if the children array is defined at the instance level (using **hasOwnProperty**).
 If not, the property is set with a new array.
 
-The class **[BDDDescribe](%BDD%#L70-L118)** inherits from **BDDAbstract** and contains arrays to remember the before,
+The class **[BDDDescribe](%BDD%#L74-L122)** inherits from **BDDAbstract** and contains arrays to remember the before,
 beforeEach, after and afterEach callbacks defined within the describe.
-Also, some 'static' members are define to keep track of the [root](%BDD%#L96-L97) and the [current ](%BDD%#L99-L100)
+Also, some 'static' members are define to keep track of the [root](%BDD%#L100-L101) and the [current ](%BDD%#L1034-L104)
 describe item (used during the first pass). An [helper](%BDD%#L102-L115) is also defined to add a callback to the
 current describe.
 
-Finally, the **[BDDIt](%BDD%#L120-L140)** inherits from **BDDAbstract** and keeps track of the spec callback.
+Finally, the **[BDDIt](%BDD%#L124-L144)** inherits from **BDDAbstract** and keeps track of the spec callback.
 
 ### Providing the BDD keywords
 
-The [next part](%BDD%#L144-L220) declares the BDD keywords.
+The [next part](%BDD%#L148-L226) declares the BDD keywords.
 
-The [_output](%BDD%#L146-L155) function is designed to integrate with another module that is capable of detecting
-unexpected outputs (this is part of some tests). The [exit](%BDD%#L2018-L214) function is required to end the tests.
-The [iteration function](%BDD%#L216-L220) checks first if the method exists before overriding it: this is helpful
+The [_output](%BDD%#L150-L159) function is designed to integrate with another module that is capable of detecting
+unexpected outputs (this is part of some tests). The [exit](%BDD%#L206-L218) function is required to end the tests.
+The [iteration function](%BDD%#L220-L224) checks first if the method exists before overriding it: this is helpful
 if you want to integrate your own version of **assert** or **exit**.
 But it is not recommended to override any other BDD keyword.
 
 ### Default output handling
 
-The [next part](%BDD%#L224-L301) takes care of the default output. The main idea is to provide all information to the
+The [next part](%BDD%#L228-L305) takes care of the default output. The main idea is to provide all information to the
 caller through a callback so that he can format the output as needed.
 However, if no handler is specified, there must be a default behavior.
 
@@ -519,7 +519,7 @@ Three callbacks are defined:
 
 ### Tests runner
 
-The [test runner](%BDD%#L305-L716) is probably the code where I spent most of the time.
+The [test runner](%BDD%#L307-L717) is probably the code where I spent most of the time.
 You may check the file history to see how many times I had to rewrite the algorithm.
 
 Long story short, my biggest challenge was to found a way to conciliate the asynchronous callbacks with the synchronous
@@ -532,43 +532,43 @@ I came up with two ideas:
 
 **The finite state engine**
 
-It all starts with a [main loop](%BDD%#L563-L578).
+It all starts with a [main loop](%BDD%#L567-L582).
 This function executes any pending callback (synchronously or not) and then invoke the state method.
-Indeed, each state is represented by a [constant](%BDD%#L693-L700) that provides a member name to execute on
+Indeed, each state is represented by a [constant](%BDD%#L694-L701) that provides a member name to execute on
 the **Runner** instance.
 
-STATE_DESCRIBE_BEFORE [_onDescribeBefore](%BDD%#L580-L586)
+STATE_DESCRIBE_BEFORE [_onDescribeBefore](%BDD%#L584-L590)
 
 * set state to STATE_DESCRIBE_CHILDREN
 * Execute **before** callbacks (if any)
 
-STATE_DESCRIBE_CHILDREN [_onDescribeChildren](%BDD%#L588-L603)
+STATE_DESCRIBE_CHILDREN [_onDescribeChildren](%BDD%#L592-L607)
 
 * if no more child, set state to STATE_DESCRIBE_AFTER (and exit)
 * if child is an **it** set state to STATE_DESCRIBE_CHILDIT_BEFORE
 * if child is a **describe** stack current describe and set state to STATE_DESCRIBE_BEFORE
 
-STATE_DESCRIBE_CHILDIT_BEFORE [_onItBefore](%BDD%#L622-L627)
+STATE_DESCRIBE_CHILDIT_BEFORE [_onItBefore](%BDD%#L626-L631)
 
 * set state to STATE_DESCRIBE_CHILDIT_EXECUTE
 * Execute **beforeEach** callbacks
 
-STATE_DESCRIBE_CHILDIT_EXECUTE [_onItExecute](%BDD%#L629-L645)
+STATE_DESCRIBE_CHILDIT_EXECUTE [_onItExecute](%BDD%#L633-L648)
 
 * set state to STATE_DESCRIBE_CHILDIT_AFTER
 * execute the callback
 
-STATE_DESCRIBE_CHILDIT_AFTER [_onItAfter](%BDD%#L647-L652)
+STATE_DESCRIBE_CHILDIT_AFTER [_onItAfter](%BDD%#L650-L655)
 
 * set state to STATE_DESCRIBE_CHILDREN
 * Execute **afterEach** callbacks
 
-STATE_DESCRIBE_AFTER [_onDescribeAfter](%BDD%#L654-L660)
+STATE_DESCRIBE_AFTER [_onDescribeAfter](%BDD%#L657-L663)
 
 * set state to STATE_DESCRIBE_DONE
 * Execute **after** callbacks
 
-STATE_DESCRIBE_DONE [_onDescribeDone](%BDD%#L662-L674)
+STATE_DESCRIBE_DONE [_onDescribeDone](%BDD%#L665-L675)
 
 * if no more stacked **describe**, set state to STATE_FINISHED (and exit)
 * unstack describe, set state to STATE_DESCRIBE_CHILDREN
@@ -577,7 +577,7 @@ STATE_DESCRIBE_DONE [_onDescribeDone](%BDD%#L662-L674)
 
 ### Main entry point
 
-The [run function](%BDD%#L718-L727) is declared at the very end of the file.
+The [run function](%BDD%#L719-L728) is declared at the very end of the file.
 
 </code>
 <script language="javascript">
