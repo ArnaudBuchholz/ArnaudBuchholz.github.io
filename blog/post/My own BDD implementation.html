@@ -13,7 +13,7 @@
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
     I consider myself a curious person and I am always eager to understand / learn how things work.
     For the gpf-js library, I wanted to follow TDD practice.
-    However, tools such as Mocha / Jasmine were not compatible with all supported environments.
+    However, tools such as Mocha / Jasmine were not compatible with all the environments I wanted to support.
     Hence, I had to develop my own.
 </div>
 <script type="application/ld+json">
@@ -66,7 +66,7 @@ Each one has its own PROs and CONs in terms of:
 ExtJS), support of UI automation, support of asynchronous calls, support of browsers...
 * **Implementation**: how much effort it takes to implement the framework, how much effort it takes to write tests
 * **Performance**: how much time it takes to run the tests
- 
+
 I will not pretend that I know them all, but, at the very least, I thoroughly experimented with the following:
 
 * [Siesta](https://www.sencha.com/blog/introducing-siesta-a-testing-tool-for-ext-js/): the ExtJS specific testing tool
@@ -405,7 +405,7 @@ a bunch of interesting visualisations for the output).
 
 ### Forewords
 
-The last part of this article provides information on how I implemented BDD for the sake of testing the
+The last part of this article provides some information on how I implemented BDD for the sake of testing the
 [gpf-js](https://github.com/ArnaudBuchholz/gpf-js) library on
 [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx) and later on
 [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino).
@@ -419,6 +419,9 @@ ref=sr_1_1?s=books&ie=UTF8&qid=1444776426&sr=1-1&keywords=clean+coders), both bo
 Indeed, I have defined very strict JSHint settings (even stricter than the ones validating sources on the blog) and this
 is visible in the way the source code is written: small functions with very little
 [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity).
+
+(...) Actually, I also added [ESlint](http://eslint.org/) validation.
+
 Also, the testing framework is tested (through [test_bdd.html](https://github.com/ArnaudBuchholz/gpf-js/blob/
 ecc49966e67ba3316d77b2f120e0465a5836ca77/test/host/test_bdd.html)).
 
@@ -435,6 +438,9 @@ environment.
 * I learned a lot by doing this but the process felt - a lot - like re-inventing the wheel. Obviously, in a real
 project, this has to be avoided whenever possible. But because it is a personal project, I have time.
 In the end, the lessons learned were worth the invested spent.
+
+* You might find the following explanations incomplete (and they are) and I highly encourage you to read - or even
+better debug - the source to figure it out by yourself: code never lies!
 
 * Things can obviously be improved, I always welcome feedback, please do so by adding comments to this article.
 
@@ -472,7 +478,7 @@ To work properly, we must remember all the test suites and specs that are define
 
 The class **[BDDAbstract](%BDD%#L45-L72)** defines this parent / children relationship and offers a placeholder for a
 label. When the constructor is called with a parent parameter, this parent is modified to include the current instance
-as its child.
+in its children list.
 
 The following [code portion](%BDD%#L54-L58) is really important and deserves some explanations:
 `if (!parent.hasOwnProperty("children")) {
@@ -482,25 +488,28 @@ The following [code portion](%BDD%#L54-L58) is really important and deserves som
 parent.children.push(this);`
 
 **[children](%BDD%#L66-L67)** is actually defined on the prototype of **BDDAbstract** as an array.
-Adding the child to this array would make all instances of **BDDAbstract** have this new child.
-In order to distinguish the collections,
-we first verify if the children array is defined at the instance level (using **hasOwnProperty**).
-If not, the property is set with a new array.
+Adding a child to this array would make all instances of **BDDAbstract** have this new child (because of prototype
+inheritance). In order to distinguish the collections,
+we first verify if the children array is defined at the instance level (using
+**[hasOwnProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+hasOwnProperty)**). If not, the property is set with a new array.
 
 The class **[BDDDescribe](%BDD%#L74-L122)** inherits from **BDDAbstract** and contains arrays to remember the before,
-beforeEach, after and afterEach callbacks defined within the describe.
-Also, some 'static' members are define to keep track of the [root](%BDD%#L100-L101) and the [current ](%BDD%#L1034-L104)
-describe item (used during the first pass). An [helper](%BDD%#L102-L115) is also defined to add a callback to the
-current describe.
+beforeEach, after and afterEach callbacks defined within the **describe**.
+Also, some 'static' members are set to keep track of the [root](%BDD%#L100-L101) and the
+[current](%BDD%#L1034-L104) describe item (used during the first pass).
+Finally, An [helper](%BDD%#L102-L115) is created to add a callback to the current describe.
 
-Finally, the **[BDDIt](%BDD%#L124-L144)** inherits from **BDDAbstract** and keeps track of the spec callback.
+Last but not least, the **[BDDIt](%BDD%#L124-L144)** inherits from **BDDAbstract** and keeps track of the spec callback.
 
 ### Providing the BDD keywords
 
 The [next part](%BDD%#L148-L226) declares the BDD keywords.
 
-The [_output](%BDD%#L150-L159) function is designed to integrate with another module that is capable of detecting
-unexpected outputs (this is part of some tests). The [exit](%BDD%#L206-L218) function is required to end the tests.
+The [_output](%BDD%#L150-L159) function is designed to integrate with another module ([console.js](https://github.com/
+ArnaudBuchholz/gpf-js/blob/master/test/host/console.js)) that is capable of detecting unexpected outputs. Indeed, this
+is part of some GPF-JS tests.
+The [exit](%BDD%#L206-L218) function is used to end the tests.
 The [iteration function](%BDD%#L220-L224) checks first if the method exists before overriding it: this is helpful
 if you want to integrate your own version of **assert** or **exit**.
 But it is not recommended to override any other BDD keyword.
@@ -515,69 +524,115 @@ Three callbacks are defined:
 
 * **describe**: is called whenever the content of a **describe** will be tested
 * **it**: is called whenever the result of a spec is known (success or error)
-* **results**: is called to finalize the tests execution
+* **results**: is called to summarize the tests execution
 
 ### Tests runner
 
 The [test runner](%BDD%#L307-L717) is probably the code where I spent most of the time.
-You may check the file history to see how many times I had to rewrite the algorithm.
+You may check the [file history](https://github.com/ArnaudBuchholz/gpf-js/commits/
+666f7b1903c3090c90d455165a6327d4fc189bcc/test/host/bdd.js) to see how many times I had to rewrite the algorithm.
 
 Long story short, my biggest challenge was to found a way to conciliate the asynchronous callbacks with the synchronous
 ones in order to sequence everything the right way.
 
 I came up with two ideas:
 
-* I use a finite state engine to sequence the execution of callbacks (beforeEach, it, afterEach)
-* Each steps returns a boolean to know if the processing remains synchronous or not.
+* A finite state engine to sequence the global execution
+* A boolean result on each significant step to indicate if the processing can continue (synchronous) or if we must wait
+for next step (asynchronous)
 
 **The finite state engine**
 
-It all starts with a [main loop](%BDD%#L567-L582).
+It all starts with the [main loop](%BDD%#L567-L582) entry point.
 This function executes any pending callback (synchronously or not) and then invoke the state method.
-Indeed, each state is represented by a [constant](%BDD%#L694-L701) that provides a member name to execute on
+
+Each state is represented by a [constant](%BDD%#L694-L701) that provides a member name to execute on
 the **Runner** instance.
+
+![Finite state machine](https://ArnaudBuchholz.github.io/blog/post/My own BDD implementation/Finite state machine.svg)
 
 STATE_DESCRIBE_BEFORE [_onDescribeBefore](%BDD%#L584-L590)
 
-* set state to STATE_DESCRIBE_CHILDREN
 * Execute **before** callbacks (if any)
+* Set state to STATE_DESCRIBE_CHILDREN
 
 STATE_DESCRIBE_CHILDREN [_onDescribeChildren](%BDD%#L592-L607)
 
-* if no more child, set state to STATE_DESCRIBE_AFTER (and exit)
-* if child is an **it** set state to STATE_DESCRIBE_CHILDIT_BEFORE
-* if child is a **describe** stack current describe and set state to STATE_DESCRIBE_BEFORE
+* If no more child, set state to STATE_DESCRIBE_AFTER (and exit)
+* If child is an **it** set state to STATE_DESCRIBE_CHILDIT_BEFORE
+* If child is a **describe** stack current describe and set state to STATE_DESCRIBE_BEFORE
 
 STATE_DESCRIBE_CHILDIT_BEFORE [_onItBefore](%BDD%#L626-L631)
 
-* set state to STATE_DESCRIBE_CHILDIT_EXECUTE
 * Execute **beforeEach** callbacks
+* Set state to STATE_DESCRIBE_CHILDIT_EXECUTE
 
 STATE_DESCRIBE_CHILDIT_EXECUTE [_onItExecute](%BDD%#L633-L648)
 
-* set state to STATE_DESCRIBE_CHILDIT_AFTER
-* execute the callback
+* Execute the callback
+* Set state to STATE_DESCRIBE_CHILDIT_AFTER
 
 STATE_DESCRIBE_CHILDIT_AFTER [_onItAfter](%BDD%#L650-L655)
 
-* set state to STATE_DESCRIBE_CHILDREN
 * Execute **afterEach** callbacks
+* Set state to STATE_DESCRIBE_CHILDREN
 
 STATE_DESCRIBE_AFTER [_onDescribeAfter](%BDD%#L657-L663)
 
-* set state to STATE_DESCRIBE_DONE
 * Execute **after** callbacks
+* Set state to STATE_DESCRIBE_DONE
 
 STATE_DESCRIBE_DONE [_onDescribeDone](%BDD%#L665-L675)
 
-* if no more stacked **describe**, set state to STATE_FINISHED (and exit)
-* unstack describe, set state to STATE_DESCRIBE_CHILDREN
+* If no more stacked **describe**, set state to STATE_FINISHED (and exit)
+* Unstack **describe** (using LIFO), set state to STATE_DESCRIBE_CHILDREN
 
-**The finite state engine**
+**Synchronous / Asynchronous handling**
+
+The execution of each callback (**it** test function, before, after ...) is carried out by the
+[_monitorCallback](%BDD%#L361-L396) method.
+Because it may lead to asynchronous processing, this function receives a completion callback (**callbackCompleted**)
+as well as a context (**callbackContext**).
+
+(...) I could have used promises but the goal was to limit the dependencies.
+
+This function returns true if the callback is asynchronous (meaning the caller has to wait for the callback to
+complete).
+
+Even if the executed function does not use the done parameter, it is [created](%BDD%#L388) anyway as it will be the
+central point to handle the result.
+
+The creation of the done function consists in:
+
+* Creating a [custom context](%BDD%#L375-L385), called monitorContext
+* And binding it to the [_done function](%BDD%#L398-L420)
+
+(...) This trick is a little extreme in terms of readbility. Declared as a member of the Runner class, it is always
+executed with a value of **this** pointing to a different object.
+
+In order to avoid confusion when calling the callback function, the method [_secureCall](%BDD%#L427-L435) will take care
+of invoking it with the right amount of parameters: if the signature confirms it accepts a parameter, it is transmitted.
+Otherwise, the callback is invoked with no parameters.
+
+(...) When creating the test cases, I realized that even when a function  signature is empty, it can still access
+'extra' parameters by checking the **[arguments](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+Functions/arguments)** object. Hence, I wanted to avoid the unexpected use of it.
+
+Once invoked, the [_processCallResult method](%BDD%#L437-L463) will analyze the context and decide if the call
+is:
+
+* **synchronous**: no parameter was expected and the result is not a Promise or the done function was called during the
+initial invocation.
+* **asynchronous**: in any othe case, a [timeout](%BDD%#L454-L458) is created to monitor the execution time (configured
+through the main entry point). If the delay is reached, the callback / test case is failed.
 
 ### Main entry point
 
 The [run function](%BDD%#L719-L728) is declared at the very end of the file.
+It receives two optional parameters:
+
+* **callback**: the output handler
+* **timeoutDelay**: the maximum waiting time for asynchronous callbacks
 
 </code>
 <script language="javascript">
