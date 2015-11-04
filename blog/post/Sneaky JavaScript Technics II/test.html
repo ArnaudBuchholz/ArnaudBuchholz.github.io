@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Sneaky JavaScript Technics II</title>
+        <link rel="stylesheet" type="text/css" href="../../console.css">
+        <script language="javascript" src="../../console.js"></script>
+        <script language="javascript" src="../../promise.min.js"></script>
+        <script language="javascript">
+"use strict";
+
+function onceWrapper (callback) {
+    "use strict";
+
+    var _result,
+            _pendingPromises;
+
+    return function () {
+        var deferred;
+        if (_result) {
+            return Promise.resolve(_result);
+        }
+        deferred = {};
+        deferred.promise = new Promise(function (resolve, reject) {
+            deferred.resolve = resolve;
+            deferred.reject = reject;
+        });
+        if (!_pendingPromises) {
+            _pendingPromises = [deferred];
+            callback.apply(this, arguments)
+                    .then(function (result) {
+                        _result = result;
+                        _pendingPromises.forEach(function (deferred) {
+                            deferred.resolve(result);
+                        });
+                    })
+                    .catch(function (reason) {
+                        _pendingPromises.forEach(function (deferred) {
+                            deferred.reject(reason);
+                        });
+                    });
+        } else {
+            _pendingPromises.push(deferred);
+        }
+        return deferred.promise;
+    };
+
+}
+
+var called = false;
+function intializationAPI () {
+    if (called) {
+        console.error("intializationAPI has been called too many times");
+        return Promise.reject("intializationAPI has been called too many times");
+    }
+    called = true;
+    return Promise.resolve({
+        test: function () {
+            console.log("Hello World!");
+        }
+    });
+}
+
+var safeInitializeApi = onceWrapper(intializationAPI);
+
+function run () {
+    safeInitializeApi()
+            .then(function (api) {
+                api.test();
+            });
+    safeInitializeApi()
+            .then(function (api) {
+                api.test();
+            });
+}
+
+        </script>
+    </head>
+    <body onload="run()"></body>
+</html>
+
