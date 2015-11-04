@@ -11,7 +11,8 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/ninja.png" align="left">
-    How do you secure an asynchronous method to make sure that the code is executed only once.
+    How do you secure an asynchronous method to make sure that the code is executed only once?
+    Here is an example using promises.
 </div>
 <script type="application/ld+json">
 {
@@ -26,8 +27,8 @@
     },
     "headline": "Sneaky JavaScript Technics II",
     "url": "http://gpf-js.blogspot.ca/sneaky-javascript-technics-ii.html",
-    "datePublished": "2015-02-03T04:54:00.000Z",
-    "dateModified": "2015-02-03T04:54:00.000Z",
+    "datePublished": "2015-11-04T04:14:00.000Z",
+    "dateModified": "2015-11-04T04:14:00.000Z",
     "description": ""
 }
 </script>
@@ -142,7 +143,7 @@ Here is a more sophisticated version of the **safeInitializeApi**:
             deferred.reject = reject;
         });
         _pendingPromises.push(deferred);
-        return deferred;
+        return deferred.promise;
     };
 
 }(this));`
@@ -194,15 +195,16 @@ This leads to this wrapper:
         } else {
             _pendingPromises.push(deferred);
         }
-        return deferred;
+        return deferred.promise;
     };
 
 }(this));`
 
 ### Final solution
 
-If you want this trick to be reusable, here is a function that wraps any function / method to ensure that it can be
-called only once.
+If you want this trick to be reusable, here is a function that wraps any function or method to ensure that it can be
+called only once. This [sample page](http://arnaudbuchholz.github.io/blog/post/Sneaky%20JavaScript%20Technics%20II/
+test.html) will allow you to see it in action.
 
 `/*global intializeApi*//*gpf:apply-jshint*/
 
@@ -239,7 +241,7 @@ function onceWrapper (callback) {
         } else {
             _pendingPromises.push(deferred);
         }
-        return deferred;
+        return deferred.promise;
     };
 
 }
