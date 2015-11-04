@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" href="../file.css" />
 <div class="post">
 <h3 class="post-title entry-title">
-    Sneaky JavaScript Technics I
+    Sneaky JavaScript Technics II
 </h3>
 <div class="post-header">
     <div class="post-header-line-1"></div>
@@ -11,10 +11,7 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/ninja.png" align="left">
-    Sometimes you need to alter the behavior of the code but you have no way to
-    update the original source (either because you don't own it or because it
-    will be updated soon).<br/>
-    I will show you two ways to achieve that
+    How do you secure an asynchronous method to make sure that the code is executed only once.
 </div>
 <script type="application/ld+json">
 {
@@ -37,18 +34,218 @@
 <code class="markdown">
 ### The context
 
-I had the chance to work on a SAAS application where parts of the user interface
-were fully customizable by (or for) the customer.
+I often talk about [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+as a way to handle asynchronous calls. In this short article, I would like to illustrate an advanced technique that
+allows you to synchronize concurrent calls to an asynchronous API with promises.
 
-    Part of this customization
-consisted in JavaScript files that could be added to include specific behaviors.
-Obviously, the whole thing relied on standardized APIs so that we didn't have
-to reinvent the wheel everytime.
+Let consider the following API:
 
-Most of the time, those customization were the occasion to compute some
-information, fetch or reformat data.
+`/**
+ * Intialize the API.
+ * WARNING: must be called only once!
+ *
+ * @return {Promise} resolves to an object providing the API methods
+ */
+function intializeApi () { /*...*/ }
+`
 
+As a client of this API, you need to find a place in your code where you would call it this way:
 
+`// Intialize the API
+intializeApi()
+    .then(function (api) {
+        // Use the API
+    });
+`
+
+### Handling concurrent calls
+
+As the comment says, you can call this function only once. What happens if you develop several modules that requires
+this API? You have to wrap the function in a module that is loaded before any other and expose a method to secure the
+call.
+
+`(function (context) {/*gpf:apply-jshint*/
+    "use strict";
+    /*global intializeApi*/
+
+    var _api;
+
+    context.safeInitializeApi = function () {
+        if (_api) {
+            return Promise.resolve(_api);
+        }
+        return intializeApi()
+            .then(function (api) {
+                _api = api;
+                return api;
+            });
+    };
+
+}(this));`
+
+This sounds great: when the promise is fulfilled, it keeps track of the returned object and any subsequent call will use
+the cached result.
+
+But...
+
+What if the you consider the following code:
+
+`// module1
+safeInitializeApi()
+    .then(function (api) {
+        // Use the API
+    });
+
+// module2
+safeInitializeApi()
+    .then(function (api) {
+        // Use the API
+    });
+`
+
+The function **safeInitializeApi** is called twice sequentially. Because the **initializeApi** is asynchronous,
+it won't have the possibility to execute the fulfillment handler (that sets **_api**) before the second call.
+
+As a result, you still call the API twice.
+
+### Solution
+
+Here is a more sophisticated version of the **safeInitializeApi**:
+
+`(function (context) {/*gpf:apply-jshint*/
+    "use strict";
+    /*global intializeApi*/
+
+    var _api,
+        _pendingPromises;
+
+    context.safeInitializeApi = function () {
+        var deferred;
+        if (_api) {
+            return Promise.resolve(_api);
+        }
+        if (!_pendingPromises) {
+            _pendingPromises = [];
+            return intializeApi()
+                .then(function (api) {
+                    _api = api;
+                    _pendingPromises.forEach(function (deferred) {
+                        deferred.resolve(api);
+                    });
+                    return api;
+                });
+        }
+        // Build a new promise resolved upon API fulfillment
+        deferred = {};
+        deferred.promise = new Promise(function (resolve, reject) {
+            deferred.resolve = resolve;
+            deferred.reject = reject;
+        });
+        _pendingPromises.push(deferred);
+        return deferred;
+    };
+
+}(this));`
+
+The trick consists in creating new promises that will be resolved when the initial one is fulfilled. The array of
+promises (**_pendingPromises**) acts as a critical section to know if the method has already been called or not.
+
+### Handling errors
+
+How do you handle errors?
+
+Unlike fulfillment handlers that can be chained (**.then()** returns a promise), rejection handlers can't be.
+Hence, we need to create another promise to wrap the initial one and forward fulfillment or rejection on all pending
+promises.
+
+This leads to this wrapper:
+
+`(function (context) {/*gpf:apply-jshint*/
+    "use strict";
+    /*global intializeApi*/
+
+    var _api,
+        _pendingPromises;
+
+    context.safeInitializeApi = function () {
+        var deferred;
+        if (_api) {
+            return Promise.resolve(_api);
+        }
+        deferred = {};
+        deferred.promise = new Promise(function (resolve, reject) {
+            deferred.resolve = resolve;
+            deferred.reject = reject;
+        });
+        if (!_pendingPromises) {
+            _pendingPromises = [deferred];
+            intializeApi()
+                .then(function (api) {
+                    _api = api;
+                    _pendingPromises.forEach(function (deferred) {
+                        deferred.resolve(api);
+                    });
+                })
+                .catch(function (reason) {
+                    _pendingPromises.forEach(function (deferred) {
+                        deferred.reject(reason);
+                    });
+                });
+        } else {
+            _pendingPromises.push(deferred);
+        }
+        return deferred;
+    };
+
+}(this));`
+
+### Final solution
+
+If you want this trick to be reusable, here is a function that wraps any function / method to ensure that it can be
+called only once.
+
+`/*global intializeApi*//*gpf:apply-jshint*/
+
+function onceWrapper (callback) {
+    "use strict";
+
+    var _result,
+        _pendingPromises;
+
+    return function () {
+        var deferred;
+        if (_result) {
+            return Promise.resolve(_result);
+        }
+        deferred = {};
+        deferred.promise = new Promise(function (resolve, reject) {
+            deferred.resolve = resolve;
+            deferred.reject = reject;
+        });
+        if (!_pendingPromises) {
+            _pendingPromises = [deferred];
+            callback.apply(this, arguments)
+                .then(function (result) {
+                    _result = result;
+                    _pendingPromises.forEach(function (deferred) {
+                        deferred.resolve(result);
+                    });
+                })
+                .catch(function (reason) {
+                    _pendingPromises.forEach(function (deferred) {
+                        deferred.reject(reason);
+                    });
+                });
+        } else {
+            _pendingPromises.push(deferred);
+        }
+        return deferred;
+    };
+
+}
+
+// Example of use
+var safeInitializeApi = onceWrapper(intializeApi);`
 
 </code>
 <!-- Drop those two lines -->
