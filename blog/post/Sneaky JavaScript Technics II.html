@@ -45,18 +45,18 @@ Let consider the following API:
  * Intialize the API.
  * WARNING: must be called only once!
  *
- * @return {Promise} resolves to an object providing the API methods
+ * @param {Function} callback Will be triggered when the API is ready
+ * it receives a dictionary exposing the api.
  */
-function intializeApi () { /*...*/ }
+function intializeApi (callback) { /*...*/ }
 `
 
 As a client of this API, you need to find a place in your code where you would call it this way:
 
 `// Intialize the API
-intializeApi()
-    .then(function (api) {
-        // Use the API
-    });
+intializeApi(function (api) {
+    // Use the API
+});
 `
 
 ### Handling concurrent calls
@@ -75,17 +75,18 @@ call.
         if (_api) {
             return Promise.resolve(_api);
         }
-        return intializeApi()
-            .then(function (api) {
+        return new Promise(function (resolve/*, reject*/) {
+            intializeApi(function (api) {
                 _api = api;
-                return api;
+                resolve(api);
             });
+        });
     };
 
 }(this));`
 
-This sounds great: when the promise is fulfilled, it keeps track of the returned object and any subsequent call will use
-the cached result.
+This sounds great: when the callback  is triggered, it keeps track of the returned object and any subsequent call will
+use the cached result.
 
 But...
 
@@ -110,6 +111,12 @@ it won't have the possibility to execute the fulfillment handler (that sets **_a
 As a result, you still call the API twice.
 
 ### Solution
+
+(...) The following part was based on an incorrect assumption. However, even if the proposed solution is useless (and
+I will explain the reason at the end of the article), is remains valid (it works).
+To understand where I come from, the
+
+
 
 Here is a more sophisticated version of the **safeInitializeApi**:
 
