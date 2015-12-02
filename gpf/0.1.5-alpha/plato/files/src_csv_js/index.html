@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/csv.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/csv.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">64.34</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">272</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">60.96</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.44</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*exported _gpfCsvParse*/
+/*#endif*/
+
+_gpfErrorDeclare(&quot;csv&quot;, {
+    csvInvalid:
+        &quot;Invalid CSV syntax (bad quote sequence or missing end of file)&quot;
+});
+
+var
+    // Usual CSV separators
+    _gpfCsvSeparators = &quot;;,\t &quot;;
+
+/**
+ * Deduce CSV separator from line (usually, the header)
+ *
+ * @param {String} header
+ * @return {String}
+ */
+function _gpfCsvComputeSeparator (header) {
+    var len = _gpfCsvSeparators.length,
+        idx,
+        separator;
+    for (idx = 0; idx &lt; len; ++idx) {
+        separator = _gpfCsvSeparators.charAt(idx);
+        if (-1 !== header.indexOf(separator)) {
+            return separator;
+        }
+    }
+    // Default
+    return _gpfCsvSeparators.charAt(0);
+}
+
+/**
+ * Remove final \r from the line
+ *
+ * @param {String} line
+ * @return {String}
+ */
+function _gpfTrimFinalR (line) {
+    var len = line.length - 1;
+    if (&quot;\r&quot; === line.charAt(len)) {
+        return line.substr(0, len);
+    }
+    return line;
+}
+
+/**
+ * CSV Parser
+ *
+ * @param {String} content CSV content
+ * @param {Object} options
+ * - {String} [header=undefined] header
+ * - {String} [separator=undefined] separator can be deduced from header
+ * - {String} [quote=&quot;\&quot;&quot;] quote
+ * @class {_GpfCsvParse}
+ * @constructor
+ */
+function _GpfCsvParser (content, options) {
+    /*jshint validthis:true*/ // constructor
+    options = options || {}; // to have at least an empty object
+    this._lines = content.split(&quot;\n&quot;).map(_gpfTrimFinalR);
+    var header = options.header || this._lines.shift();
+    this._separator = options.separator || _gpfCsvComputeSeparator(header);
+    this._quote = options.quote || &quot;\&quot;&quot;;
+    this._columns = header.split(this._separator);
+}
+
+_GpfCsvParser.prototype = {
+
+    // @property {String[]} Array of lines
+    _lines: [],
+
+    // Column separator
+    _separator: &quot;&quot;,
+
+    // Quote
+    _quote: &quot;&quot;,
+
+    // @property {String[]} Columns&#039; name
+    _columns: [],
+
+    /**
+     * Process quoted value to unescape it properly.
+     * Either the quote appears in the middle of the value: it must be followed by another quote.
+     * And/Or it appears at the end of the value: it means this ends the quoted value
+     *
+     * @param {String} value
+     * @return {Array}
+     * - {String} 0 The result value
+     * - {Boolean} 1 Indicates if the quote escaping is still active
+     */
+    _unquote: function (value) {
+        var quote = this._quote,
+            pos = value.indexOf(quote),
+            inQuotedString = true;
+        while (-1 &lt; pos) {
+            if (pos === value.length - 1) {
+                // Last character of the string
+                value = value.substr(0, pos);
+                inQuotedString = false;
+                break;
+            } else if (value.charAt(pos + 1) === quote) {
+                // Double quote means escaped one
+                value = value.substr(0, pos) + value.substr(pos + 1);
+            } else {
+                throw gpf.Error.csvInvalid();
+            }
+            pos = value.indexOf(quote, pos + 1);
+        }
+        return [value, inQuotedString];
+    },
+
+    /**
+     * Process the line value knowing it is quoted
+     *
+     * @param {String[]} line Line split on separator
+     * @param {Number} idx Index of the value to consider
+     * @param {Object} flags
+     * - {Boolean} inQuotedString
+     * - {Boolean} includeCarriageReturn
+     * @returns {Number} Next value index
+     */
+    _processQuotedLineValue: function (line, idx, flags) {
+        var value = line[idx],
+            unQuoted;
+        // Concatenate with &#039;previous&#039; item
+        var previousValue = [line[idx - 1]];
+        if (flags.includeCarriageReturn) {
+            previousValue.push(&quot;\r\n&quot;);
+        } else {
+            // part of the escaped string
+            previousValue.push(this._separator);
+        }
+        unQuoted = this._unquote(value);
+        previousValue.push(unQuoted[0]);
+        flags.inQuotedString = unQuoted[1];
+        line[idx - 1] = previousValue.join(&quot;&quot;);
+        flags.includeCarriageReturn = false;
+        line.splice(idx, 1);
+        return idx;
+    },
+
+    /**
+     * Process the line value to check if any quote exists
+     *
+     * @param {String[]} line Line split on separator
+     * @param {Number} idx Index of the value to consider
+     * @param {Object} flags
+     * - {Boolean} inQuotedString
+     * - {Boolean} includeCarriageReturn
+     * @returns {Number} Next value index
+     */
+    _processLineValue: function (line, idx, flags) {
+        var value = line[idx],
+            unQuoted;
+        if (0 === value.indexOf(this._quote)) {
+            flags.inQuotedString = true;
+            unQuoted = this._unquote(value.substr(1));
+            line[idx] = unQuoted[0];
+            flags.inQuotedString = unQuoted[1];
+        }
+        return idx + 1;
+    },
+
+    /**
+     * Convert the line into values
+     *
+     * @param {String} line
+     * @param {String[]} values
+     * @param {Object} flags
+     * - {Boolean} inQuotedString
+     * - {Boolean} includeCarriageReturn
+     * @returns {Boolean}
+     */
+    _processLineValues: function (line, values, flags) {
+        var idx;
+        if (flags.inQuotedString) {
+            flags.includeCarriageReturn = true;
+            line.unshift(values.pop()); // Last value is not completed
+            idx = 1;
+        } else {
+            idx = 0;
+            flags.includeCarriageReturn = false;
+        }
+        while (idx &lt; line.length) {
+            if (flags.inQuotedString) {
+                idx = this._processQuotedLineValue(line, idx, flags);
+            } else {
+                idx = this._processLineValue(line, idx, flags);
+            }
+        }
+        [].splice.apply(values, [values.length, 0].concat(line));
+        return !flags.inQuotedString;
+    },
+
+    /**
+     * Read one &#039;line&#039; of values.
+     * Quote escaping is handled meaning that a line might be on several lines
+     *
+     * @returns {String[]}
+     */
+    _readValues: function () {
+        var lines = this._lines,
+            separator = this._separator,
+            values = [],
+            flags = {
+                inQuotedString: false,
+                includeCarriageReturn: false
+            },
+            line;
+        while (lines.length) {
+            line = lines.shift().split(separator);
+            if (this._processLineValues(line, values, flags)) {
+                break;
+            }
+        }
+        if (flags.inQuotedString) {
+            throw gpf.Error.csvInvalid();
+        }
+        return values;
+    },
+
+    /**
+     * Read one record
+     *
+     * @returns {Object}
+     */
+    read: function () {
+        var values = this._readValues(),
+            record = {};
+        this._columns.forEach(function (name, idx) {/*gpf:inline(array)*/
+            record[name] = values[idx];
+        });
+        return record;
+    },
+
+    /**
+     * Read all records
+     *
+     * @returns {Object[]}
+     */
+    readAll: function () {
+        var result = [];
+        while (this._lines.length) {
+            result.push(this.read());
+        }
+        return result;
+    }
+
+};
+
+gpf.csv = {
+
+    /**
+     * CSV parsing function
+     *
+     * @param {String} content CSV content
+     * @param {Object} options
+     * - {String} [header=undefined] header
+     * - {String} [separator=undefined] separator can be deduced from header
+     * - {String} [quote=&quot;\&quot;&quot;] quote
+     *
+     * @return {Object[]} records
+     */
+    parse: function (content, options) {
+        var csvParser = new _GpfCsvParser(content, options);
+        return csvParser.readAll();
+    }
+
+};</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

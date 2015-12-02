@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/include.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/include.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">70.86</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">165</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">28.66</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.64</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*jshint browser: true*/
+/*global _GPF_EVENT_ERROR*/ // gpf.events.EVENT_ERROR
+/*global _GPF_EVENT_READY*/ // gpf.events.EVENT_READY
+/*global _gpfEventsFire*/ // gpf.events.fire (internal, parameters must match)
+/*global _gpfInBrowser*/ // The current host is a browser like
+/*global _gpfWebDocument*/ // Browser document object
+/*global _gpfWebHead*/ // Browser head tag
+/*#endif*/
+
+/* istanbul ignore next */ // Not testable with NodeJS
+if (_gpfInBrowser) {
+
+    /**
+     * Dynamically loads a script in the browser, wait until the script is loaded to fire the eventsHandler when done.
+     *
+     * @param {String} url
+     * @param {gpf.events.Handler} eventsHandler
+     *
+     * @eventParam {string} url URL of the included resource
+     *
+     * @event gpf.events.EVENT_READY
+     * The resource has been successfully loaded
+     *
+     * @event gpf.events.EVENT_ERROR
+     * An error occurred when loading the resource
+     */
+    gpf.web.include = (function () {
+        // This is a private context, hence the naming rules are not mandatory here
+
+        var INCLUDE_ID_PREFIX = &quot;gpf-include-&quot;,
+            // Unique IDs for each include
+            lastIncludeId = 0,
+            // Dictionary of contexts associated to the includes
+            includeMap = {};
+
+        /**
+         * Context of an include
+         *
+         * @param {String} url
+         * @param {gpf.events.Handler} eventsHandler
+         * @class IncludeContext
+         * @constructor
+         */
+        function IncludeContext (url, eventsHandler) {
+            /*jshint validthis:true*/
+            this.id = ++lastIncludeId;
+            this.url = url;
+            this.eventsHandler = eventsHandler;
+            includeMap[this.id] = this;
+        }
+
+        IncludeContext.prototype = {
+
+            // Unique ID of this context
+            id: 0,
+
+            // Include URL
+            url: &quot;&quot;,
+
+            // @property {gpf.events.Handler} Events handler
+            eventsHandler: null,
+
+            /**
+             * Clean the include context
+             *
+             * @param {Object} domScript The script element
+             */
+            clean: function (domScript) {
+                var parent = domScript.parentNode;
+                domScript.onerror = domScript.onload = domScript.onreadystatechange = null;
+                if (parent) {
+                    parent.removeChild(domScript);
+                }
+                // Destroy context mapping
+                delete includeMap[this.id];
+            },
+
+            /**
+             * The script may be loaded
+             *
+             * @param {Object} domScript The script element
+             */
+            check: function (domScript) {
+                var readyState = domScript.readyState;
+                if (!readyState || -1 &lt; [&quot;loaded&quot;, &quot;complete&quot;].indexOf(readyState)) {
+                    this.clean(domScript);
+                    // IE10: the event is triggered *before* the source is evaluated
+                    setTimeout(_gpfEventsFire, 0, _GPF_EVENT_READY, {url: this.url}, this.eventsHandler);
+                }
+            },
+
+            /**
+             * The script loading failed
+             *
+             * @param {Object} domScript The script element
+             */
+            failed: function (domScript) {
+                this.clean(domScript);
+                setTimeout(_gpfEventsFire, 0, _GPF_EVENT_ERROR, {url: this.url}, this.eventsHandler);
+            }
+
+        };
+
+        function getIncludeContextFromId (id) {
+            return includeMap[id.substr(INCLUDE_ID_PREFIX.length)];
+        }
+
+        // Wrapper for the load event
+        function onLoad () {
+            /*jshint validthis:true*/ // &#039;this&#039; is the script element
+            var me = this; //eslint-disable-line no-invalid-this
+            var context = getIncludeContextFromId(me.id);
+            if (context) {
+                context.check(me);
+            }
+        }
+
+        // Wrapper for the error event
+        function onError () {
+            /*jshint validthis:true*/ // &#039;this&#039; is the script element
+            var me = this; //eslint-disable-line no-invalid-this
+            var context = getIncludeContextFromId(me.id);
+            if (context) {
+                context.failed(me);
+            }
+        }
+
+        /**
+         * Use insertBefore instead of appendChild  to avoid an IE6 bug.
+         * This arises when a base node is used (#2709 and #4378).
+         *
+         * @param {Object} domScript
+         */
+        function insert (domScript) {
+            _gpfWebHead.insertBefore(domScript, _gpfWebHead.firstChild);
+        }
+
+        /**
+         * @inheritdoc gpf.web#include
+         * Implementation of gpf.web.include
+         *
+         * Inspired from http://stackoverflow.com/questions/4845762/
+         */
+        return function (url, eventsHandler) {
+            var context = new IncludeContext(url, eventsHandler),
+                domScript = _gpfWebDocument.createElement(&quot;script&quot;);
+            // Configure script tag
+            domScript.language = &quot;javascript&quot;;
+            domScript.src = url;
+            domScript.id = INCLUDE_ID_PREFIX + context.id;
+            // Attach handlers for all browsers
+            domScript.onload = domScript.onreadystatechange = onLoad;
+            domScript.onerror = onError;
+            // Use async when supported
+            if (undefined !== domScript.async) {
+                domScript.async = true;
+            }
+            // Bug in IE10 that loads &amp; triggers immediately, use timeout
+            setTimeout(insert, 0, domScript);
+        };
+
+    }());
+
+}</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

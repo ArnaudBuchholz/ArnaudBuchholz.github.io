@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/interfaces.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/interfaces.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">72.48</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">341</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">36.02</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.16</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _gpfAttributesAdd*/ // Shortcut for gpf.attributes.add
+/*global _gpfDefAttr*/ // gpf.define for attributes
+/*global _gpfDefine*/ // Shortcut for gpf.define
+/*global _gpfEmptyFunc*/ // An empty function
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*global _gpfGenDefHandler*/ // Class handler for class types (interfaces...)
+/*global _gpfGetClassDefinition*/ // Get GPF class definition for a constructor
+/*global _gpfIgnore*/ // Helper to remove unused parameter warning
+/*exported _gpfI*/
+/*exported _gpfDefIntrf*/
+/*#endif*/
+
+_gpfErrorDeclare(&quot;interfaces&quot;, {
+    interfaceExpected:
+        &quot;Expected interface not implemented: {name}&quot;
+});
+
+/**
+ * Verify that the object implements the current interface
+ *
+ * @param {Object} inspectedObject object (or class) to inspect
+ * @param {gpf.interfaces.Interface} interfaceDefinition reference interface
+ * @return {Boolean}
+ */
+function _gpfIsImplementedBy (inspectedObject, interfaceDefinition) {
+    var member,
+        memberReference,
+        memberValue,
+        memberType;
+    /*
+     * IMPORTANT note: we test the object itself (i.e. own members and the prototype).
+     * That&#039;s why the hasOwnProperty is skipped
+     */
+    /*jslint forin:true*/
+    for (member in interfaceDefinition.prototype) {
+        if (&quot;constructor&quot; === member) { // Object
+            continue;
+        }
+        memberReference = interfaceDefinition.prototype[member];
+        memberValue = inspectedObject[member];
+        memberType = typeof memberValue;
+        if (typeof memberReference !== memberType) {
+            return false;
+        }
+        if (&quot;function&quot; === memberType &amp;&amp; memberReference.length !== memberValue.length) {
+            return false;
+        }
+    }
+    return true;
+}
+
+var
+    /**
+     * gpf.attributes shortcut
+     *
+     * @type {Object}
+     * @private
+     */
+    _gpfI = gpf.interfaces = {
+
+        /**
+         * Verify that the object (or class) implements the current interface
+         *
+         * @param {Object|Function} inspectedObject object (or class) to inspect
+         * @param {gpf.interfaces.Interface} interfaceDefinition reference interface
+         * @return {Boolean}
+         */
+        isImplementedBy: function (inspectedObject, interfaceDefinition) {
+            if (inspectedObject instanceof Function) {
+                inspectedObject = inspectedObject.prototype;
+            }
+            return _gpfIsImplementedBy(inspectedObject, interfaceDefinition);
+        },
+
+        /**
+         * Retrieve an object implementing the expected interface from an object.
+         * This is done in two tests:
+         * - Either the object implements the interface, it is returned
+         * - Or the object implements IUnknown, then queryInterface is used
+         *
+         * @param {Object} objectInstance object to inspect
+         * @param {gpf.interfaces.Interface} interfaceDefinition reference interface
+         * @param {Boolean} [throwError=true] throwError Throws an error if the interface is not found (otherwise, null
+         * is returned)
+         * @return {Object|null}
+         */
+        query: function (objectInstance, interfaceDefinition, throwError) {
+            var result = null;
+            if (_gpfIsImplementedBy(objectInstance, interfaceDefinition)) {
+                return objectInstance;
+            } else if (_gpfIsImplementedBy(objectInstance, gpf.interfaces.IUnknown)) {
+                result = objectInstance.queryInterface(interfaceDefinition);
+            }
+            if (null === result &amp;&amp; (undefined === throwError || throwError)) {
+                throw gpf.Error.interfaceExpected({
+                    name: _gpfGetClassDefinition(interfaceDefinition)._name
+                });
+            }
+            return result;
+        }
+
+    };
+
+/**
+ * Defines an interface (relies on gpf.define)
+ *
+ * @param {String} name Interface name. If it contains a dot, it is treated as absolute contextual.
+ * Otherwise, it is relative to &quot;gpf.interfaces&quot;
+ * @param {Function|string} [base=undefined] base Base interface (or contextual name)
+ * @param {Object} [definition=undefined] definition Interface definition
+ * @return {Function}
+ */
+var _gpfDefIntrf = _gpfGenDefHandler(&quot;gpf.interfaces&quot;, &quot;Interface&quot;);
+
+/**
+ * Base class for any interface
+ *
+ * @class gpf.interfaces.Interface
+ */
+_gpfDefine(&quot;gpf.interfaces.Interface&quot;, Object, {});
+
+//region IEventTarget
+
+/* istanbul ignore next */ // Interface
+_gpfDefIntrf(&quot;IEventDispatcher&quot;, {
+
+    /**
+     * Add an event listener to the dispatcher
+     *
+     * @param {String} event name
+     * @param {gpf.events.Handler} eventsHandler
+     * @return {gpf.interfaces.IEventDispatcher}
+     * @chainable
+     */
+    addEventListener: function (event, eventsHandler) {
+        _gpfIgnore(event, eventsHandler);
+        return this;
+    },
+
+    /**
+     * Remove an event listener from the dispatcher
+     *
+     * @param {String} event name
+     * @param {gpf.events.Handler} eventsHandler
+     * @return {gpf.interfaces.IEventDispatcher}
+     * @chainable
+     */
+    removeEventListener: function (event, eventsHandler) {
+        _gpfIgnore(event, eventsHandler);
+        return this;
+    },
+
+    /**
+     * Broadcast the event
+     *
+     * @param {String|gpf.events.Event} event name or object
+     * @param {Object} [params={}] event parameters
+     * @return {gpf.events.Event}
+     */
+    dispatchEvent: function (event, params) {
+        _gpfIgnore(event, params);
+    }
+
+});
+
+//endregion
+
+//region IUnknown
+
+/* istanbul ignore next */ // Interface
+/**
+ * Provide a way for any object to implement an interface using an intermediate object (this avoids overloading the
+ * object with temporary / useless members)
+ */
+var _gpfIUnknown = _gpfDefIntrf(&quot;IUnknown&quot;, {
+
+    /**
+     * Retrieves an object supporting the provided interface (maybe the object itself)
+     *
+     * @param {gpf.interfaces.Interface} interfaceDefinition The expected interface
+     * @return {Object|null} The object supporting the interface (or null)
+     */
+    queryInterface: function (interfaceDefinition) {
+        _gpfIgnore(interfaceDefinition);
+        return null;
+    }
+
+});
+
+//endregion
+
+//region InterfaceImplement attribute
+
+/**
+ * Retrieves an object supporting the provided interface (maybe the object itself).
+ * This function (added to any object declaring the attribute InterfaceImplementAttribute with a builder) uses the
+ * InterfaceImplementAttribute attribute list to see if the one corresponding to the interface provides a builder and
+ * calls it
+ *
+ * @param {gpf.interfaces.Interface} interfaceDefinition The expected interface
+ * @return {Object|null} The object supporting the interface (or null)
+ */
+function _queryInterface (interfaceDefinition) {
+    /*jshint validthis:true*/ // Called with apply
+    var
+        array = (new gpf.attributes.Map(this))
+            .getMemberAttributes(&quot;Class&quot;)
+            .filter(gpf.attributes.InterfaceImplementAttribute),
+        builder;
+    if (!array.every(function (attribute) {
+        builder = attribute._builder;
+        return attribute._interfaceDefinition !== interfaceDefinition || !builder;
+    })) {
+        if (&quot;function&quot; === typeof builder) {
+            return builder(this);
+        }
+        // Expects a member name
+        return this[builder]();
+    }
+    // Otherwise
+    return null;
+}
+
+/**
+ * Creates a wrapper calling _queryInterface and, if no result is built, the original one defined in the object
+ * prototype
+ *
+ * @param {Function} orgQueryInterface
+ * @closure
+ */
+function _wrapQueryInterface (orgQueryInterface) {
+    /**
+     * @inheritdoc gpf.interfaces.IUnknown#queryInterface
+     * @this
+     */
+    return function (interfaceDefinition) {
+        _gpfIgnore(interfaceDefinition);
+        var result = _queryInterface.apply(this, arguments);
+        if (null === result) {
+            result = orgQueryInterface.apply(this, arguments);
+        }
+        return result;
+    };
+}
+
+/**
+ * Document the class by telling the interface is implemented and may provide a builder to access it
+ *
+ * @param {Function} interfaceDefinition Implemented interface definition
+ * @param {Function|String} [queryInterfaceBuilder=undefined] queryInterfaceBuilder Function or member name to executed
+ * if the implemented interface is requested
+ *
+ * @class gpf.attributes.InterfaceImplementAttribute
+ * @extends gpf.attributes.ClassAttribute
+ * @alias gpf.$InterfaceImplement
+ */
+_gpfDefAttr(&quot;$InterfaceImplement&quot;, {
+    &quot;-&quot;: {
+
+        // Interface definition
+        &quot;[_interfaceDefinition]&quot;: [gpf.$ClassProperty(false)],
+        _interfaceDefinition: _gpfEmptyFunc,
+
+        /**
+         * Builder function
+         *
+         * @type {Function|null}
+         */
+        &quot;[_builder]&quot;: [gpf.$ClassProperty(false)],
+        _builder: null,
+
+        _addMissingInterfaceMembers: function (objPrototype) {
+            var
+                iProto = this._interfaceDefinition.prototype,
+                member;
+            // Fill the missing methods
+            /*jslint forin:true*/ // Wants inherited members too
+            for (member in iProto) {
+                if (!(member in objPrototype)) {
+                    objPrototype[member] = iProto[member];
+                }
+            }
+        },
+
+        _addQueryInterface: function (objPrototype) {
+            if (undefined === objPrototype.queryInterface) {
+                objPrototype.queryInterface = _queryInterface;
+                _gpfAttributesAdd(objPrototype.constructor, &quot;Class&quot;, [gpf.$InterfaceImplement(_gpfIUnknown)]);
+            } else if (_queryInterface !== objPrototype.queryInterface) {
+                /*
+                 * Two situations here:
+                 * - Either the class (or one of its parent) already owns the $InterfaceImplement attribute
+                 * - Or the class (or one of its parent) implements its own queryInterface
+                 * In that last case, wrap it to use the attribute version first
+                 *
+                 * In both case, we take the assumption that the class already owns
+                 * gpf.$InterfaceImplement(gpf.interfaces.IUnknown)
+                 */
+                objPrototype.queryInterface = _wrapQueryInterface(objPrototype.queryInterface);
+            }
+        }
+
+    },
+    &quot;#&quot;: {
+
+        // @inheritdoc gpf.attributes.Attribute#_alterPrototype
+        _alterPrototype: function (objPrototype) {
+            if (this._builder) {
+                this._addQueryInterface(objPrototype);
+            } else {
+                this._addMissingInterfaceMembers(objPrototype);
+                // Get the interface&#039;s attributes apply them to the obj
+                new gpf.attributes.Map()
+                    .fillFromClassDef(_gpfGetClassDefinition(this._interfaceDefinition))
+                    .forEach(function (attributes, member) {
+                        _gpfAttributesAdd(objPrototype.constructor, member, attributes);
+                    });
+            }
+        }
+
+    },
+
+    &quot;+&quot;: {
+
+        /**
+         * @param {Function} interfaceDefinition Interface definition
+         * @param {Function|null} [queryInterfaceBuilder=null]
+         * queryInterfaceBuilder Builder function
+         * @constructor
+         */
+        constructor: function (interfaceDefinition, queryInterfaceBuilder) {
+            this._interfaceDefinition = interfaceDefinition;
+            if (queryInterfaceBuilder) {
+                this._builder = queryInterfaceBuilder;
+            }
+        }
+
+    }
+
+});
+
+//endregion</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

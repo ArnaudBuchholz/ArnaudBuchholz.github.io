@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/sources.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/sources.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">71.06</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">94</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">7.06</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.20</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*eslint-disable no-invalid-this, strict*/
+(function (context) {/* Begin of privacy scope */
+    &quot;use strict&quot;;
+
+    /* istanbul ignore else */ // Tested with NodeJS
+    /*global global*/ // NodeJS global
+    if (&quot;object&quot; === typeof global) {
+        context = global;
+    }
+
+    var _sources = [
+    //  &quot;boot&quot;,                 // Loader
+        &quot;compatibility&quot;,        // JavaScript compatibility helpers
+        &quot;promise&quot;,              // Promise polyfill              gpf.Promise
+        &quot;constants&quot;,            // Constants
+        &quot;events&quot;,               // Event management         gpf.events.Event
+        &quot;include&quot;,              // WEB include               gpf.web.include
+        &quot;base&quot;,                 // General helpers
+        &quot;function&quot;,             // Function builder
+        &quot;like&quot;,                 // Comparison helper                gpf.like
+        &quot;error&quot;,                // Error base class                gpf.Error
+        &quot;dispatch&quot;,             //                gpf.mixins.EventDispatcher
+        &quot;mimetype&quot;,             // Mime types handling   gpf.web.getMimeType
+        &quot;timeout&quot;,              //                                setTimeout
+        &quot;bin&quot;,                  // Binary tools                      gpf.bin
+        &quot;json&quot;,                 // JSON compatibility layer             JSON
+        &quot;path&quot;,                 // Path helper                      gpf.path
+        &quot;path_matcher&quot;,         // Path matcher                     gpf.path
+        &quot;javascript&quot;,           // JavaScript language tools          gpf.js
+        &quot;csv&quot;,                  // CSV helper                        gpf.csv
+        &quot;define&quot;,               // Class management               gpf.define
+        &quot;attributes&quot;,           // Attributes                 gpf.attributes
+                                // (=&gt; i_array)
+        &quot;a_attributes&quot;,         // AttributeClassOnly attributes
+        &quot;a_class&quot;,              // Class attributes
+        &quot;interfaces&quot;,           // Interfaces                 gpf.interfaces
+        &quot;i_enumerator&quot;,         // IEnumerator
+        &quot;i_array&quot;,              // IArray
+        &quot;i_stream&quot;,             // IStream
+        &quot;i_filestorage&quot;,        // IFileStorage
+        &quot;fs&quot;,                   // File system (FS)                   gpf.fs
+
+        /* new JSHint settings */
+        &quot;&quot;,                     // --- temporary end marker ---
+
+// https://github.com/ArnaudBuchholz/gpf-js/milestones/Release%200.1.5:%20The%20next%20gen
+
+        // https://github.com/ArnaudBuchholz/gpf-js/issues/67
+        &quot;parser&quot;,               // Parser helper                  gpf.Parser
+        &quot;pattern&quot;,              // Patterns                       gpf.Parser
+        &quot;tokenizer&quot;,            // Javascript parser                  gpf.js
+
+        // https://github.com/ArnaudBuchholz/gpf-js/issues/66
+        &quot;fs_node&quot;,              // FS implementation for nodeJS       gpf.fs
+        &quot;fs_ms&quot;,                // FS implementation for WScript      gpf.fs
+
+        // https://github.com/ArnaudBuchholz/gpf-js/issues/68
+        &quot;stream&quot;,               // IStream helpers                gpf.stream
+        &quot;stream_out&quot;,           // gpf.stream.Out
+        &quot;stream_node&quot;,          // IStream helpers for nodeJS     gpf.stream
+        &quot;string&quot;,               // String functions
+        &quot;array&quot;,                // Array functions
+        &quot;encoding&quot;,             // Encoding                     gpf.encoding
+
+        // https://github.com/ArnaudBuchholz/gpf-js/issues/69
+        &quot;date&quot;,                 // Date functions
+
+// https://github.com/ArnaudBuchholz/gpf-js/milestones/Release%200.2.1:%20XML
+        &quot;i_wrapper&quot;,            // Interface wrapper  gpf.interfaces.Wrapper
+
+        &quot;i_xml&quot;,                // IXmlSerializable &amp; IXmlContentHandler
+        &quot;a_xml&quot;,                // Xml attributes
+        &quot;xml&quot;,                  // Xml helpers                       gpf.xml
+        &quot;xserial&quot;,              // Xml serialization
+        &quot;xnode&quot;,                // Xml &#039;DOM&#039; structure               gpf.xml
+        &quot;xpath&quot;,                // Xml &#039;XPATH&#039; parser/evaluator      gpf.xml
+
+        &quot;params&quot;,               // Parameters parsing             gpf.Params
+
+        &quot;serial&quot;,               // Object serialization           gpf.serial
+
+        // The following ones must be at the end
+        &quot;html&quot;,                 // HTML specific functions          gpf.html
+        &quot;websvr&quot;                // Simple JSP web server (nodeJS specific)
+    ];
+
+    /* istanbul ignore if */ // Tested with NodeJS: gpf is defined
+    if (!context.gpf) {
+        context.gpf = {};
+    }
+    gpf.sources = function () {
+        return [].concat(_sources);
+    };
+
+}(this)); /* End of privacy scope */</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

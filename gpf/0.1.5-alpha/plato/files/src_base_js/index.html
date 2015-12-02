@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/base.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/base.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">72.32</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">461</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">46.06</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.82</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _GPF_HOST_BROWSER*/ // gpf.HOST_BROWSER
+/*global _gpfAssert*/ // Assertion method
+/*global _gpfExit*/ // Exit function
+/*global _gpfHost*/ // Host type
+/*global _gpfIgnore*/ // Helper to remove unused parameter warning
+/*global _gpfWebWindow*/ // Browser window object
+/*exported _gpfExtend*/
+/*exported _gpfIsArrayLike*/
+/*exported _gpfNodeBuffer2JsArray*/
+/*exported _gpfObjectForEach*/
+/*exported _gpfStringCapitalize*/
+/*exported _gpfStringEscapeFor*/
+/*exported _gpfStringReplaceEx*/
+/*exported _gpfValues*/
+/*#endif*/
+
+//region _gpfIsArrayLike
+
+var
+    /**
+     * Return true if the parameter looks like an array
+     *
+     * @param {Object} obj
+     * @return {Boolean} True if array-like
+     */
+    _gpfIsArrayLike;
+
+/* istanbul ignore if */ // Not tested with NodeJS
+if (_GPF_HOST_BROWSER === _gpfHost &amp;&amp; (_gpfWebWindow.HTMLCollection || _gpfWebWindow.NodeList)) {
+    _gpfIsArrayLike = function (obj) {
+        return obj instanceof Array
+            || obj instanceof _gpfWebWindow.HTMLCollection
+            || obj instanceof _gpfWebWindow.NodeList;
+    };
+} else {
+    _gpfIsArrayLike = function (obj) {
+        return obj instanceof Array;
+    };
+}
+
+/**
+ * Return true if the provided parameter looks like an array (i.e. it has a property length and each item can be
+ * accessed with [])
+ *
+ * @param {Object} obj
+ * @return {Boolean} True if array-like
+ */
+gpf.isArrayLike = _gpfIsArrayLike;
+
+//endregion
+
+//region gpf.forEach
+
+/**
+ * Similar to [].forEach but works on array-like
+ *
+ * @param {Array} array
+ * @param {Function} callback Function to execute for each own property, taking three arguments:
+ * - {*} currentValue The current element being processed
+ * - {String} property The current index being processed
+ * - {Object} array The array currently being processed
+ * @param {*} [thisArg=undefined] thisArg Value to use as this when executing callback.
+ */
+function _gpfArrayForEach (array, callback, thisArg) {
+    var index,
+        length = array.length;
+    for (index = 0; index &lt; length; ++index) {
+        callback.apply(thisArg, [array[index], index, array]);
+    }
+}
+
+/**
+ * Similar to [].forEach but for objects
+ *
+ * @param {Object} object
+ * @param {Function} callback Function to execute for each own property, taking three arguments:
+ * - {*} currentValue The current element being processed
+ * - {String} property The name of the current property being processed
+ * - {Object} object The object currently being processed
+ * @param {*} [thisArg=undefined] thisArg Value to use as this when executing callback.
+ */
+function _gpfObjectForEach (object, callback, thisArg) {
+    for (var property in object) {
+        /* istanbul ignore else */
+        if (object.hasOwnProperty(property)) {
+            callback.apply(thisArg, [object[property], property, object]);
+        }
+    }
+}
+
+/**
+ * Executes a provided function once per structure element.
+ *
+ * @param {Array|Object} structure
+ * @param {Function} callback Function to execute for each element, taking three arguments:
+ * - {*} currentValue The current element being processed
+ * - {String} property The name of the current property or the index being processed
+ * - {Array|Object} structure The structure currently being processed
+ * @param {*} [thisArg=undefined] thisArg Value to use as this when executing callback.
+ */
+gpf.forEach = function (structure, callback, thisArg) {
+    if (_gpfIsArrayLike(structure)) {
+        _gpfArrayForEach(structure, callback, thisArg);
+        return;
+    }
+    _gpfObjectForEach(structure, callback, thisArg); /*gpf:inline(object)*/
+};
+
+//endregion
+
+//region String helpers (will be reused in string module)
+
+/**
+ * Capitalize the string
+ *
+ * @param {String} that
+ * @return {String}
+ */
+function _gpfStringCapitalize (that) {
+    return that.charAt(0).toUpperCase() + that.substr(1);
+}
+
+/**
+ * String replacement using dictionary map
+ *
+ * @param {String} that
+ * @param {Object} replacements map of strings to search and replace
+ * @return {String}
+ */
+function _gpfStringReplaceEx (that, replacements) {
+    var result = that;
+    _gpfObjectForEach(replacements, function (replacement, key) {/*gpf:inline(object)*/
+        result = result.split(key).join(replacement);
+    });
+    return result;
+}
+
+var
+// Dictionary of language to escapes
+    _gpfStringEscapes = {
+
+        javascript: {
+            &quot;\\&quot;: &quot;\\\\&quot;,
+            &quot;\&quot;&quot;: &quot;\\\&quot;&quot;,
+            &quot;\n&quot;: &quot;\\n&quot;,
+            &quot;\r&quot;: &quot;\\r&quot;,
+            &quot;\t&quot;: &quot;\\t&quot;
+        },
+
+        xml: {
+            &quot;&amp;&quot;: &quot;&amp;amp;&quot;,
+            &quot;&lt;&quot;: &quot;&amp;lt;&quot;,
+            &quot;&gt;&quot;: &quot;&amp;gt;&quot;
+        },
+
+        html: {
+            &quot;&amp;&quot;: &quot;&amp;amp;&quot;,
+            &quot;&lt;&quot;: &quot;&amp;lt;&quot;,
+            &quot;&gt;&quot;: &quot;&amp;gt;&quot;,
+            \u00E9: &quot;&amp;eacute;&quot;,
+            \u00E8: &quot;&amp;egrave;&quot;,
+            \u00EA: &quot;&amp;ecirc;&quot;,
+            \u00E1: &quot;&amp;aacute;&quot;,
+            \u00E0: &quot;&amp;agrave;&quot;
+        }
+
+    };
+
+/**
+ * Make the string content compatible with lang
+ *
+ * @param {String} that
+ * @param {String} language
+ * @return {String}
+ */
+function _gpfStringEscapeFor (that, language) {
+    that = _gpfStringReplaceEx(that, _gpfStringEscapes[language]);
+    if (&quot;javascript&quot; === language) {
+        that = &quot;\&quot;&quot; + that + &quot;\&quot;&quot;;
+    }
+    return that;
+}
+
+//endregion
+
+//region gpf.extend
+
+/**
+ * gpf.extend implementation of assign with no callback
+ *
+ * @param {*} value
+ * @param {String} member
+ */
+function _gpfAssign (value, member) {
+    /*jshint validthis:true*/ // gpf.extend&#039;s arguments: this[0] is dst
+    this[0][member] = value;
+}
+
+/**
+ * gpf.extend implementation of assign with a callback
+ *
+ * @param {*} value
+ * @param {String} member
+ */
+function _gpfAssignOrCall (value, member) {
+    /*jshint validthis:true*/ // gpf.extend&#039;s arguments
+    var dst = this[0],
+        overwriteCallback = this[2];
+    // TODO: see if in is faster
+    if (undefined === dst[member]) {
+        dst[member] = value;
+    } else {
+        overwriteCallback(dst, member, value);
+    }
+}
+
+/**
+ * Extends the destination object dst by copying own enumerable properties from the src object(s) to dst.
+ * If a conflict has to be handled (i.e. member exists on both objects), the overwriteCallback has to handle it.
+ *
+ * @param {Object} dst
+ * @param {Object} src
+ * @param {Function} [overwriteCallback=undefined] overwriteCallback
+ * @return {Object} the modified dst
+ * @chainable
+ */
+function _gpfExtend (dst, src, overwriteCallback) {
+    var callbackToUse;
+    if (undefined === overwriteCallback) {
+        callbackToUse = _gpfAssign;
+    } else {
+        _gpfAssert(&quot;function&quot; === typeof overwriteCallback, &quot;Expected function&quot;);
+        callbackToUse = _gpfAssignOrCall;
+    }
+    _gpfObjectForEach(src, callbackToUse, arguments); /*gpf:inline(object)*/
+    return dst;
+}
+
+// @inheritdoc _gpfExtend
+gpf.extend = _gpfExtend;
+
+//endregion
+
+//region gpf.value
+
+var
+    /**
+     * gpf.value handlers per type.
+     * Each handler signature is:
+     * - {*} value the value to convert
+     * - {String} valueType typeof value
+     * - {*} defaultValue the expected default value if not convertible
+     *
+     * @type {Object}
+     */
+    _gpfValues = {
+        &quot;boolean&quot;: function (value, valueType, defaultValue) {
+            _gpfIgnore(defaultValue);
+            if (&quot;string&quot; === valueType) {
+                if (&quot;yes&quot; === value || &quot;true&quot; === value) {
+                    return true;
+                }
+                return 0 !== parseInt(value, 10);
+            }
+            if (&quot;number&quot; === valueType) {
+                return 0 !== value;
+            }
+        },
+
+        number:  function (value, valueType, defaultValue) {
+            _gpfIgnore(defaultValue);
+            if (&quot;string&quot; === valueType) {
+                return parseFloat(value);
+            }
+        },
+
+        string: function (value, valueType, defaultValue) {
+            _gpfIgnore(valueType, defaultValue);
+            return value.toString();
+        },
+
+        object: function (value, valueType, defaultValue) {
+            _gpfIgnore(value, valueType, defaultValue);
+        }
+    };
+
+/*
+ * Converts the provided value to match the expectedType.
+ * If not specified or impossible to do so, defaultValue is returned.
+ * When expectedType is not provided, it is deduced from defaultValue.
+ *
+ * @param {*} value
+ * @param {*} default value
+ * @param {String} [expectedType=typeof defaultValue] expected type
+ * @return {*}
+ */
+function _gpfValue (value, defaultValue, expectedType) {
+    var valueType = typeof value,
+        result;
+    if (!expectedType) {
+        expectedType = typeof defaultValue;
+    }
+    if (expectedType === valueType) {
+        return value;
+    }
+    if (&quot;undefined&quot; === valueType) {
+        return defaultValue;
+    }
+    result = _gpfValues[expectedType](value, valueType, defaultValue);
+    if (undefined === result) {
+        return defaultValue;
+    }
+    return result;
+}
+
+// @inheritdoc _gpfValue
+gpf.value = _gpfValue;
+
+//endregion
+
+_gpfExtend(gpf, {
+
+    /**
+     * Shallow copy an object
+     *
+     * @param {Object} obj
+     * @return {Object}
+     */
+    clone: function (obj) {
+        // http://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-clone-an-object/5344074#5344074
+        return JSON.parse(JSON.stringify(obj));
+    },
+
+    /*
+     * Find the first member of dictionary which value equals to value.
+     *
+     * @param {Object/array} dictionary
+     * @param {*} value
+     * @return {String/number/undefined} undefined if not found
+     */
+    test: function (dictionary, value) {
+        var idx;
+        if (dictionary instanceof Array) {
+            idx = dictionary.length;
+            while (idx &gt; 0) {
+                if (dictionary[--idx] === value) {
+                    return idx;
+                }
+            }
+        } else {
+            for (idx in dictionary) {
+                if (dictionary.hasOwnProperty(idx) &amp;&amp; dictionary[idx] === value) {
+                    return idx;
+                }
+            }
+        }
+        return undefined;
+    },
+
+    /*
+     * Inserts the value in the array if not already present.
+     *
+     * @param {Array} array
+     * @param {*} value
+     * @return {Array}
+     * @chainable
+     */
+    set: function (array, value) {
+        _gpfAssert(array instanceof Array, &quot;gpf.set must be used with an Array&quot;);
+        var idx = array.length;
+        while (idx &gt; 0) {
+            if (array[--idx] === value) {
+                return array; // Already set
+            }
+        }
+        array.push(value);
+        return array;
+    },
+
+    /*
+     * Removes the member of &#039;dictionary&#039; which value equals &#039;value&#039;.
+     * NOTE: that the object is modified.
+     *
+     * @param {Object/array} dictionary
+     * @param {*} value
+     * @return {Object/array} dictionary
+     * @chainable
+     */
+    clear: function (dictionary, value) {
+        var idx;
+        if (dictionary instanceof Array) {
+            idx = dictionary.length;
+            while (idx &gt; 0) {
+                if (dictionary[--idx] === value) {
+                    dictionary.splice(idx, 1);
+                    break;
+                }
+            }
+        } else {
+            for (idx in dictionary) {
+                if (dictionary.hasOwnProperty(idx) &amp;&amp; dictionary[idx] === value) {
+                    delete dictionary[idx];
+                }
+            }
+        }
+        return dictionary;
+    },
+
+    /**
+     * XOR
+     *
+     * @param {Boolean} a
+     * @param {Boolean} b
+     */
+    xor: function (a, b) {
+        return a &amp;&amp; !b || !a &amp;&amp; b;
+    }
+
+});
+
+
+/* istanbul ignore next */ // Not testable
+/**
+ * Exit function
+ *
+ * @paran {Number} [exitCode=0] exitCode
+ */
+gpf.exit = function (exitCode) {
+    if (undefined === exitCode) {
+        exitCode = 0;
+    }
+    _gpfExit(exitCode);
+};
+
+//region NodeJS helpers
+
+/**
+ * Converts a NodeJS buffer into a native array containing unsigned
+ * bytes
+ *
+ * @param {Buffer} buffer
+ * @return {Number[]}
+ */
+function _gpfNodeBuffer2JsArray (buffer) {
+    var result = [],
+        len = buffer.length,
+        idx;
+    for (idx = 0; idx &lt; len; ++idx) {
+        result.push(buffer.readUInt8(idx));
+    }
+    return result;
+}
+
+//endregion
+
+/*#ifndef(UMD)*/
+
+gpf.internals._gpfObjectForEach = _gpfObjectForEach;
+gpf.internals._gpfStringEscapeFor = _gpfStringEscapeFor;
+gpf.internals._gpfNodeBuffer2JsArray = _gpfNodeBuffer2JsArray;
+
+/*#endif*/</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

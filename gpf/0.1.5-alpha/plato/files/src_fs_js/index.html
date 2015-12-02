@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/fs.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/fs.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">73.41</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">172</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">23.75</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.77</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _GPF_EVENT_DATA*/ // gpf.events.EVENT_DATA
+/*global _GPF_EVENT_END_OF_DATA*/ // gpf.events.EVENT_END_OF_DATA
+/*global _GPF_EVENT_ERROR*/ // gpf.events.EVENT_ERROR
+/*global _GPF_FS_TYPE_DIRECTORY*/ // _GPF_FS_TYPE_DIRECTORY
+/*global _GPF_FS_TYPE_FILE*/ // _GPF_FS_TYPE_FILE
+/*global _GPF_FS_TYPE_NOT_FOUND*/ // _GPF_FS_TYPE_NOT_FOUND
+/*global _GPF_FS_TYPE_UNKNOWN*/ // _GPF_FS_TYPE_UNKNOWN
+/*global _gpfCreateConstants*/
+/*global _gpfEmptyFunc*/ // An empty function
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*global _gpfEventsFire*/ // gpf.events.fire (internal, parameters must match)
+/*global _gpfGetBootstrapMethod*/ // Create a method that contains a bootstrap (called only once)
+/*global _gpfI*/ // gpf.interfaces
+/*exported _gpfFsExploreEnumerator*/ // IFileStorage.explore helper
+/*#endif*/
+
+_gpfErrorDeclare(&quot;fs&quot;, {
+    &quot;fileNotFound&quot;:
+        &quot;File not found&quot;
+});
+
+/**
+ * Automate the use of getInfo on a path array to implement IFileStorage.explore
+ *
+ * @param {gpf.interfaces.IFileStorage} iFileStorage
+ * @param {String[]} listOfPaths
+ * @return {gpf.interfaces.IEnumerator}
+ */
+function _gpfFsExploreEnumerator (iFileStorage, listOfPaths) {
+    var pos = -1,
+        info;
+    // Secure the array by creating a copy
+    listOfPaths = [].concat(listOfPaths);
+    return {
+        reset: function () {
+            pos = -1;
+        },
+        moveNext: function (eventsHandler) {
+            var me = this;
+            ++pos;
+            info = undefined;
+            if (eventsHandler) {
+                if (pos &lt; listOfPaths.length) {
+                    iFileStorage.getInfo(listOfPaths[pos], function (event) {
+                        if (_GPF_EVENT_ERROR === event.type) {
+                            // forward the event
+                            _gpfEventsFire.apply(me, [event, {}, eventsHandler]);
+                            return;
+                        }
+                        info = event.get(&quot;info&quot;);
+                        _gpfEventsFire.apply(me, [_GPF_EVENT_DATA, {}, eventsHandler]);
+                    });
+                } else {
+                    _gpfEventsFire.apply(me, [_GPF_EVENT_END_OF_DATA, {}, eventsHandler]);
+                }
+            }
+            return false;
+        },
+        current: function () {
+            return info;
+        }
+    };
+}
+
+/**
+ * Build a find method that is specific to a iFileStorage
+ *
+ * @param {gpf.interfaces.IFileStorage) iFileStorage
+ * @return {Function} same signature than gpf.fs.find
+ */
+function _gpfFsBuildFindMethod (iFileStorage) {
+
+    // @inheritdoc gpf.fs#find
+    return function (basePath, filters, eventsHandler) {
+        var pendingCount = 0,
+            match = gpf.path.match,
+            compiledFilters = gpf.path.compileMatchPattern(filters);
+
+        function _fire (event, params) {
+            _gpfEventsFire(event, params || {}, eventsHandler);
+        }
+
+        function _done (event) {
+            if (_GPF_EVENT_ERROR === event.type) {
+                _fire(event); // Forward the error
+            }
+            if (0 === --pendingCount) {
+                _fire(_GPF_EVENT_END_OF_DATA);
+            }
+        }
+
+        function _explore (fileInfo) {
+            var filePath,
+                relativePath,
+                fileInfoType = fileInfo.type;
+            if (_GPF_FS_TYPE_DIRECTORY === fileInfoType) {
+                ++pendingCount;
+                iFileStorage.explore(fileInfo.filePath, function (event) {
+                    if (_GPF_EVENT_ERROR === event.type) {
+                        _fire(event);
+                    } else {
+                        _gpfI.IEnumerator.each(event.get(&quot;enumerator&quot;), _explore, _done);
+                    }
+                });
+
+            } else if (_GPF_FS_TYPE_FILE === fileInfoType) {
+                filePath = fileInfo.filePath;
+                relativePath = gpf.path.relative(basePath, filePath);
+                if (match(compiledFilters, relativePath)) {
+                    _fire(_GPF_EVENT_DATA, {path: relativePath});
+                }
+            } // other cases are ignored
+        }
+
+        iFileStorage.getInfo(basePath, function (event) {
+            if (_GPF_EVENT_ERROR === event.type) {
+                _fire(event);
+            } else {
+                _explore(event.get(&quot;info&quot;));
+            }
+        });
+    };
+
+}
+
+gpf.fs = {
+
+    /**
+     * Get host file storage handler
+     *
+     * @return {gpf.interfaces.IFileStorage}
+     */
+    host: function () {
+        return null;
+    },
+
+    /**
+     * Find and identify files matching the pattern, trigger a file event when a file is found.
+     * The search is recursive and dig through the file hierarchy.
+     *
+     * NOTE: errors might be thrown during the scanning of the folders. wait for END_OF_DATA that signals the real end.
+     *
+     * @param {String} basePath
+     * @param {String[]} filters Patterns (see gpf.path.match) of files to detect
+     * @param {gpf.events.Handler} eventsHandler
+     *
+     * @event gpf.events.EVENT_DATA
+     * a matching file has been identified
+     * @eventParam {String} path the path is relative to the basePath
+     *
+     * @event gpf.events.EVENT_END_OF_DATA
+     */
+    find: _gpfEmptyFunc
+
+};
+
+_gpfGetBootstrapMethod(&quot;gpf.fs.find&quot;, function () {
+    return _gpfFsBuildFindMethod(gpf.fs.host());
+});
+
+_gpfCreateConstants(gpf.fs, {
+    TYPE_NOT_FOUND: _GPF_FS_TYPE_NOT_FOUND,
+    TYPE_FILE: _GPF_FS_TYPE_FILE,
+    TYPE_DIRECTORY: _GPF_FS_TYPE_DIRECTORY,
+    TYPE_UNKNOWN: _GPF_FS_TYPE_UNKNOWN
+});
+
+/*#ifndef(UMD)*/
+
+gpf.internals._gpfFsExploreEnumerator = _gpfFsExploreEnumerator;
+gpf.internals._gpfFsBuildFindMethod = _gpfFsBuildFindMethod;
+
+/*#endif*/</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
