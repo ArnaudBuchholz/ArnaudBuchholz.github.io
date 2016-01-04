@@ -97,12 +97,12 @@ language basics and a nice sense of debugging with printouts. On the other hand,
 oriented programming with JavaScript and all the troubles (...I mean fun stuff...) related to web development.
 
 So far, I had not been exposed to any framework: I started with jQuery on the game development but I quickly realized
-I was using only the query selector API. I have to say that it has been a chance: I had to learn all the basics of web
-development with [vanilla JavaScript](http://vanilla-js.com/).
+I was using only the query selector API. I have to say that it has been a chance: I forced myself to learn all the
+basics of web development with [vanilla JavaScript](http://vanilla-js.com/).
 
 ### Canadian experience
 
-Then, I had to quit my job because my family moved to Canada.
+Then, I had to quit my job to move to Canada.
 
 ![It's cold out there](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/20130403-234545.jpg)
 
@@ -111,8 +111,8 @@ This is where I discovered [ExtJS](https://www.sencha.com/products/extjs/) and i
 [build process](https://www.sencha.com/products/extjs/cmd-download/). I also got familiar with NodeJS by creating tools
 to analyzes the code or to mock the server.
 
-Later I moved to another company that was relying on AngularJS. After 3 month, I became fluent with the framework and
-the tooling associated to the web development (such as grunt).
+Later I moved to another company that was relying on AngularJS. Quickly, I became fluent with the framework and the
+tooling associated to the web development (such as grunt).
 
 ### The idea
 
@@ -124,11 +124,13 @@ see if they would really be helpful or valuable.
 ![The idea](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/docs idea.jpg)
 
 Basically, my flux capacitor is composed of:
-* A unified class definition system (gpf.define)
+* A unified class definition formalism (gpf.define)
 * Attributes to configure / alter those classes in a declarative way (gpf.attributes.Attribute)
 * Interfaces (gpf.interfaces.Interface)
 
-The other challenges I wanted to come through:
+So I started to develop a library (not a framework) that would help me implement these.
+
+The other challenges I wanted to come through were:
 * Inter-operability with different hosts (NodeJS, browser, cscript and later Rhino...)
 * A custom minification process
 * A controllable source system
