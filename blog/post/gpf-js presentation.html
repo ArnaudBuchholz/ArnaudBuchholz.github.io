@@ -11,7 +11,7 @@
         <!-- Copy from the next line -->
         <div class="summary">
             <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
-            I have been developing this library for more than 3 years and I recently realized that I never took the
+            I have been developing the GPF-JS library for a while and I recently realized that I never took the
             time to explain the reasons why I started this whole thing and what I am trying to achieve here.
             Welcome to my utopia where a perfectionist is trying to re-invent the wheel.
         </div>
@@ -34,23 +34,28 @@
 }
 </script>
 <code class="markdown">
+(...) Since I work for a big company, I must explain that I take the entire responsibility for the information and views
+that are set out in this article.
+Also, ["Back to the Future"](http://www.backtothefuture.com/) pictures were gathered from the web.
+They are copyrights of Universal City Studios, Inc. and U-Drive Joint Venture.
+
 ## Happy New Year 2016 !
-![2015 was already the future, welcome to 2016 !](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/
-oct21-2015.jpg)
+!/[2015 was already the future, imagine what will happen in 2016 !](https://ArnaudBuchholz.github.io/blog/post/
+gpf-js presentation/oct21-2015.jpg)
 
 First of all, I'd like to wish you an happy new year 2016 ! May your lives, studies, careers, projects and everything
 that makes sense to you be successful.
 
-This is a good time to look back and comment on what happened in order to take new resolutions for the coming year.
-Talking about me, I would like to present you a project that I have been working on for the last 2 years and that was
-greatly improved over the last months.
+This is a good time to look back and ponder on what happened in order to take new resolutions for the coming year.
+Talking about me, I would like to present you a personal project that I have been working on for the last 2 years and
+that was greatly improved over the last months.
 
-![GPF-JS GitHub contributions](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/contributions.png)
+!/[GPF-JS GitHub contributions](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/contributions.png)
 
 ## First, let's set the context
 This is a pretty long story but I will try to make it short for the sake of your network bandwidth.
 
-### Work experience
+### Work experience with JavaScript
 
 If you look into [my profile](https://ca.linkedin.com/in/arnaudbuchholz), you will read that my longest experience was
 in a French company as a software engineer and this is where I learnt most of what I know today regarding coding.
@@ -63,7 +68,7 @@ as the HTML was generated on server side.
 
 But in the last years, I witnessed the growing importance of JavaScript as it was used both on Back-End and Front-End.
 
-### Personal experience
+### Personal experience with JavaScript
 
 I would not pretend I had a natural preference for this language: I have also coded in C, C++, Pascal (... remember
 Delphi?), VBA (yuck!), C# and a little bit of Java...
@@ -84,7 +89,7 @@ component (using new ActiveXObject) and, from there, you could then access criti
 
 I decided to invest my personal time learning more about the language.
 
-![You want me to buy a subscription to the 'JavaScript Journal'?](https://ArnaudBuchholz.github.io/blog/post/
+!/[You want me to buy a subscription to the 'JavaScript Journal'?](https://ArnaudBuchholz.github.io/blog/post/
 gpf-js presentation/docbrownb61406.jpg)
 
 Because I am a [lazy developer](http://threevirtues.com/), I created a series of command line tools (using cscript) to
@@ -102,11 +107,11 @@ So far, I had not been exposed to any framework: I started with jQuery on the ga
 I was using only the query selector API. I have to say that it has been a chance: I forced myself to learn all the
 basics of web development with [vanilla JavaScript](http://vanilla-js.com/).
 
-### Canadian experience
+### Canadian experience with JavaScript
 
 Then, I had to quit my job to move to Canada.
 
-![It's cold out there](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/20130403-234545.jpg)
+!/[It's cold out there](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/20130403-234545.jpg)
 
 As I have been quite successful with my card game simulator, I found a job as a web developer in a startup.
 This is where I discovered [ExtJS](https://www.sencha.com/products/extjs/) and its
@@ -117,24 +122,29 @@ Later I moved to another company that was relying on [AngularJS](https://angular
 Quickly, I became fluent with the framework and the tooling associated to the web development (such as
 [grunt](http://gruntjs.com/)).
 
+Now I work for a big company where I use my JavaScript expertise to build cloud solutions.
+
 ### The idea
 
 From these experiences, I learned a lot. I have also been frustrated because I knew I was only scratching the surface
-of something bigger. When you look at the number of frameworks that exist now, you realize how much the JavaScript
-language is versatile and powerful.
+of something bigger. When you look at the number of [libraries and frameworks](https://en.wikipedia.org/wiki/
+List_of_JavaScript_libraries)  that exist now, you realize how much the JavaScript language is versatile and powerful.
+During my researches, I had some ideas that I wanted to put in action in order to see if they would really be helpful
+or valuable.
 
-During my experimentations, I had some ideas I wanted to put in action in order to see if they would really be helpful
-or even valuable.
-
-![The idea](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/docs idea.jpg)
+!/[The idea](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/docs idea.jpg)
 
 Basically, my flux capacitor is composed of:
 * A unified class definition formalism ([gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/
 e6982dd33568f9d2a6fc6d9ee919ab0fae96bfa9/test/define.js#L16-L28))
 * Attributes to configure / alter those classes in a declarative way ([gpf.attributes.Attribute](https://github.com/
 ArnaudBuchholz/gpf-js/blob/e6982dd33568f9d2a6fc6d9ee919ab0fae96bfa9/test/attributes.js#L15-L36))
+* A unified [event handling](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/events.js) mechanism (callbacks
+or [promises](https://github.com/ArnaudBuchholz/gpf-js/blob/28191a4bebb294fd2a244f0974402a434b554245/test/
+events.js#L358-L390))
 * Interfaces ([gpf.interfaces.Interface](https://github.com/ArnaudBuchholz/gpf-js/blob/
-e6982dd33568f9d2a6fc6d9ee919ab0fae96bfa9/test/interfaces.js#L52-L81))
+e6982dd33568f9d2a6fc6d9ee919ab0fae96bfa9/test/interfaces.js#L52-L81)): in particular the
+[stream ones](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/interfaces/stream.js).
 
 So I started to develop a library (not a framework, reasons detailed below) that would help me implement these.
 
@@ -142,7 +152,7 @@ Because it is my own project, I also wanted to come through the following challe
 * A real source repository ([GitHub](https://github.com/ArnaudBuchholz/gpf-js/))
 * [Interoperability](https://en.wikipedia.org/wiki/Software_portability) with different hosts (NodeJS, browser, cscript
 and later Rhino...) and versions of JavaScript (through [polyfills](https://en.wikipedia.org/wiki/Polyfill))
-* A custom [minification](https://en.wikipedia.org/wiki/Minification_(programming) process
+* A custom [minification](https://en.wikipedia.org/wiki/Minification_(programming) process to experiment optimizations
 * [TDD, TDD, TDD](https://en.wikipedia.org/wiki/Test-driven_development)
 
 ## Building a library
@@ -156,19 +166,20 @@ to all existing frameworks or libraries.
 
 On one hand, a framework is designed to simplify complex tasks with the objective of building a given result (such as
 a single page application). Usually, it helps you building something faster but at the cost of forcing the developer to
-understand and apply the specific logic of it. As soon as you want to escape from the expected structure, things are
-getting ugly. This last sentence is obviously moderated by the capacity of the framework to accepts these changes (some
-simply don't). In that sense, [ExtJS](https://www.sencha.com/products/extjs/) and [AngularJS](https://angularjs.org/)
-are frameworks.
+understand and apply its specific logic. As soon as you want to escape from the expected structure, things are
+getting ugly. This last sentence is obviously moderated by the capacity of the framework to accepts these changes but
+some simply don'). In that sense, [ExtJS](https://www.sencha.com/products/extjs/) and
+[AngularJS](https://angularjs.org/) are frameworks.
 
 On the other hand, a library solves a problem with a narrowed scope: it doesn't try to do everything.
 In that sense, [jQuery](https://jquery.com/) and [backbone.js](http://backbonejs.org/) are libraries.
 
-Looking at what I want to achieve, I am trying to create helpers to simplify the JavaScript development in general.
+Looking at what I want to achieve, I am trying to create a collection of helpers to simplify the JavaScript development
+in general.
 
 ### Organizing sources
 
-![Let's rock !](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/Amplifier.jpg)
+!/[Let's rock !](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/Amplifier.jpg)
 The very first library I created in JavaScript was a big mess (script.lib.js, for those who still use it... sorry):
 
 * Everything was written in a single - huge - file... maintained on my drive (versioning was done by zipping the file
@@ -300,13 +311,6 @@ working. Actually, this is the same for any kind of activity.
 
 This is so true.
 
-
-    ## Legal stuff
-
-["Back to the Future"](http://www.backtothefuture.com/) pictures gathered around the web.
-They are copyrights of Universal City Studios, Inc. and U-Drive Joint Venture.
-
-Responsibility for the information and views set out in this article lies entirely with the author.
 
 </code>
 <!-- Drop those two lines -->
