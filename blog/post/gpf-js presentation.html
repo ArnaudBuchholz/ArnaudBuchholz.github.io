@@ -114,14 +114,17 @@ This is where I discovered [ExtJS](https://www.sencha.com/products/extjs/) and i
 to analyzes the code or to mock the server.
 
 Later I moved to another company that was relying on [AngularJS](https://angularjs.org/).
-Quickly, I became fluent with the framework and the tooling associated to the web development (such as grunt).
+Quickly, I became fluent with the framework and the tooling associated to the web development (such as
+[grunt](http://gruntjs.com/)).
 
 ### The idea
 
 From these experiences, I learned a lot. I have also been frustrated because I knew I was only scratching the surface
 of something bigger. When you look at the number of frameworks that exist now, you realize how much the JavaScript
-language is versatile and powerful. During my experimentations, I had some ideas I wanted to put in action in order to
-see if they would really be helpful or valuable.
+language is versatile and powerful.
+
+During my experimentations, I had some ideas I wanted to put in action in order to see if they would really be helpful
+or even valuable.
 
 ![The idea](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/docs idea.jpg)
 
@@ -168,53 +171,87 @@ Looking at what I want to achieve, I am trying to create helpers to simplify the
 ![Let's rock !](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/Amplifier.jpg)
 The very first library I created in JavaScript was a big mess (script.lib.js, for those who still use it... sorry):
 
-* Everything was written in a single - huge - file... maintained on my drive (versionning was done by zipping the file)
-* I had no clue about the minification process so I named my variables with single letters and a comment to know what
-they were used for. A simple script was stripping the comments to generate the 'release' build:
+* Everything was written in a single - huge - file... maintained on my drive (versioning was done by zipping the file
+and renaming it manually)
+* I had no clue about the minification tools so I named my variables with single letters and a comment to know what
+they were used for (the worst thing to do). Then, a simple command line was stripping the comments as well as the
+unnecessary formatting characters to generate the 'release' build.
 
+For instance, I wrote:
 `function capitalize(s/*string*/) {
     return s/*string*/[0].toUpperCase() + s/*string*/.substr(1);
 }
 `
 
-* I had no clear understanding of private scoping so everything was created globally (and easily 'hackable')
+To generate:
+`function capitalize(s) {return s[0].toUpperCase()+s.substr(1);}`
 
-I learned by making mistakes and, after several tries, I came up with a better organization:
+    * I had no clear understanding of private scoping so everything was created globally (and easily 'hackable')
+
+I learned by making mistakes and, after several attempts, I came up with a better organization:
 
 * Features are grouped by modules, a module is a single JavaScript source file (for instance:
 [error](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/error.js))
 * Modules are not using any private context (using classical [IIFE](https://en.wikipedia.org/wiki/
-Immediately-invoked_function_expression)), this is added afterward by the minification process (see next part)
+Immediately-invoked_function_expression)), this is added afterward by the build process (see next part)
 * Each module may import and export 'internals': the [linters global & exported keywords](https://github.com/
 ArnaudBuchholz/gpf-js/blob/3f950527beb10ef44e999da391d71a61d0f76f0e/src/error.js#L3-L6) are leveraged to consolidate
 (and check) the list of dependencies and update the documentation within each module (this is done with
 [make/globals.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/globals.js))
 * The list of modules is consolidated in a unique [source file](https://github.com/ArnaudBuchholz/gpf-js/blob/master/
-src/sources.js): a [marker in this file](https://github.com/ArnaudBuchholz/gpf-js/blob/
+src/sources.js): a [marker](https://github.com/ArnaudBuchholz/gpf-js/blob/
 3f950527beb10ef44e999da391d71a61d0f76f0e/src/sources.js#L42) decides which modules are in the library.
 
 ### Minification & build process
 
-Again, I made sveral mistakes regarding the build process. I will explain later the automation using grunt but at the
-very end, the library comes in three flavors:
+When you develop a library, you must think about its publication (or at least the way you want to use it):
+ideally, you produce a single file that has been minified (to reduce its size) and possibly obfuscated (you may want to
+protect some of your code).
+
+(...) A quick note about obfuscation: it is impossible to fully obfuscate the JavaScript code.
+At least, you can make it really hard to read for someone who wants to reveres engineer it but, in the end, the browser
+needs a valid JavaScript source to run it.
+
+Once the sources are organized, a workflow must be set up to concatenate them and generate the result.
+
+Here again, I made several mistakes regarding the build process:
+
+* I did not automate this process from the beginning... this was addressed later using [grunt](http://gruntjs.com/)
+(I will come to that later)
+* How do you validate that the result file works as expected? TEST DATABASE
+* I wanted to experiment conditional building (#ifdef) & optimizations (inlines)
+* I wanted to control the minification process... but how do you parse JavaScript? I first tried to parse it manually
+(I have a working tokenizer but the grammer is complex) then I moved to AST generation using esprima, manipulation and
+code rewriting using escodegen.
+
+In end, the library comes in three flavors:
 * The source version: done by loading the [boot.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js)
 module
 * The debug version: the non-minified concatenated-like version
 * The release version: the minified & optimized concatenated-like version
 
+Even if the build process is controlled, I use [Google Closure Compiler](https://developers.google.com/closure/
+compiler/) to compress the release version.
+
 ## Javascript Development (with a capital D)
 
 ### Linters
 
-    JSHint
+A linter is a tool that almost validate the code while you are typing it: it is capable of identifying usual mistakes
+(undeclared or unused variables, missing semi-column characters...) and it is configurable (to fit your preferences).
 
-    ESLint
+I started with JSHint
+
+Then I moved to ESLint as it offers more customization option and also provides custom rules mechanism based on AST
+parsing
 
 ### Grunt
 
     Automation
 
+
     Grunt vs Gulp
+
 
 ### Test Driven Development
 
@@ -226,15 +263,26 @@ module
 
     qUnit
 
+    My Own BDD implementation
+
 ### Code coverage
 
-    Istanbul
+    Once the code is tested, how do you make sure that every line of code is actually tested? On the contrary, are sure
+    that every line of code you wrote makes sense? The only way to know is to use tools that measure the code coverage.
+
+    Istanbul with a hack for generated functions (interesting part)
 
 ### Code analysis
 
-    Plato
+    How do you quantify the quality of your code? using code coverage or making sure that your linters do not generate
+    any error? Is it really enough?
+
+    Plato is a tool that go over your library and computes intersting stats such as the maintanability factor or the
+    bugs ratio.
 
 ### GitHub
+
+    Do I have to present GitHub?
 
 ## Lessons learnt
 
@@ -243,6 +291,15 @@ Clean code & clean coder lessons
     [software craftsmanship](https://en.wikipedia.org/wiki/Software_craftsmanship).
 
 Time management (personal time & GitHub)
+
+I remember a comic strip I read a long time ago with this cartoonist being asked what he did to learn drawing (and
+being like accused of having a gift). His answer was really funny as he just said that it was a matter of practicing and
+working. Actually, this is the same for any kind of activity.
+
+"C'est en forgeant que l'on devient forgeron" with the best translation I found being "You have to do your craft".
+
+This is so true.
+
 
     ## Legal stuff
 
