@@ -113,8 +113,8 @@ This is where I discovered [ExtJS](https://www.sencha.com/products/extjs/) and i
 [build process](https://www.sencha.com/products/extjs/cmd-download/). I also got familiar with NodeJS by creating tools
 to analyzes the code or to mock the server.
 
-Later I moved to another company that was relying on AngularJS. Quickly, I became fluent with the framework and the
-tooling associated to the web development (such as grunt).
+Later I moved to another company that was relying on [AngularJS](https://angularjs.org/).
+Quickly, I became fluent with the framework and the tooling associated to the web development (such as grunt).
 
 ### The idea
 
@@ -136,10 +136,10 @@ e6982dd33568f9d2a6fc6d9ee919ab0fae96bfa9/test/interfaces.js#L52-L81))
 So I started to develop a library (not a framework, reasons detailed below) that would help me implement these.
 
 Because it is my own project, I also wanted to come through the following challenges:
+* A real source repository ([GitHub](https://github.com/ArnaudBuchholz/gpf-js/))
 * [Interoperability](https://en.wikipedia.org/wiki/Software_portability) with different hosts (NodeJS, browser, cscript
 and later Rhino...) and versions of JavaScript (through [polyfills](https://en.wikipedia.org/wiki/Polyfill))
-* A custom [minification](https://en.wikipedia.org/wiki/Minification_(programming)) process
-* A controllable source system
+* A custom [minification](https://en.wikipedia.org/wiki/Minification_(programming) process
 * [TDD, TDD, TDD](https://en.wikipedia.org/wiki/Test-driven_development)
 
 ## Building a library
@@ -153,20 +153,22 @@ to all existing frameworks or libraries.
 
 On one hand, a framework is designed to simplify complex tasks with the objective of building a given result (such as
 a single page application). Usually, it helps you building something faster but at the cost of forcing the developer to
-understand and apply the specific logic of it. As soon as you want to escape from the rigid structure, this are getting
-ugly. This last sentence is obviously moderated by the capacity of the framework to accepts these changes (some simply
-don't). In that sense, ExtJS and AngularJS are frameworks.
+understand and apply the specific logic of it. As soon as you want to escape from the expected structure, things are
+getting ugly. This last sentence is obviously moderated by the capacity of the framework to accepts these changes (some
+simply don't). In that sense, [ExtJS](https://www.sencha.com/products/extjs/) and [AngularJS](https://angularjs.org/)
+are frameworks.
 
-On the other hand, a library solves a problem with a narrowed scope: it doesn't try to solve everything. In that sense,
-[jQuery](https://jquery.com/) and [backbone.js](http://backbonejs.org/) are libraries.
+On the other hand, a library solves a problem with a narrowed scope: it doesn't try to do everything.
+In that sense, [jQuery](https://jquery.com/) and [backbone.js](http://backbonejs.org/) are libraries.
 
-Looking at what I want to achieve, I am trying to create helpers to simplify the JavaScript developments in general.
+Looking at what I want to achieve, I am trying to create helpers to simplify the JavaScript development in general.
 
 ### Organizing sources
 
+![Let's rock !](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/Amplifier.jpg)
 The very first library I created in JavaScript was a big mess (script.lib.js, for those who still use it... sorry):
 
-* Everything was written in a single - huge - file
+* Everything was written in a single - huge - file... maintained on my drive (versionning was done by zipping the file)
 * I had no clue about the minification process so I named my variables with single letters and a comment to know what
 they were used for. A simple script was stripping the comments to generate the 'release' build:
 
@@ -177,18 +179,28 @@ they were used for. A simple script was stripping the comments to generate the '
 
 * I had no clear understanding of private scoping so everything was created globally (and easily 'hackable')
 
-I learned by making mistakes but I came up with a better organization:
+I learned by making mistakes and, after several tries, I came up with a better organization:
 
 * Features are grouped by modules, a module is a single JavaScript source file (for instance:
 [error](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/error.js))
+* Modules are not using any private context (using classical [IIFE](https://en.wikipedia.org/wiki/
+Immediately-invoked_function_expression)), this is added afterward by the minification process (see next part)
+* Each module may import and export 'internals': the [linters global & exported keywords](https://github.com/
+ArnaudBuchholz/gpf-js/blob/3f950527beb10ef44e999da391d71a61d0f76f0e/src/error.js#L3-L6) are leveraged to consolidate
+(and check) the list of dependencies and update the documentation within each module (this is done with
+[make/globals.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/globals.js))
 * The list of modules is consolidated in a unique [source file](https://github.com/ArnaudBuchholz/gpf-js/blob/master/
-src/sources.js)
-* Each module may import and export 'internals': the linters global & exported are leveraged to consolidate a list of
-globals and update the documentation within each module (this is done with [make/globals.js](https://github.com/
-ArnaudBuchholz/gpf-js/blob/master/make/globals.js))
+src/sources.js): a [marker in this file](https://github.com/ArnaudBuchholz/gpf-js/blob/
+3f950527beb10ef44e999da391d71a61d0f76f0e/src/sources.js#L42) decides which modules are in the library.
 
 ### Minification & build process
 
+Again, I made sveral mistakes regarding the build process. I will explain later the automation using grunt but at the
+very end, the library comes in three flavors:
+* The source version: done by loading the [boot.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js)
+module
+* The debug version: the non-minified concatenated-like version
+* The release version: the minified & optimized concatenated-like version
 
 ## Javascript Development (with a capital D)
 
