@@ -180,6 +180,7 @@ in general.
 ### Organizing sources
 
 !/[Let's rock !](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/Amplifier.jpg)
+
 The very first library I created in JavaScript was a big mess (script.lib.js, for those who still use it... sorry):
 
 * Everything was written in a single - huge - file... maintained on my drive (versioning was done by zipping the file
@@ -204,7 +205,7 @@ I learned by making mistakes and, after several attempts, I came up with a bette
 * Features are grouped by modules, a module is a single JavaScript source file (for instance:
 [error](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/error.js))
 * Modules are not using any private context (using classical [IIFE](https://en.wikipedia.org/wiki/
-Immediately-invoked_function_expression)), this is added afterward by the build process (see next part)
+Immediately-invoked_function_expression)), this is injected afterward by the build process (see next part)
 * Each module may import and export 'internals': the [linters global & exported keywords](https://github.com/
 ArnaudBuchholz/gpf-js/blob/3f950527beb10ef44e999da391d71a61d0f76f0e/src/error.js#L3-L6) are leveraged to consolidate
 (and check) the list of dependencies and update the documentation within each module (this is done with
@@ -213,6 +214,8 @@ ArnaudBuchholz/gpf-js/blob/3f950527beb10ef44e999da391d71a61d0f76f0e/src/error.js
 src/sources.js): a [marker](https://github.com/ArnaudBuchholz/gpf-js/blob/
 3f950527beb10ef44e999da391d71a61d0f76f0e/src/sources.js#L42) decides which modules are in the library.
 
+I even wrote a [coding guideline](https://github.com/ArnaudBuchholz/gpf-js/blob/master/CODESTYLE.md) !
+
 ### Minification & build process
 
 When you develop a library, you must think about its publication (or at least the way you want to use it):
@@ -220,7 +223,7 @@ ideally, you produce a single file that has been minified (to reduce its size) a
 protect some of your code).
 
 (...) A quick note about obfuscation: it is impossible to fully obfuscate the JavaScript code.
-At least, you can make it really hard to read for someone who wants to reveres engineer it but, in the end, the browser
+At least, you can make it really hard to read for someone who wants to reverse engineer it but, in the end, the browser
 needs a valid JavaScript source to run it.
 
 Once the sources are organized, a workflow must be set up to concatenate them and generate the result.
@@ -229,20 +232,27 @@ Here again, I made several mistakes regarding the build process:
 
 * I did not automate this process from the beginning... this was addressed later using [grunt](http://gruntjs.com/)
 (I will come to that later)
-* How do you validate that the result file works as expected? TEST DATABASE
+* I had troubles with the first results: how do you validate that the generated file works as expected? I had to build
+a complete test database (TDD!)
 * I wanted to experiment conditional building (#ifdef) & optimizations (inlines)
-* I wanted to control the minification process... but how do you parse JavaScript? I first tried to parse it manually
-(I have a working tokenizer but the grammer is complex) then I moved to AST generation using esprima, manipulation and
-code rewriting using escodegen.
+* Initially, I wanted to do the minification by myself... but how do you parse JavaScript? I first tried to parse it
+manually. Indeed, I have a working tokenizer (that I use for syntax highlighting) but the
+[JavaScript grammar](https://github.com/pegjs/pegjs/blob/master/examples/javascript.pegjs) is complex. That's why I
+now rely on AST generation done by [esprima](http://esprima.org/index.html). I manipulate the structure and I rewrite
+the code using [escodegen](https://github.com/estools/escodegen). However, the list of transformations to apply in order
+to reach a good ratio is huge... for a very small benefit if you think that some tools already exist.
+So I integrated the [Google Closure Compiler](https://developers.google.com/closure/compiler/) to compress the release
+version.
 
 In end, the library comes in three flavors:
-* The source version: done by loading the [boot.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js)
+* The **source** version: done by loading the [boot.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js)
 module
-* The debug version: the non-minified concatenated-like version
-* The release version: the minified & optimized concatenated-like version
+* The **[debug](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/gpf-debug.js)** version: the non-minified
+concatenated-like version
+* The **[release](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/gpf.js)** version: the minified & optimized
+concatenated-like version
 
-Even if the build process is controlled, I use [Google Closure Compiler](https://developers.google.com/closure/
-compiler/) to compress the release version.
+UMD ?
 
 ## Javascript Development (with a capital D)
 
