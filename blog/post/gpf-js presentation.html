@@ -228,31 +228,43 @@ needs a valid JavaScript source to run it.
 
 Once the sources are organized, a workflow must be set up to concatenate them and generate the result.
 
+A long time ago, I documented my thoughts in an article about
+[Release and debug versions](http://gpf-js.blogspot.ca/2013/04/release-and-debug-versions.html).
+
 Here again, I made several mistakes regarding the build process:
 
 * I did not automate this process from the beginning... this was addressed later using [grunt](http://gruntjs.com/)
 (I will come to that later)
 * I had troubles with the first results: how do you validate that the generated file works as expected? I had to build
 a complete test database (TDD!)
-* I wanted to experiment conditional building (#ifdef) & optimizations (inlines)
+* I wanted to experiment conditional building (#ifdef) & optimizations (inlines - not done yet)
 * Initially, I wanted to do the minification by myself... but how do you parse JavaScript? I first tried to parse it
-manually. Indeed, I have a working tokenizer (that I use for syntax highlighting) but the
+manually. Indeed, I have a working tokenizer (that is used for syntax highlighting) but the
 [JavaScript grammar](https://github.com/pegjs/pegjs/blob/master/examples/javascript.pegjs) is complex. That's why I
-now rely on AST generation done by [esprima](http://esprima.org/index.html). I manipulate the structure and I rewrite
-the code using [escodegen](https://github.com/estools/escodegen). However, the list of transformations to apply in order
+now rely on AST generation done by [esprima](http://esprima.org/index.html). The structure is manipulated and the code
+rewrote using [escodegen](https://github.com/estools/escodegen). However, the list of transformations to apply in order
 to reach a good ratio is huge... for a very small benefit if you think that some tools already exist.
 So I integrated the [Google Closure Compiler](https://developers.google.com/closure/compiler/) to compress the release
 version.
 
+The AST transformation is also used to inject the different modules inside an
+[Universal Module Definition](https://github.com/umdjs/umd) [adapted](https://github.com/ArnaudBuchholz/gpf-js/blob/
+master/make/UMD.js) for my needs.
+As a consequence, the library can be used in all the environment in the most natural way:
+
+* require for [NodeJS](https://nodejs.org/api/modules.html) and [PhantomJS](http://phantomjs.org/api/system/)
+* as a [script tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script) for browsers
+* using [load ](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino/Shell#load.28.5Bfilename.2C_....5D.29]
+in Rhino
+* as an include inside WSG
+
 In end, the library comes in three flavors:
-* The **source** version: done by loading the [boot.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js)
-module
+* The **source** version: done by loading the [boot.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/
+boot.js) module
 * The **[debug](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/gpf-debug.js)** version: the non-minified
 concatenated-like version
 * The **[release](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/gpf.js)** version: the minified & optimized
 concatenated-like version
-
-UMD ?
 
 ## Javascript Development (with a capital D)
 
@@ -307,6 +319,7 @@ parsing
 
 ## Lessons learnt
 
+Document your code: you will learn about yourself !
 
 Clean code & clean coder lessons
     [software craftsmanship](https://en.wikipedia.org/wiki/Software_craftsmanship).
