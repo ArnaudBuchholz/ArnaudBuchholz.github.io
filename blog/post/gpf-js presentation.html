@@ -40,7 +40,7 @@ Also, ["Back to the Future"](http://www.backtothefuture.com/) pictures were gath
 They are copyrights of Universal City Studios, Inc. and U-Drive Joint Venture.
 
 ## Happy New Year 2016 !
-!/[2015 was already the future, imagine what will happen in 2016 !](https://ArnaudBuchholz.github.io/blog/post/
+![2015 was already the future, imagine what will happen in 2016 !](https://ArnaudBuchholz.github.io/blog/post/
 gpf-js presentation/oct21-2015.jpg)
 
 First of all, I'd like to wish you an happy new year 2016 ! May your lives, studies, careers, projects and everything
@@ -50,7 +50,7 @@ This is a good time to look back and ponder on what happened in order to take ne
 Talking about me, I would like to present you a personal project that I have been working on for the last 2 years and
 that was greatly improved over the last months.
 
-!/[GPF-JS GitHub contributions](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/contributions.png)
+![GPF-JS GitHub contributions](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/contributions.png)
 
 ## First, let's set the context
 This is a pretty long story but I will try to make it short for the sake of your network bandwidth.
@@ -89,7 +89,7 @@ component (using new ActiveXObject) and, from there, you could then access criti
 
 I decided to invest my personal time learning more about the language.
 
-!/[You want me to buy a subscription to the 'JavaScript Journal'?](https://ArnaudBuchholz.github.io/blog/post/
+![You want me to buy a subscription to the 'JavaScript Journal'?](https://ArnaudBuchholz.github.io/blog/post/
 gpf-js presentation/docbrownb61406.jpg)
 
 Because I am a [lazy developer](http://threevirtues.com/), I created a series of command line tools (using cscript) to
@@ -111,7 +111,7 @@ basics of web development with [vanilla JavaScript](http://vanilla-js.com/).
 
 Then, I had to quit my job to move to Canada.
 
-!/[It's cold out there](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/20130403-234545.jpg)
+![It's cold out there](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/20130403-234545.jpg)
 
 As I have been quite successful with my card game simulator, I found a job as a web developer in a startup.
 This is where I discovered [ExtJS](https://www.sencha.com/products/extjs/) and its
@@ -132,7 +132,7 @@ List_of_JavaScript_libraries)  that exist now, you realize how much the JavaScri
 During my researches, I had some ideas that I wanted to put in action in order to see if they would really be helpful
 or valuable.
 
-!/[The idea](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/docs idea.jpg)
+![The idea](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/docs idea.jpg)
 
 Basically, my flux capacitor is composed of:
 * A unified class definition formalism ([gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/
@@ -179,7 +179,7 @@ in general.
 
 ### Organizing sources
 
-!/[Let's rock !](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/Amplifier.jpg)
+![Let's rock !](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/Amplifier.jpg)
 
 The very first library I created in JavaScript was a big mess (script.lib.js, for those who still use it... sorry):
 
@@ -270,17 +270,48 @@ concatenated-like version
 
 ### Linters
 
-A linter is a tool that almost validate the code while you are typing it: it is capable of identifying usual mistakes
-(undeclared or unused variables, missing semi-column characters...) and it is configurable (to fit your preferences).
+A [linter](https://en.wikipedia.org/wiki/Lint_(software)) is a tool that validates the code while you are typing it.
+It identifies most common errors (undeclared or unused variables, missing semi-column characters...) and it fits to your
+preferences through configuration.
 
-I started with JSHint
+The first time I have been exposed to [JSHint](http://jshint.com/) it was in a professional environment (my first
+Canadian experience).
+I was annoyed by the tool as it blocked most of my pushes to the repository.
+At that time, I was convinced that my code style was perfect and I saw the errors as meaningless (they were mainly
+styling errors).
 
-Then I moved to ESLint as it offers more customization option and also provides custom rules mechanism based on AST
-parsing
+Actually, after some time, I understood the two great advantages of using such a tool:
+
+* It eliminates most common errors: as the JavaScript code does not require compilation to be used, this step checks
+the code. Otherwise, until the faulty line is evaluated, you have no clue about the error.
+* When working in a team, this tool ensures that everybody applies the same formatting rules and conventions (you may
+also forbid specific syntaxes such as the use of the [ternary operator](https://en.wikipedia.org/wiki/%3F:)).
+It is a way to produce uniform code.
+
+So I integrated JShint in my project at the beginning of 2014.
+Sooner this year, I wrote an article about [Code analysis](http://gpf-js.blogspot.ca/2015/01/code-analysis.html).
+
+(...) Actually, I discovered ESLint after writing this article.
+
+Then, four months ago, I moved to [ESLint](http://eslint.org/) as it offers more settings and it also allows custom
+rules mechanism based on AST parsing. All [rules](http://eslint.org/docs/rules/) are clearly documented and, for each
+of them, you may decide either:
+
+* to ignore it
+* to generate a warning
+* to generate an error
+
+I am not convinced with the value of generating warning if they are not blocking anything. Indeed,
+    https://en.wikipedia.org/wiki/Broken_windows_theory
 
 ### Grunt
 
     Automation
+
+As a lazy developer, I don't like to do the same thing twice. Hence, I try to automate my tasks as much as possible.
+I initially started with DOS command lines.
+
+I started to integrate [grunt](http://gruntjs.com/) in may 2015: 
 
 
     Grunt vs Gulp
