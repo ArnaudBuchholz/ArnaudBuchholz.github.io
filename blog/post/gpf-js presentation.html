@@ -40,7 +40,7 @@ Also, ["Back to the Future"](http://www.backtothefuture.com/) pictures were gath
 They are copyrights of Universal City Studios, Inc. and U-Drive Joint Venture.
 
 ## Happy New Year 2016!
-![2015 was already the future, imagine what will happen in 2016!](https://ArnaudBuchholz.github.io/blog/post/
+!/[2015 was already the future, imagine what will happen in 2016!](https://ArnaudBuchholz.github.io/blog/post/
 gpf-js presentation/oct21-2015.jpg)
 
 First of all, I'd like to wish you a happy new year 2016! May your lives, studies, careers, projects and everything
@@ -50,7 +50,7 @@ This is a good time to look back and ponder on what happened to take new resolut
 Talking about me, I would like to present you a personal project that I have been working on for the last 2 years and
 that was greatly improved over the last months.
 
-![GPF-JS GitHub contributions](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/contributions.png)
+!/[GPF-JS GitHub contributions](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/contributions.png)
 
 ## First, let's set the context
 This is a pretty long story but I will try to make it short for the sake of your network bandwidth.
@@ -89,7 +89,7 @@ component (using new ActiveXObject) and, from there, you could then access criti
 
 I decided to invest my personal time learning more about the language.
 
-![You want me to buy a subscription to the 'JavaScript Journal'?](https://ArnaudBuchholz.github.io/blog/post/
+!/[You want me to buy a subscription to the 'JavaScript Journal'?](https://ArnaudBuchholz.github.io/blog/post/
 gpf-js presentation/mind-reader.jpg)
 
 Because I am a [lazy developer](http://threevirtues.com/), I created a series of command line tools (using cscript) to
@@ -111,7 +111,7 @@ basics of web development with [vanilla JavaScript](http://vanilla-js.com/).
 
 Then, I had to quit my job to move to Canada.
 
-![It's cold out there](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/frozen-dolorean.jpg)
+!/[It's cold out there](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/frozen-dolorean.jpg)
 
 As I have been quite successful with my card game simulator, I found a job as a web developer in a startup.
 This is where I discovered [ExtJS](https://www.sencha.com/products/extjs/) and its
@@ -132,7 +132,7 @@ List_of_JavaScript_libraries)  that exist now, you realize how much the JavaScri
 During my researches, I had some ideas that I wanted to put in action in order to see if they would really be helpful
 or valuable.
 
-![The idea](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/docs-idea.jpg)
+!/[The idea](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/docs-idea.jpg)
 
 Basically, my flux capacitor is composed of:
 * A unified class definition formalism ([gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/
@@ -179,7 +179,7 @@ in general.
 
 ### Organizing sources
 
-![Let's rock!](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/marty-amplifier.jpg)
+!/[Let's rock!](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/marty-amplifier.jpg)
 
 The very first library I created in JavaScript was a big mess (script.lib.js, for those who still use it... sorry):
 
@@ -313,7 +313,7 @@ max-statements)) in order to improve the code quality.
 
 ### Grunt
 
-![It is all about automation](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/dog-feeder.jpg)
+!/[It is all about automation](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/dog-feeder.jpg)
 
 As a lazy developer, I don't like to do the same thing twice. Hence, I try to automate my tasks as much as possible.
 It all started with DOS command lines but I was concerned about the portability of the project.
@@ -346,7 +346,7 @@ PC vs Console...). It may be true but Grunt does the job.
 
 ### Test Driven Development
 
-![When this baby hits 88 miles per hours, you gonna see some serious s...](https://ArnaudBuchholz.github.io/blog/post/
+!/[When this baby hits 88 miles per hours, you gonna see some serious s...](https://ArnaudBuchholz.github.io/blog/post/
 gpf-js presentation/serious-stuff.jpg)
 
 One of my last articles was about [My own BDD implementation](http://gpf-js.blogspot.ca/2015/10/
@@ -365,10 +365,33 @@ and well documented so I suggest you to check the website of each to see which o
 
 ### Code coverage
 
-    Once the code is tested, how do you make sure that every line of code is actually tested? On the contrary, are sure
-    that every line of code you wrote makes sense? The only way to know is to use tools that measure the code coverage.
+The code is tested and, following Uncle Bob rules, only the required logic was implemented to pass the tests.
+One important question remains: is there any path in your code that was not executed during the tests?
 
-    Istanbul with a hack for generated functions (interesting part)
+Why is it critical? In my opinion, we are still talking about testing here. Indeed, I remember this simple rule:
+[If it is not tested, it does not work](https://yakking.branchable.com/posts/truism-4-if-it-is-not-tested/).
+Eventually, the code you are developing will be used and, even if you extensively document the API, someone will find
+(or search) ways to reach this code.
+If you never tested it, how can you be sure of the behavior?
+
+(...) Sadly, even if you have 100% code coverage, there are still ways to break the code. For instance, let's imagine
+a function that divides two numbers. In one test, you get 100% coverage. But what happens if you divide by 0? What
+happens if you divide by a very small number (will you have an overflow?).
+This are edge cases but they exist (and they probably should be handled by the function).
+The least we can do is to make sure that each line of code is executed at least once.
+
+The only way to keep track of the different execution paths is to instrument the code and collect the information during
+the tests. It must generate an exhaustive report as well as an estimate of the
+[code coverage](https://en.wikipedia.org/wiki/Code_coverage).
+
+Ideally one should target 100% of coverage but, in the real world, it is extremely hard to reach it.
+It is even more difficult if you handle different platforms (or hosts).
+Fortunately, the tool may propose ways to ignore some paths (with the risk you know).
+
+
+Furthermore, some thresholds are defined
+
+
 
 ### Code analysis
 
@@ -401,7 +424,7 @@ This is so true.
 
 ## What's next?
 
-![Where we're going... we don't need roads!](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/
+!/[Where we're going... we don't need roads!](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/
 dont-need-roads.jpg)
 
 I still didn't complete the project refactoring: my first objective is to restore a feature that is used on my
