@@ -349,21 +349,19 @@ PC vs Console...). It may be true but Grunt does the job.
 ![When this baby hits 88 miles per hours, you gonna see some serious s...](https://ArnaudBuchholz.github.io/blog/post/
 gpf-js presentation/serious-stuff.jpg)
 
-One of my last article was about [My own BDD implementation](http://gpf-js.blogspot.ca/2015/10/
+One of my last articles was about [My own BDD implementation](http://gpf-js.blogspot.ca/2015/10/
 my-own-bdd-implementation.html).
 
-I won't repeat here the benefits of testings but his actually came late in my project.
-Coverage
+I won't repeat here the benefits of testing but it actually came late in my project.
 
-    BDD
+I first started with a custom testing mechanism but it was mostly designed for the web: I was not happy with the NodeJS
+integration. Then I decided to integrate [Mocha](https://mochajs.org/) as it was for both (and
+[integrated in grunt](https://github.com/pghalliday/grunt-mocha-test)).
+But then I wanted a solution for the cscript host. This is why I started my own BDD framework.
 
-    Mocha
-
-    Jasmine
-
-    qUnit
-
-    My Own BDD implementation
+I was exposed to [Jasmine](http://jasmine.github.io/) and [qUnit](https://qunitjs.com/) and, in the end, they all do the
+job properly. Most of the time, it is a matter of syntax and framework specific tools. These test frameworks are mature
+and well documented so I suggest you to check the website of each to see which one fits your needs.
 
 ### Code coverage
 
@@ -401,6 +399,22 @@ working. Actually, this is the same for any kind of activity.
 
 This is so true.
 
+## What's next?
+
+![Where we're going... we don't need roads!](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/
+dont-need-roads.jpg)
+
+I still didn't complete the project refactoring: my first objective is to restore a feature that is used on my
+[blog](http://gpf-js.blogspot.ca/). Indeed, I **am** a lazy developer and I don't want to write HTML. That's why I use
+[markdown](http://en.wikipedia.org/wiki/Markdown) that is converted to render the articles using the library
+(see [blog.js](https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/blob/master/blog/blog.js)... I may need to
+apply ESLint on it too).
+
+Then, I will continue to play with streams: I would like to develop my own [XML SAX parser](https://en.wikipedia.org/
+wiki/Simple_API_for_XML) and XML writer. And I will finish the [XML serialization](https://github.com/ArnaudBuchholz/
+gpf-js/blob/master/test/xml.js) I started a long time ago.
+
+I have trillions of ideas... so stay tuned to the project!
 
 </code>
 <!-- Drop those two lines -->
