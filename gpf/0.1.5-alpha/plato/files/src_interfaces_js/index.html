@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">341</p>
+      <p class="stat">345</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,7 +62,7 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">36.02</p>
+      <p class="stat">35.75</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
@@ -99,8 +99,9 @@
 /*global _gpfGenDefHandler*/ // Class handler for class types (interfaces...)
 /*global _gpfGetClassDefinition*/ // Get GPF class definition for a constructor
 /*global _gpfIgnore*/ // Helper to remove unused parameter warning
-/*exported _gpfI*/
-/*exported _gpfDefIntrf*/
+/*exported _gpfDefIntrf*/ // gpf.define for interfaces
+/*exported _gpfI*/ // gpf.interfaces
+/*exported _gpfQueryInterface*/ // gpf.interfaces.query
 /*#endif*/
 
 _gpfErrorDeclare(&quot;interfaces&quot;, {
@@ -142,6 +143,33 @@ function _gpfIsImplementedBy (inspectedObject, interfaceDefinition) {
     return true;
 }
 
+/**
+ * Retrieve an object implementing the expected interface from an object.
+ * This is done in two tests:
+ * - Either the object implements the interface, it is returned
+ * - Or the object implements IUnknown, then queryInterface is used
+ *
+ * @param {Object} objectInstance object to inspect
+ * @param {gpf.interfaces.Interface} interfaceDefinition reference interface
+ * @param {Boolean} [throwError=true] throwError Throws an error if the interface is not found (otherwise, null
+ * is returned)
+ * @return {Object|null}
+ */
+function _gpfQueryInterface (objectInstance, interfaceDefinition, throwError) {
+    var result = null;
+    if (_gpfIsImplementedBy(objectInstance, interfaceDefinition)) {
+        return objectInstance;
+    } else if (_gpfIsImplementedBy(objectInstance, gpf.interfaces.IUnknown)) {
+        result = objectInstance.queryInterface(interfaceDefinition);
+    }
+    if (null === result &amp;&amp; (undefined === throwError || throwError)) {
+        throw gpf.Error.interfaceExpected({
+            name: _gpfGetClassDefinition(interfaceDefinition)._name
+        });
+    }
+    return result;
+}
+
 var
     /**
      * gpf.attributes shortcut
@@ -165,32 +193,8 @@ var
             return _gpfIsImplementedBy(inspectedObject, interfaceDefinition);
         },
 
-        /**
-         * Retrieve an object implementing the expected interface from an object.
-         * This is done in two tests:
-         * - Either the object implements the interface, it is returned
-         * - Or the object implements IUnknown, then queryInterface is used
-         *
-         * @param {Object} objectInstance object to inspect
-         * @param {gpf.interfaces.Interface} interfaceDefinition reference interface
-         * @param {Boolean} [throwError=true] throwError Throws an error if the interface is not found (otherwise, null
-         * is returned)
-         * @return {Object|null}
-         */
-        query: function (objectInstance, interfaceDefinition, throwError) {
-            var result = null;
-            if (_gpfIsImplementedBy(objectInstance, interfaceDefinition)) {
-                return objectInstance;
-            } else if (_gpfIsImplementedBy(objectInstance, gpf.interfaces.IUnknown)) {
-                result = objectInstance.queryInterface(interfaceDefinition);
-            }
-            if (null === result &amp;&amp; (undefined === throwError || throwError)) {
-                throw gpf.Error.interfaceExpected({
-                    name: _gpfGetClassDefinition(interfaceDefinition)._name
-                });
-            }
-            return result;
-        }
+        // @inheritdoc _gpfQueryInterface
+        query: _gpfQueryInterface
 
     };
 

@@ -91,24 +91,24 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _GpfClassDefinition*/ // GPF class definition
 /*global _gpfAssert*/ // Assertion method
 /*global _gpfAsserts*/ // Multiple assertion method
-/*global _GpfClassDefinition*/ // GPF class definition
-/*global _gpfDecodeAttributeMember*/
+/*global _gpfDecodeAttributeMember*/ // Normalized way to decode an attribute member name
 /*global _gpfDefine*/ // Shortcut for gpf.define
 /*global _gpfEmptyFunc*/ // An empty function
-/*global _gpfEncodeAttributeMember*/
+/*global _gpfEncodeAttributeMember*/ // Normalized way to encode an attribute member name
 /*global _gpfFunc*/ // Create a new function using the source
 /*global _gpfGenDefHandler*/ // Class handler for class types (interfaces...)
 /*global _gpfGetClassDefinition*/ // Get GPF class definition for a constructor
 /*global _gpfIgnore*/ // Helper to remove unused parameter warning
 /*global _gpfObjectForEach*/ // Similar to [].forEach but for objects
-/*exported _gpfA*/
-/*exported _gpfAttribute*/
-/*exported _gpfAttributesAdd*/
-/*exported _gpfDefAttr*/
-/*exported _gpfIArrayGetItem*/
-/*exported _gpfIArrayGetItemsCount*/
+/*exported _gpfA*/ // gpf.attributes
+/*exported _gpfAttribute*/ // Shortcut for gpf.attributes.Attribute
+/*exported _gpfAttributesAdd*/ // Shortcut for gpf.attributes.add
+/*exported _gpfDefAttr*/ // gpf.define for attributes
+/*exported _gpfIArrayGetItem*/ // gpf.interfaces.IReadOnlyArray#getItem factory
+/*exported _gpfIArrayGetItemsCount*/ // gpf.interfaces.IReadOnlyArray#getItemsCount factory
 /*#endif*/
 
 // @property {gpf.attributes.Map|null} Attributes of this class (null if none)
