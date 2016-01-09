@@ -1,21 +1,21 @@
 <script language="javascript" src="../include.js"></script>
 <link rel="stylesheet" type="text/css" href="../file.css" />
 <div class="post">
-    <h3 class="post-title entry-title">
-        GPF-JS Presentation
-    </h3>
-    <div class="post-header">
-        <div class="post-header-line-1"></div>
-    </div>
-    <div class="post-body">
-        <!-- Copy from the next line -->
-        <div class="summary">
-            <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
-            I have been developing the GPF-JS library for a while and I recently realized that I never took the
-            time to explain the reasons why I started this whole thing and what I am trying to achieve here.
-            Welcome to my utopia where a perfectionist is trying to re-invent the wheel.
-        </div>
-        <script type="application/ld+json">
+<h3 class="post-title entry-title">
+    GPF-JS Presentation
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
+    I have been developing the GPF-JS library for a while and I recently realized that I never took the
+    time to explain the reasons why I started this whole thing and what I am trying to achieve here.
+    Welcome to my utopia where a perfectionist is trying to re-invent the wheel.
+</div>
+<script type="application/ld+json">
 {
     "@context": "http://schema.org",
     "@type": "Article",
@@ -27,9 +27,9 @@
         "url": "http://gpf-js.blogspot.ca/"
     },
     "headline": "GPF-JS Presentation",
-    "url": "http://gpf-js.blogspot.com/2015/11/gpf-js-presentation.html",
-    "datePublished": "2015-11-04T04:14:00.000Z",
-    "dateModified": "2015-11-04T04:14:00.000Z",
+    "url": "http://gpf-js.blogspot.com/2016/01/gpf-js-presentation.html",
+    "datePublished": "2016-01-09T20:47:00.000Z",
+    "dateModified": "2016-01-09T20:47:00.000Z",
     "description": ""
 }
 </script>
@@ -274,7 +274,7 @@ concatenated-like version
 * The **[release](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/gpf.js)** version: the minified & optimized
 concatenated-like version
 
-## Javascript Development (with a capital D)
+## JavaScript Development (with a capital D)
 
 ### Linters
 
@@ -298,7 +298,7 @@ code. Otherwise, until the faulty line is evaluated, you have no clue about the 
 also forbid specific syntaxes such as the use of the [ternary operator](https://en.wikipedia.org/wiki/%3F:).
 It is a way to produce uniform code (and it is also useful when working alone on a big project).
 
-So I integrated JShint at the beginning of 2014 and it actually took me a long time to adapt the code accordingly.
+So I integrated JSHint at the beginning of 2014 and it actually took me a long time to adapt the code accordingly.
 
 Sooner this year, I wrote an article about [Code analysis](http://gpf-js.blogspot.ca/2015/01/code-analysis.html).
 
@@ -315,7 +315,7 @@ The only reason would be to raise attention to specific issues that can be addre
 to force the developer to act or you will suffer the [broken window effect](https://en.wikipedia.org/wiki/
 Broken_windows_theory).
 
-Enabling ESlint also took me a while because I had to review all rules to [configure it](https://github.com/
+Enabling ESLint also took me a while because I had to review all rules to [configure it](https://github.com/
 ArnaudBuchholz/gpf-js/blob/master/.eslintrc) and then modify the code (again).
 
 (...) Also, at that time, I drastically refined the complexity settings ([max-depth](http://eslint.org/docs/rules/
@@ -417,43 +417,70 @@ the grunt task [fixInstrument](https://github.com/ArnaudBuchholz/gpf-js/blob/mas
 
 The code is linted, tested and the code coverage is maximal.
 
-What about the code quality? Can it be quantified or is there any way to objectively measure how much the code will be
-easiy to maintain?
+What about the code quality? Can it be quantified or is there any way to objectively measure how easy the code will be
+to maintain?
 
-[Plato](https://github.com/es-analysis/plato) is a tool designed to visualize the code complexity.
+[Plato](https://github.com/es-analysis/plato) is a tool designed to visualize the
+[code complexity](https://github.com/jared-stilwell/complexity-report).
 
-
-    http://arnaudbuchholz.github.io/gpf/0.1.5-alpha/plato/index.html
-
-
-
-    https://github.com/es-analysis/plato
-    How do you quantify the quality of your code? using code coverage or making sure that your linters do not generate
-    any error? Is it really enough?
-
-    Plato is a tool that go over your library and computes intersting stats such as the maintanability factor or the
-    bugs ratio.
+The [latest analysis](http://arnaudbuchholz.github.io/gpf/0.1.5-alpha/plato/index.html) done on the library shows an
+average maintainability around 73.
 
 ### GitHub
 
-    Do I have to present GitHub?
+Do I have to present [GitHub](https://github.com/)? based on [Git](https://git-scm.com/) this free version control
+platform offers more than just a code repository: one can also store
+[backlog items](https://github.com/ArnaudBuchholz/gpf-js/milestones/Backlog)
+and [issues](https://github.com/ArnaudBuchholz/gpf-js/issues).
 
 ## Lessons learnt
 
-Document your code: you will learn about yourself!
+The code base I have been working on was existing for two years and there was no real functional update to the library
+in 2015 (mostly improvements). As a matter of fact, it was more like a quality year.
+Indeed, the library has benefited from automation, testing and its complexity is now manageable.
 
-Clean code & clean coder lessons
-    [software craftsmanship](https://en.wikipedia.org/wiki/Software_craftsmanship).
+I start this year knowing that I can now focus on features.
 
-Time management (personal time & GitHub)
+There would be much to say but this article is already long and if I take too much time to publish it, my new year
+wishes would be obsolete...
 
-I remember a comic strip I read a long time ago with this cartoonist being asked what he did to learn drawing (and
-being like accused of having a gift). His answer was really funny as he just said that it was a matter of practicing and
-working. Actually, this is the same for any kind of activity.
+So here are the three most important lessons.
 
-"C'est en forgeant que l'on devient forgeron" with the best translation I found being "You have to do your craft".
+### Testing *is* part of the development
 
-This is so true.
+Besides the obvious advantages of TDD, here are the main three:
+
+* If the code is fully tested, there is no fear breaking it. To improve the code quality I had to rewrite huge
+portions of the code. I was safe because of the tests.
+
+* When you develop any API, you often question yourself about the best way to expose a feature.
+If you try to follow the TDD method, you will quickly see the power of experimenting the code even before it is written.
+Indeed, it gives you a taste of how this would work.
+
+* Actually, you may notice that I didn't speak about documentation. I believe that a code that is written the right way
+is self documented. [Code never lies, comments sometimes do](http://blog.codinghorror.com/
+learn-to-read-the-source-luke/). Test cases are a good source of documentation.
+
+### Code quality
+
+I definitely recommend reading [clean code](http://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/
+0132350882) and [clean coder](http://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/) from
+[Robert C. Martin (Uncle Bob)](http://blog.cleancoder.com/).
+
+That was a real eye opener to me.
+
+### Time management
+
+![](https://ArnaudBuchholz.github.io/blog/post/gpf-js presentation/clocks.jpg)
+
+This is a personal project meaning that I have very little time to spend on it.
+I usually work from home when the rest of the house is sleeping but I also take all the little opportunities I can find
+to think about improvements and take notes.
+
+I will never insist too much on the importance of note taking: if it is not written, it does not exist.
+
+Working on GitHub is also a time saver as it is available from the web, I sometimes change one line directly in the
+source because I think of an improvement.
 
 ## What's next?
 
