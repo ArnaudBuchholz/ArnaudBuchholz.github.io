@@ -7,7 +7,7 @@
         <script language="JavaScript">
 
 function on$Ajax () {
-    $.ajax("index.json", {
+    $.ajax("index.json?jquery", {
         dataType: "json",
         complete: function (xhr, textStatus) {
             alert(textStatus);
@@ -23,7 +23,7 @@ function onXHR () {
             alert(xhr.statusText);
         }
     };
-    xhr.open("GET", "index.json", true);
+    xhr.open("GET", "index.json?xhr", true);
     xhr.send();
 }
 
