@@ -6,13 +6,25 @@
         <script language="JavaScript" src="index.js"></script>
         <script language="JavaScript">
 
-function onTest () {
+function on$Ajax () {
     $.ajax("index.json", {
         dataType: "json",
         complete: function (xhr, textStatus) {
             alert(textStatus);
         }
     });
+}
+
+function onXHR () {
+    // Chrome extension runs... in Chrome
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (4 === xhr.readyState) {
+            alert(xhr.statusText);
+        }
+    };
+    xhr.open("GET", "index.json", true);
+    xhr.send();
 }
 
         </script>
@@ -22,6 +34,7 @@ function onTest () {
         <script language="JavaScript">
             injectCode();
         </script>
-        <button onclick="onTest()">Ajax test</button>
+        <button onclick="on$Ajax()">$.ajax test</button>
+        <button onclick="onXHR()">XMLHttpRequest test</button>
     </body>
 </html>
