@@ -15,15 +15,30 @@ function on$Ajax () {
     });
 }
 
+function createCORSRequest(method, url) {
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+        // XHR for Chrome/Firefox/Opera/Safari.
+        xhr.open(method, url, true);
+    } else if (typeof XDomainRequest != "undefined") {
+        // XDomainRequest for IE.
+        xhr = new XDomainRequest();
+        xhr.open(method, url);
+    } else {
+        // CORS not supported.
+        xhr = null;
+    }
+    return xhr;
+}
+
 function onXHR () {
     // Chrome extension runs... in Chrome
-    var xhr = new XMLHttpRequest();
+    var xhr = createCORSRequest("GET", "index.json?xhr");
     xhr.onreadystatechange = function() {
         if (4 === xhr.readyState) {
             alert(xhr.statusText);
         }
     };
-    xhr.open("GET", "index.json?xhr", true);
     xhr.send();
 }
 
