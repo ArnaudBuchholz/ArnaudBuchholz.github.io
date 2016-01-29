@@ -15,25 +15,10 @@ function on$Ajax () {
     });
 }
 
-function createCORSRequest(method, url) {
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-        // XHR for Chrome/Firefox/Opera/Safari.
-        xhr.open(method, url, true);
-    } else if (typeof XDomainRequest != "undefined") {
-        // XDomainRequest for IE.
-        xhr = new XDomainRequest();
-        xhr.open(method, url);
-    } else {
-        // CORS not supported.
-        xhr = null;
-    }
-    return xhr;
-}
-
-function onXHR () {
+function onXHR (corsEnabled) {
     // Chrome extension runs... in Chrome
     var xhr = createCORSRequest("GET", "index.json?xhr");
+    xhr.open("GET", "index.json?xhr", corsEnabled);
     xhr.onreadystatechange = function() {
         if (4 === xhr.readyState) {
             alert(xhr.statusText);
@@ -51,5 +36,6 @@ function onXHR () {
         </script>
         <button onclick="on$Ajax()">$.ajax test</button>
         <button onclick="onXHR()">XMLHttpRequest test</button>
+        <button onclick="onXHR(true)">XMLHttpRequest/CORS test</button>
     </body>
 </html>
