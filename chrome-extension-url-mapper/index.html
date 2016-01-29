@@ -17,7 +17,7 @@ function on$Ajax () {
 
 function onXHR (corsEnabled) {
     // Chrome extension runs... in Chrome
-    var xhr = createCORSRequest("GET", "index.json?xhr");
+    var xhr = new XMLHttpRequest();
     xhr.open("GET", "index.json?xhr", corsEnabled);
     xhr.onreadystatechange = function() {
         if (4 === xhr.readyState) {
