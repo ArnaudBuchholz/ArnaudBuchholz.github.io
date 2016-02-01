@@ -15,13 +15,19 @@ function on$Ajax () {
     });
 }
 
-function onXHR (corsEnabled) {
+function onXHR (corsEnabled, redirected) {
     // Chrome extension runs... in Chrome
-    var xhr = new XMLHttpRequest();
-    if (undefined === corsEnabled) {
-        xhr.open("GET", "index.json?xhr");
+    var xhr = new XMLHttpRequest(),
+        url;
+    if (redirected) {
+        url = "http://buchholz.free.fr/chrome-extension-url-mapper/index.json";
     } else {
-        xhr.open("GET", "index.json?xhr", corsEnabled);
+        url = "index.json?xhr";
+    }
+    if (undefined === corsEnabled) {
+        xhr.open("GET", url);
+    } else {
+        xhr.open("GET", url, corsEnabled);
     }
     xhr.onreadystatechange = function() {
         if (4 === xhr.readyState) {
@@ -41,6 +47,7 @@ function onXHR (corsEnabled) {
         <button onclick="on$Ajax()">$.ajax test</button>
         <button onclick="onXHR()">XMLHttpRequest simple</button>
         <button onclick="onXHR(false)">XMLHttpRequest synchronous</button>
+        <button onclick="onXHR(false, true)">XMLHttpRequest synchronous (redirected)</button>
         <button onclick="onXHR(true)">XMLHttpRequest with CORS</button>
     </body>
 </html>
