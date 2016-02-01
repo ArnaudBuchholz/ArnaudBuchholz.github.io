@@ -18,10 +18,10 @@ function on$Ajax () {
 function onXHR (corsEnabled) {
     // Chrome extension runs... in Chrome
     var xhr = new XMLHttpRequest();
-    if (corsEnabled) {
-        xhr.open("GET", "index.json?xhr", corsEnabled);
-    } else {
+    if (undefined === corsEnabled) {
         xhr.open("GET", "index.json?xhr");
+    } else {
+        xhr.open("GET", "index.json?xhr", corsEnabled);
     }
     xhr.onreadystatechange = function() {
         if (4 === xhr.readyState) {
@@ -39,7 +39,8 @@ function onXHR (corsEnabled) {
             injectCode();
         </script>
         <button onclick="on$Ajax()">$.ajax test</button>
-        <button onclick="onXHR()">XMLHttpRequest test</button>
-        <button onclick="onXHR(true)">XMLHttpRequest/CORS test</button>
+        <button onclick="onXHR()">XMLHttpRequest simple</button>
+        <button onclick="onXHR(false)">XMLHttpRequest synchronous</button>
+        <button onclick="onXHR(true)">XMLHttpRequest with CORS</button>
     </body>
 </html>
