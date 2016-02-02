@@ -1,0 +1,16 @@
+body {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 18px;
+    background-color: white;
+    width: 800px;
+}
+
+li {
+    border-bottom: darkgray dashed 1px;
+    width: 600px;
+}
+
+li button {
+    position: absolute;
+    left: 600px;
+}

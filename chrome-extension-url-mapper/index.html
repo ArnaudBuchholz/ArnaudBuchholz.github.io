@@ -2,13 +2,15 @@
     <head>
         <meta charset="utf-8">
         <title>chrome-extension-url-mapper</title>
+        <link rel="stylesheet" type="text/css" href="index.css" />
         <script language="JavaScript" src="jquery-2.2.0.min.js"></script>
         <script language="JavaScript" src="index.js"></script>
         <script language="JavaScript">
 
-function on$Ajax () {
+function on$Ajax (async) {
     $.ajax("index.json?jquery", {
         dataType: "json",
+        async: async,
         complete: function (xhr, textStatus) {
             alert(textStatus);
         }
@@ -41,13 +43,17 @@ function onXHR (corsEnabled, redirected) {
     </head>
     <body>
         <img src="thumbs-up.png">
+        <img src="thumbs-down.png">
         <script language="JavaScript">
             injectCode();
         </script>
-        <button onclick="on$Ajax()">$.ajax test</button>
-        <button onclick="onXHR()">XMLHttpRequest simple</button>
-        <button onclick="onXHR(false)">XMLHttpRequest synchronous</button>
-        <button onclick="onXHR(false, true)">XMLHttpRequest synchronous (redirected)</button>
-        <button onclick="onXHR(true)">XMLHttpRequest with CORS</button>
+        <ul>
+            <li>Asynchronous $.ajax <button onclick="on$Ajax(true)">test</button></li>
+            <li>Synchronous $.ajax <button onclick="on$Ajax(false)">test</button></li>
+            <li>XMLHttpRequest simple <button onclick="onXHR()">test</button></li>
+            <li>XMLHttpRequest synchronous <button onclick="onXHR(false)">test</button></li>
+            <li>XMLHttpRequest synchronous to a different server<button onclick="onXHR(false, true)">test</button></li>
+            <li>XMLHttpRequest with explicit asynchronous<button onclick="onXHR(true)">test</button></li>
+        </ul>
     </body>
 </html>
