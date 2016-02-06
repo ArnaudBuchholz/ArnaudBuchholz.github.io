@@ -11,8 +11,9 @@
 <!-- Copy from the next line -->
 <div class="summary">
 <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
-GPF-JS has support several hosts. Unfortunately, these platforms do not necessary support all the latest EcmaScript
-features I need. Here is an example of manipulation I had to deal with in order to have dates support ISO format.
+In its design, GPF-JS supports several hosts. Unfortunately, these platforms do not necessary provide all the latest
+EcmaScript features I expect. Here is an example of manipulation I had to deal with in order to have dates support the
+ISO format.
 </div>
 <code class="markdown">
 ## toISOString
@@ -69,7 +70,7 @@ For this very specific method, here is the proposed one:
 [compatibility module](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/compatibility.js)
 The detection, replacement and testing of polyfills is configured by a dictionary (_gpfCompatibility).
 
-A counterpart of this method is that you should be able to initialize a date with it:
+A counterpart of this method is that you should be able to initialize a date with the same format:
 `var date = new Date("2003-01-22T22:45:00.000Z");
 assert(2003 === date.getUTCFullYear());
 assert(0 === date.getUTCMonth());
@@ -83,8 +84,8 @@ are not accepting this format (cscript & rhino).
 
 So, I ended up facing this question: how can I override the Date constructor?
 
-(...) I first thought of using a Date.fromISOString method but I realized that I would then deviate from the 'standard'.
-Indeed, most of modern hosts are supporting this format: I just need to find a way for older hosts.
+(...) I first thought of creating a Date.fromISOString method but I realized that I would then deviate from the
+'standard'. Indeed, most of modern hosts are supporting this format: I just needed to find a way for older hosts.
 
 ## Replacing the Date constructor
 
@@ -94,7 +95,7 @@ Before going any further, there are several constraints to take into account:
 ([Date.UTC](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC) ...)
 * The new constructor must be able to create real Date objects (meaning, the prototype is the same and
 [instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) must work)
-* Objects created with the genuine constructor should also be instanceof the new one (tricky but necessary)
+* Objects created with the genuine constructor should also be instances of the new one (tricky but necessary)
 * Any other construction should work
 
 So the following examples from [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
@@ -112,7 +113,221 @@ Last but not least... how do you safely detect that the Date constructor does no
 
 ## Proof of concept
 
-Here is
+It took me some time to figure out the best way to make it work... Actually, the most difficult part was to call the
+initial Date constructor with a variable number of parameters.
+
+[Download POC](http://arnaudbuchholz.github.io/blog/post/Date%20override/date.js)
+`// Generate one Date before replacing the Date constructor
+var refDate = new Date(1995, 11, 17, 3, 24, 0); // from MDN
+
+// This regular expression both matches & extracts the values
+var _reISOString = new RegExp([
+        "([0-9][0-9][0-9][0-9])",
+        "\\-",
+        "([0-9][0-9])",
+        "\\-",
+        "([0-9][0-9])",
+        "T",
+        "([0-9][0-9])",
+        "\\:",
+        "([0-9][0-9])",
+        "\\:",
+        "([0-9][0-9])",
+        "\\.",
+        "([0-9][0-9][0-9])",
+        "Z"
+    ].join(""));
+
+// Detects ISO representation of a Date
+function _isISOString (value) {
+    if ("string" !== typeof value && value.length !== 24) {
+        return false;
+    }
+    _reISOString.lastIndex = 0;
+    return _reISOString.exec(value);
+}
+
+// Generate the constructor call forwarder function
+var src = [
+        "var C = this,",
+        "    p = arguments,",
+        "    l = p.length;"
+    ],
+    args = [],
+    idx;
+for (idx = 0; idx < 10; ++idx) {
+    args.push("p[" + idx + "]");
+}
+for (idx = 0; idx < 10; ++idx) {
+    src.push("    if (" + idx + " === l) {");
+    src.push("        return new C(" + args.slice(0, idx).join(", ") + ");");
+    src.push("    }");
+}
+var _genericFactory = new Function (src.join("\r\n"));
+
+function _installDate () {
+    var globalContext = this,
+        supported = false;
+    // Test if ISO format supported
+    try {
+        var date = new Date("2003-01-22T22:45:34.075Z");
+        supported = 2003 === date.getUTCFullYear()
+            && 0 === date.getUTCMonth()
+            && 0 === date.getUTCMonth()
+            && 22 === date.getUTCDate()
+            && 22 === date.getUTCHours()
+            && 45 === date.getUTCMinutes()
+            && 34 === date.getUTCSeconds()
+            && 75 === date.getUTCMilliseconds();
+    } catch (e) {}
+    if (!supported) {
+        // Backup original Date constructor
+        var _oldDate = globalContext.Date;
+        // Date override
+        function _newDate () {
+            var values = _isISOString(arguments[0]),
+                idx,
+                args,
+                result;
+            if (values) {
+                args = [];
+                for (idx = 0; idx < 7; ++idx) {
+                    args.push(parseInt(values[idx + 1], 10));
+                }
+                // Month must be corrected (0-based)
+                --args[1];
+                return new _oldDate(_oldDate.UTC.apply(_oldDate.UTC, args));
+            }
+            return _genericFactory.apply(_oldDate, arguments);
+        }
+        // Ensure instanceof
+        _newDate.prototype = _oldDate.prototype;
+        // Copy methods
+        _newDate.UTC = _oldDate.UTC; // should bind
+        // Replace
+        globalContext.Date = _newDate;
+    }
+
+}
+
+// Do some tests
+WScript.Echo(refDate);
+
+var time = Date.UTC(2003,0,22,22,45,34,75);
+var utcDate = new Date(time);
+WScript.Echo(time + " ==> " + utcDate);
+
+_installDate();
+
+WScript.Echo("instanceof is " + (refDate instanceof Date ? "OK" : "KO"));
+
+var isoDate = new Date("2003-01-22T22:45:34.075Z");
+WScript.Echo(isoDate);
+
+var newDate = new Date(1995, 11, 17, 3, 24, 0);
+WScript.Echo(newDate);
+
+var newShortDate = new Date(1995, 11, 17);
+WScript.Echo(newShortDate);
+
+var newTimeDate = new Date(Date.UTC(1995, 11, 17, 3, 24, 0));
+WScript.Echo(newTimeDate);`
+
+I tried the [following approach](http://stackoverflow.com/questions/1606797/
+use-of-apply-with-new-operator-is-this-possible) but it fails miserably with cscript's native constructor.
+
+Then I tried the following - ugly - approach knowing that I would have a maximum of 7 parameters. Again, cscript's Date
+constructor tries to use all the parameters that are passed (even if they are undefined).
+
+`function oldDateFactory (a, b, c, d, e, f, g) {
+  return new _oldDate(a, b, c, d, e, f, g);
+}`
+
+So I had to use my favorite technic: code generation.
+
+(...) I use code generation for many different reasons in gpf-js. I am glad that I found a proper and 'not too complex'
+example to illustrate the concept.
+
+Long story short, I want to build a function that forwards only the right amount of parameters to the constructor.
+Something like:
+
+`function genericFactory () {
+    var ClassToBuild = this,
+        params = arguments,
+        length = params.length;
+    if (0 === length) {
+        return new ClassToBuild();
+    }
+    if (1 === length) {
+        return new ClassToBuild(params[1]);
+    }
+    /* ... */
+}`
+
+But this construction is both repetitive and error prone, so I prefer this version:
+
+`var src = [
+        "var C = this,",
+        "    p = arguments,",
+        "    l = p.length;"
+    ],
+    args = [],
+    idx;
+for (idx = 0; idx < 10; ++idx) {
+    args.push("p[" + idx + "]");
+}
+for (idx = 0; idx < 10; ++idx) {
+    src.push("    if (" + idx + " === l) {");
+    src.push("        return new C(" + args.slice(0, idx).join(", ") + ");");
+    src.push("    }");
+}
+var genericFactory = new Function (src.join("\r\n"));`
+
+It generates:
+
+`var C = this,
+    p = arguments,
+    l = p.length;
+    if (0 === l) {
+        return new C();
+    }
+    if (1 === l) {
+        return new C(p[0]);
+    }
+    if (2 === l) {
+        return new C(p[0], p[1]);
+    }
+    if (3 === l) {
+        return new C(p[0], p[1], p[2]);
+    }
+    if (4 === l) {
+        return new C(p[0], p[1], p[2], p[3]);
+    }
+    if (5 === l) {
+        return new C(p[0], p[1], p[2], p[3], p[4]);
+    }
+    if (6 === l) {
+        return new C(p[0], p[1], p[2], p[3], p[4], p[5]);
+    }
+    if (7 === l) {
+        return new C(p[0], p[1], p[2], p[3], p[4], p[5], p[6]);
+    }
+    if (8 === l) {
+        return new C(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
+    }
+    if (9 === l) {
+        return new C(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]);
+    }`
+
+Code generation has another advantage: I would not be able to write such a function in my library because of ESLint
+validating code complexity. However, for that particular situation, it is mandatory.
+
+On the other hand, it has two drawbacks:
+
+* This code is not processed by coverage tools (it is not detected as 'active code')
+* Furthermore, ESLing generates an error ["The Function constructor is eval"](https://jslinterrors.com/
+the-function-constructor-is-eval) as it represents a security issue if you don't control the content of what is inside
+the source.
 
 </code>
 </div>
