@@ -1,0 +1,119 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Date override
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+<img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
+GPF-JS has support several hosts. Unfortunately, these platforms do not necessary support all the latest EcmaScript
+features I need. Here is an example of manipulation I had to deal with in order to have dates support ISO format.
+</div>
+<code class="markdown">
+## toISOString
+
+The Date [method toISOString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+Date/toISOString) has been introduced with JavaScript 1.8. It returns a string in simplified extended
+[ISO format](https://en.wikipedia.org/wiki/ISO_8601), which is always 24 characters long: YYYY-MM-DDTHH:mm:ss.sssZ.
+The timezone is always zero UTC offset, as denoted by the suffix "Z".
+</code>
+<div style="text-align: center; font-family: Verdana, Arial, Sans-Serif; font-size: xx-large" id="date-override-timer">
+</div>
+<script language="JavaScript">
+window.setInterval(function () {
+    document.getElementById("date-override-timer").innerHTML = (new Date()).toISOString();
+}, 250);
+</script>
+<code class="markdown">
+One advantage of using UTC timezone is that you can store & compare dates.
+This very specific format can also be safely detected and associated to a date value inside a JSON string.
+
+When the method does not exist in the current host, you can easily workaround the issue by:
+
+* Detecting the missing API on Date prototype
+* Implementing a polyfill
+
+Most of the common polyfills are proposed on the [Mozilla Developper Network](https://developer.mozilla.org/en-US/).
+For this very specific method, here is the proposed one:
+
+`if (!Date.prototype.toISOString) {
+  (function() {
+
+    function pad(number) {
+      if (number < 10) {
+        return '0' + number;
+      }
+      return number;
+    }
+
+    Date.prototype.toISOString = function() {
+      return this.getUTCFullYear() +
+        '-' + pad(this.getUTCMonth() + 1) +
+        '-' + pad(this.getUTCDate()) +
+        'T' + pad(this.getUTCHours()) +
+        ':' + pad(this.getUTCMinutes()) +
+        ':' + pad(this.getUTCSeconds()) +
+        '.' + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+        'Z';
+    };
+
+  }());
+}`
+
+(...) In [gpf-js](https://github.com/ArnaudBuchholz/gpf-js), this is done inside the
+[compatibility module](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/compatibility.js)
+The detection, replacement and testing of polyfills is configured by a dictionary (_gpfCompatibility).
+
+A counterpart of this method is that you should be able to initialize a date with it:
+`var date = new Date("2003-01-22T22:45:00.000Z");
+assert(2003 === date.getUTCFullYear());
+assert(0 === date.getUTCMonth());
+assert(22 === date.getUTCDate());
+assert(22 === date.getUTCHours());
+assert(45 === date.getUTCMinutes());
+assert(0 === date.getUTCSeconds());`
+
+But, apparently, some of the hosts supported by [gpf-js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/README.md)
+are not accepting this format (cscript & rhino).
+
+So, I ended up facing this question: how can I override the Date constructor?
+
+(...) I first thought of using a Date.fromISOString method but I realized that I would then deviate from the 'standard'.
+Indeed, most of modern hosts are supporting this format: I just need to find a way for older hosts.
+
+## Replacing the Date constructor
+
+Before going any further, there are several constraints to take into account:
+
+* The new constructor function object should expose the same methods as the Date one
+([Date.UTC](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC) ...)
+* The new constructor must be able to create real Date objects (meaning, the prototype is the same and
+[instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) must work)
+* Objects created with the genuine constructor should also be instanceof the new one (tricky but necessary)
+* Any other construction should work
+
+So the following examples from [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+Date) should work
+
+`var today = new Date();
+var birthday = new Date('December 17, 1995 03:24:00');
+var birthday = new Date('1995-12-17T03:24:00');
+var birthday = new Date(1995, 11, 17);
+var birthday = new Date(1995, 11, 17, 3, 24, 0);
+
+var unixTimestamp = Date.now(); // in milliseconds`
+
+Last but not least... how do you safely detect that the Date constructor does not accept the ISO format?
+
+## Proof of concept
+
+Here is
+
+</code>
+</div>
+</div>
