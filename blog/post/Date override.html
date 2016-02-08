@@ -11,17 +11,17 @@
 <!-- Copy from the next line -->
 <div class="summary">
 <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
-In its design, GPF-JS supports several hosts. Unfortunately, these platforms do not necessary provide all the latest
-EcmaScript features I expect. Here is an example of manipulation I had to deal with in order to have dates support the
-ISO format.
+In its design, GPF-JS supports several hosts. Unfortunately, these platforms do not necessary provide all the expected
+EcmaScript features. Here is an example of manipulation I had to deal with in order to implement the ISO 8601 support
+for dates.
 </div>
 <code class="markdown">
 ## toISOString
 
 The Date [method toISOString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
 Date/toISOString) has been introduced with JavaScript 1.8. It returns a string in simplified extended
-[ISO format](https://en.wikipedia.org/wiki/ISO_8601), which is always 24 characters long: YYYY-MM-DDTHH:mm:ss.sssZ.
-The timezone is always zero UTC offset, as denoted by the suffix "Z".
+[ISO 8601 format](https://en.wikipedia.org/wiki/ISO_8601), which is always 24 characters long: YYYY-MM-DDTHH:mm:ss.sssZ.
+The time zone is always zero UTC offset, as denoted by the suffix "Z".
 </code>
 <div style="text-align: center; font-family: Verdana, Arial, Sans-Serif; font-size: xx-large" id="date-override-timer">
 </div>
@@ -31,16 +31,16 @@ window.setInterval(function () {
 }, 250);
 </script>
 <code class="markdown">
-One advantage of using UTC timezone is that you can store & compare dates.
-This very specific format can also be safely detected and associated to a date value inside a JSON string.
+The advantage of using strings to represent dates in the UTC time zone is that you can store and compare them simply.
+Moreover, this very specific format can be safely detected and associated to a date value inside a JSON string.
 
 When the method does not exist in the current host, you can easily workaround the issue by:
 
 * Detecting the missing API on Date prototype
 * Implementing a polyfill
 
-Most of the common polyfills are proposed on the [Mozilla Developper Network](https://developer.mozilla.org/en-US/).
-For this very specific method, here is the proposed one:
+Most of the common polyfills are proposed on the [Mozilla Developer Network](https://developer.mozilla.org/en-US/).
+Here is the proposed one:
 
 `if (!Date.prototype.toISOString) {
   (function() {
@@ -95,8 +95,8 @@ Before going any further, there are several constraints to take into account:
 ([Date.UTC](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC) ...)
 * The new constructor must be able to create real Date objects (meaning, the prototype is the same and
 [instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) must work)
-* Objects created with the genuine constructor should also be instances of the new one (tricky but necessary)
-* Any other construction should work
+* Objects created with the genuine constructor should also be instances of the new one
+* Any supported use of the constructor must work
 
 So the following examples from [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
 Date) should work
@@ -109,7 +109,7 @@ var birthday = new Date(1995, 11, 17, 3, 24, 0);
 
 var unixTimestamp = Date.now(); // in milliseconds`
 
-Last but not least... how do you safely detect that the Date constructor does not accept the ISO format?
+Last but not least... how do I safely detect that the Date constructor does not accept the ISO 8601 format?
 
 ## Proof of concept
 
@@ -187,8 +187,7 @@ function _installDate () {
         function _newDate () {
             var values = _isISOString(arguments[0]),
                 idx,
-                args,
-                result;
+                args;
             if (values) {
                 args = [];
                 for (idx = 0; idx < 7; ++idx) {
@@ -233,22 +232,32 @@ WScript.Echo(newShortDate);
 var newTimeDate = new Date(Date.UTC(1995, 11, 17, 3, 24, 0));
 WScript.Echo(newTimeDate);`
 
+### Using constructor result
+
+You might notice that the new Date constructor always returns genuine Date objects. This is possible because a
+constructor function can return any object instead of the one allocated by new.
+
+This is a funky feature that saved my life today !
+
+### Calling a constructor with a variable number of parameters
+
 I tried the [following approach](http://stackoverflow.com/questions/1606797/
 use-of-apply-with-new-operator-is-this-possible) but it fails miserably with cscript's native constructor.
 
 Then I tried the following - ugly - approach knowing that I would have a maximum of 7 parameters. Again, cscript's Date
-constructor tries to use all the parameters that are passed (even if they are undefined).
+constructor tries to use all the parameters that are passed (even if they are undefined... which leads to
+[NaN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN)).
 
 `function oldDateFactory (a, b, c, d, e, f, g) {
   return new _oldDate(a, b, c, d, e, f, g);
 }`
 
-So I had to use my favorite technic: code generation.
+So I had to use my favorite tool: code generation.
 
-(...) I use code generation for many different reasons in gpf-js. I am glad that I found a proper and 'not too complex'
-example to illustrate the concept.
+(...) In gpf-js, code generation is used for different reasons. But this is the first time I find a proper and 'not too
+complex' example to illustrate the concept.
 
-Long story short, I want to build a function that forwards only the right amount of parameters to the constructor.
+Long story short, I wanted to write a function that forwards only the right amount of parameters to the constructor.
 Something like:
 
 `function genericFactory () {
@@ -261,10 +270,14 @@ Something like:
     if (1 === length) {
         return new ClassToBuild(params[1]);
     }
+    if (2 === length) {
+        return new ClassToBuild(params[1], params[2]);
+    }
     /* ... */
 }`
 
-But this construction is both repetitive and error prone, so I prefer this version:
+But I had to repeat the pattern for up to seven parameters... which is error prone.
+So I built this version (and used up to ten parameters):
 
 `var src = [
         "var C = this,",
@@ -283,7 +296,7 @@ for (idx = 0; idx < 10; ++idx) {
 }
 var genericFactory = new Function (src.join("\r\n"));`
 
-It generates:
+The result is a function with the following body:
 
 `var C = this,
     p = arguments,
@@ -319,15 +332,20 @@ It generates:
         return new C(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]);
     }`
 
-Code generation has another advantage: I would not be able to write such a function in my library because of ESLint
-validating code complexity. However, for that particular situation, it is mandatory.
+I would not be able to write such a function in my library because of ESLint that checks for code complexity.
+But, for that particular situation, it is mandatory. The advantage here is that ESLint does not see the final code.
 
 On the other hand, it has two drawbacks:
 
-* This code is not processed by coverage tools (it is not detected as 'active code')
+* This code is not considered by the coverage tool
 * Furthermore, ESLing generates an error ["The Function constructor is eval"](https://jslinterrors.com/
-the-function-constructor-is-eval) as it represents a security issue if you don't control the content of what is inside
-the source.
+the-function-constructor-is-eval) as it represents a security issue. It is true if you don't control the content of
+the body...  which is not the case here.
+
+### instanceof
+
+Surprisingly, setting the right prototype on the new Date constructor is enough to make
+[instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) work.
 
 </code>
 </div>
