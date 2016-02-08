@@ -68,8 +68,7 @@ function _installDate () {
         function _newDate () {
             var values = _isISOString(arguments[0]),
                 idx,
-                args,
-                result;
+                args;
             if (values) {
                 args = [];
                 for (idx = 0; idx < 7; ++idx) {
