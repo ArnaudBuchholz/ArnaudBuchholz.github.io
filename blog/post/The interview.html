@@ -16,14 +16,15 @@ what are the hot topics, which frameworks you should be looking at...
 Last year, I was in charge a building a team of JavaScript developers to work on an AngularJS application.
 I would like to share with you this experience in a fictionalized story based on real facts.
 </div>
-<code class="markdown">
+<code class="markdown" id="TheInterview">
 That day, the HR specialist came to me with a good news.
 
-<div><div>
-- Arnaud, we have a new candidate: he got a score of 180% on xxxx. Would you mind having a quick review of his test
-source that we can arrange an interview?
+<dialog>
+- Arnaud, we have a new candidate: he got a score of 180% on xxxx. Would you mind having a quick review
+of his test source that we can arrange an interview?
 - Sure, I will look at that. But please remember that a good score does not mean a good candidate.
 HR Specialist: No worries, just let me know if it's a go
+</dialog>
 
 In this company, any potential candidate is first assessed using a remote test. Two questions must be resolved with
 a JavaScript program that the candidate must write. The questions were quite complex (it took me more time
@@ -56,5 +57,23 @@ function runTheInterviewCode () {
 </script>
 
 </code>
+<script language="javascript">
+var code = document.body.querySelector("code#TheInterview");
+[].slice.call(code.querySelectorAll("dialog"), 0).forEach(function (dialog) {
+    var ul = document.createElement("ul"),
+        ul;
+    ul.className = "dialog";
+    code.insertBefore(ul, dialog);
+    dialog.innerHTML.split("- ").forEach(function (line) {
+        if (line.trim()) {
+            var li = document.createElement("li");
+            li.innerHTML = line;
+            ul.appendChild(li);
+        }
+    });
+    code.removeChild(dialog);
+});
+code.innerHTML = code.innerHTML.split("%BDD%").join(BDD);
+</script>
 </div>
 </div>
