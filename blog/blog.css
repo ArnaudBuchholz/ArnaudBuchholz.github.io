@@ -331,3 +331,36 @@ div.summary {
 .hide {
     display: none;
 }
+
+/* Dialog */
+
+ul.dialog {
+    font-style: italic;
+    list-style-type: none;
+    padding-left: 4px;
+}
+
+ul.dialog li {
+    border-radius: 8px;
+    width: 500px;
+    border: solid 1px black;
+    background-color: #F0F0F0;
+    padding: 8px;
+    margin: 4px;
+    margin-bottom: 30px;
+}
+
+ul.dialog li:before {
+    content: " ";
+    position: relative;
+    display: inline-block;
+    left: 0px;
+    width: 30px;
+    height: 30px;
+    border: solid #5a8f00 1px;
+}
+
+ul.dialog li.me {
+    border-left: solid 1px black;
+}
+
