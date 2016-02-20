@@ -332,7 +332,7 @@ div.summary {
     display: none;
 }
 
-/* Dialog */
+/* Dialog, inspired from http://nicolasgallagher.com/pure-css-speech-bubbles/demo/ */
 
 div.dialog {
     padding: 4px;
