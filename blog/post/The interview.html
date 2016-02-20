@@ -19,7 +19,7 @@ I would like to share with you this experience in a fictionalized story based on
 <code class="markdown" id="TheInterview">
 That day, the HR specialist came to me with a good news.
 
-<dialog>
+<dialog start="left">
 - Arnaud, we have a new candidate: he got a score of 180% on xxxx. Would you mind having a quick review
 of his test source that we can arrange an interview?
 - Sure, I will look at that. But please remember that a good score does not mean a good candidate.
@@ -60,20 +60,27 @@ function runTheInterviewCode () {
 <script language="javascript">
 var code = document.body.querySelector("code#TheInterview");
 [].slice.call(code.querySelectorAll("dialog"), 0).forEach(function (dialog) {
-    var ul = document.createElement("ul"),
-        ul;
-    ul.className = "dialog";
-    code.insertBefore(ul, dialog);
+    var right = dialog.getAttribute("start") !== "left",
+        dialogDiv = document.createElement("div");
+    dialogDiv.className = "dialog";
+    code.insertBefore(dialogDiv, dialog);
     dialog.innerHTML.split("- ").forEach(function (line) {
         if (line.trim()) {
-            var li = document.createElement("li");
-            li.innerHTML = line;
-            ul.appendChild(li);
+            var balloonDiv = document.createElement("div"),
+                contentdiv;
+            if (right) {
+                balloonDiv.className = "balloon right";
+            } else {
+                balloonDiv.className = "balloon left";
+            }
+            contentP = balloonDiv.appendChild(document.createElement("p"));
+            contentP.innerHTML = line;
+            dialogDiv.appendChild(balloonDiv);
+            right = !right;
         }
     });
     code.removeChild(dialog);
 });
-code.innerHTML = code.innerHTML.split("%BDD%").join(BDD);
 </script>
 </div>
 </div>
