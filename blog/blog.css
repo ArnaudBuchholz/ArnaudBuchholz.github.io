@@ -334,33 +334,66 @@ div.summary {
 
 /* Dialog */
 
-ul.dialog {
-    font-style: italic;
-    list-style-type: none;
-    padding-left: 4px;
+div.dialog {
+    padding: 4px;
 }
 
-ul.dialog li {
+div.dialog div.balloon {
+    position: relative;
+    margin: 0 0 2em;
+    border: 4px solid #5A7ECE;
+    text-align: center;
+    background: #fff;
     border-radius: 8px;
     width: 500px;
-    border: solid 1px black;
-    background-color: #F0F0F0;
-    padding: 8px;
-    margin: 4px;
-    margin-bottom: 30px;
 }
 
-ul.dialog li:before {
-    content: " ";
-    position: relative;
-    display: inline-block;
-    left: 0px;
+div.dialog div.balloon.left {
+    margin-left: 50px;
+}
+
+div.dialog div.balloon:before {
+    content: "";
+    position: absolute;
+    z-index: 10;
+    bottom: -21px;
+    left: 50px;
     width: 30px;
-    height: 30px;
-    border: solid #5a8f00 1px;
+    height: 15px;
+    border-style: solid;
+    border-width: 0 4px 4px 0;
+    border-color: #5A7ECE;
+    background: transparent;
+    border-bottom-right-radius: 80px 50px;
+    display: block;
 }
 
-ul.dialog li.me {
-    border-left: solid 1px black;
+div.dialog div.left:before {
+    left: 400px;
+    border-width: 0 0 4px 4px;
+    border-bottom-right-radius: 0px 0px;
+    border-bottom-left-radius: 80px 50px;
 }
 
+div.dialog div.balloon:after {
+    content: "";
+    position: absolute;
+    z-index: 10;
+    bottom: -21px;
+    left: 50px;
+    width: 10px;
+    height: 15px;
+    border-style: solid;
+    border-width: 0 4px 4px 0;
+    border-color: #5A7ECE;
+    background: transparent;
+    border-bottom-right-radius: 40px 50px;
+    display: block;
+}
+
+div.dialog div.left:after {
+    left: 420px;
+    border-width: 0 0 4px 4px;
+    border-bottom-right-radius: 0px 0px;
+    border-bottom-left-radius: 40px 50px;
+}
