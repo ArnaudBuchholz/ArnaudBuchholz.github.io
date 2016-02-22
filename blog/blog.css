@@ -15,9 +15,7 @@
     width: 16px;
     height: 16px;
     display: inline-block;
-    background-image: url("gear.png");
-    background-position: right top;
-    background-repeat: no-repeat;
+    background: url("gear.png") right top no-repeat;
     margin-right: 4px;
 }
 
@@ -37,7 +35,7 @@ h3.post-title:before {
     content: "";
     position: absolute;
     display: block;
-    left: 0px;
+    left: 0;
     top: 6px;
     width: 16px;
     height: 16px;
@@ -67,33 +65,19 @@ div.post-body {
 }
 
 div.post-body a {
-    background-image: url("link.png");
-    background-position: left bottom;
-    background-repeat: no-repeat;
+    background: url("link.png") left bottom no-repeat;
     padding-left: 16px;
     color: #5A7ECE;
     text-decoration: none;
-    /*border: solid 1px white;*/
-    /*border-radius: 4px;*/
 }
-
-/*div.post-body a:visited {*/
-    /*color: black;*/
-/*}*/
 
 div.post-body a:hover {
     color: #32356E;
     text-decoration: underline;
-    /*transition: all 250ms ease;*/
-    /*background-color: #C0C0C0;*/
-    /*color: white;*/
-    /*border: solid 1px black;*/
 }
 
 div.post-body h2 {
-    background-image: url("arrow-down.png");
-    background-position: right bottom;
-    background-repeat: no-repeat;
+    background: url("arrow-down.png") right bottom no-repeat;
     font-family: verdana, arial, sans-serif;
     font-size: 18px;
     color: #5A7ECE;
@@ -103,9 +87,7 @@ div.post-body h2 {
 }
 
 div.post-body h3 {
-    background-image: url("arrow-right.png");
-    background-position: left bottom;
-    background-repeat: no-repeat;
+    background: url("arrow-right.png") left bottom no-repeat;
     padding-left: 16px;
     font-family: verdana, arial, sans-serif;
     font-size: 16px;
@@ -114,9 +96,7 @@ div.post-body h3 {
 }
 
 div.post-body h4 {
-    background-image: url("arrow-right.png");
-    background-position: 16px bottom;
-    background-repeat: no-repeat;
+    background: url("arrow-right.png") 16px bottom no-repeat;
     padding-left: 32px;
     font-size: 14px;
     color: #5A7ECE;
@@ -136,9 +116,7 @@ div.post-body div.note {
     border-bottom-right-radius: 5px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background-image: url("message.png");
-    background-position: left top;
-    background-repeat: no-repeat;
+    background: url("message.png") left top no-repeat;
     padding: 4px;
     padding-left: 36px;
     min-height: 32px;
@@ -179,8 +157,8 @@ code {
     line-height: normal;
     display: none;
     position: relative;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
 }
 
 code div.gpf-jshint {
@@ -278,10 +256,10 @@ div.summary {
     font-size: 14px;
     min-height: 140px;
     text-shadow:
-        0px 1px 0 #F0F0F0,
-        0px -1px 0 #F0F0F0,
-        1px 0px 0 #F0F0F0,
-        -1px 0px 0 #F0F0F0,
+        0 1px 0 #F0F0F0,
+        0 -1px 0 #F0F0F0,
+        1px 0 0 #F0F0F0,
+        -1px 0 0 #F0F0F0,
         1px 1px 0 #C0C0C0;
 }
 
@@ -371,7 +349,7 @@ div.dialog div.balloon:before {
 div.dialog div.left:before {
     left: 400px;
     border-width: 0 0 4px 4px;
-    border-bottom-right-radius: 0px 0px;
+    border-bottom-right-radius: 0 0;
     border-bottom-left-radius: 80px 50px;
 }
 
@@ -394,7 +372,7 @@ div.dialog div.balloon:after {
 div.dialog div.left:after {
     left: 420px;
     border-width: 0 0 4px 4px;
-    border-bottom-right-radius: 0px 0px;
+    border-bottom-right-radius: 0 0;
     border-bottom-left-radius: 40px 50px;
 }
 
