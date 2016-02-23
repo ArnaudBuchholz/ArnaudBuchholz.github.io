@@ -19,9 +19,9 @@ I would like to share with you this experience in a fictionalized story based on
 <code class="markdown" id="TheInterview">
 That day, the HR specialist came to me with a good news.
 
-<dialog start="left">
-- Arnaud, we have a new candidate: he got a score of 180% on xxxx. Would you mind having a quick review
-of his test source that we can arrange an interview?
+<dialog start="right">
+- Arnaud, we have a new candidate: he got a score of 180% on [codility](https://codility.com/).
+Would you mind having a quick review of his test source that we can arrange an interview?
 - Sure, I will look at that. But please remember that a good score does not mean a good candidate.
 - No worries, just let me know if it's a go
 </dialog>
@@ -67,14 +67,17 @@ var code = document.body.querySelector("code#TheInterview");
     dialog.innerHTML.split("- ").forEach(function (line) {
         if (line.trim()) {
             var balloonDiv = document.createElement("div"),
-                contentdiv;
+                content,
+                code;
             if (right) {
                 balloonDiv.className = "balloon right";
             } else {
                 balloonDiv.className = "balloon left";
             }
-            contentP = balloonDiv.appendChild(document.createElement("p"));
-            contentP.innerHTML = line;
+            content = balloonDiv.appendChild(document.createElement("p"));
+            code = content.appendChild(document.createElement("code"));
+            code.className = "markdown";
+            code.innerHTML = line;
             dialogDiv.appendChild(balloonDiv);
             right = !right;
         }
