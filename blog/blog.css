@@ -326,7 +326,7 @@ div.dialog div.balloon {
     width: 500px;
 }
 
-div.dialog div.balloon.left {
+div.dialog div.balloon.right {
     margin-left: 50px;
 }
 
@@ -346,7 +346,7 @@ div.dialog div.balloon:before {
     display: block;
 }
 
-div.dialog div.left:before {
+div.dialog div.right:before {
     left: 400px;
     border-width: 0 0 4px 4px;
     border-bottom-right-radius: 0 0;
@@ -369,7 +369,7 @@ div.dialog div.balloon:after {
     display: block;
 }
 
-div.dialog div.left:after {
+div.dialog div.right:after {
     left: 420px;
     border-width: 0 0 4px 4px;
     border-bottom-right-radius: 0 0;
@@ -389,16 +389,15 @@ div.dialog div p:after {
 }
 
 div.dialog div p {
-    text-align: right;
-    padding-right: 4px;
-}
-
-div.dialog div.left p {
+    margin: 8px;
     text-align: left;
-    padding-left: 4px;
 }
 
-div.dialog div.left p:after {
+div.dialog div.right p {
+    text-align: right;
+}
+
+div.dialog div.right p:after {
     left: 401px;
 }
 
