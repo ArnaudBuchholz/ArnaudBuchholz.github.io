@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.88</p>
+      <p class="stat">65.61</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">395</p>
+      <p class="stat">39</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">57.58</p>
+      <p class="stat">11.75</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.59</p>
+      <p class="stat">0.13</p>
     </div>
   </div>
 </div>
@@ -91,218 +91,17 @@
   <div class="row">
     <textarea id="file-source" class="col-md-12">/*#ifndef(UMD)*/
 &quot;use strict&quot;;
-/*global _gpfGenericFactory*/ // Create any class by passing the right number of parameters
-/*global _gpfMainContext*/ // Main context object
-/*exported _gpfArraySlice*/ // Slice an array-like object
-/*exported _gpfIsISO8601String*/ // Check if the string is an ISO 8601 representation of a date
-/*exported _gpfJsCommentsRegExp*/ // Find all JavaScript comments
+/*global _gpfCompatibility*/ // Polyfills for missing &#039;standard&#039; methods
 /*#endif*/
-
-/*eslint-disable no-proto*/ // Used for compatibility reasons
-/*jshint -W103*/
-
-var _gpfArrayPrototypeSlice = Array.prototype.slice;
-
-/**
- * Slice an array-like object
- *
- * @param {Object} array array-like parameter (arguments, Array)
- * @param {Number} from
- * @param {Number} [to=undefined] to
- * @return {Array}
- */
-function _gpfArraySlice (array, from, to) {
-    return _gpfArrayPrototypeSlice.apply(array, [from || 0, to || array.length + 1]);
-}
-
-function _pad (number) {
-    if (10 &gt; number) {
-        return &quot;0&quot; + number;
-    }
-    return number;
-}
-
-//region Polyfills for missing &#039;standard&#039; methods
-
-var _gpfCompatibility = {
-
-    Array: {
-        on: Array.prototype,
-
-        // Introduced with JavaScript 1.6
-        every: function (callback) {
-            var thisArg = arguments[1],
-                len = this.length,
-                idx;
-            for (idx = 0; idx &lt; len; ++idx) {
-                if (!callback.apply(thisArg, [this[idx], idx, this])) {
-                    return false;
-                }
-            }
-            return true;
-        },
-
-        // Introduced with JavaScript 1.6
-        filter: function (callback) {
-            var thisArg = arguments[1],
-                result = [],
-                len = this.length,
-                idx,
-                item;
-            for (idx = 0; idx &lt; len; ++idx) {
-                item = this[idx];
-                if (callback.apply(thisArg, [this[idx], idx, this])) {
-                    result.push(item);
-                }
-            }
-            return result;
-        },
-
-        // Introduced with JavaScript 1.6
-        forEach: function (callback) {
-            var thisArg = arguments[1],
-                len = this.length,
-                idx;
-            for (idx = 0; idx &lt; len; ++idx) {
-                callback.apply(thisArg, [this[idx], idx, this]);
-            }
-        },
-
-        // Introduced with JavaScript 1.5
-        indexOf: function (searchElement) {
-            var fromIndex = arguments[1],
-                index = fromIndex || 0,
-                thisLength = this.length;
-            while (index &lt; thisLength) {
-                if (this[index] === searchElement) {
-                    return index;
-                }
-                ++index;
-            }
-            return -1;
-        },
-
-        // Introduced with JavaScript 1.6
-        map: function (callback) {
-            var thisArg = arguments[1],
-                thisLength = this.length,
-                result = new Array(thisLength),
-                index;
-            for (index = 0; index &lt; thisLength; ++index) {
-                result[index] = callback.apply(thisArg, [this[index], index, this]);
-            }
-            return result;
-        },
-
-        // Introduced with JavaScript 1.8
-        reduce: function (callback) {
-            var initialValue = arguments[1],
-                thisLength = this.length,
-                index = 0,
-                value;
-            if (undefined === initialValue) {
-                value = this[index++];
-            } else {
-                value = initialValue;
-            }
-            for (; index &lt; thisLength; ++index) {
-                value = callback(value, this[index], index, this);
-            }
-            return value;
-        }
-
-    },
-
-    Function: {
-        on: Function.prototype,
-
-        // Introduced with JavaScript 1.8.5
-        bind: function (thisArg) {
-            var me = this,
-                prependArgs = _gpfArraySlice(arguments, 1);
-            return function () {
-                var args = _gpfArraySlice(arguments, 0);
-                me.apply(thisArg, prependArgs.concat(args));
-            };
-        }
-
-    },
-
-    Object: {
-        on: Object,
-
-        create: (function () {
-            function Temp () {}
-            return function (O) {
-                Temp.prototype = O;
-                var obj = new Temp();
-                Temp.prototype = null;
-                /* istanbul ignore if */ // NodeJS does not use __proto__
-                if (!obj.__proto__) {
-                    obj.__proto__ = O;
-                }
-                return obj;
-            };
-        }()),
-
-        getPrototypeOf: function (object) {
-            // May break if the constructor has been tampered with
-            return object.__proto__ || object.constructor.prototype;
-        }
-
-    },
-
-    String: {
-        on: String.prototype,
-
-        // Introduced with JavaScript 1.8.1
-        trim: (function () {
-            var rtrim = new RegExp(&quot;^[\\s\uFEFF\xA0]+|[\\s\uFEFF\xA0]+$&quot;, &quot;g&quot;);
-            return function () {
-                return this.replace(rtrim, &quot;&quot;);
-            };
-        }())
-
-    },
-
-    Date: {
-        on: Date.prototype,
-
-        // Introduced with JavaScript 1.8
-        toISOString: function () {
-            return [
-                this.getUTCFullYear(),
-                &quot;-&quot;,
-                _pad(this.getUTCMonth() + 1),
-                &quot;-&quot;,
-                _pad(this.getUTCDate()),
-                &quot;T&quot;,
-                _pad(this.getUTCHours()),
-                &quot;:&quot;,
-                _pad(this.getUTCMinutes()),
-                &quot;:&quot;,
-                _pad(this.getUTCSeconds()),
-                &quot;.&quot;,
-                (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5),
-                &quot;Z&quot;
-            ].join(&quot;&quot;);
-        }
-
-    }
-
-};
 
 (function () {
     var type,
-        compatibleMethods;
+        overrides;
 
     function install (dictionary, methods) {
         for (var name in methods) {
             /* istanbul ignore else */
             if (methods.hasOwnProperty(name)) {
-                if (name === &quot;on&quot;) {
-                    continue;
-                }
                 /* istanbul ignore if */ // NodeJS environment already contains all methods
                 if (undefined === dictionary[name]) {
                     dictionary[name] = methods[name];
@@ -314,177 +113,22 @@ var _gpfCompatibility = {
     for (type in _gpfCompatibility) {
         /* istanbul ignore else */
         if (_gpfCompatibility.hasOwnProperty(type)) {
-            compatibleMethods = _gpfCompatibility[type];
-            install(compatibleMethods.on, compatibleMethods);
+            overrides = _gpfCompatibility[type];
+            var on = overrides.on;
+            if (overrides.methods) {
+                install(on.prototype, overrides.methods);
+            }
+            if (overrides.statics) {
+                install(on, overrides.statics);
+            }
         }
     }
 
 }());
-
-//endregion
-
-//region Function name
-
-// Get the name of a function if bound to the call
-var _gpfJsCommentsRegExp =  new RegExp(&quot;//.*$|/\\*(?:[^\\*]*|\\*[^/]*)\\*/&quot;, &quot;gm&quot;);
-function _gpfGetFunctionName () {
-    // Use simple parsing
-    /*jshint validthis:true*/
-    var functionSource = Function.prototype.toString.apply(this), //eslint-disable-line no-invalid-this
-        functionKeywordPos = functionSource.indexOf(&quot;function&quot;),
-        parameterListStartPos = functionSource.indexOf(&quot;(&quot;, functionKeywordPos);
-    return functionSource
-            .substr(functionKeywordPos + 9, parameterListStartPos - functionKeywordPos - 9)
-            .replace(_gpfJsCommentsRegExp, &quot;&quot;) // remove comments
-            .trim();
-}
-
-// Handling function name properly
-/* istanbul ignore if */ // NodeJS exposes Function.prototype.name
-if ((function () {
-    /* istanbul ignore next */ // Will never be evaluated
-    function functionName () {}
-    return functionName.name !== &quot;functionName&quot;;
-})()) {
-
-    Function.prototype.compatibleName = _gpfGetFunctionName;
-
-} else {
-
-    /**
-     * Return function name
-     *
-     * @return {String}
-     */
-    Function.prototype.compatibleName = function () {
-        return this.name;
-    };
-
-}
-
-//endregion
-
-//region Date override
-
-var _gpfISO8601RegExp = new RegExp([
-    &quot;^([0-9][0-9][0-9][0-9])&quot;,
-    &quot;\\-&quot;,
-    &quot;([0-9][0-9])&quot;,
-    &quot;\\-&quot;,
-    &quot;([0-9][0-9])&quot;,
-    &quot;(?:T&quot;,
-    &quot;([0-9][0-9])&quot;,
-    &quot;\\:&quot;,
-    &quot;([0-9][0-9])&quot;,
-    &quot;\\:&quot;,
-    &quot;([0-9][0-9])&quot;,
-    &quot;(?:\\.&quot;,
-    &quot;([0-9][0-9][0-9])&quot;,
-    &quot;Z)?)?$&quot;
-].join(&quot;&quot;));
-
-/**
- * Check if the string is an ISO 8601 representation of a date
- * Supports long and short syntax.
- *
- * @param {String} value
- * @returns {Number[]} 7 numbers composing the date (Month is 0-based)
- */
-function _gpfIsISO8601String (value) {
-    var matchResult,
-        matchedDigits,
-        result,
-        len,
-        idx;
-    if (&quot;string&quot; === typeof value) {
-        _gpfISO8601RegExp.lastIndex = 0;
-        matchResult = _gpfISO8601RegExp.exec(value);
-        if (matchResult) {
-            result = [];
-            len = matchResult.length - 1; // 0 is the recognized string
-            for (idx = 0; idx &lt; len; ++idx) {
-                matchedDigits = matchResult[idx + 1];
-                if (matchedDigits) {
-                    result.push(parseInt(matchResult[idx + 1], 10));
-                } else {
-                    result.push(0);
-                }
-            }
-            // Month must be corrected (0-based)
-            --result[1];
-            // Some validation
-            if (result[1] &lt; 12
-                &amp;&amp; result[2] &lt; 32
-                &amp;&amp; result[3] &lt; 24
-                &amp;&amp; result[4] &lt; 60
-                &amp;&amp; result[5] &lt; 60) {
-                return result;
-            }
-        }
-    }
-}
-
-// Backup original Date constructor
-var _GpfGenuineDate = _gpfMainContext.Date;
-
-/**
- * Date constructor supporting ISO 8601 format
- *
- * @returns {Date}
- */
-function _GpfDate () {
-    var firstArgument = arguments[0],
-        values = _gpfIsISO8601String(firstArgument);
-    if (values) {
-        return new _GpfGenuineDate(_GpfGenuineDate.UTC.apply(_GpfGenuineDate.UTC, values));
-    }
-    return _gpfGenericFactory.apply(_GpfGenuineDate, arguments);
-}
-
-// Copy members
-[
-    &quot;prototype&quot;, // Ensure instanceof
-    &quot;UTC&quot;,
-    &quot;parse&quot;,
-    &quot;now&quot;
-].forEach(function (member) {
-    _GpfDate[member] = _GpfGenuineDate[member];
-});
-
-(function () {
-    var supported = false;
-    // Test if ISO 8601 format variations are supported
-    try {
-        var longDate = new Date(&quot;2003-01-22T22:45:34.075Z&quot;),
-            shortDate = new Date(&quot;2003-01-22&quot;);
-        supported = 2003 === longDate.getUTCFullYear()
-            &amp;&amp; 0 === longDate.getUTCMonth()
-            &amp;&amp; 22 === longDate.getUTCDate()
-            &amp;&amp; 22 === longDate.getUTCHours()
-            &amp;&amp; 45 === longDate.getUTCMinutes()
-            &amp;&amp; 34 === longDate.getUTCSeconds()
-            &amp;&amp; 75 === longDate.getUTCMilliseconds()
-            &amp;&amp; 2003 === shortDate.getUTCFullYear()
-            &amp;&amp; 0 === shortDate.getUTCMonth()
-            &amp;&amp; 22 === shortDate.getUTCDate();
-    } catch (e) {} //eslint-disable-line no-empty
-    /* istanbul ignore if */ // NodeJS environment supports ISO 8601 format
-    if (!supported) {
-        // Replace constructor with new one
-        _gpfMainContext.Date = _GpfDate;
-    }
-
-}());
-
-//endregion
 
 /*#ifndef(UMD)*/
 
-gpf.internals._gpfArraySlice = _gpfArraySlice;
 gpf.internals._gpfCompatibility = _gpfCompatibility;
-gpf.internals._gpfGetFunctionName = _gpfGetFunctionName;
-gpf.internals._gpfIsISO8601String = _gpfIsISO8601String;
-gpf.internals._GpfDate = _GpfDate;
 
 /*#endif*/</textarea>
   </div>
