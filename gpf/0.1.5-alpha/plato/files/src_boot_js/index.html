@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">76.74</p>
+      <p class="stat">75.18</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">678</p>
+      <p class="stat">718</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">40.09</p>
+      <p class="stat">43.10</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">2.72</p>
+      <p class="stat">3.06</p>
     </div>
   </div>
 </div>
@@ -99,10 +99,12 @@
 /*exported _GPF_HOST_WSCRIPT*/ // gpf.HOST_WSCRIPT
 /*exported _gpfAssert*/ // Assertion method
 /*exported _gpfAsserts*/ // Multiple assertion method
+/*exported _gpfCompatibility*/ // Polyfills for missing &#039;standard&#039; methods
 /*exported _gpfContext*/ // Resolve contextual string
 /*exported _gpfDosPath*/ // DOS-like path
 /*exported _gpfEmptyFunc*/ // An empty function
 /*exported _gpfExit*/ // Exit function
+/*exported _gpfGenericFactory*/ // Create any class by passing the right number of parameters
 /*exported _gpfGetBootstrapMethod*/ // Create a method that contains a bootstrap (called only once)
 /*exported _gpfHost*/ // Host type
 /*exported _gpfIgnore*/ // Helper to remove unused parameter warning
@@ -234,7 +236,14 @@ var
      *
      * @type {Object}
      */
-    _gpfNodePath;
+    _gpfNodePath,
+
+    /**
+     * Polyfills for missing &#039;standard&#039; methods
+     *
+     * @type {Object}
+     */
+    _gpfCompatibility = {};
 
 /**
  * Translate the parameter into a valid scope
@@ -345,6 +354,32 @@ function _gpfGetBootstrapMethod (path, methodFactory) {
     };
 }
 
+/**
+ * Create any class by passing the right number of parameters
+ *
+ * @this {Function} constructor to invoke
+ */
+var _gpfGenericFactory = (function () {
+    // Generate the constructor call forwarder function
+    var src = [
+            &quot;var C = this,&quot;,
+            &quot;    p = arguments,&quot;,
+            &quot;    l = p.length;&quot;
+        ],
+        args = [],
+        idx,
+        Func = Function;
+    for (idx = 0; idx &lt; 10; ++idx) {
+        args.push(&quot;p[&quot; + idx + &quot;]&quot;);
+    }
+    for (idx = 0; idx &lt; 10; ++idx) {
+        src.push(&quot;    if (&quot; + idx + &quot; === l) {&quot;);
+        src.push(&quot;        return new C(&quot; + args.slice(0, idx).join(&quot;, &quot;) + &quot;);&quot;);
+        src.push(&quot;    }&quot;);
+    }
+    return new Func(src.join(&quot;\r\n&quot;));
+}());
+
 /* Host detection */
 /* istanbul ignore next */
 
@@ -356,7 +391,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
     _gpfDosPath = true;
     _gpfMainContext = function () {
         return this;
-    }.apply(null, []);
+    }.call(null);
     _gpfExit = function (code) {
         WScript.Quit(code);
     };
@@ -396,7 +431,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
     _gpfDosPath = false;
     _gpfMainContext = function () {
         return this;
-    }.apply(null, []);
+    }.call(null);
     _gpfExit = function (code) {
         java.lang.System.exit(code);
     };
@@ -493,8 +528,13 @@ if (&quot;undefined&quot; !== typeof WScript) {
         var source = srcFileName.split(&quot;/&quot;).pop().split(&quot;.&quot;)[0],
             test = {
                 &quot;sources&quot;:          &quot;gpf.sources&quot;,
-                &quot;compatibility&quot;:    &quot;Function.prototype.compatibleName&quot;,
+                &quot;array&quot;:            &quot;_gpfCompatibility.Array&quot;,
+                &quot;date&quot;:             &quot;_gpfCompatibility.Date&quot;,
+                &quot;function&quot;:         &quot;_gpfCompatibility.Function&quot;,
+                &quot;object&quot;:           &quot;_gpfCompatibility.Object&quot;,
+                &quot;string&quot;:           &quot;_gpfCompatibility.String&quot;,
                 &quot;promise&quot;:          &quot;gpf.Promise&quot;,
+                &quot;compatibility&quot;:    &quot;gpf.internals._gpfCompatibility&quot;,
                 &quot;constants&quot;:        &quot;gpf.HOST_UNKNOWN&quot;,
                 &quot;events&quot;:           &quot;gpf.events&quot;,
                 &quot;include&quot;:          &quot;gpf.web.include&quot;

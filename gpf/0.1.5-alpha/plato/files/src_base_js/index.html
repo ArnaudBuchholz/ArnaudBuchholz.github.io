@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">72.32</p>
+      <p class="stat">72.28</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">461</p>
+      <p class="stat">476</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">46.06</p>
+      <p class="stat">47.91</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.82</p>
+      <p class="stat">1.96</p>
     </div>
   </div>
 </div>
@@ -96,6 +96,7 @@
 /*global _gpfExit*/ // Exit function
 /*global _gpfHost*/ // Host type
 /*global _gpfIgnore*/ // Helper to remove unused parameter warning
+/*global _gpfIsISO8601String*/ // Check if the string is an ISO 8601 representation of a date
 /*global _gpfWebWindow*/ // Browser window object
 /*exported _gpfExtend*/ // gpf.extend
 /*exported _gpfIsArrayLike*/ // Return true if the parameter looks like an array
@@ -158,7 +159,7 @@ function _gpfArrayForEach (array, callback, thisArg) {
     var index,
         length = array.length;
     for (index = 0; index &lt; length; ++index) {
-        callback.apply(thisArg, [array[index], index, array]);
+        callback.call(thisArg, array[index], index, array);
     }
 }
 
@@ -176,7 +177,7 @@ function _gpfObjectForEach (object, callback, thisArg) {
     for (var property in object) {
         /* istanbul ignore else */
         if (object.hasOwnProperty(property)) {
-            callback.apply(thisArg, [object[property], property, object]);
+            callback.call(thisArg, object[property], property, object);
         }
     }
 }
@@ -244,20 +245,29 @@ var
             &quot;&amp;&quot;: &quot;&amp;amp;&quot;,
             &quot;&lt;&quot;: &quot;&amp;lt;&quot;,
             &quot;&gt;&quot;: &quot;&amp;gt;&quot;
-        },
-
-        html: {
-            &quot;&amp;&quot;: &quot;&amp;amp;&quot;,
-            &quot;&lt;&quot;: &quot;&amp;lt;&quot;,
-            &quot;&gt;&quot;: &quot;&amp;gt;&quot;,
-            \u00E9: &quot;&amp;eacute;&quot;,
-            \u00E8: &quot;&amp;egrave;&quot;,
-            \u00EA: &quot;&amp;ecirc;&quot;,
-            \u00E1: &quot;&amp;aacute;&quot;,
-            \u00E0: &quot;&amp;agrave;&quot;
         }
 
     };
+
+(function () {
+    var escapes = _gpfStringEscapes,
+        html = {};
+    // Copy XML
+    _gpfObjectForEach(escapes.xml, function (escape, key) {
+        html[key] = escape;
+    });
+    // Adds accents escape
+    _gpfObjectForEach({
+        224: &quot;&amp;agrave;&quot;,
+        225: &quot;&amp;aacute;&quot;,
+        232: &quot;&amp;egrave;&quot;,
+        233: &quot;&amp;eacute;&quot;,
+        234: &quot;&amp;ecirc;&quot;
+    }, function (escape, key) {
+        html[String.fromCharCode(key)] = escape;
+    });
+    escapes.html = html;
+}());
 
 /**
  * Make the string content compatible with lang
@@ -368,12 +378,17 @@ var
         },
 
         string: function (value, valueType, defaultValue) {
+            if (value instanceof Date) {
+                return value.toISOString();
+            }
             _gpfIgnore(valueType, defaultValue);
             return value.toString();
         },
 
         object: function (value, valueType, defaultValue) {
-            _gpfIgnore(value, valueType, defaultValue);
+            if (defaultValue instanceof Date &amp;&amp; &quot;string&quot; === valueType &amp;&amp; _gpfIsISO8601String(value)) {
+                return new Date(value);
+            }
         }
     };
 
