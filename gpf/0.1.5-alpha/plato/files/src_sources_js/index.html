@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">70.88</p>
+      <p class="stat">70.69</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">101</p>
+      <p class="stat">113</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">6.96</p>
+      <p class="stat">6.86</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.22</p>
+      <p class="stat">0.24</p>
     </div>
   </div>
 </div>
@@ -100,18 +100,30 @@
     }
 
     var _sources = [
-    //  &quot;boot&quot;,                                             // Boot (host detection)
-    //  &quot;loader&quot;,                                           // Loader for source version
+    //  &quot;boot&quot;,                                             // Boot (host detection + non-UMD loader)
+        &quot;assert&quot;,                                           // Assertion helpers
+        &quot;noconflict&quot;,                                       //                          gpf.noConflict()
+        &quot;arraylike&quot;,                                        //                         gpf.isArrayLike()
+        &quot;foreach&quot;,                                          //                             gpf.forEach()
+        &quot;extend&quot;,                                           //                              gpf.extend()
+//      &quot;host/browser&quot;,                                     // Browser host adapter
+//      &quot;host/nodejs&quot;,                                      // NodeJS host adapter
+//      &quot;host/phantomjs&quot;,                                   // PhantomJS host adapter
+//      &quot;host/rhino&quot;,                                       // Rhino host adapter
+//      &quot;host/wscript&quot;,                                     // MS Script host adapter
+        &quot;compatibility&quot;,                                    // Polyfills installer
         &quot;compatibility/array&quot;,                              // Array methods polyfill
+        &quot;factory&quot;,                                          //                      _gpfGenericFactory()
         &quot;compatibility/date&quot;,                               // Date methods polyfill
         &quot;compatibility/function&quot;,                           // Function methods polyfill
         &quot;compatibility/object&quot;,                             // Object methods polyfill
         &quot;compatibility/string&quot;,                             // String methods polyfill
         &quot;compatibility/promise&quot;,                            // Promise polyfill              gpf.Promise
-        &quot;compatibility&quot;,                                    // Polyfills installer
+        &quot;context&quot;,                                          //                             gpf.context()
         &quot;constants&quot;,                                        // Constants
         &quot;events&quot;,                                           // Event management         gpf.events.Event
         &quot;include&quot;,                                          // WEB include               gpf.web.include
+        &quot;bootstrap&quot;,                                        // Helper to bootstrap methods
         &quot;base&quot;,                                             // General helpers
         &quot;function&quot;,                                         // Function builder
         &quot;like&quot;,                                             // Comparison helper                gpf.like

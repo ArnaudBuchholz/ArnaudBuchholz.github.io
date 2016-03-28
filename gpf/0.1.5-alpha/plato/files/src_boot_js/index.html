@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">75.18</p>
+      <p class="stat">76.84</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">718</p>
+      <p class="stat">526</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">43.10</p>
+      <p class="stat">31.42</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">3.06</p>
+      <p class="stat">2.20</p>
     </div>
   </div>
 </div>
@@ -97,15 +97,9 @@
 /*exported _GPF_HOST_RHINO*/ // gpf.HOST_RHINO
 /*exported _GPF_HOST_UNKNOWN*/ // gpf.HOST_UNKNOWN
 /*exported _GPF_HOST_WSCRIPT*/ // gpf.HOST_WSCRIPT
-/*exported _gpfAssert*/ // Assertion method
-/*exported _gpfAsserts*/ // Multiple assertion method
-/*exported _gpfCompatibility*/ // Polyfills for missing &#039;standard&#039; methods
-/*exported _gpfContext*/ // Resolve contextual string
 /*exported _gpfDosPath*/ // DOS-like path
 /*exported _gpfEmptyFunc*/ // An empty function
 /*exported _gpfExit*/ // Exit function
-/*exported _gpfGenericFactory*/ // Create any class by passing the right number of parameters
-/*exported _gpfGetBootstrapMethod*/ // Create a method that contains a bootstrap (called only once)
 /*exported _gpfHost*/ // Host type
 /*exported _gpfIgnore*/ // Helper to remove unused parameter warning
 /*exported _gpfInBrowser*/ // The current host is a browser like
@@ -164,17 +158,6 @@ var
     // Main context object
     _gpfMainContext = this, //eslint-disable-line consistent-this
     /*jshint +W040*/
-
-    /**
-     * To implement gpf.noConflict(), we need to keep the previous content of gpf.
-     * Makes sense only for the following hosts:
-     * - phantomjs
-     * - browser
-     * - unknown
-     *
-     * @type {undefined|Object}
-     */
-    _gpfConflictingSymbol,
 
     /**
      * Helper to ignore unused parameter
@@ -236,14 +219,7 @@ var
      *
      * @type {Object}
      */
-    _gpfNodePath,
-
-    /**
-     * Polyfills for missing &#039;standard&#039; methods
-     *
-     * @type {Object}
-     */
-    _gpfCompatibility = {};
+    _gpfNodePath;
 
 /**
  * Translate the parameter into a valid scope
@@ -284,101 +260,6 @@ var
     _gpfSyncReadForBoot;
 
 /*#endif*/
-
-function _getObjectProperty (parent, name) {
-    /* istanbul ignore else */
-    if (undefined !== parent) {
-        return parent[name];
-    }
-}
-
-function _getOrCreateObjectProperty (parent, name) {
-    var result = parent[name];
-    if (undefined === result) {
-        result = parent[name] = {};
-    }
-    return result;
-}
-
-/**
- * Resolve the provided contextual path and returns the result
- *
- * @param {String[]} path array of identifiers
- * @param {Boolean} [createMissingParts=false] createMissingParts if the path leads to undefined parts and
- * createMissingParts is true, it allocates a default empty object
- *
- * @return {*|undefined}
- * - when path is undefined, it returns the current host higher object
- * - when path is &quot;gpf&quot; it returns the GPF object
- */
-function _gpfContext (path, createMissingParts) {
-    var reducer,
-        rootContext;
-    if (createMissingParts) {
-        reducer = _getOrCreateObjectProperty;
-    } else {
-        reducer = _getObjectProperty;
-    }
-    if (path[0] === &quot;gpf&quot;) {
-        rootContext = gpf;
-        path = path.slice(1);
-    } else {
-        rootContext = _gpfMainContext;
-    }
-    return path.reduce(reducer, rootContext);
-}
-
-/**
- * Create a method that contains a bootstrap (called only once)
- *
- * @param {String} path method path
- * @param {Function} methodFactory Must return a function (it receives the path as parameter)
- * @return {function}
- * @closure
- */
-function _gpfGetBootstrapMethod (path, methodFactory) {
-    path = path.split(&quot;.&quot;);
-    var name = path.pop(),
-        namespace = _gpfContext(path, true),
-        mustBootstrap = true,
-        method;
-    // The initial method is protected as the caller may keep its reference
-    namespace[name] = function () {
-        /* istanbul ignore else */ // Because that&#039;s the idea (shouldn&#039;t be called twice)
-        if (mustBootstrap) {
-            method = methodFactory(path);
-            namespace[name] = method;
-            mustBootstrap = false;
-        }
-        return method.apply(this, arguments);
-    };
-}
-
-/**
- * Create any class by passing the right number of parameters
- *
- * @this {Function} constructor to invoke
- */
-var _gpfGenericFactory = (function () {
-    // Generate the constructor call forwarder function
-    var src = [
-            &quot;var C = this,&quot;,
-            &quot;    p = arguments,&quot;,
-            &quot;    l = p.length;&quot;
-        ],
-        args = [],
-        idx,
-        Func = Function;
-    for (idx = 0; idx &lt; 10; ++idx) {
-        args.push(&quot;p[&quot; + idx + &quot;]&quot;);
-    }
-    for (idx = 0; idx &lt; 10; ++idx) {
-        src.push(&quot;    if (&quot; + idx + &quot; === l) {&quot;);
-        src.push(&quot;        return new C(&quot; + args.slice(0, idx).join(&quot;, &quot;) + &quot;);&quot;);
-        src.push(&quot;    }&quot;);
-    }
-    return new Func(src.join(&quot;\r\n&quot;));
-}());
 
 /* Host detection */
 /* istanbul ignore next */
@@ -525,9 +406,24 @@ if (&quot;undefined&quot; !== typeof WScript) {
         script.language = &quot;javascript&quot;;
         script.src = srcFileName;
         script = _gpfWebHead.insertBefore(script, _gpfWebHead.firstChild);
+        function testSymbol (symbol) {
+            try {
+                /*jshint -W054*/
+                return new Function(&quot;return &quot; + symbol)(); //eslint-disable-line no-new-func
+                /*jshint +W054*/
+            } catch (e) {
+                return undefined;
+            }
+        }
         var source = srcFileName.split(&quot;/&quot;).pop().split(&quot;.&quot;)[0],
-            test = {
+            symbol = {
                 &quot;sources&quot;:          &quot;gpf.sources&quot;,
+                &quot;assert&quot;:           &quot;gpf.assert&quot;,
+                &quot;noconflict&quot;:       &quot;gpf.noConflict&quot;,
+                &quot;arraylike&quot;:        &quot;gpf.isArrayLike&quot;,
+                &quot;foreach&quot;:          &quot;gpf.forEach&quot;,
+                &quot;extend&quot;:           &quot;gpf.extend&quot;,
+                &quot;factory&quot;:          &quot;gpf.internals._gpfGenericFactory&quot;,
                 &quot;array&quot;:            &quot;_gpfCompatibility.Array&quot;,
                 &quot;date&quot;:             &quot;_gpfCompatibility.Date&quot;,
                 &quot;function&quot;:         &quot;_gpfCompatibility.Function&quot;,
@@ -535,12 +431,16 @@ if (&quot;undefined&quot; !== typeof WScript) {
                 &quot;string&quot;:           &quot;_gpfCompatibility.String&quot;,
                 &quot;promise&quot;:          &quot;gpf.Promise&quot;,
                 &quot;compatibility&quot;:    &quot;gpf.internals._gpfCompatibility&quot;,
+                &quot;context&quot;:          &quot;gpf.context&quot;,
                 &quot;constants&quot;:        &quot;gpf.HOST_UNKNOWN&quot;,
                 &quot;events&quot;:           &quot;gpf.events&quot;,
                 &quot;include&quot;:          &quot;gpf.web.include&quot;
-            }[source].split(&quot;.&quot;);
+            }[source];
+        if (undefined === symbol) {
+            console.error(&quot;No symbol to test for: &quot; + source);
+        }
         function wait () {
-            if (undefined === _gpfContext(test)) {
+            if (undefined === testSymbol(symbol)) {
                 // Use an aggressive setting as it will be used only for the non UMD version
                 setTimeout(wait, 0);
             } else {
@@ -559,25 +459,6 @@ if (&quot;undefined&quot; !== typeof WScript) {
 
 _gpfMainContext.gpf = {
     internals: {} // To support testable internals
-};
-
-/*#else*/
-
-_gpfConflictingSymbol = _gpfMainContext.gpf;
-
-/* istanbul ignore next */ // web only
-/**
- * Relinquish control of the gpf variable.
- *
- * @return {Object} current GPF instance
- */
-gpf.noConflict = function () {
-    if (undefined === _gpfConflictingSymbol) {
-        delete _gpfMainContext.gpf;
-    } else {
-        _gpfMainContext.gpf = _gpfConflictingSymbol;
-    }
-    return gpf;
 };
 
 /*#endif*/
@@ -607,22 +488,6 @@ gpf.version = function () {
  */
 gpf.host = function () {
     return _gpfHost;
-};
-
-/**
- * Resolve the provided contextual path and returns the result
- *
- * @param {String} path Dot separated list of identifiers
- *
- * @return {*|undefined}
- * - when path is undefined, it returns the current host higher object
- * - when path is &quot;gpf&quot; it returns the GPF object
- */
-gpf.context = function (path) {
-    if (undefined === path) {
-        return _gpfMainContext;
-    }
-    return _gpfContext(path.split(&quot;.&quot;));
 };
 
 /*#ifndef(UMD)*/
@@ -686,63 +551,6 @@ if (!gpf.loaded) {
 
 /*#endif*/
 
-var _gpfAssert,
-    _gpfAsserts;
-
-/*#ifdef(DEBUG)*/
-
-// DEBUG specifics
-
-/* istanbul ignore next */ // no ASSERT should pop during tests
-/**
- * Assertion helper
- *
- * @param {Boolean} condition May be a truthy value
- * @param {String} message Assertion message (to explain the violation if it fails)
- */
-_gpfAssert = function (condition, message) {
-    if (undefined === message) {
-        message = &quot;_gpfAssert with no message&quot;;
-        condition = false;
-    }
-    if (!condition) {
-        console.warn(&quot;ASSERTION FAILED: &quot; + message);
-        throw gpf.Error.assertionFailed({
-            message: message
-        });
-    }
-};
-
-/**
- * Batch assertion helper
- *
- * @param {Object} messages Dictionary of messages (value being the condition)
- */
-_gpfAsserts = function (messages) {
-    for (var message in messages) {
-        /* istanbul ignore else */
-        if (messages.hasOwnProperty(message)) {
-            _gpfAssert(messages[message], message);
-        }
-    }
-};
-
-/* istanbul ignore if */ // Because tested in DEBUG
-if (!_gpfAssert) {
-
-/*#else*/
-
-    /*gpf:nop*/ _gpfAssert = _gpfEmptyFunc;
-    /*gpf:nop*/ _gpfAsserts = _gpfEmptyFunc;
-
-/*#endif*/
-
-/*#ifdef(DEBUG)*/
-
-}
-
-/*#endif*/
-
 /*#ifndef(UMD)*/
 
 /**
@@ -772,8 +580,8 @@ if (_gpfSyncReadForBoot) {
     _gpfAsyncLoadForBoot = function (name, callback) {
         callback(_gpfSyncReadForBoot(name));
     };
-} else {
-    _gpfAssert(undefined !== _gpfAsyncLoadForBoot, &quot;A method must be defined to load sources&quot;);
+} else if (undefined === _gpfAsyncLoadForBoot) {
+    throw new Error(&quot;A method must be defined to load sources&quot;);
 }
 
 _gpfAsyncLoadForBoot(gpfSourcesPath + &quot;sources.js&quot;, function (sourcesContent) {
