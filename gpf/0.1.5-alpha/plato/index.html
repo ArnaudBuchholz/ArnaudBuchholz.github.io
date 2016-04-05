@@ -13,7 +13,7 @@
   <![endif]-->
 
   <script>
-    var __options = {"title":"GPF-JS","flags":{"complexity":{"logicalor":true,"switchcase":true,"forin":false,"trycatch":false,"newmi":true},"jshint":{"globals":{"Promise":false,"gpf":true,"gpfSourcesPath":true},"options":{"bitwise":false,"curly":true,"eqeqeq":true,"forin":true,"immed":true,"latedef":true,"newcap":true,"noarg":true,"noempty":true,"nonew":true,"plusplus":false,"regexp":true,"undef":true,"strict":true,"trailing":true,"asi":false,"boss":false,"debug":false,"eqnull":false,"es5":false,"esnext":false,"evil":false,"expr":false,"funcscope":false,"globalstrict":false,"iterator":false,"lastsemic":false,"laxbreak":true,"laxcomma":false,"loopfunc":false,"multistr":false,"onecase":false,"proto":false,"regexdash":false,"scripturl":false,"smarttabs":false,"shadow":false,"sub":false,"supernew":false,"validthis":false,"browser":true,"couch":false,"devel":true,"dojo":false,"jquery":false,"mootools":false,"node":true,"nonstandard":false,"prototypejs":false,"rhino":false,"wsh":true,"nomen":false,"onevar":false,"passfail":false,"white":false,"unused":true,"maxerr":100,"camelcase":true,"indent":4,"quotmark":"double","maxstatements":15,"maxparams":3,"maxdepth":4,"maxcomplexity":6,"maxlen":120}}}}
+    var __options = {"title":"GPF-JS","flags":{"complexity":{"logicalor":true,"switchcase":true,"forin":false,"trycatch":false,"newmi":true},"jshint":{"globals":{"Promise":false,"gpf":true,"gpfSourcesPath":true},"options":{"bitwise":false,"curly":true,"eqeqeq":true,"forin":true,"immed":true,"latedef":true,"newcap":false,"noarg":true,"noempty":true,"nonew":true,"plusplus":false,"regexp":true,"undef":true,"strict":true,"trailing":true,"asi":false,"boss":false,"debug":false,"eqnull":false,"es5":false,"esnext":false,"evil":false,"expr":false,"funcscope":false,"globalstrict":false,"iterator":false,"lastsemic":false,"laxbreak":true,"laxcomma":false,"loopfunc":false,"multistr":false,"onecase":false,"proto":false,"regexdash":false,"scripturl":false,"smarttabs":false,"shadow":false,"sub":false,"supernew":false,"validthis":false,"browser":true,"couch":false,"devel":true,"dojo":false,"jquery":false,"mootools":false,"node":true,"nonstandard":false,"prototypejs":false,"rhino":false,"wsh":true,"nomen":false,"onevar":false,"passfail":false,"white":false,"unused":true,"maxerr":100,"camelcase":true,"indent":4,"quotmark":"double","maxstatements":15,"maxparams":3,"maxdepth":4,"maxcomplexity":6,"maxlen":120}}}}
   </script>
 
   <link href="assets/css/vendor/bootstrap.css" rel="stylesheet">
@@ -49,11 +49,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Total/Average Lines <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code" data-original-title="SLOC" data-container="body"></i></h2>
-      <p class="stat">7518 / 159</p>
+      <p class="stat">7352 / 141</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Average Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index" data-container="body"></i></a></h2>
-      <p class="stat">73.59</p>
+      <p class="stat">75.57</p>
     </div>
   </div>
 </div>
@@ -121,9 +121,9 @@
           <span class="col-md-4 file"><a class="file-link" href="./files/src_boot_js/index.html">src/boot.js</a></span>
         <span class="col-md-8 file-chart js-file-chart"
               data-lint="0"
-              data-sloc="526"
-              data-bugs="2.20"
-              data-complexity="28"
+              data-sloc="306"
+              data-bugs="0.88"
+              data-complexity="11"
           ></span>
         </div>
       </li>
@@ -131,12 +131,64 @@
       <li class="col-md-12">
         <div class="row">
           <span class="fade-left fadeout visible-large"></span>
-          <span class="col-md-4 file"><a class="file-link" href="./files/src_sources_js/index.html">src/sources.js</a></span>
+          <span class="col-md-4 file"><a class="file-link" href="./files/src_host_browser_js/index.html">src/host/browser.js</a></span>
         <span class="col-md-8 file-chart js-file-chart"
               data-lint="0"
-              data-sloc="113"
-              data-bugs="0.24"
-              data-complexity="3"
+              data-sloc="26"
+              data-bugs="0.06"
+              data-complexity="4"
+          ></span>
+        </div>
+      </li>
+      
+      <li class="col-md-12">
+        <div class="row">
+          <span class="fade-left fadeout visible-large"></span>
+          <span class="col-md-4 file"><a class="file-link" href="./files/src_host_nodejs_js/index.html">src/host/nodejs.js</a></span>
+        <span class="col-md-8 file-chart js-file-chart"
+              data-lint="0"
+              data-sloc="21"
+              data-bugs="0.02"
+              data-complexity="2"
+          ></span>
+        </div>
+      </li>
+      
+      <li class="col-md-12">
+        <div class="row">
+          <span class="fade-left fadeout visible-large"></span>
+          <span class="col-md-4 file"><a class="file-link" href="./files/src_host_phantomjs_js/index.html">src/host/phantomjs.js</a></span>
+        <span class="col-md-8 file-chart js-file-chart"
+              data-lint="0"
+              data-sloc="22"
+              data-bugs="0.03"
+              data-complexity="2"
+          ></span>
+        </div>
+      </li>
+      
+      <li class="col-md-12">
+        <div class="row">
+          <span class="fade-left fadeout visible-large"></span>
+          <span class="col-md-4 file"><a class="file-link" href="./files/src_host_rhino_js/index.html">src/host/rhino.js</a></span>
+        <span class="col-md-8 file-chart js-file-chart"
+              data-lint="0"
+              data-sloc="34"
+              data-bugs="0.11"
+              data-complexity="2"
+          ></span>
+        </div>
+      </li>
+      
+      <li class="col-md-12">
+        <div class="row">
+          <span class="fade-left fadeout visible-large"></span>
+          <span class="col-md-4 file"><a class="file-link" href="./files/src_host_wscript_js/index.html">src/host/wscript.js</a></span>
+        <span class="col-md-8 file-chart js-file-chart"
+              data-lint="0"
+              data-sloc="35"
+              data-bugs="0.11"
+              data-complexity="2"
           ></span>
         </div>
       </li>
@@ -313,6 +365,19 @@
       <li class="col-md-12">
         <div class="row">
           <span class="fade-left fadeout visible-large"></span>
+          <span class="col-md-4 file"><a class="file-link" href="./files/src_compatibility_timeout_js/index.html">src/compatibility/timeout.js</a></span>
+        <span class="col-md-8 file-chart js-file-chart"
+              data-lint="0"
+              data-sloc="102"
+              data-bugs="0.48"
+              data-complexity="8"
+          ></span>
+        </div>
+      </li>
+      
+      <li class="col-md-12">
+        <div class="row">
+          <span class="fade-left fadeout visible-large"></span>
           <span class="col-md-4 file"><a class="file-link" href="./files/src_context_js/index.html">src/context.js</a></span>
         <span class="col-md-8 file-chart js-file-chart"
               data-lint="0"
@@ -329,9 +394,22 @@
           <span class="col-md-4 file"><a class="file-link" href="./files/src_constants_js/index.html">src/constants.js</a></span>
         <span class="col-md-8 file-chart js-file-chart"
               data-lint="0"
-              data-sloc="189"
-              data-bugs="0.60"
-              data-complexity="4"
+              data-sloc="198"
+              data-bugs="0.63"
+              data-complexity="5"
+          ></span>
+        </div>
+      </li>
+      
+      <li class="col-md-12">
+        <div class="row">
+          <span class="fade-left fadeout visible-large"></span>
+          <span class="col-md-4 file"><a class="file-link" href="./files/src_scope_js/index.html">src/scope.js</a></span>
+        <span class="col-md-8 file-chart js-file-chart"
+              data-lint="0"
+              data-sloc="20"
+              data-bugs="0.03"
+              data-complexity="3"
           ></span>
         </div>
       </li>
@@ -449,19 +527,6 @@
               data-sloc="128"
               data-bugs="0.40"
               data-complexity="7"
-          ></span>
-        </div>
-      </li>
-      
-      <li class="col-md-12">
-        <div class="row">
-          <span class="fade-left fadeout visible-large"></span>
-          <span class="col-md-4 file"><a class="file-link" href="./files/src_timeout_js/index.html">src/timeout.js</a></span>
-        <span class="col-md-8 file-chart js-file-chart"
-              data-lint="0"
-              data-sloc="102"
-              data-bugs="0.48"
-              data-complexity="8"
           ></span>
         </div>
       </li>
