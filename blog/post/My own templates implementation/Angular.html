@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        <title>Angular sample</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <script language="JavaScript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script language="JavaScript">
+
+var myApp = angular.module('myApp',[]);
+
+myApp.controller('SampleController', ['$scope', function($scope) {
+    $scope.title = "Angular example";
+    $scope.id="test";
+    $scope.checked=true;
+    $scope.label="it works";
+}]);
+
+        </script>
+    </head>
+    <body ng-controller="SampleController">
+        <h1>{{title}}</h1>
+        <input id="{{id}}" type="checkbox" ng-checked="checked"><label for="{{id}}" title="{{label}}">{{label}}</label>
+    </body>
+</html>
