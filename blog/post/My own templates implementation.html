@@ -78,14 +78,18 @@ Several solution exists:
 
 ### Build HTML nodes using script
 
-The browsers offers an API to manipulate the
+The browsers offers a complete API to manipulate the
 [Document Object Model](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model).
-It virtually allows you
-to do anything you would like to do
+It allows you to programmatically fill the page the same way you would do with HTML code.
 
+**PROS**
+* Fast
+* Full control on the generation
 
-Pro: fast, full control on generation
-Cons: long to develop, not easily maintanable, hard to evolve
+**CONS**
+* Longer to develop
+* Not easily maintainable
+* Hard to read and evolve
 
 [Code sample](http://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Code.html)
 `var data = {
