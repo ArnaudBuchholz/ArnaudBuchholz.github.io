@@ -78,18 +78,21 @@ Several solution exists:
 
 ### Build HTML nodes using script
 
-The browsers offers a complete API to manipulate the
+Browsers now offer a complete (and standardized) API to manipulate the
 [Document Object Model](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model).
-It allows you to programmatically fill the page the same way you would do with HTML code.
+It allows you to programmatically fill the page the same way you would do with static HTML code.
 
 **PROS**
 * Fast
 * Full control on the generation
+* Can be debugged
 
 **CONS**
-* Longer to develop
+* Complex and exhaustive API
+* Takes more time to develop
+* Long code for simple output
+* Code is quite cryptic and hard to evolve
 * Not easily maintainable
-* Hard to read and evolve
 
 [Code sample](http://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Code.html)
 `var data = {
@@ -111,12 +114,20 @@ label.innerHTML = data.label;`
 
 ### Use a template engine
 
-Pro: quite fast (depends on the engine), less code to develop
-Cons: depends on the engine and its api, its ease of use and flexibility
+Template engines usually rely on a static description of the final output.
+The documented syntax proposes placeholders to represent substitution points.
+Depending on the engine, there might be several ways to inject the values.
+They are designed to be fast, offer manipulation helpers (such as enumeration) and extensive bindings (with
+typing, transformation...).
 
-Most of the time they are designed to be fast, offer enumeration
-helpers and contextual bindings but they also come with conventions
-and concepts
+**PROS**
+* Quite fast (depends on the engine)
+* Less code to develop
+* Rapid learning curve
+
+**CONS**
+* Each engine has its conventions and api
+* Debugging
 
 [Mustache sample](http://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Mustache.html)
 `var html = Mustache.to_html(document.getElementById("tpl").innerHTML, {
