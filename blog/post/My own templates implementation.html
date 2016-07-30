@@ -60,8 +60,8 @@ ArnaudBuchholz/gpf-js/blob/7362fbc4685b5aefecb856aa5f984f59e7497411/src/sources.
 sources.json), all entered manually (with lots of errors leading to "what is going on?",
 "oh no, nothing works again...").
 
-At some point I deserve a little bit of control on this file content not only to enforce its syntax but also to have a
-better view on what it contains.
+At some point I deserve a little bit of [control](https://en.wikipedia.org/wiki/Control_freak) on this file content not
+only to enforce its syntax but also to have a better view on what it contains.
 
 So I decided it would be nice to develop an HTML view on this one.
 
@@ -72,13 +72,15 @@ Updating will come later.
 Hence a basic [HTML page](https://github.com/ArnaudBuchholz/gpf-js/blob/master/sources.html) was created to display a
 table (I know... not really responsive but this is not required for now).
 
-Loading the JSON file using an AJAX request and iterate over its content is easy but then...
+Loading the JSON file using an [AJAX request](https://github.com/ArnaudBuchholz/gpf-js/blob/master/res/xhr.js) and
+iterating over its content is easy but then...
 
 Several solution exists:
 
 ### Build HTML nodes using script
 
-Browsers now offer a complete (and standardized) API to manipulate the
+Browsers [now](http://www.newyorker.com/tech/elements/the-evolution-of-the-web-in-a-blink) offer a complete
+(and standardized) API to manipulate the
 [Document Object Model](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model).
 It allows you to programmatically fill the page the same way you would do with static HTML code.
 
@@ -88,7 +90,7 @@ It allows you to programmatically fill the page the same way you would do with s
 * Can be debugged
 
 **CONS**
-* Complex and exhaustive API
+* Exhaustive but complex API
 * Takes more time to develop
 * Long code for simple output
 * Code is quite cryptic and hard to evolve
@@ -123,10 +125,11 @@ typing, transformation...).
 **PROS**
 * Quite fast (depends on the engine)
 * Less code to develop
+* Easy to maintain
 * Rapid learning curve
 
 **CONS**
-* Each engine has its conventions and api
+* Each engine has its conventions and API
 * Debugging
 
 [Mustache sample](http://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Mustache.html)
@@ -146,9 +149,17 @@ where the template is defined as:
 
 ### Use a framework
 
-Pros: well tested and honestly fast
-Cons: heavy, a nightmare to debug if anything goes wrong. Have to
-follow framework design concepts ($scope).
+Frameworks convert any web page into a web application: everything is under control
+
+**PROS**
+* Codebase (samples, documentation...)
+* Application oriented (does more than templating)
+
+**CONS**
+* Heavy
+* Long learning curve
+* May become a nightmare to debug if anything goes wrong
+* Design may be rigid
 
 [Angular sample](http://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Angular.html)
 `var myApp = angular.module('myApp',[]);
