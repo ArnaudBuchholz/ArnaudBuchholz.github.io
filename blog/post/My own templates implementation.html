@@ -142,10 +142,11 @@ typing, transformation...).
 document.body.appendChild(document.createElement("div")).innerHTML = html;`
 
 where the template is defined as:
-`&lt;script id="tpl" type="text/template"&gt;
-    &lt;h1&gt;{{title}}&lt;/h1&gt;
-    &lt;input id="{{id}}" type="checkbox" {{checked}}&gt;&lt;label for="{{id}}" title="{{label}}"&gt;{{label}}&lt;/label&gt;
-&lt;/script&gt;`
+<code class="html">&lt;</span><span class="element">script </span><span class="attribute">id=</span><span class="value">&quot;tpl&quot; </span><span class="attribute">type=</span><span class="value">&quot;text/template&quot;</span><span class="attribute">&gt;
+    &lt;</span><span class="element">h1</span><span class="attribute">&gt;{{title}}&lt;/</span><span class="element">h1</span><span class="attribute">&gt;
+    &lt;</span><span class="element">input </span><span class="attribute">id=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">{{checked}}&gt;
+    &lt;</span><span class="element">label </span><span class="attribute">for=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">title=</span><span class="value">&quot;{{label}}&quot;</span><span class="attribute">&gt;{{label}}&lt;/</span><span class="element">label</span><span class="attribute">&gt;
+&lt;/</span><span class="element">script</span><span class="attribute">&gt;</span></code>
 
 ### Use a framework
 
@@ -172,10 +173,14 @@ myApp.controller('SampleController', ['$scope', function($scope) {
 }]);`
 
 where the body is defined as:
-`&lt;body ng-controller="SampleController"&gt;
-    &lt;h1&gt;{{title}}&lt;/h1&gt;
-    &lt;input id="{{id}}" type="checkbox" ng-checked="checked"&gt;&lt;label for="{{id}}" title="{{label}}"&gt;{{label}}&lt;/label&gt;
-&lt;/body&gt;`
+<code class="html"><span class="attribute">&lt;</span><span class="element">html </span><span class="attribute">ng-app=</span><span class="value">&quot;myApp&quot;</span><span class="attribute">&gt; 
+    </span><span class="comment">&lt;!-- ... --&gt;</span><span class="attribute"> 
+    &lt;</span><span class="element">body </span><span class="attribute">ng-controller=</span><span class="value">&quot;SampleController&quot;</span><span class="attribute">&gt; 
+        &lt;</span><span class="element">h1</span><span class="attribute">&gt;{{title}}&lt;/</span><span class="element">h1</span><span class="attribute">&gt; 
+        &lt;</span><span class="element">input </span><span class="attribute">id=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">ng-checked=</span><span class="value">&quot;checked&quot;</span><span class="attribute">&gt; 
+        &lt;</span><span class="element">label </span><span class="attribute">for=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">title=</span><span class="value">&quot;{{label}}&quot;</span><span class="attribute">&gt;{{label}}&lt;/</span><span class="element">label</span><span class="attribute">&gt; 
+    &lt;/</span><span class="element">body</span><span class="attribute">&gt; 
+&lt;/</span><span class="element">html</span><span class="attribute">&gt;</span></code>
 
     http://bitworking.org/news/2014/05/zero_framework_manifesto
     http://vanilla-js.com/
