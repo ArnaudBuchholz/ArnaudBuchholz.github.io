@@ -224,6 +224,35 @@ code.javascript span.symbol {
 	color: gray;
 }
 
+code.html {
+    font-family: courier, sans-serif;
+    font-size: 12px;
+    border: 1px dashed #CCCCCC;
+    width:99%;
+    height: auto;
+    overflow: auto;
+    background: #f0f0f0;
+    padding: 4px;
+    white-space: pre-wrap;
+}
+
+code.html span.element {
+    color: rgb(0,0,128);
+    font-weight: bold;
+}
+
+code.html span.attribute {
+
+}
+
+code.html span.comment {
+    color: rgb(128,128,128); font-style: italic;
+}
+
+code.html span.value {
+    color: rgb(0,128,0); font-weight: bold;
+}
+
 pre.code.output {
     font-family: courier, sans-serif;
     font-size: 12px;
