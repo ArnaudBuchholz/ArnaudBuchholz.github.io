@@ -260,42 +260,43 @@ I adopted a simple syntax that allows me to:
     &lt;/</span><span class="element">tr</span><span class="attribute">&gt;
 &lt;/</span><span class="element">template</span><span class="attribute">&gt;</span></code>
 
+### Tokenizing
+
+The first version of this helper was returning a function that was not only
+[tokenizing](https://en.wikipedia.org/wiki/Tokenization_%28lexical_analysis%29) the HTML of the template but also
+substituting the tokens. Then I realized that it would be faster to tokenize the content first and then returning a
+function doing the substitution job only. Hence I rewrote it to dynamically build the template function based on the
+template (I'll come to that after).
+
+Until recently I was not a big fan of
+[regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
+I was under the impression that they were slow and useless
+because they were only telling you if a string respects a given pattern. Then I read the book
+[JavaScript The Good Parts](https://www.google.ca/search?q=Javascript+the+good+parts) from
+[Douglas Crockford](https://en.wikipedia.org/wiki/Douglas_Crockford) and the chapter 7 was an eye opener.
+Indeed, on top of matching a pattern it can also extract specific information from it using capturing groups
+(parenthesis).
+
+... So I created 3 patterns ... that I combine with | and a final matching all
+
 ### Code generation
 
-    The first version of this templating helper was returning a fonction
-    that not only tokenized the HTML of the template but also substituted
-    the tokens.
-    Then I realized that it would be faster to tokenize the content first
-    and then returning a function doing the substitution job.
-    Hence I rewrote it to dynamically build the template fonction based on
-    the template.
+I have a real fascination for the process of generating code: the outcome is most of the time faster than the
+traditional way of doing things because it produces highly specialized functions.
 
-    Until recently I was not a big fan of regular expression. I was under
-    the impression rhat they were slow and useless because they were only
-    telling you if a string respects a given pattern.
-    Then I read the book "Javascript the good parts" from Crockford and
-    the chapter X was an eye opener. Indeed, on top of matching a pattern
-    you can also extract specifc information from it using parenthesis
-    (ref to mdn).
+There are two ways to generate code:
+- [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval)
+- [Function constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)
 
-    I have a real fascination for the process of generating code: the
-    outcome is most of the time faster than the traditional way of doing
-    things because it produces highly specialized functions.
-    There are two ways to generate code:
-    - eval
-    - the Function constructor
+(...) There are other ways which are more elaborated such as loading dynamically generated sources either by inserting a
+new script tag whose content is generated or by loading a script from a
+[data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs). But let's keep things simple.
 
-    There is a third way which combines benefits of the two others but
-    with an additional complexity: loading dynamically generated sources
-    (either by inserting a new script tag whose content is generated or by
-    loading a script from the data URL).
+In general eval is a bad idea: it merges the content withing the global scope and it is an open door for code injection.
+[Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode) brings some security
+mechanisms but most linters will reject it anyway. And I agree: eval is evil.
 
-    In general eval is a bad idea: it merges the content with the global
-    scope and it is an open door for code injection. Use script brought
-    some security mechanism but most linters would reject it. And I agree:
-    eval is evil.
-
-    On the other hand, new Function builds the function in a isolated scope:
+On the other hand, new Function builds the function in a isolated scope:
 
 </code>
 <!-- Drop those two lines -->
