@@ -11,8 +11,8 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
-    What do you do when you need HTML templates but you don't want to include an heavy framework?
-    You experiment and write your own implementation... Welcome to a journey within DOM, document fragments and
+    What do you do when you need HTML templates but you don't want to include any heavy library or framework?
+    You experiment and write your own implementation... Welcome to a journey within DOM, regular expressions and
     function builders.
 </div>
 <code class="markdown">
@@ -38,14 +38,15 @@ But in between everything I still have some rare occasions of fun and I started 
 
 ## The need
 
-In [my library](https://github.com/ArnaudBuchholz/gpf-js), the source and test files are organised with the help of one
-special configuration file: [sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json).
+In [the GPF-JS library](https://github.com/ArnaudBuchholz/gpf-js), the source and test files are organised with the help
+of one special configuration file:
+[sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json).
 It is the [vertebral column](https://en.wikipedia.org/wiki/Vertebral_column) of the project as all the tools related to
 building, testing or even documenting are based on it.
 
 (...) Documentation generation relies on [JSDoc](http://usejsdoc.org/) and a
 [grunt plugin](https://www.npmjs.com/package/grunt-jsdoc) but the code base needs some additional cleanup.
-Consequently only few files are actually considered.
+Consequently only few files are currently considered.
 
 This JSON storage lists files and associates properties to them:
 * Textual description of the source content
@@ -54,14 +55,14 @@ This JSON storage lists files and associates properties to them:
 * Optional documentation flags that stress out the most important parts of the source (such as class implementation,
 main method name...)
 
-Because I try to isolate concepts as much as possible, it quickly grew from [134 lines in April](https://github.com/
+Because concepts are isolated as much as possible, this file quickly grew from [134 lines in April](https://github.com/
 ArnaudBuchholz/gpf-js/blob/7362fbc4685b5aefecb856aa5f984f59e7497411/src/sources.json) to
 [334 lines in June](https://github.com/ArnaudBuchholz/gpf-js/blob/022ae58401e7415812d443dd9963cdd71f8efc77/src/
 sources.json), all entered manually (with lots of errors leading to "what is going on?",
 "oh no, nothing works again...").
 
-At some point I deserve a little bit of [control](https://en.wikipedia.org/wiki/Control_freak) on this file content not
-only to enforce its syntax but also to have a better view on what it contains.
+At some point its content deserved a little bit of [control](https://en.wikipedia.org/wiki/Control_freak) not only to
+enforce the syntax but also to have a better view on what it contains.
 
 So I decided it would be nice to develop an HTML view on this one.
 
@@ -70,7 +71,7 @@ So I decided it would be nice to develop an HTML view on this one.
 Long story short, it all started with a simple list formatting the file content.
 Updating will come later.
 Hence a basic [HTML page](https://github.com/ArnaudBuchholz/gpf-js/blob/master/sources.html) was created to display a
-table (I know... not really responsive but this is not required for now).
+table (not really responsive but this is not required for now).
 
 Loading the JSON file using an [AJAX request](https://github.com/ArnaudBuchholz/gpf-js/blob/master/res/xhr.js) and
 iterating over its content is easy but then...
@@ -205,12 +206,13 @@ Sample reference:
 
 ## Building a simple template engine
 
-I have nothing against frameworks, it's just too much with regards to what I'm trying to achieve.
-I could have used mustache but I felt I would have missed an opportunity to
+A framework could have been used but it's just too much with regards to what has to be achieved.
+mustache is also appropriate but I would have missed an opportunity to
 [learn new things](http://www.lifehack.org/articles/featured/learn-something-new-every-day.html).
-Indeed, if you have read the other articles, you already know that I am curious.
 
-So, I searched around and found some interesting information about the
+After some searches on the web,
+Searching around the web
+So, searched around and found some interesting information about the
 [template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) and I wanted to
 play with it.
 
@@ -221,7 +223,7 @@ The expected key benefits are:
 
 ### The template tag
 
-I prefer declaration over implementation, that's probably why I use [grunt](http://gruntjs.com/) instead of
+In my opinion, declaration has to be preferred over implementation, that's probably why I use [grunt](http://gruntjs.com/) instead of
 [gulp](http://gulpjs.com/). One reason is that I believe that less code means less bugs.
 Furthermore, when the [parser](https://en.wikipedia.org/wiki/Parsing) already exists (the browser in our case),
 this enforces the syntax and eases a little bit more the implementation.
@@ -280,6 +282,8 @@ Indeed, on top of matching a pattern it can also extract specific information fr
 (parenthesis).
 
 ... So I created 3 patterns ... that I combine with | and a final matching all
+
+https://regex101.com/?regex=\{([a-zA-Z_][a-zA-Z_0-9]+)\}#javascript
 
 ### Code generation
 
