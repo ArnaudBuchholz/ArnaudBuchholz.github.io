@@ -235,6 +235,8 @@ I adopted a simple syntax that allows me to:
 * bind textual values by putting brackets around them (like name and description below)
 * inject javascript code by ...
 
+...Explain $item, $index and $write
+
 <code class="html"><span class="attribute">&lt;</span><span class="element">template </span><span class="attribute">id=</span><span class="value">&quot;tpl_row&quot;</span><span class="attribute">&gt;
     &lt;</span><span class="element">tr</span><span class="attribute">&gt;
         &lt;</span><span class="element">td</span><span class="attribute">&gt;{name}&lt;/</span><span class="element">td</span><span class="attribute">&gt;
@@ -296,7 +298,7 @@ In general eval is a bad idea: it merges the content withing the global scope an
 [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode) brings some security
 mechanisms but most linters will reject it anyway. And I agree: eval is evil.
 
-On the other hand, new Function builds the function in a isolated scope:
+On the other hand, the Function constructor builds the function in a isolated scope.
 
 </code>
 <!-- Drop those two lines -->
