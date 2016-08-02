@@ -114,12 +114,15 @@ label.setAttribute("for", data.id);
 label.setAttribute("title", data.label);
 label.innerHTML = data.label;`
 
+Further reading:
+[Introduction to the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction)
+
 ### Use a template engine
 
 Template engines usually rely on a static description of the final output.
 The documented syntax proposes placeholders to represent substitution points.
 Depending on the engine, there might be several ways to inject the values.
-They are designed to be fast, offer manipulation helpers (such as enumeration) and extensive bindings (with
+They are designed to be fast, offer common helpers (such as enumeration) and extensive bindings (with
 typing, transformation...).
 
 **PROS**
@@ -148,13 +151,24 @@ where the template is defined as:
     &lt;</span><span class="element">label </span><span class="attribute">for=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">title=</span><span class="value">&quot;{{label}}&quot;</span><span class="attribute">&gt;{{label}}&lt;/</span><span class="element">label</span><span class="attribute">&gt;
 &lt;/</span><span class="element">script</span><span class="attribute">&gt;</span></code>
 
+Sample reference:
+[mustache.js](https://github.com/janl/mustache.js)
+
 ### Use a framework
 
-Long story short, a frameworks will convert any web page into a web application. This being said,
+Long story short, a framework will convert any web page into a web application: it encapsulates more than just UI
+definition and behaviors.
+
+(...) I recommend reading this
+[manifesto against frameworks](http://bitworking.org/news/2014/05/zero_framework_manifesto), it draws the line between
+libraries and frameworks
+
+This being said,
 [each framework](https://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks) has its
-own specificities and, regarding UI, I would distinguish 2 types:
-* Widget based frameworks (ExtJS, Open UI5...): each UI control is wrapped inside a class
-* HTML based frameworks (AngularJS, EmberJS...): HTML is augmented with bindings
+own specificities but, regarding UI, I would distinguish 2 main types:
+* Widget based frameworks (ExtJS, Open UI5...): each UI element is wrapped inside a control class.
+Building the interface can be done either through static descriptions (such as XML) or code.
+* HTML based frameworks (AngularJS, EmberJS...): based on HTML, it is then augmented with bindings
 
 **PROS**
 * Codebase (samples, documentation...)
@@ -186,47 +200,67 @@ where the body is defined as:
     &lt;/</span><span class="element">body</span><span class="attribute">&gt; 
 &lt;/</span><span class="element">html</span><span class="attribute">&gt;</span></code>
 
-    http://bitworking.org/news/2014/05/zero_framework_manifesto
-    http://vanilla-js.com/
+Sample reference:
+[Angular JS](https://angularjs.org/) or any other framework
 
-I am a big fan of Vanilla JS: the idea is not to rej
+## Building a simple template engine
 
+I have nothing against frameworks, it's just too much with regards to what I'm trying to achieve.
+I could have used mustache but I felt I would have missed an opportunity to
+[learn new things](http://www.lifehack.org/articles/featured/learn-something-new-every-day.html).
+Indeed, if you have read the other articles, you already know that I am curious.
 
+So, I searched around and found some interesting information about the
+[template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) and I wanted to
+play with it.
 
+The expected key benefits are:
+* flexible and easy way to define HTML
+* Binding
+* JavaScript injection (attributes or global)
 
+### The template tag
 
+I prefer declaration over implementation, that's probably why I use [grunt](http://gruntjs.com/) instead of
+[gulp](http://gulpjs.com/). One reason is that I believe that less code means less bugs.
+Furthermore, when the [parser](https://en.wikipedia.org/wiki/Parsing) already exists (the browser in our case),
+this enforces the syntax and eases a little bit more the implementation.
 
+The template tag is an HTML element that accepts any HTML content. It is parsed but not rendered. When you access it,
+this DOM element looks like a document fragment and its content can be read or altered almost like any other element.
+In particular, you can access the [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)
+member.
 
-    Please note that I have nothing against the framework itself, it's
-    just too much with regards to what I'l trying to do here.
+I adopted a simple syntax that allows me to:
+* bind textual values by putting brackets around them (like name and description below)
+* inject javascript code by ...
 
-    Angular exemple
+<code class="html"><span class="attribute">&lt;</span><span class="element">template </span><span class="attribute">id=</span><span class="value">&quot;tpl_row&quot;</span><span class="attribute">&gt;
+    &lt;</span><span class="element">tr</span><span class="attribute">&gt;
+        &lt;</span><span class="element">td</span><span class="attribute">&gt;{name}&lt;/</span><span class="element">td</span><span class="attribute">&gt;
+        &lt;</span><span class="element">td</span><span class="attribute">&gt;{description}&lt;/</span><span class="element">td</span><span class="attribute">&gt;
+        &lt;</span><span class="element">td</span><span class="attribute">&gt;&lt;</span><span class="element">input </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">{}=</span><span class="value">&quot;
+        if ($item.load) {
+            return 'checked=\'true\'';
+        } else {
+            return '';
+        }&quot;</span><span class="attribute">&gt;&lt;/</span><span class="element">td</span><span class="attribute">&gt;
+        &lt;</span><span class="element">td</span><span class="attribute">&gt;&lt;</span><span class="element">input </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">{}=</span><span class="value">&quot;
+        if ($item.load </span><span class="s3">&amp;amp;&amp;amp;</span><span class="value"> $item.test) {
+            return 'checked=\'true\'';
+        } else {
+            return '';
+        }&quot;</span><span class="attribute">&gt;&lt;/</span><span class="element">td</span><span class="attribute">&gt;
+        &lt;</span><span class="element">td</span><span class="attribute">&gt;&lt;</span><span class="element">input </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">{}=</span><span class="value">&quot;
+        if ($item.doc) {
+        return 'checked=\'true\'';
+        } else {
+            return '';
+        }&quot;</span><span class="attribute">&gt;&lt;/</span><span class="element">td</span><span class="attribute">&gt;
+    &lt;/</span><span class="element">tr</span><span class="attribute">&gt;
+&lt;/</span><span class="element">template</span><span class="attribute">&gt;</span></code>
 
-    Building a simple template engine
-
-    Because I am curious, I searched around and found some interesting
-    ideas about DOM template element and I wanted to experiment it.
-
-    The expected key benefits are:
-    - flexible way to define HTML
-    - ease of use
-    - flexible way to customize it:
-    Binding, attributes adding (checkbox), conditionnal insertion
-
-    I prefer declaration over implementation, that's probably why I use
-    grunt instead of gulp. One reason is that I believe in less code means
-    less bugs. Furthermore, when the parser already exists (the browser in
-    our case), this enforces rhe syntax and eases a little bit more the
-    implementation.
-
-
-    The template tag is an HTML element that accepts any HTML content. It
-    is parsed but not rendered. When you access it, this DOM element looks
-    like a document fragment and its content can be read or altered almost
-    like any other element. What is also nice is that it may contain more
-    than one node v
-
-    Code generation
+### Code generation
 
     The first version of this templating helper was returning a fonction
     that not only tokenized the HTML of the template but also substituted
