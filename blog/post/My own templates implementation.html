@@ -210,32 +210,31 @@ A framework could have been used but it's just too much with regards to what has
 mustache is also appropriate but I would have missed an opportunity to
 [learn new things](http://www.lifehack.org/articles/featured/learn-something-new-every-day.html).
 
-After some searches on the web,
-Searching around the web
-So, searched around and found some interesting information about the
-[template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) and I wanted to
-play with it.
+Regarding the requirements, the expected benefits of the template engine were:
+* Flexible and easy way to define valid HTML
+* Simple textual bindings
+* JavaScript injection
 
-The expected key benefits are:
-* flexible and easy way to define HTML
-* Binding
-* JavaScript injection (attributes or global)
+### The checkbox case
 
-### The template tag
+One challenge with
 
-In my opinion, declaration has to be preferred over implementation, that's probably why I use [grunt](http://gruntjs.com/) instead of
-[gulp](http://gulpjs.com/). One reason is that I believe that less code means less bugs.
+In my opinion, declaration has to be preferred over implementation,
+that's probably why I use [grunt](http://gruntjs.com/) instead of [gulp](http://gulpjs.com/).
+One reason is that I believe that less code means less bugs.
+
 Furthermore, when the [parser](https://en.wikipedia.org/wiki/Parsing) already exists (the browser in our case),
 this enforces the syntax and eases a little bit more the implementation.
 
-The template tag is an HTML element that accepts any HTML content. It is parsed but not rendered. When you access it,
-this DOM element looks like a document fragment and its content can be read or altered almost like any other element.
+### The template tag
+
+The [template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) tag is an HTML element that
+accepts any HTML content. It is parsed but not rendered. When you access it, this DOM element looks like a document
+fragment and its content can be used or altered almost like any other element.
 In particular, you can access the [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)
 member.
 
-I adopted a simple syntax that allows me to:
-* bind textual values by putting brackets around them (like name and description below)
-* inject javascript code by ...
+
 
 ...Explain $item, $index and $write
 
@@ -303,6 +302,8 @@ In general eval is a bad idea: it merges the content withing the global scope an
 mechanisms but most linters will reject it anyway. And I agree: eval is evil.
 
 On the other hand, the Function constructor builds the function in a isolated scope.
+
+### Testing
 
 </code>
 <!-- Drop those two lines -->
