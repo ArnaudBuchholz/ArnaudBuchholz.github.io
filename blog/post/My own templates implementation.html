@@ -209,11 +209,11 @@ Sample reference:
 
 ## Building a simple template engine
 
-A framework could have been used but it's just too much with regards to what has to be achieved.
+A framework could be used but it's just too much with regards to what has to be achieved.
 And, obviously, mustache is appropriate but I would have missed an opportunity to
 [learn new things](http://www.lifehack.org/articles/featured/learn-something-new-every-day.html).
 
-Regarding the requirements, the expected benefits of the template engine were:
+Regarding the requirements, the expected benefits of my template engine are:
 * Flexible and easy way to define valid HTML
 * Simple textual bindings
 * JavaScript injection (see below)
@@ -231,8 +231,14 @@ But the checkbox will be ticked or not depending on the presence of the checked 
 
 So the template engine must offer a way to alter an element definition by adding attributes.
 
-My first idea was to use code
-One challenge with
+Working on the syntax, I tried different approaches and the simplest one is the following:
+    <input type="checkbox" {%%}="JAVASCRIPT CODE">
+
+Indeed, the following one generates issues mostly because it is not a valid HTML content
+
+    <input type="checkbox" {% JAVASCRIPT CODE %>
+
+### The template tag
 
 In my opinion, declaration has to be preferred over implementation,
 that's probably why I use [grunt](http://gruntjs.com/) instead of [gulp](http://gulpjs.com/).
@@ -240,8 +246,6 @@ One reason is that I believe that less code means less bugs.
 
 Furthermore, when the [parser](https://en.wikipedia.org/wiki/Parsing) already exists (the browser in our case),
 this enforces the syntax and eases a little bit more the implementation.
-
-### The template tag
 
 The [template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) tag is an HTML element that
 accepts any HTML content. It is parsed but not rendered. When you access it, this DOM element looks like a document
