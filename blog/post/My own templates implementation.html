@@ -152,12 +152,15 @@ where the template is defined as:
     &lt;</span><span class="element">label </span><span class="attribute">for=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">title=</span><span class="value">&quot;{{label}}&quot;</span><span class="attribute">&gt;{{label}}&lt;/</span><span class="element">label</span><span class="attribute">&gt;
 &lt;/</span><span class="element">script</span><span class="attribute">&gt;</span></code>
 
+(...) A quick note about the script tag with type="text/template", it is a trick that prevents the browser to actually
+execute the content of the script tag. However, it remains available for any custom coding.
+
 Sample reference:
 [mustache.js](https://github.com/janl/mustache.js)
 
 ### Use a framework
 
-Long story short, a framework will convert any web page into a web application: it encapsulates more than just UI
+To put it in a nutshell, a framework will convert any web page into a web application: it encapsulates more than just UI
 definition and behaviors.
 
 (...) I recommend reading this
@@ -166,7 +169,7 @@ libraries and frameworks
 
 This being said,
 [each framework](https://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks) has its
-own specificities but, regarding UI, I would distinguish 2 main types:
+own specificities but, regarding UI building, I would distinguish 2 main types:
 * Widget based frameworks (ExtJS, Open UI5...): each UI element is wrapped inside a control class.
 Building the interface can be done either through static descriptions (such as XML) or code.
 * HTML based frameworks (AngularJS, EmberJS...): based on HTML, it is then augmented with bindings
@@ -202,21 +205,33 @@ where the body is defined as:
 &lt;/</span><span class="element">html</span><span class="attribute">&gt;</span></code>
 
 Sample reference:
-[Angular JS](https://angularjs.org/) or any other framework
+[Angular JS](https://angularjs.org/)
 
 ## Building a simple template engine
 
 A framework could have been used but it's just too much with regards to what has to be achieved.
-mustache is also appropriate but I would have missed an opportunity to
+And, obviously, mustache is appropriate but I would have missed an opportunity to
 [learn new things](http://www.lifehack.org/articles/featured/learn-something-new-every-day.html).
 
 Regarding the requirements, the expected benefits of the template engine were:
 * Flexible and easy way to define valid HTML
 * Simple textual bindings
-* JavaScript injection
+* JavaScript injection (see below)
 
 ### The checkbox case
 
+Most of the content to generate simply consists in replacing placeholders with text coming from the data structure
+(source name, description...). It can be either as a textual node (in between elements) or as an attribute value
+(like for ids...). However, an unexpected challenge appeared when it came to boolean options.
+
+Indeed, the simpler way to represent a boolean is to use an
+[input with type=checkbox](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input).
+
+But the checkbox will be ticked or not depending on the presence of the checked attribute, whatever its value.
+
+So the template engine must offer a way to alter an element definition by adding attributes.
+
+My first idea was to use code
 One challenge with
 
 In my opinion, declaration has to be preferred over implementation,
