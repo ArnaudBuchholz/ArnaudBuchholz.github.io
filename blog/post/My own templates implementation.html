@@ -146,11 +146,11 @@ typing, transformation...).
 document.body.appendChild(document.createElement("div")).innerHTML = html;`
 
 where the template is defined as:
-<code class="html">&lt;</span><span class="element">script </span><span class="attribute">id=</span><span class="value">&quot;tpl&quot; </span><span class="attribute">type=</span><span class="value">&quot;text/template&quot;</span><span class="attribute">&gt;
-    &lt;</span><span class="element">h1</span><span class="attribute">&gt;{{title}}&lt;/</span><span class="element">h1</span><span class="attribute">&gt;
-    &lt;</span><span class="element">input </span><span class="attribute">id=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">{{checked}}&gt;
-    &lt;</span><span class="element">label </span><span class="attribute">for=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">title=</span><span class="value">&quot;{{label}}&quot;</span><span class="attribute">&gt;{{label}}&lt;/</span><span class="element">label</span><span class="attribute">&gt;
-&lt;/</span><span class="element">script</span><span class="attribute">&gt;</span></code>
+<code class="html">&lt;</span><span class="s1">script </span><span class="s0">id=</span><span class="s2">&quot;tpl&quot; </span><span class="s0">type=</span><span class="s2">&quot;text/template&quot;</span><span class="s0">&gt;
+    &lt;</span><span class="s1">h1</span><span class="s0">&gt;{{title}}&lt;/</span><span class="s1">h1</span><span class="s0">&gt;
+    &lt;</span><span class="s1">input </span><span class="s0">id=</span><span class="s2">&quot;{{id}}&quot; </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{{checked}}&gt;
+    &lt;</span><span class="s1">label </span><span class="s0">for=</span><span class="s2">&quot;{{id}}&quot; </span><span class="s0">title=</span><span class="s2">&quot;{{label}}&quot;</span><span class="s0">&gt;{{label}}&lt;/</span><span class="s1">label</span><span class="s0">&gt;
+&lt;/</span><span class="s1">script</span><span class="s0">&gt;</span></code>
 
 (...) A quick note about the script tag with type="text/template", it is a trick that prevents the browser to actually
 execute the content of the script tag. However, it remains available for any custom coding.
@@ -195,14 +195,14 @@ myApp.controller('SampleController', ['$scope', function($scope) {
 }]);`
 
 where the body is defined as:
-<code class="html"><span class="attribute">&lt;</span><span class="element">html </span><span class="attribute">ng-app=</span><span class="value">&quot;myApp&quot;</span><span class="attribute">&gt; 
-    </span><span class="comment">&lt;!-- ... --&gt;</span><span class="attribute"> 
-    &lt;</span><span class="element">body </span><span class="attribute">ng-controller=</span><span class="value">&quot;SampleController&quot;</span><span class="attribute">&gt; 
-        &lt;</span><span class="element">h1</span><span class="attribute">&gt;{{title}}&lt;/</span><span class="element">h1</span><span class="attribute">&gt; 
-        &lt;</span><span class="element">input </span><span class="attribute">id=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">ng-checked=</span><span class="value">&quot;checked&quot;</span><span class="attribute">&gt; 
-        &lt;</span><span class="element">label </span><span class="attribute">for=</span><span class="value">&quot;{{id}}&quot; </span><span class="attribute">title=</span><span class="value">&quot;{{label}}&quot;</span><span class="attribute">&gt;{{label}}&lt;/</span><span class="element">label</span><span class="attribute">&gt; 
-    &lt;/</span><span class="element">body</span><span class="attribute">&gt; 
-&lt;/</span><span class="element">html</span><span class="attribute">&gt;</span></code>
+<code class="html"><span class="s0">&lt;</span><span class="s1">html </span><span class="s0">ng-app=</span><span class="s2">&quot;myApp&quot;</span><span class="s0">&gt; 
+    </span><span class="s3">&lt;!-- ... --&gt;</span><span class="s0"> 
+    &lt;</span><span class="s1">body </span><span class="s0">ng-controller=</span><span class="s2">&quot;SampleController&quot;</span><span class="s0">&gt; 
+        &lt;</span><span class="s1">h1</span><span class="s0">&gt;{{title}}&lt;/</span><span class="s1">h1</span><span class="s0">&gt; 
+        &lt;</span><span class="s1">input </span><span class="s0">id=</span><span class="s2">&quot;{{id}}&quot; </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">ng-checked=</span><span class="s2">&quot;checked&quot;</span><span class="s0">&gt; 
+        &lt;</span><span class="s1">label </span><span class="s0">for=</span><span class="s2">&quot;{{id}}&quot; </span><span class="s0">title=</span><span class="s2">&quot;{{label}}&quot;</span><span class="s0">&gt;{{label}}&lt;/</span><span class="s1">label</span><span class="s0">&gt; 
+    &lt;/</span><span class="s1">body</span><span class="s0">&gt; 
+&lt;/</span><span class="s1">html</span><span class="s0">&gt;</span></code>
 
 Sample reference:
 [Angular JS](https://angularjs.org/)
@@ -231,12 +231,20 @@ But the checkbox will be ticked or not depending on the presence of the checked 
 
 So the template engine must offer a way to alter an element definition by adding attributes.
 
-Working on the syntax, I tried different approaches and the simplest one is the following:
-    <input type="checkbox" {%%}="JAVASCRIPT CODE">
+Working on the syntax, I tried different approaches. The first one was:
+<code class="html"><span class="s0">&lt;</span><span class="s1">input </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{% JAVASCRIPT CODE %}&gt;</span></code>
 
-Indeed, the following one generates issues mostly because it is not a valid HTML content
+This one is simple as it looks like other template styles. However, the parsed result generates a strange HTML string:
+<code class="javascript gpf-blog"><span class="string">"&lt;input type=\"checkbox\" {%=\"\" javascript=\"\" code=\"\" %}=\"\"&gt;"</span></code>
 
-    <input type="checkbox" {% JAVASCRIPT CODE %>
+Indeed, it looks like each block of characters is recognized as a single attribute.
+
+So, I tried the following one:
+<code class="html"><span class="s0">&lt;</span><span class="s1">input </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{%%}=</span><span class="s2">&quot;JAVASCRIPT CODE&quot;</span><span class="s0">&gt;</span></code>
+
+And this time, the string looked good:
+<code class="javascript gpf-blog"><span class="string">"lt;input type=\"checkbox\" {%%}=\"JAVASCRIPT CODE\"&gt;"</span></code>
+
 
 ### The template tag
 
@@ -257,30 +265,30 @@ member.
 
 ...Explain $item, $index and $write
 
-<code class="html"><span class="attribute">&lt;</span><span class="element">template </span><span class="attribute">id=</span><span class="value">&quot;tpl_row&quot;</span><span class="attribute">&gt;
-    &lt;</span><span class="element">tr</span><span class="attribute">&gt;
-        &lt;</span><span class="element">td</span><span class="attribute">&gt;{name}&lt;/</span><span class="element">td</span><span class="attribute">&gt;
-        &lt;</span><span class="element">td</span><span class="attribute">&gt;{description}&lt;/</span><span class="element">td</span><span class="attribute">&gt;
-        &lt;</span><span class="element">td</span><span class="attribute">&gt;&lt;</span><span class="element">input </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">{}=</span><span class="value">&quot;
+<code class="html"><span class="s0">&lt;</span><span class="s1">template </span><span class="s0">id=</span><span class="s2">&quot;tpl_row&quot;</span><span class="s0">&gt;
+    &lt;</span><span class="s1">tr</span><span class="s0">&gt;
+        &lt;</span><span class="s1">td</span><span class="s0">&gt;{name}&lt;/</span><span class="s1">td</span><span class="s0">&gt;
+        &lt;</span><span class="s1">td</span><span class="s0">&gt;{description}&lt;/</span><span class="s1">td</span><span class="s0">&gt;
+        &lt;</span><span class="s1">td</span><span class="s0">&gt;&lt;</span><span class="s1">input </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{}=</span><span class="s2">&quot;
         if ($item.load) {
             return 'checked=\'true\'';
         } else {
             return '';
-        }&quot;</span><span class="attribute">&gt;&lt;/</span><span class="element">td</span><span class="attribute">&gt;
-        &lt;</span><span class="element">td</span><span class="attribute">&gt;&lt;</span><span class="element">input </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">{}=</span><span class="value">&quot;
-        if ($item.load </span><span class="s3">&amp;amp;&amp;amp;</span><span class="value"> $item.test) {
+        }&quot;</span><span class="s0">&gt;&lt;/</span><span class="s1">td</span><span class="s0">&gt;
+        &lt;</span><span class="s1">td</span><span class="s0">&gt;&lt;</span><span class="s1">input </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{}=</span><span class="s2">&quot;
+        if ($item.load </span><span class="s3">&amp;amp;&amp;amp;</span><span class="s2"> $item.test) {
             return 'checked=\'true\'';
         } else {
             return '';
-        }&quot;</span><span class="attribute">&gt;&lt;/</span><span class="element">td</span><span class="attribute">&gt;
-        &lt;</span><span class="element">td</span><span class="attribute">&gt;&lt;</span><span class="element">input </span><span class="attribute">type=</span><span class="value">&quot;checkbox&quot; </span><span class="attribute">{}=</span><span class="value">&quot;
+        }&quot;</span><span class="s0">&gt;&lt;/</span><span class="s1">td</span><span class="s0">&gt;
+        &lt;</span><span class="s1">td</span><span class="s0">&gt;&lt;</span><span class="s1">input </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{}=</span><span class="s2">&quot;
         if ($item.doc) {
         return 'checked=\'true\'';
         } else {
             return '';
-        }&quot;</span><span class="attribute">&gt;&lt;/</span><span class="element">td</span><span class="attribute">&gt;
-    &lt;/</span><span class="element">tr</span><span class="attribute">&gt;
-&lt;/</span><span class="element">template</span><span class="attribute">&gt;</span></code>
+        }&quot;</span><span class="s0">&gt;&lt;/</span><span class="s1">td</span><span class="s0">&gt;
+    &lt;/</span><span class="s1">tr</span><span class="s0">&gt;
+&lt;/</span><span class="s1">template</span><span class="s0">&gt;</span></code>
 
 ### Tokenizing
 
