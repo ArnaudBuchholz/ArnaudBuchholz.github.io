@@ -236,20 +236,21 @@ code.html {
     white-space: pre-wrap;
 }
 
-code.html span.element {
+/* WebStorm generated classes (until a real parser is implemented) */
+code.html span.s1 { /* element */
     color: rgb(0,0,128);
     font-weight: bold;
 }
 
-code.html span.attribute {
+code.html span.s0 { /* attribute, symbols */
 
 }
 
-code.html span.comment {
+code.html span.s3 { /* comments */
     color: rgb(128,128,128); font-style: italic;
 }
 
-code.html span.value {
+code.html span.s2 { /* attribute value */
     color: rgb(0,128,0); font-weight: bold;
 }
 
