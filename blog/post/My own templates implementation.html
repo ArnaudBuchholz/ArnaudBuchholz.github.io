@@ -218,6 +218,15 @@ Regarding the requirements, the expected benefits of my template engine are:
 * Simple textual bindings
 * JavaScript injection (see below)
 
+In terms of syntax, I wanted to use:
+* {{fieldName}} to be replaced with field named fieldName
+* {% JAVASCRIPT CODE %} to inject JavaScript
+
+JavaScript helpers will be provided to condition / alter the output:
+* $write() to output any text
+* $item gives the current data structure
+* $index gives the current index
+
 ### The checkbox case
 
 Most of the content to generate simply consists in replacing placeholders with text coming from the data structure
@@ -243,7 +252,7 @@ So, I tried the following one:
 <code class="html"><span class="s0">&lt;</span><span class="s1">input </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{%%}=</span><span class="s2">&quot;JAVASCRIPT CODE&quot;</span><span class="s0">&gt;</span></code>
 
 And this time, the string looked good:
-<code class="javascript gpf-blog"><span class="string">"lt;input type=\"checkbox\" {%%}=\"JAVASCRIPT CODE\"&gt;"</span></code>
+<code class="javascript gpf-blog"><span class="string">"&lt;input type=\"checkbox\" {%%}=\"JAVASCRIPT CODE\"&gt;"</span></code>
 
 
 ### The template tag
