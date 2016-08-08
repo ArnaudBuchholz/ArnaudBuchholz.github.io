@@ -221,36 +221,41 @@ Regarding the requirements, the expected benefits of the new template engine are
 The engine must generate a function accepting at least two parameters:
 * An object providing values for substitution
 * An index that will distinguish objects when used in an enumeration
+The result will be a set of DOM nodes.
 
 In terms of syntax, the following patterns will be accepted in the template definition:
-* **{{fieldName}}** to be replaced with the object's field named fieldName
+* **{{fieldName}}** to be replaced with the object's field named fieldName: it can be used inside any textual content
+(attributes or textual nodes).
 * **{% JAVASCRIPT CODE %}** to inject JavaScript
 
 JavaScript helpers will be allowed inside the injected code to condition / alter the output:
-* **$write()** to output any text
-* **$item** gives the current object
+* **$write()** to output any HTML code (to be used carefully)
+* **$object** gives the current object
 * **$index** gives the current index
 
 ### The checkbox case
 
-Most of the content to generate simply consists in replacing placeholders with text coming from the data structure
+Most of the content to generate simply consists in replacing placeholders with text coming from the object
 (source name, description...). It can be either as a textual node (in between elements) or as an attribute value
 (like for ids...). However, an unexpected challenge appeared when it came to boolean options.
 
 Indeed, the simpler way to represent a boolean is to use an
-[input with type=checkbox](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input).
+[input with type set to checkbox](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input).
 
 But the checkbox will be ticked or not depending on the presence of the checked attribute, whatever its value.
 
 So the template engine must offer a way to alter an element definition by adding attributes.
 
-Working on the syntax, I tried different approaches. The first one was:
+Working on the syntax, I tried different approaches. The first attempt looked like this:
 <code class="html"><span class="s0">&lt;</span><span class="s1">input </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{% JAVASCRIPT CODE %}&gt;</span></code>
 
-This one is simple as it looks like other template styles. However, the parsed result generates a strange HTML string:
+This one is simple however, the parsed result generates a strange HTML string:
 <code class="javascript gpf-blog"><span class="string">"&lt;input type=\"checkbox\" {%=\"\" javascript=\"\" code=\"\" %}=\"\"&gt;"</span></code>
 
-Indeed, it looks like each block of characters is recognized as a single attribute.
+(...) One easy way to find out this parsed result is to open the debugger, grab the handle of the parent element and
+ask for the [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) property.
+
+Indeed, each block of characters is recognized as a single attribute.
 
 So, I tried the following one:
 <code class="html"><span class="s0">&lt;</span><span class="s1">input </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">{%%}=</span><span class="s2">&quot;JAVASCRIPT CODE&quot;</span><span class="s0">&gt;</span></code>
@@ -258,15 +263,26 @@ So, I tried the following one:
 And this time, the string looked good:
 <code class="javascript gpf-blog"><span class="string">"&lt;input type=\"checkbox\" {%%}=\"JAVASCRIPT CODE\"&gt;"</span></code>
 
+(...) This also implies that the JavaScript code is correctly escaped to fit an attribute value. For instance, it may
+use single quotes for strings instead of double quotes.
 
 ### The template tag
 
+Let say you want to define a configuration file that has to be used by a JavaScript application. How would you define
+its syntax and content? Some may invent a dedicated API and request the file to be a valid JavaScript program.
+Other may define a syntax to set the options in a declarative way.
+
+Each version has its advantages and drawbacks:
+* the programmatic approach maximizes the capacities when setting the configuration (environment detection, conditions,
+loops...) but with a cost in terms of maintenance and compatibility
+* the declarative approach simplifies the file but also gives limits to what you can do with it
+
 In my opinion, declaration has to be preferred over implementation,
 that's probably why I use [grunt](http://gruntjs.com/) instead of [gulp](http://gulpjs.com/).
-One reason is that I believe that less code means less bugs.
+The main reason is that less code means less bugs.
 
-Furthermore, when the [parser](https://en.wikipedia.org/wiki/Parsing) already exists (the browser in our case),
-this enforces the syntax and eases a little bit more the implementation.
+When the [parser](https://en.wikipedia.org/wiki/Parsing) already exists (the browser in our case or the JSON syntax for
+the previous example), this enforces the syntax and makes the implementation even easier.
 
 The [template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) tag is an HTML element that
 accepts any HTML content. It is parsed but not rendered. When you access it, this DOM element looks like a document
