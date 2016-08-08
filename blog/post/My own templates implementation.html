@@ -213,19 +213,23 @@ A framework could be used but it's just too much with regards to what has to be 
 And, obviously, mustache is appropriate but I would have missed an opportunity to
 [learn new things](http://www.lifehack.org/articles/featured/learn-something-new-every-day.html).
 
-Regarding the requirements, the expected benefits of my template engine are:
+Regarding the requirements, the expected benefits of the new template engine are:
 * Flexible and easy way to define valid HTML
 * Simple textual bindings
-* JavaScript injection (see below)
+* JavaScript injection
 
-In terms of syntax, I wanted to use:
-* {{fieldName}} to be replaced with field named fieldName
-* {% JAVASCRIPT CODE %} to inject JavaScript
+The engine must generate a function accepting at least two parameters:
+* An object providing values for substitution
+* An index that will distinguish objects when used in an enumeration
 
-JavaScript helpers will be provided to condition / alter the output:
-* $write() to output any text
-* $item gives the current data structure
-* $index gives the current index
+In terms of syntax, the following patterns will be accepted in the template definition:
+* **{{fieldName}}** to be replaced with the object's field named fieldName
+* **{% JAVASCRIPT CODE %}** to inject JavaScript
+
+JavaScript helpers will be allowed inside the injected code to condition / alter the output:
+* **$write()** to output any text
+* **$item** gives the current object
+* **$index** gives the current index
 
 ### The checkbox case
 
