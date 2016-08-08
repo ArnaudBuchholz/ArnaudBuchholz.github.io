@@ -226,10 +226,10 @@ The result will be a set of DOM nodes.
 In terms of syntax, the following patterns will be accepted in the template definition:
 * **{{fieldName}}** to be replaced with the object's field named fieldName: it can be used inside any textual content
 (attributes or textual nodes).
-* **{% JAVASCRIPT CODE %}** to inject JavaScript
+* **{% JAVASCRIPT CODE %}** to inject JavaScript *(with some limitations, see below)*
 
 JavaScript helpers will be allowed inside the injected code to condition / alter the output:
-* **$write()** to output any HTML code (to be used carefully)
+* **$write()** to output any HTML code *(to be used carefully)*
 * **$object** gives the current object
 * **$index** gives the current index
 
