@@ -341,11 +341,32 @@ where replacements are required.
 Until recently I was not a big fan of
 [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 I was under the impression that they were slow and useless
-because they were only telling you if a string respects a given pattern. Then I read the book
+because they were only telling you if a string respects a given pattern.
+
+Then I read the book
 [JavaScript The Good Parts](https://www.google.ca/search?q=Javascript+the+good+parts) from
 [Douglas Crockford](https://en.wikipedia.org/wiki/Douglas_Crockford). The chapter 7 was an eye opener.
-Indeed, on top of matching a pattern it can also extract specific information from it using capturing groups
-(parenthesis).
+Indeed, on top of matching a pattern (and give you information about what and where), it can also extract specific
+information from it using capturing groups (parenthesis).
+
+I also strongly recommend reading [this website](http://www.regular-expressions.info/) that provides valuable
+information about the engine.
+
+Regarding performances, they can be efficient or very slow depending on how you write them, check the following
+documentation:
+
+* [Regex Performance from Coding Horror](https://blog.codinghorror.com/regex-performance/)
+
+* [Regexes: The Bad, the Better, and the Best](https://www.loggly.com/blog/regexes-the-bad-better-best/)
+
+* [Comparing the Efficiency of Regular Expressions](https://www.regexbuddy.com/manual/benchmark.html)
+
+(...) There are still some situations where JavaScript regexes are not appropriate. For instance, when the string you
+want to match is a stream you need a [text-directed](http://www.regular-expressions.info/engine.html) engine that can
+be interrupted. I started to implement
+[such a mechanism](https://github.com/ArnaudBuchholz/gpf-js/blob/71afe8db96e1637524ff146721a56f955eb0bf12/src/
+pattern.js) ([tested](https://github.com/ArnaudBuchholz/gpf-js/blob/71afe8db96e1637524ff146721a56f955eb0bf12/test/
+pattern.js)) in GPF-JS.
 
 So, for each pattern, a regular expression is capable of finding it and extracting its content:
 
@@ -358,9 +379,10 @@ So, for each pattern, a regular expression is capable of finding it and extracti
 Once the three are combined with an additional default case, it gives the
 [tokenizing pattern](https://regex101.com/r/uB7tR4/1).
 
-From there, the algorithm consists in matching the string through this regular expression.
+From there, the algorithm consists in matching the string through this regular expression and process each token one by
+one.
 
-Don't forget to reset the [lastIndex property](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+(...) Don't forget to reset the [lastIndex property](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 Global_Objects/RegExp/lastIndex) before matching a new string.
 
 ### Code generation
