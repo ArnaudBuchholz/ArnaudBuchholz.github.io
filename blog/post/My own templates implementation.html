@@ -20,7 +20,10 @@
 
 OK, I have to admit that the blog is not really active... I should probably write more often. It's not because of
 [procrastination](https://en.wikipedia.org/wiki/Procrastination) but rather a
-[time management issue](https://youtu.be/zhAmug6Ts6o).
+[time management issue](https://youtu.be/zhAmug6Ts6o). Furthermore, writing takes me a lot of time as I always review
+the article several times before publishing.
+
+(...) Yet, I may have missed typos and other mistakes, don't hesitate to give feedback
 
 A [backlog](https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/issues?q=is%3Aopen+is%3Aissue+label%3AArticle) of
 articles I would like to write is maintained and I also created a task on my
@@ -272,7 +275,7 @@ And this time, the string looked good:
 use single quotes for strings instead of double quotes.
 
 (...) Re-reading this part, I realize I could also use an attribute named {isChecked} and set the field isChecked with
-"checked" or "anyhting" depending if I want the checkbox to be ticked or not.
+"checked" or "anything" depending if I want the checkbox to be ticked or not.
 However, in that case, the value has to be pre-formatted which is something I want to avoid.
 
 ### The template tag
@@ -290,12 +293,12 @@ In my opinion, declaration has to be preferred over implementation,
 that's probably why I use [grunt](http://gruntjs.com/) instead of [gulp](http://gulpjs.com/).
 The main reason is that less code means less bugs.
 
-When the [parser](https://en.wikipedia.org/wiki/Parsing) already exists (the browser in our case or JSON for
+When the [parser](https://en.wikipedia.org/wiki/Parsing) already exists (the browser in our case or the JSON format for
 the previous example), this enforces the syntax and makes the implementation even easier.
 
 The [template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) is an HTML tag that
-accepts any HTML content. It is parsed (hence validated) but not rendered. When you access it, this DOM element exposes
-a [content](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template#Attributes) property that can be used and
+accepts any HTML content. When you access it, this DOM element exposes a
+[content](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template#Attributes) property that can be used and
 altered almost like any other element.
 
 Also, you can access the [innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML) member.
@@ -304,9 +307,9 @@ Also, you can access the [innerHTML](https://developer.mozilla.org/en-US/docs/We
 Element/template#Browser_compatibility)
 
 Actually, almost any HTML element could be used the same way. However the template one has two significant advantages:
-* It is not rendered: it speeds up the loading of the page and no special handling is required to hide it
+* It is parsed but not rendered: it speeds up the loading of the page and no special handling is required to hide it
 * It accepts any HTML content: try setting innerHTML to "&lt;tr&gt;&lt;/tr&gt;" on a
-[DIV element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div).
+[DIV element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div), it won't accept it.
 
 So - after few modifications - here is the template content illustrating all features:
 
@@ -332,21 +335,21 @@ So - after few modifications - here is the template content illustrating all fea
 
 ### Tokenizing
 
-Now that we have a content, let see how we can isolate each part in order to distinguish the statc text from the places
-where replacements are needed.
+Now that we have a content, let see how we can isolate each part in order to distinguish the static text from the places
+where replacements are required.
 
 Until recently I was not a big fan of
 [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 I was under the impression that they were slow and useless
 because they were only telling you if a string respects a given pattern. Then I read the book
 [JavaScript The Good Parts](https://www.google.ca/search?q=Javascript+the+good+parts) from
-[Douglas Crockford](https://en.wikipedia.org/wiki/Douglas_Crockford) and the chapter 7 was an eye opener.
+[Douglas Crockford](https://en.wikipedia.org/wiki/Douglas_Crockford). The chapter 7 was an eye opener.
 Indeed, on top of matching a pattern it can also extract specific information from it using capturing groups
 (parenthesis).
 
-... So I created 3 patterns ... that I combine with | and a final matching all
+So, for each pattern, a regular expression is capable of finding it and extracting its content:
 
-[Matching field name](https://regex101.com/?regex=\{\{%28[a-zA-Z_][a-zA-Z_0-9]%2B%29\}\}#javascript)
+[Matching field name](https://regex101.com/r/cS5wD1/2)
 
 [Matching attribute injection](https://regex101.com/?regex=\{%25%25\}="%28[^"]%2B%29"#javascript)
 
