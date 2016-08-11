@@ -349,19 +349,19 @@ Indeed, on top of matching a pattern it can also extract specific information fr
 
 So, for each pattern, a regular expression is capable of finding it and extracting its content:
 
-[Matching field name](https://regex101.com/r/cS5wD1/2)
+* [Matching field name](https://regex101.com/r/cS5wD1/3)
 
-[Matching attribute injection](https://regex101.com/?regex=\{%25%25\}="%28[^"]%2B%29"#javascript)
+* [Matching attribute injection](https://regex101.com/r/aC9aQ8/1)
 
-[Matching textual injection](https://regex101.com/?regex=\{%25%28%28?:[^%25]|%25[^\}]%29*%29%25\}#javascript)
+* [Matching textual injection](https://regex101.com/r/rO6yC6/1)
 
+Once the three are combined with an additional default case, it gives the
+[tokenizing pattern](https://regex101.com/r/uB7tR4/1).
 
-/\{\{%28[a-zA-Z_][a-zA-Z_0-9]%2B%29\}\}|\{%25%25\}="%28[^"]%2B%29"|\{%25%28%28?:[^%25]|%25[^\}]%29*%29%25\}|%28[^\{]%2B%29/g,
+From there, the algorithm consists in matching the string through this regular expression.
 
-\{\{%28[a-zA-Z_][a-zA-Z_0-9]+%29\}\}
-\{%25%25\}="%28[^"]+%29"
-\{%25%28%28?:[^%25]|%25[^\}]%29*%29%25\}
-%28[^\{]+%29
+Don't forget to reset the [lastIndex property](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+Global_Objects/RegExp/lastIndex) before matching a new string.
 
 ### Code generation
 
