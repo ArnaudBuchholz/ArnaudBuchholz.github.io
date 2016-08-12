@@ -336,7 +336,8 @@ So - after few modifications - here is the template content illustrating all fea
 ### Tokenizing
 
 Now that we have a content, let see how we can isolate each part in order to distinguish the static text from the places
-where replacements are required.
+where replacements are required. This process is called
+[tokenizing](https://en.wikipedia.org/wiki/Tokenization_%28lexical_analysis%29).
 
 Until recently I was not a big fan of
 [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
@@ -387,27 +388,28 @@ Global_Objects/RegExp/lastIndex) before matching a new string.
 
 ### Code generation
 
-The first version of this helper was returning a function that was not only
-[tokenizing](https://en.wikipedia.org/wiki/Tokenization_%28lexical_analysis%29) the HTML of the template but also
-substituting the tokens. Then I realized that it would be faster to tokenize the content first and then returning a
-function doing the substitution job only. Hence I rewrote it to dynamically build the template function based on the
-template (I'll come to that after).
+If you were patient enough to read this article until this part: congratulations! You have reached the funniest part of
+it.
 
+The first version of the helper was returning a function that was not only tokenizing the HTML of the template but also
+substituting the tokens. Then I realized that it would be faster to tokenize the content first and then returning a
+function that does the substitution job only.
+Hence I rewrote it to dynamically build the template function based on the template description.
 
 I have a real fascination for the process of generating code: the outcome is most of the time faster than the
 traditional way of doing things because it produces highly specialized functions.
 
-There are two ways to generate code:
-- [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval)
-- [Function constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)
+There are several ways to generate code, the two most commons are:
+* [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval)
+* [Function constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)
 
-(...) There are other ways which are more elaborated such as loading dynamically generated sources either by inserting a
-new script tag whose content is generated or by loading a script from a
+(...) There are other ways which are more elaborated. For instance, One may also load a script from a
 [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs). But let's keep things simple.
 
 In general eval is a bad idea: it merges the content withing the global scope and it is an open door for code injection.
 [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode) brings some security
-mechanisms but most linters will reject it anyway. And I agree: eval is evil.
+mechanisms but most linters will reject it anyway. And I agree:
+[eval is evil](http://jslint.fantasy.codes/eval-is-evil/).
 
 On the other hand, the Function constructor builds the function in a isolated scope.
 
