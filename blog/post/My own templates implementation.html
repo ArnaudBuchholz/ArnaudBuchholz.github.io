@@ -197,13 +197,13 @@ myApp.controller('SampleController', ['$scope', function($scope) {
 }]);`
 
 where the body is defined as:
-<code class="html"><span class="s0">&lt;</span><span class="s1">html </span><span class="s0">ng-app=</span><span class="s2">&quot;myApp&quot;</span><span class="s0">&gt; 
-    </span><span class="s3">&lt;!-- ... --&gt;</span><span class="s0"> 
-    &lt;</span><span class="s1">body </span><span class="s0">ng-controller=</span><span class="s2">&quot;SampleController&quot;</span><span class="s0">&gt; 
-        &lt;</span><span class="s1">h1</span><span class="s0">&gt;{{title}}&lt;/</span><span class="s1">h1</span><span class="s0">&gt; 
-        &lt;</span><span class="s1">input </span><span class="s0">id=</span><span class="s2">&quot;{{id}}&quot; </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">ng-checked=</span><span class="s2">&quot;checked&quot;</span><span class="s0">&gt; 
-        &lt;</span><span class="s1">label </span><span class="s0">for=</span><span class="s2">&quot;{{id}}&quot; </span><span class="s0">title=</span><span class="s2">&quot;{{label}}&quot;</span><span class="s0">&gt;{{label}}&lt;/</span><span class="s1">label</span><span class="s0">&gt; 
-    &lt;/</span><span class="s1">body</span><span class="s0">&gt; 
+<code class="html"><span class="s0">&lt;</span><span class="s1">html </span><span class="s0">ng-app=</span><span class="s2">&quot;myApp&quot;</span><span class="s0">&gt;
+    </span><span class="s3">&lt;!-- ... --&gt;</span><span class="s0">
+    &lt;</span><span class="s1">body </span><span class="s0">ng-controller=</span><span class="s2">&quot;SampleController&quot;</span><span class="s0">&gt;
+        &lt;</span><span class="s1">h1</span><span class="s0">&gt;{{title}}&lt;/</span><span class="s1">h1</span><span class="s0">&gt;
+        &lt;</span><span class="s1">input </span><span class="s0">id=</span><span class="s2">&quot;{{id}}&quot; </span><span class="s0">type=</span><span class="s2">&quot;checkbox&quot; </span><span class="s0">ng-checked=</span><span class="s2">&quot;checked&quot;</span><span class="s0">&gt;
+        &lt;</span><span class="s1">label </span><span class="s0">for=</span><span class="s2">&quot;{{id}}&quot; </span><span class="s0">title=</span><span class="s2">&quot;{{label}}&quot;</span><span class="s0">&gt;{{label}}&lt;/</span><span class="s1">label</span><span class="s0">&gt;
+    &lt;/</span><span class="s1">body</span><span class="s0">&gt;
 &lt;/</span><span class="s1">html</span><span class="s0">&gt;</span></code>
 
 Sample reference:
@@ -452,6 +452,84 @@ b0fd9ae18c2f79c866debcafacc954eb8bcec518/test/host/mocha/tpl.html#L169):
     return __d.importNode(__t.content, true);
 }
 )`
+
+Now if we take [sample 4](https://github.com/ArnaudBuchholz/gpf-js/blob/b0fd9ae18c2f79c866debcafacc954eb8bcec518/test/host/mocha/tpl.html#L172)
+`(function() {
+    var __a = arguments
+      , $object = __a[0]
+      , $index = __a[1]
+      , __r = []
+      , __d = document
+      , __t = __d.createElement("template");
+    function __s(v) {
+        if (undefined === v)
+            return "";
+        return v.toString();
+    }
+    function $write(t) {
+        __r.push(__s(t));
+    }
+    __r.push("<h1>;");
+    __r.push(__s($object.title));
+    __r.push("</h1>;");
+    __r.push(__s($object.content));
+    __t.innerHTML = __r.join("");
+    return __d.importNode(__t.content, true);
+}
+)`
+
+Now if we take [sample 6](https://github.com/ArnaudBuchholz/gpf-js/blob/b0fd9ae18c2f79c866debcafacc954eb8bcec518/test/host/mocha/tpl.html#L172)
+`(function() {
+    var __a = arguments
+      , $object = __a[0]
+      , $index = __a[1]
+      , __r = []
+      , __d = document
+      , __t = __d.createElement("template");
+    function __s(v) {
+        if (undefined === v)
+            return "";
+        return v.toString();
+    }
+    function $write(t) {
+        __r.push(__s(t));
+    }
+    __r.push("This is a static ");
+    $write('content');
+    __t.innerHTML = __r.join("");
+    return __d.importNode(__t.content, true);
+}
+)
+`
+
+Now if we take [sample 8](https://github.com/ArnaudBuchholz/gpf-js/blob/b0fd9ae18c2f79c866debcafacc954eb8bcec518/test/host/mocha/tpl.html#L172)
+`(function() {
+    var __a = arguments
+      , $object = __a[0]
+      , $index = __a[1]
+      , __r = []
+      , __d = document
+      , __t = __d.createElement("template");
+    function __s(v) {
+        if (undefined === v)
+            return "";
+        return v.toString();
+    }
+    function $write(t) {
+        __r.push(__s(t));
+    }
+    if ($object.condition) {
+        __r.push("<span>");
+        $write("Hello");
+        __r.push("</span>");
+    } else {
+        __r.push("<div></div>");
+    }
+    __t.innerHTML = __r.join("");
+    return __d.importNode(__t.content, true);
+}
+)
+`
 
 ### Testing
 
