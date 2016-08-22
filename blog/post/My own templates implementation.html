@@ -29,18 +29,18 @@ articles I would like to write is maintained and I also created a task on my
 [Habitica](https://habitica.com/static/front/#?memberId=54a5210c-0e2b-4e21-b99c-ee27062f1bd6) as a reminder to fill the
 blog.
 
-So you may wonder what do I spend my time on?
+So you may wonder what do I spend my time on.
 
 A lot of personal - good and bad - events, a new [framework](http://openui5.org/) to learn and a deep code refactoring
 [to improve maintainability](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/metrics.js#L158-L193) are taking
 most of it.
 
 But in between everything I still have some rare occasions of fun and I started this
-[microproject](https://en.wiktionary.org/wiki/microproject) recently.
+[micro project](https://en.wiktionary.org/wiki/microproject) recently.
 
 ## The need
 
-In [the GPF-JS library](https://github.com/ArnaudBuchholz/gpf-js), the source and test files are organised with the help
+In [the GPF-JS library](https://github.com/ArnaudBuchholz/gpf-js), the source and test files are organized with the help
 of one special configuration file:
 [sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json).
 It is the [vertebral column](https://en.wikipedia.org/wiki/Vertebral_column) of the project as all the tools related to
@@ -167,7 +167,8 @@ definition and behaviors.
 
 (...) I recommend reading this
 [manifesto against frameworks](http://bitworking.org/news/2014/05/zero_framework_manifesto), it draws the line between
-libraries and frameworks
+libraries and frameworks and offers an interesting point of view on why we should avoid frameworks to push innovations
+as a standard.
 
 This being said,
 [each framework](https://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks) has its
@@ -215,7 +216,7 @@ A framework could be used but it's just too much with regards to what has to be 
 And, obviously, mustache is appropriate but I would have missed an opportunity to
 [learn new things](http://www.lifehack.org/articles/featured/learn-something-new-every-day.html).
 
-Regarding the requirements, the expected benefits of the new template engine are:
+Regarding the requirements, the expected benefits of the simple template engine are:
 * Flexible and easy way to define valid HTML
 * Simple textual bindings
 * JavaScript injection
@@ -224,7 +225,8 @@ The engine must generate a function accepting at least two parameters:
 * An object providing values for substitution
 * An index that will distinguish objects when used in an enumeration
 
-The result will be a set of DOM nodes.
+The result will be a DOM node that can be placed anywhere (for instance, using
+[appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)).
 
 In terms of syntax, the following patterns will be accepted in the template definition:
 * **{{fieldName}}** to be replaced with the object's field named fieldName: it can be used inside any textual content
@@ -406,7 +408,7 @@ There are several ways to generate code in JavaScript, the two most commons are:
 (...) There are other ways which are more elaborated. For instance, one may also load a script from a
 [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs). But let's keep things simple.
 
-In general eval is a bad idea: it merges the content within the global scope and it is an open door for unwanted code
+In general eval is a bad idea: it merges the content within the local scope and it is an open door for unwanted code
 injection or unexpected side effects. [Strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 Strict_mode) brings some security mechanisms but most linters will reject it anyway. And I agree:
 [eval is evil](http://jslint.fantasy.codes/eval-is-evil/).
@@ -422,7 +424,7 @@ with a null scope in a non-strict environment. From there, you can access all gl
 
 (...) I also recommend this interesting article [Writing a JavaScript framework -
 Sandboxed code evaluation](https://blog.risingstack.com/writing-a-javascript-framework-sandboxed-code-evaluation/): it
-proposes an ES6 alternative to create sandboxed environments.
+proposes an ES6 alternative to create real sandboxed environments.
 
 The [factory builder](https://github.com/ArnaudBuchholz/gpf-js/blob/b0fd9ae18c2f79c866debcafacc954eb8bcec518/res/
 tpl.js#L36-L69) maintain an array of code lines (named **code**) to finally
@@ -461,8 +463,8 @@ test/host/mocha/tpl.html#L169):
 
 Because the template allows JavaScript injection, it is important to make sure that the injected code won't collide with
 the one that ensures the template mechanics (basically everything but the line containing "This is a static one").
-I still remember this funny [PHP warning](http://php.net/manual/en/language.oop5.magic.php) about using __ in names so I
-decided to prefix the internal names with it.
+I still remember this funny [PHP warning](http://php.net/manual/en/language.oop5.magic.php) about using magical __ in
+names so I decided to prefix the internal names with it.
 
 So you have:
 * **__a** shortcut to [arguments](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments)
@@ -569,6 +571,23 @@ common use cases of this template library.
 
 ## Conclusion
 
+The purpose of this exercise was to try to implement a minimalist template engine that would fit my needs, I would not
+pretend it to be perfect nor fully functional. However, besides the implementation, I am more interested by the lessons
+I learned from it. My hope is that you will also learn from it.
+
+As usual, any
+[feedback](mailto://arnaud.buchholz@free.fr?subject=[gpf-js.blogspot] My%20own%20templates%20implementation) is welcome.
+
+Right now, I am happy with the result: the minified version of
+[mustache.js](https://github.com/janl/mustache.js/blob/master/mustache.min.js) is about 9 KB, mine would take only 1KB
+(using [jscompress.com](https://jscompress.com/)).
+
+But there would be lots to add to it, such as:
+* error management (relate to the original template line if something wrong occurs when building the function)
+* [two way bindings](http://stackoverflow.com/questions/13504906/what-is-two-way-binding) (I'd like to try that one...)
+* enumeration helpers (such as for each object property)
+* conditional helpers
+* ...
 
 
 </code>
