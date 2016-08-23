@@ -17,7 +17,7 @@
         blogCssUrl = "../blog.css";
 
     } else {
-        baseUrl = locationProtocol + "://ArnaudBuchholz.github.io/";
+        baseUrl = locationProtocol + "//ArnaudBuchholz.github.io/";
         gpfUrl = baseUrl + "gpf.js";
         gpfLoadedUrls = baseUrl + "blog/jshint.js, " + baseUrl + "blog/blog.js";
         blogCssUrl = baseUrl + "blog/blog.css";
