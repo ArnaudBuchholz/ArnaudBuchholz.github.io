@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: compatibility/promise.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: compatibility/promise.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Promise polyfill
+ * @since 0.1.5
+ */
+/*#ifndef(UMD)*/
+"use strict";
+/*global _gpfAssert*/ // Assertion method
+/*global _gpfIgnore*/ // Helper to remove unused parameter warning
+/*global _gpfMainContext*/ // Main context object
+/*#endif*/
+
+// Ensure the functions are called only once
+function _gpfPromiseSafeResolve (fn, onFulfilled, onRejected) {
+    var safe = true;
+    function makeSafe (callback) {
+        return function (value) {
+            if (safe) {
+                safe = false;
+                callback(value);
+            }
+        };
+    }
+    try {
+        fn(makeSafe(onFulfilled), makeSafe(onRejected));
+    } catch (e) {
+        if (safe) {
+            safe = false;
+            onRejected(e);
+        }
+    }
+}
+
+function _gpfPromiseFinale () {
+    /*jshint validthis:true*/
+    var me = this; //eslint-disable-line no-invalid-this
+    me._handlers.forEach(function (handler) {
+        handler.process(me);
+    });
+    me._handlers = []; // Reset list
+}
+
+function _gpfPromiseReject (newValue) {
+    /*jshint validthis:true*/
+    var me = this; //eslint-disable-line no-invalid-this
+    me._state = false;
+    me._value = newValue;
+    _gpfPromiseFinale.call(me);
+}
+
+//Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+function _gpfPromiseResolve (newValue) {
+    /*jshint validthis:true*/
+    var me = this; //eslint-disable-line no-invalid-this
+    try {
+        _gpfAssert(newValue !== me, "A promise cannot be resolved with itself.");
+        if (newValue &amp;&amp; (typeof newValue === "object" || typeof newValue === "function")) {
+            var then = newValue.then;
+            if ("function" === typeof then) {
+                _gpfPromiseSafeResolve(then.bind(newValue), _gpfPromiseResolve.bind(me), _gpfPromiseReject.bind(me));
+                return;
+            }
+        }
+        me._state = true;
+        me._value = newValue;
+        _gpfPromiseFinale.call(me);
+    } catch (e) {
+        _gpfPromiseReject.call(me, e);
+    }
+}
+
+var _GpfPromise = gpf.Promise = function (fn) {
+    _gpfPromiseSafeResolve(fn, _gpfPromiseResolve.bind(this), _gpfPromiseReject.bind(this));
+};
+
+function _gpfPromiseHandler () {
+}
+
+_gpfPromiseHandler.prototype = {
+
+    onFulfilled: null,
+
+    onRejected: null,
+
+    resolve: null,
+
+    reject: null,
+
+    process: function (promise) {
+        /*jshint validthis:true*/
+        var me = this; //eslint-disable-line no-invalid-this
+        if (promise._state === null) {
+            /* istanbul ignore else */ // Not sure when it would happen
+            if (!promise.hasOwnProperty("_handlers")) {
+                promise._handlers = [];
+            }
+            promise._handlers.push(me);
+            return;
+        }
+        setTimeout(function () {
+            var callback,
+                result;
+            if (promise._state) {
+                callback = me.onFulfilled;
+            } else {
+                callback = me.onRejected;
+            }
+            if (null === callback) {
+                if (promise._state) {
+                    me.resolve(promise._value);
+                } else {
+                    me.reject(promise._value);
+                }
+                return;
+            }
+            try {
+                result = callback(promise._value);
+            }  catch (e) {
+                me.reject(e);
+                return;
+            }
+            me.resolve(result);
+        }, 0);
+    }
+
+};
+
+_GpfPromise.prototype = {
+
+    // @property {Boolean|null} state of the promise
+    _state: null,
+
+    // @property {*} fufilment value
+    _value: null,
+
+    // @property {Handler[]} list of handlers
+    _handlers: [],
+
+    then: function (onFulfilled, onRejected) {
+        var me = this;
+        return new _GpfPromise(function (resolve, reject) {
+            var handler = new _gpfPromiseHandler();
+            if (undefined !== onFulfilled) {
+                handler.onFulfilled = onFulfilled;
+            }
+            if (undefined !== onRejected) {
+                handler.onRejected = onRejected;
+            }
+            handler.resolve = resolve;
+            handler.reject = reject;
+            handler.process(me);
+        });
+    },
+
+    "catch": function (onRejected) {
+        return this.then(null, onRejected);
+    }
+
+};
+
+_GpfPromise.resolve = function (value) {
+    return new _GpfPromise(function (resolve) {
+        resolve(value);
+    });
+};
+
+_GpfPromise.reject = function (value) {
+    return new _GpfPromise(function (resolve, reject) {
+        _gpfIgnore(resolve);
+        reject(value);
+    });
+};
+
+_GpfPromise.all = function (promises) {
+    if (0 === promises.length) {
+        return _GpfPromise.resolve([]);
+    }
+    return new _GpfPromise(function (resolve, reject) {
+        var remaining = promises.length;
+        function handle (result, index) {
+            try {
+                if (result &amp;&amp; result instanceof _GpfPromise) {
+                    result.then(function (value) {
+                        handle(value, index);
+                    }, reject);
+                    return;
+                }
+                promises[index] = result;
+                if (--remaining === 0) {
+                    resolve(promises);
+                }
+            } catch (e) {
+                reject(e);
+            }
+        }
+        promises.forEach(handle);
+    });
+};
+
+_GpfPromise.race = function (promises) {
+    return new _GpfPromise(function (resolve, reject) {
+        promises.forEach(function (promise) {
+            promise.then(resolve, reject);
+        });
+    });
+};
+
+/* istanbul ignore next */ // Promise exists now in NodeJS
+if (undefined === _gpfMainContext.Promise) {
+    _gpfMainContext.Promise = _GpfPromise;
+}
+
+/*#ifndef(UMD)*/
+
+gpf.internals._GpfPromise = _GpfPromise;
+
+/*#endif*/
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="gpf.Error.html">Error</a></li><li><a href="gpf.Error.AbstractMethod.html">AbstractMethod</a></li><li><a href="gpf.Error.AssertionFailed.html">AssertionFailed</a></li><li><a href="gpf.Error.InvalidParameter.html">InvalidParameter</a></li><li><a href="gpf.Error.NotImplemented.html">NotImplemented</a></li></ul><h3>Namespaces</h3><ul><li><a href="gpf.html">gpf</a></li><li><a href="gpf.node.html">node</a></li><li><a href="gpf.web.html">web</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-CODESTYLE.html">CODESTYLE</a></li><li><a href="tutorial-COMPATIBILITY.html">COMPATIBILITY</a></li><li><a href="tutorial-LOADING.html">LOADING</a></li></ul><h3>Global</h3><ul><li><a href="global.html#abstractMethod">abstractMethod</a></li><li><a href="global.html#assertionFailed">assertionFailed</a></li><li><a href="global.html#invalidParameter">invalidParameter</a></li><li><a href="global.html#notImplemented">notImplemented</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Nov 21 2016 22:58:44 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

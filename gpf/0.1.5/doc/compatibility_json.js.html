@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: compatibility/json.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: compatibility/json.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file JSON polyfill
+ * @since 0.1.5
+ */
+/*#ifndef(UMD)*/
+"use strict";
+/*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
+/*global _gpfEmptyFunc*/ // An empty function
+/*global _gpfFunc*/ // Create a new function using the source
+/*global _gpfMainContext*/ // Main context object
+/*global _gpfObjectForEach*/ // Similar to [].forEach but for objects
+/*global _gpfStringEscapeFor*/ // Make the string content compatible with lang
+/*exported _gpfJsonParse*/ // JSON.parse
+/*exported _gpfJsonStringify*/ // JSON.stringify
+/*#endif*/
+
+var
+    /**
+     * The JSON.stringify() method converts a JavaScript value to a JSON string
+     *
+     * @param {*} value the value to convert to a JSON string
+     * @return {String} JSON representation of the value
+     * @since 0.1.5
+     */
+    _gpfJsonStringify,
+
+    /**
+     * The JSON.parse() method parses a string as JSON
+     *
+     * @param {*} text The string to parse as JSON
+     * @return {Object} Parsed value
+     * @since 0.1.5
+     */
+    _gpfJsonParse;
+
+// Filter functions and escape values
+function _gpfPreprocessValueForJson (callback) {
+    return function (value, index) {
+        if ("function" === typeof value) {
+            return; // ignore
+        }
+        callback(_gpfJsonStringifyPolyfill(value), index);
+    };
+}
+
+function _gpfObject2Json (object) {
+    var isArray,
+        results;
+    isArray = object instanceof Array;
+    results = [];
+    if (isArray) {
+        _gpfArrayForEach(object, _gpfPreprocessValueForJson(function (value) {
+            results.push(value);
+        }));
+        return "[" + results.join(",") + "]";
+    }
+    _gpfObjectForEach(object, _gpfPreprocessValueForJson(function (value, property) {
+        results.push(_gpfStringEscapeFor(property, "javascript") + ":" + value);
+    }));
+    return "{" + results.join(",") + "}";
+}
+
+function _gpfJsonStringifyObject (object) {
+    return object.toString();
+}
+
+var _gpfJsonStringifyMapping = {
+    undefined: _gpfEmptyFunc,
+    "function": _gpfEmptyFunc,
+    number: _gpfJsonStringifyObject,
+    "boolean": _gpfJsonStringifyObject,
+    string: function (object) {
+        return _gpfStringEscapeFor(object, "javascript");
+    },
+    object: function (object) {
+        if (null === object) {
+            return "null";
+        }
+        return _gpfObject2Json(object);
+    }
+};
+
+/*jshint -W003*/ // Circular reference _gpfJsonStringifyPolyfill &lt;-> _gpfObject2Json
+function _gpfJsonStringifyPolyfill (object) {
+    return _gpfJsonStringifyMapping[typeof object](object);
+}
+/*jshint +W003*/
+
+function _gpfJsonParsePolyfill (test) {
+    return _gpfFunc("return " + test)();
+}
+
+// Used only for environments where JSON is not defined
+/* istanbul ignore next */
+if ("undefined" === typeof JSON) {
+
+    _gpfJsonStringify = _gpfJsonStringifyPolyfill;
+    _gpfJsonParse = _gpfJsonParsePolyfill;
+
+    // Creates the JSON global object
+    _gpfMainContext.JSON = {
+        stringify: _gpfJsonStringify,
+        parse: _gpfJsonParse
+    };
+
+} else {
+
+    _gpfJsonStringify = JSON.stringify;
+    _gpfJsonParse = JSON.parse;
+
+}
+
+/*#ifndef(UMD)*/
+
+gpf.internals._gpfJsonStringifyPolyfill = _gpfJsonStringifyPolyfill;
+gpf.internals._gpfJsonParsePolyfill = _gpfJsonParsePolyfill;
+
+/*#endif*/
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="gpf.Error.html">Error</a></li><li><a href="gpf.Error.AbstractMethod.html">AbstractMethod</a></li><li><a href="gpf.Error.AssertionFailed.html">AssertionFailed</a></li><li><a href="gpf.Error.InvalidParameter.html">InvalidParameter</a></li><li><a href="gpf.Error.NotImplemented.html">NotImplemented</a></li></ul><h3>Namespaces</h3><ul><li><a href="gpf.html">gpf</a></li><li><a href="gpf.node.html">node</a></li><li><a href="gpf.web.html">web</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-CODESTYLE.html">CODESTYLE</a></li><li><a href="tutorial-COMPATIBILITY.html">COMPATIBILITY</a></li><li><a href="tutorial-LOADING.html">LOADING</a></li></ul><h3>Global</h3><ul><li><a href="global.html#abstractMethod">abstractMethod</a></li><li><a href="global.html#assertionFailed">assertionFailed</a></li><li><a href="global.html#invalidParameter">invalidParameter</a></li><li><a href="global.html#notImplemented">notImplemented</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Nov 21 2016 22:58:44 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

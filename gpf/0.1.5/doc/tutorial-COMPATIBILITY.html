@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: COMPATIBILITY</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: COMPATIBILITY</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>COMPATIBILITY</h2>
+</header>
+
+<article>
+    <h1>GPF Library compatibility layer</h1><p>The library offers a common compatibility layer whatever the environment it runs on.</p>
+<h2>Standard object methods and statics</h2><h3>Array</h3><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every">every</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">filter</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach">forEach</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf">indexOf</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map">map</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce">reduce</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from">Array.from</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray">Array.isArray</a></li>
+</ul>
+<h3>Date</h3><p>The Date constructor supports <a href="http://gpf-js.blogspot.ca/2016/02/date-override.html">ISO 8601 format</a>
+and instances offers
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString">toIsoString</a> method.</p>
+<h3>Function</h3><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">bind</a></li>
+<li>compatibleName(): introduced to provide a convenient way to read function names. Indeed,
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name">name</a> property is not
+supported on all hosts.</li>
+</ul>
+<h3>Object</h3><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create">Object.create</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf">Object.getPrototypeOf</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys">Object.keys</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values">Object.values</a></li>
+</ul>
+<h3>String</h3><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim">trim</a></li>
+</ul>
+<h2>Promise</h2><p>The library offers (when necessary) a <a href="https://promisesaplus.com/">Promise/A+</a> implementation based on
+<a href="https://github.com/taylorhakes/promise-polyfill">promise-polyfill</a></p>
+<h2>Timeout</h2><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout">setTimeout</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/clearTimeout">clearTimeout</a></li>
+</ul>
+<p>setInterval / clearInterval are not managed but can be easily simulated by chaining timeouts.</p>
+<p>On some hosts, <a href="gpf.html#.handleTimeout">gpf.handleTimeout</a>() must be used to activate timeouts.</p>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="gpf.Error.html">Error</a></li><li><a href="gpf.Error.AbstractMethod.html">AbstractMethod</a></li><li><a href="gpf.Error.AssertionFailed.html">AssertionFailed</a></li><li><a href="gpf.Error.InvalidParameter.html">InvalidParameter</a></li><li><a href="gpf.Error.NotImplemented.html">NotImplemented</a></li></ul><h3>Namespaces</h3><ul><li><a href="gpf.html">gpf</a></li><li><a href="gpf.node.html">node</a></li><li><a href="gpf.web.html">web</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-CODESTYLE.html">CODESTYLE</a></li><li><a href="tutorial-COMPATIBILITY.html">COMPATIBILITY</a></li><li><a href="tutorial-LOADING.html">LOADING</a></li></ul><h3>Global</h3><ul><li><a href="global.html#abstractMethod">abstractMethod</a></li><li><a href="global.html#assertionFailed">assertionFailed</a></li><li><a href="global.html#invalidParameter">invalidParameter</a></li><li><a href="global.html#notImplemented">notImplemented</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Nov 21 2016 22:58:45 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
