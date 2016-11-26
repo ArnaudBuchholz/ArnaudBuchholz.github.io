@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">74.36</p>
+      <p class="stat">69.54</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">171</p>
+      <p class="stat">141</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">15.16</p>
+      <p class="stat">14.55</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.49</p>
+      <p class="stat">0.33</p>
     </div>
   </div>
 </div>
@@ -98,11 +98,6 @@
 /*global _GPF_HOST*/ // Host types
 /*global _gpfAssert*/ // Assertion method
 /*global _gpfHost*/ // Host type
-/*global _gpfObjectForEach*/ // Similar to [].forEach but for objects
-/*exported _GPF_FS_TYPE_DIRECTORY*/ // gpf.fs.TYPE_DIRECTORY
-/*exported _GPF_FS_TYPE_FILE*/ // gpf.fs.TYPE_FILE
-/*exported _GPF_FS_TYPE_NOT_FOUND*/ // gpf.fs.TYPE_NOT_FOUND
-/*exported _GPF_FS_TYPE_UNKNOWN*/ // gpf.fs.TYPE_UNKNOWN
 /*exported _gpfALPHA*/ // Letters (uppercase)
 /*exported _gpfAlpha*/ // Letters (lowercase)
 /*exported _gpfCreateConstants*/ // Automate constants creation
@@ -126,16 +121,15 @@
  * @since 0.1.5
  */
 
+/**
+ * @namespace gpf.typedef
+ * @description Root namespace for GPF type documentation.
+ *
+ * Note that this symbol does not exist and is used only for documentation purposes.
+ * @since 0.1.5
+ */
+
 var
-
-    //region File system constants
-
-    _GPF_FS_TYPE_NOT_FOUND          = 0,
-    _GPF_FS_TYPE_FILE               = 1,
-    _GPF_FS_TYPE_DIRECTORY          = 2,
-    _GPF_FS_TYPE_UNKNOWN            = 99,
-
-    //endregion
 
     // https://github.com/jshint/jshint/issues/525
     _GpfFunc = Function, // avoid JSHint error
@@ -186,7 +180,6 @@ function _gpfFuncUnsafe (params, source) {
  * @param {String[]} [params] params Parameter names list
  * @param {String} source Body of the function
  * @return {Function} New function
- * @private
  * @since 0.1.5
  */
 function _gpfFunc (params, source) {
@@ -213,29 +206,6 @@ function _gpfFunc (params, source) {
 function _gpfIsUnsignedByte (value) {
     return &quot;number&quot; === typeof value &amp;&amp; 0 &lt;= value &amp;&amp; value &lt; 256;
 }
-
-/**
- * Add constants to the provided object
- *
- * @param {Object} obj Object receiving the constants
- * @param {Object} dictionary Dictionary names to value
- * @private
- * @since 0.1.5
- */
-function _gpfCreateConstants (obj, dictionary) {
-    _gpfObjectForEach(dictionary, function (value, key) {
-        obj[key] = value;
-    });
-}
-
-_gpfCreateConstants(gpf, {
-    HOST_BROWSER: _GPF_HOST.BROWSER,
-    HOST_NODEJS: _GPF_HOST.NODEJS,
-    HOST_PHANTOMJS: _GPF_HOST.PHANTOMJS,
-    HOST_RHINO: _GPF_HOST.RHINO,
-    HOST_UNKNOWN: _GPF_HOST.UNKNOWN,
-    HOST_WSCRIPT: _GPF_HOST.WSCRIPT
-});
 
 /* istanbul ignore else */ // Because tested with NodeJS
 if (_GPF_HOST.NODEJS === _gpfHost) {
