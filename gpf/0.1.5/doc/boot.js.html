@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: boot.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: boot.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Host detection, non-UMD loader
+ */
+/*#ifndef(UMD)*/
+"use strict";
+/*exported _GPF_HOST*/ // Host types
+/*exported _gpfDosPath*/ // DOS-like path
+/*exported _gpfEmptyFunc*/ // An empty function
+/*exported _gpfExit*/ // Exit function
+/*exported _gpfHost*/ // Host type
+/*exported _gpfIgnore*/ // Helper to remove unused parameter warning
+/*exported _gpfMainContext*/ // Main context object
+/*exported _gpfMsFSO*/ // Scripting.FileSystemObject activeX
+/*exported _gpfNodeFs*/ // Node require("fs")
+/*exported _gpfNodePath*/ // Node require("path")
+/*exported _gpfVersion*/ // GPF version
+/*exported _gpfWebDocument*/ // Browser document object
+/*exported _gpfWebHead*/ // Browser head tag
+/*exported _gpfWebWindow*/ // Browser window object
+/*eslint-disable no-unused-vars*/
+/*#endif*/
+
+/*jshint browser: true, node: true, phantom: true, rhino: true, wsh: true*/
+/*eslint-env browser, node, phantomjs, rhino, wsh*/
+
+// An empty function
+function _gpfEmptyFunc () {}
+
+var
+    // GPF version
+    _gpfVersion = "0.1.5",
+
+    /**
+     * Host type
+     *
+     * @enum {String}
+     */
+    _GPF_HOST = {
+        /** Browser */
+        BROWSER:    "browser",
+        /** [NodeJs](http://nodejs.org/) */
+        NODEJS:     "nodejs",
+        /** [PhantomJS](http://phantomjs.org/) */
+        PHANTOMJS:  "phantomjs",
+        /** [Rhino](http://developer.mozilla.org/en/docs/Rhino) */
+        RHINO:      "rhino",
+        /** Unknown: detection failed */
+        UNKNOWN:    "unknown",
+        /** [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx) */
+        WSCRIPT:    "wscript"
+    },
+
+    /**
+     * Current host type
+     *
+     * @type {_GPF_HOST}
+     */
+    _gpfHost = _GPF_HOST.UNKNOWN,
+
+    /** Indicates that paths are DOS-like (i.e. case insensitive with /) */
+    _gpfDosPath = false,
+
+    /*jshint -W040*/ // This is the common way to get the global context
+    /**
+     * Main context object
+     *
+     * @type {Object}
+     */
+    _gpfMainContext = this, //eslint-disable-line no-invalid-this, consistent-this
+    /*jshint +W040*/
+
+    /**
+     * Helper to ignore unused parameter
+     *
+     * @param {*} param
+     */
+    /*gpf:nop*/ _gpfIgnore = _gpfEmptyFunc,
+
+    /**
+     * Exit function
+     *
+     * @param {Number} code
+     */
+    _gpfExit = _gpfEmptyFunc,
+
+    /**
+     * Browser window object
+     *
+     * @type {Object}
+     */
+    _gpfWebWindow,
+
+    /**
+     * Browser [document](https://developer.mozilla.org/en-US/docs/Web/API/Document) object
+     *
+     * @type {Object}
+     */
+    _gpfWebDocument,
+
+    /**
+     * Browser [head](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/head) tag
+     *
+     * @type {Object}
+     */
+    _gpfWebHead,
+
+    /**
+     * [Scripting.FileSystemObject](https://msdn.microsoft.com/en-us/library/aa711216(v=vs.71).aspx) Object
+     *
+     * @type {Object}
+     */
+    _gpfMsFSO,
+
+    /**
+     * Node [require("fs")](https://nodejs.org/api/fs.html)
+     *
+     * @type {Object}
+     */
+    _gpfNodeFs,
+
+    /**
+     * Node [require("path")](https://nodejs.org/api/path.html)
+     *
+     * @type {Object}
+     */
+    _gpfNodePath;
+
+/*#ifdef(DEBUG)*/
+
+_gpfVersion += "-debug";
+
+/*#endif*/
+
+/*#ifndef(UMD)*/
+
+_gpfVersion += "-source";
+
+/**
+ * Synchronous read function
+ *
+ * @param {String} srcFileName
+ * @return {String} content of the srcFileName
+ */
+var _gpfSyncReadForBoot;
+
+/*#endif*/
+
+/* Host detection */
+/* istanbul ignore next */
+
+// Microsoft cscript / wscript
+if ("undefined" !== typeof WScript) {
+    _gpfHost = _GPF_HOST.WSCRIPT;
+    _gpfDosPath = true;
+
+/*#ifndef(UMD)*/
+    /*eslint-disable new-cap*/
+
+    _gpfMsFSO = new ActiveXObject("Scripting.FileSystemObject");
+
+    _gpfSyncReadForBoot = function (srcFileName) {
+        var srcFile = _gpfMsFSO.OpenTextFile(srcFileName),
+            srcContent = srcFile.ReadAll();
+        srcFile.Close();
+        return srcContent;
+    };
+
+    /*eslint-enable new-cap*/
+/*#endif*/
+
+} else if ("undefined" !== typeof print &amp;&amp; "undefined" !== typeof java) {
+    _gpfHost = _GPF_HOST.RHINO;
+    _gpfDosPath = false;
+
+/*#ifndef(UMD)*/
+
+    _gpfSyncReadForBoot = readFile;
+
+/*#endif*/
+
+// PhantomJS
+} else if ("undefined" !== typeof phantom &amp;&amp; phantom.version) {
+    _gpfHost = _GPF_HOST.PHANTOMJS;
+    _gpfDosPath = require("fs").separator === "\\";
+    _gpfMainContext = window;
+
+/*#ifndef(UMD)*/
+
+    _gpfNodeFs =  require("fs");
+
+    _gpfSyncReadForBoot = function (srcFileName) {
+        return _gpfNodeFs.read(srcFileName);
+    };
+
+/*#endif*/
+
+// Nodejs
+} else if ("undefined" !== typeof module &amp;&amp; module.exports) {
+    _gpfHost = _GPF_HOST.NODEJS;
+    _gpfNodePath = require("path");
+    _gpfDosPath = _gpfNodePath.sep === "\\";
+    _gpfMainContext = global;
+
+/*#ifndef(UMD)*/
+    /*eslint-disable no-sync*/ // Simpler this way
+
+    _gpfNodeFs =  require("fs");
+
+    _gpfSyncReadForBoot = function (srcFileName) {
+        return _gpfNodeFs.readFileSync(srcFileName).toString();
+    };
+
+/*#endif*/
+
+// Browser
+} else if ("undefined" !== typeof window) {
+    _gpfHost = _GPF_HOST.BROWSER;
+    _gpfMainContext = window;
+
+/*#ifndef(UMD)*/
+
+    _gpfSyncReadForBoot = function (srcFileName) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", srcFileName, false);
+        xhr.send();
+        return xhr.responseText;
+    };
+
+/*#endif*/
+
+}
+
+/*#ifndef(UMD)*/
+
+/**
+ * Loading sources occurs here for the non UMD version.
+ * UMD versions (debug / release) will have everything concatenated.
+ */
+
+// Need to create the gpf name 'manually'
+_gpfMainContext.gpf = {
+    internals: {} // To support testable internals
+};
+
+// gpfSourcesPath - if defined - gives the relative path to sources
+function _gpfGetSourcesPath () {
+    var result = gpfSourcesPath,
+        pathSep;
+    /* istanbul ignore next */ // Handled the right way with NodeJS
+    if ("undefined" === typeof result) {
+        result = "";
+    } else {
+        if (_gpfDosPath) {
+            pathSep = "\\";
+        } else {
+            pathSep = "/";
+        }
+        if (result.charAt(result.length - 1) !== pathSep) {
+            result += pathSep;
+        }
+    }
+    return result;
+}
+
+function _gpfLoadSources () { //jshint ignore:line
+    /*jslint evil: true*/
+    var sourcePath = _gpfGetSourcesPath(),
+        sourceListContent = _gpfSyncReadForBoot(sourcePath + "sources.json"),
+        _gpfSources,
+        allContent = [],
+        idx = 0,
+        source;
+    eval("_gpfSources = " + sourceListContent + ";"); //eslint-disable-line no-eval
+    for (; idx &lt; _gpfSources.length; ++idx) {
+        source = _gpfSources[idx];
+        if (source.load !== false) {
+            allContent.push(_gpfSyncReadForBoot(sourcePath + source.name + ".js"));
+        }
+    }
+    return allContent.join("\r\n");
+}
+
+/*jshint ignore:start*/ // Best way I found
+eval(_gpfLoadSources()); //eslint-disable-line no-eval
+/*jshint ignore:end*/
+
+/*#endif*/
+
+/**
+ * Returns a string identifying the detected host
+ *
+ * @return {String}
+ * - gpf.HOST_WSCRIPT for cscript and wscript
+ * - gpf.HOST_NODEJS for nodejs
+ * - gpf.HOST_PHANTOMJS for phantomjs
+ * - gpf.HOST_BROWSER for any browser
+ * - gpf.HOST_UNKNOWN if not detected
+ */
+gpf.host = function () {
+    return _gpfHost;
+};
+
+// Returns the current version
+gpf.version = function () {
+    return _gpfVersion;
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="gpf.Error.html">Error</a></li><li><a href="gpf.Error.AbstractMethod.html">AbstractMethod</a></li><li><a href="gpf.Error.AssertionFailed.html">AssertionFailed</a></li><li><a href="gpf.Error.InvalidParameter.html">InvalidParameter</a></li><li><a href="gpf.Error.NotImplemented.html">NotImplemented</a></li></ul><h3>Namespaces</h3><ul><li><a href="gpf.html">gpf</a></li><li><a href="gpf.node.html">node</a></li><li><a href="gpf.web.html">web</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-CODESTYLE.html">CODESTYLE</a></li><li><a href="tutorial-COMPATIBILITY.html">COMPATIBILITY</a></li><li><a href="tutorial-LOADING.html">LOADING</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Nov 22 2016 17:27:01 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
