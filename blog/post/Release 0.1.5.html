@@ -1,3 +1,4 @@
+<script src="../../../../Downloads/noUiSlider.9.0.0/nouislider.min.js"></script>
 <script language="javascript" src="../include.js"></script>
 <link rel="stylesheet" type="text/css" href="../file.css" />
 <div class="post">
@@ -18,8 +19,25 @@
 <code class="markdown">
 ## It's finally out !
 
-Almost one two years ago, I was experimenting NPM release and the version 0.1.4 was going out.
-Then, I started to focus on quality and automation and I reworked most of it.
+Almost two years ago, I was experimenting [NPM publication](https://docs.npmjs.com/cli/publish) and the
+version [0.1.4](https://www.npmjs.com/package/gpf-js) went out.
+
+At that time, I had no clear road map or vision of what I wanted to do with this library.
+Long story short, I was trying to consolidate my JavaScript know-how in order to re-create (in a better way) a library
+that I created in a previous company.
+
+If you check the [package.json history](https://github.com/ArnaudBuchholz/gpf-js/commits/master/package.json),
+version 0.1.5 'officially' started on [November 26th, 2015](https://github.com/ArnaudBuchholz/gpf-js/commit/
+f117eb8ba9f0c7aaf08ce65fb3c893e2b01e322b). This was after I added some [grunt packages](https://www.npmjs.com/) to
+automate linting ([jshint](https://www.npmjs.com/package/grunt-contrib-jshint) and
+[ESlint](https://www.npmjs.com/package/grunt-eslint)) as well as testing (mocha
+[1](https://www.npmjs.com/package/grunt-mocha), [2](https://www.npmjs.com/package/grunt-mocha-test)
+and istanbul [1](https://www.npmjs.com/package/grunt-istanbul),
+[2] (https://www.npmjs.com/package/grunt-istanbul-coverage)).
+
+Clearly, the goal shifted from coding only to automating, testing and checking quality.
+
+In this journey, I faced many problems, some of them are already [documented](http://gpf-js.blogspot.ca/).
 
 ### Source management
 
