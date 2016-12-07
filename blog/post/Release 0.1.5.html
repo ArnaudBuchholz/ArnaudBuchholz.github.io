@@ -12,9 +12,9 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
-    This new release delivers clean foundation to build the library in a proper way.
-    In this article, I will detail all the tooling that were built and what is the roadmap
-    for the next release.
+    This new release delivers clean foundation to build the library in a proper (and faster?) way.
+    In this article, I will detail all the tooling that were built and what is the road map
+    for the next releases.
 </div>
 <code class="markdown">
 ## It's finally out !
@@ -22,9 +22,9 @@
 Almost two years ago, I was experimenting [NPM publication](https://docs.npmjs.com/cli/publish) and the
 version [0.1.4](https://www.npmjs.com/package/gpf-js) went out.
 
-At that time, I had no clear road map or vision of what I wanted to do with this library.
+At that time, I had no clear road map or even a vision of what I wanted to do with this library.
 Long story short, I was trying to consolidate my JavaScript know-how in order to re-create (in a better way) a library
-that I created in a previous company.
+that I started in a previous company.
 
 If you check the [package.json history](https://github.com/ArnaudBuchholz/gpf-js/commits/master/package.json),
 version 0.1.5 'officially' started on [November 26th, 2015](https://github.com/ArnaudBuchholz/gpf-js/commit/
@@ -35,22 +35,30 @@ automate linting ([jshint](https://www.npmjs.com/package/grunt-contrib-jshint) a
 and istanbul [1](https://www.npmjs.com/package/grunt-istanbul),
 [2] (https://www.npmjs.com/package/grunt-istanbul-coverage)).
 
-Clearly, the goal shifted from coding only to automating, testing and checking quality.
+Clearly, the goal shifted from coding only to automating, testing and checking quality. And that probably explains why I
+needed a full year to achieve this version.
 
-In this journey, I faced many problems, some of them are already [documented](http://gpf-js.blogspot.ca/).
+### From Grunt command line to Web interface
+
+As I am too lazy to remember all the grunt tasks, I decided to create a small web interface that would offer me all
+the commands I need. When you install the project and run grunt
+(see [readme](https://github.com/ArnaudBuchholz/gpf-js#setup)),
+a browser will pop to display this page:
+
+![Welcome page](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Welcome.png)
+
+It will be empty at first but I will [improve this part](https://github.com/ArnaudBuchholz/gpf-js/issues/114).
 
 ### Source management
 
-### Quality with Plato
-
 ### TDD
+
+Selenium
+
+### Quality with Plato
 
 ### Automation
 
-### Grunt web integration
-
-As I am to lazy to remember all the grunt tasks, I decided to create a small web interface that would offer me all
-the interactions I need.
 
 </code>
 <!-- Drop those two lines -->
