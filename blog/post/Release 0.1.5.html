@@ -105,11 +105,12 @@ When I use grunt --help, the following commands are listed:
      pre-serve  Custom task.
          serve  Alias for "pre-serve", "connect:server", "watch" tasks.`
 
+(...) The exec task has also 27 configurations...
+
 As I am too lazy to remember (or even type) all the grunt tasks, I decided to create a small web interface that would
 offer me all the commands I need in one click.
 
-When you install the project and run grunt
-(see [readme](https://github.com/ArnaudBuchholz/gpf-js#setup)),
+When you install the project and run grunt (see [readme](https://github.com/ArnaudBuchholz/gpf-js#setup)),
 a browser will pop to display this page:
 
 ![Welcome page](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Welcome.png)
@@ -136,25 +137,50 @@ I am planning to rework this code as soon as the library will offer decent parsi
 
 I briefly explained my issues with source management and the reason why I needed a
 [template mechanism](http://gpf-js.blogspot.ca/2016/08/my-own-templates-implementation.html).
-After implementing my [own template engine](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/res/tpl.js), I finally
-created an editor that allows me to quickly enable / disable sources and reorganize them.
+After implementing my [own template engine](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/res/tpl.js), I
+created a page that allows me to quickly enable / disable sources and reorganize them (using drag &amp; drop).
 
 The tile titled "Sources" shows the number of active source compared to the total number of sources.
+If you click it, you access the list.
 
 ![Sources preview](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/sources.png)
+
+In front of each source, you have access to:
+- Dependencies explanations
+- A load checkbox
+- A test checkbox: which is visible only if a matching test file exist
+- A doc checkbox
+- A description extracted from the @file comment
 
 As of today, only 28 are part of the library for a total of 100. Indeed, because quality is measure, I wanted a way to
 easily exclude files without physically remove them from the project.
 
+If you are interested by the implementation, I added a
+[middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/connect-middleware/fs.js) to the
+[connect task](https://github.com/gruntjs/grunt-contrib-connect).
+It implements basic [CRUD methods](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) on the file system.
+
 ### TDD
 
 Selenium
+Mocha
+
+### Code coverage
+
+Based on node evaluation
+Talk about .internals
+Use of ignore
 
 ### Quality with Plato
 
 ![Total/Average Lines](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Average number of lines.png)
 
 ![Average maintainability](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Average maintainability.png)
+
+### Development process
+
+Modified files are immediatly checked (lint) and evaluated (plato)
+Will be tested soon
 
 ### Time management
 
