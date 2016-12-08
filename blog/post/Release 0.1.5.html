@@ -22,7 +22,8 @@
 Almost two years ago, I was experimenting [NPM publication](https://docs.npmjs.com/cli/publish) and the
 version [0.1.4](https://www.npmjs.com/package/gpf-js) went out.
 
-At that time, I had no clear road map or even a vision of what I wanted to do with this library.
+At that time, I had no clear road map or even a vision of what I wanted to do with the
+[GPF-JS library](https://github.com/ArnaudBuchholz/gpf-js).
 Long story short, I was trying to consolidate my JavaScript know-how in order to re-create (in a better way) a library
 that I started in a previous company.
 
@@ -35,19 +36,102 @@ automate linting ([jshint](https://www.npmjs.com/package/grunt-contrib-jshint) a
 and istanbul [1](https://www.npmjs.com/package/grunt-istanbul),
 [2] (https://www.npmjs.com/package/grunt-istanbul-coverage)).
 
-Clearly, the goal shifted from coding only to automating, testing and checking quality. And that probably explains why I
-needed a full year to achieve this version.
+Clearly, the goal shifted from coding to automating, testing and checking quality.
+And that probably explains why I needed a full year to achieve this version.
 
-### From Grunt command line to Web interface
+## What's inside?
 
-As I am too lazy to remember all the grunt tasks, I decided to create a small web interface that would offer me all
-the commands I need. When you install the project and run grunt
+Well... that's embarrassing but... almost nothing.
+Indeed, if you check the [documentation](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/index.html), only
+[few functions](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.html) and one
+[class](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.Error.html) are available for now.
+
+![That's suspicious](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/futurama-suspicious.jpg)
+
+At least, the library provides a
+[compatibility layer](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/tutorial-COMPATIBILITY.html) for all
+[supported environments](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/tutorial-LOADING.html).
+
+But, still, you might wonder: what did I spend my year on?
+
+To put it in a nutshell, I focused more on the how than on the what.
+
+## From Grunt command line to Web interface
+
+[Grunt](http://gruntjs.com/) has been implemented to automate lots of tasks.
+
+When I use grunt --help, the following commands are listed:
+`    concurrent  Run grunt tasks concurrently *
+       connect  Start a connect web server. *
+          copy  Copy files. *
+        jshint  Validate files with JSHint. *
+        uglify  Minify files with UglifyJS. *
+         watch  Run predefined tasks whenever watched files change.
+        eslint  Validate files with ESLint *
+          exec  Execute shell commands. *
+      htmllint  HTML5 linter and validator. *
+    instrument  instruments a file or a directory tree
+   reloadTasks  override instrumented tasks
+ storeCoverage  store coverage from global
+    makeReport  make coverage report
+      coverage  check coverage thresholds *
+         jsdoc  Generates source documentation using jsdoc *
+         mocha  Run Mocha unit tests in a headless PhantomJS instance. *
+     mochaTest  Run node unit tests with Mocha *
+        notify  Show an arbitrary notification whenever you need. *
+  notify_hooks  Config the automatic notification hooks.
+        chrome  Alias for "connectIf", "exec:testChromeVerbose" tasks.
+       firefox  Alias for "connectIf", "exec:testFirefoxVerbose" tasks.
+            ie  Alias for "connectIf", "exec:testIeVerbose" tasks.
+         check  Alias for "exec:globals", "concurrent:linters",
+                "concurrent:quality", "exec:metrics" tasks.
+     connectIf  Run connect if not detected
+       default  Alias for "serve" task.
+ fixInstrument  Custom task.
+      istanbul  Alias for "instrument", "fixInstrument", "copy:sourcesJson",
+                "mochaTest:coverage", "storeCoverage", "makeReport", "coverage"
+                tasks.
+          make  Alias for "exec:version", "check", "jsdoc:public", "connectIf",
+                "concurrent:source", "exec:buildDebug", "exec:buildRelease",
+                "uglify:buildRelease", "exec:fixUglify", "concurrent:debug",
+                "concurrent:release", "uglify:buildTests",
+                "copy:publishVersionPlato", "copy:publishVersion",
+                "copy:publishVersionDoc", "copy:publishTest" tasks.
+         plato  Alias for "copy:getPlatoHistory", "exec:plato" tasks.
+          node  Custom task.
+       phantom  Custom task.
+         rhino  Custom task.
+       wscript  Custom task.
+     pre-serve  Custom task.
+         serve  Alias for "pre-serve", "connect:server", "watch" tasks.`
+
+As I am too lazy to remember (or even type) all the grunt tasks, I decided to create a small web interface that would
+offer me all the commands I need in one click.
+
+When you install the project and run grunt
 (see [readme](https://github.com/ArnaudBuchholz/gpf-js#setup)),
 a browser will pop to display this page:
 
 ![Welcome page](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Welcome.png)
 
 It will be empty at first but I will [improve this part](https://github.com/ArnaudBuchholz/gpf-js/issues/114).
+
+The magic happens when you click the buttons or links.
+For instance, the URL:
+`http://localhost:8000/grunt/make`
+triggers the grunt command named make.
+
+While being executed in the background, any output generated by this command is parsed for formatting and sent back
+to the browser. As a result, you can trace the command execution in real time:
+
+![grunt make](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/make.png)
+
+If you are interested by the implementation, I added a
+[middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/connect-middleware/grunt.js) to the
+[connect task](https://github.com/gruntjs/grunt-contrib-connect).
+Note the code I am the most proud of... but it works.
+
+(...) I am planning to rework this code as soon as the library will offer decent parsing helpers.
 
 ### Source management
 
@@ -59,6 +143,12 @@ Selenium
 
 ### Automation
 
+### Time management
+
+
+
+
+(Estimate how much time spent, show contributions)
 
 </code>
 <!-- Drop those two lines -->
