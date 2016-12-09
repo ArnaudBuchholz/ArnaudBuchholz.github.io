@@ -115,7 +115,7 @@ a browser will pop to display this page:
 
 ![Welcome page](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Welcome.png)
 
-It will be empty at first but [this will be improved](https://github.com/ArnaudBuchholz/gpf-js/issues/114).
+(...) It will be empty at first but [this will be improved](https://github.com/ArnaudBuchholz/gpf-js/issues/114).
 
 The magic happens when you click the buttons or links.
 They are simple hyperlinks to URL like: <pre>http://localhost:8000/grunt/make</pre>
@@ -133,7 +133,7 @@ If you are interested by the implementation, I added a
 (...) This is not the code I am the most proud of... but it works.
 I am planning to rework this code as soon as the library will offer decent parsing helpers.
 
-### Source management
+## Source management
 
 I briefly explained my issues with source management and the reason why I needed a
 [template mechanism](http://gpf-js.blogspot.ca/2016/08/my-own-templates-implementation.html).
@@ -146,43 +146,148 @@ If you click it, you access the list.
 ![Sources preview](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/sources.png)
 
 In front of each source, you have access to:
-- Dependencies explanations
-- A load checkbox
-- A test checkbox: which is visible only if a matching test file exist
-- A doc checkbox
-- A description extracted from the @file comment
+* **Dependencies analysis**: the red bubble shows the count of sources the current one depends on and the green bubble
+shows the count of sources depending on this one. Each bubble details the dependencies inside a tooltip
+* **Load checkbox**: the source will be part of the library when ticked
+* **Test checkbox**: it appears only if a matching test file exists and it configures if it is included in the test
+suite
+* **Doc checkbox**: jsdoc integration appeared very late, I wanted to be able to control which files the documentation
+is extracted from
+* **Description**: this is directly extracted from the source by searching the
+[@file](http://usejsdoc.org/tags-file.html) comment
 
-As of today, only 28 are part of the library for a total of 100. Indeed, because quality is measure, I wanted a way to
-easily exclude files without physically remove them from the project.
+As of today, only 28 are part of the library for a total of 100. Indeed, because quality is measured, I was looking for
+an easy way to exclude files without physically remove them from the project.
 
-If you are interested by the implementation, I added a
+All these files accesses are implemented through another
 [middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/connect-middleware/fs.js) to the
 [connect task](https://github.com/gruntjs/grunt-contrib-connect).
 It implements basic [CRUD methods](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) on the file system.
 
-### TDD
+(...) Well, Delete is not yet enabled because I didn't need it.
 
-Selenium
-Mocha
+(...) You might also have valid concerns about security as this middleware not only allows reads but also updates.
+I will need to add an extra path checking algorithm to make sure that only
+[project files are available](https://github.com/ArnaudBuchholz/gpf-js/issues/116). As they are backed up by git, those
+files can be easily restored if anything goes wrong.
 
-### Code coverage
+As the complexity of the [sources.json](https://github.com/ArnaudBuchholz/gpf-js/commits/v0.1.5/src/sources.json) file
+constantly grows, this tool rapidly demonstrated value. I recently had to re-organize the order, this was done in a
+blink!
 
-Based on node evaluation
-Talk about .internals
-Use of ignore
+## Testing
 
-### Quality with Plato
+I am constantly advocating for [Test Driven Development](http://agiledata.org/essays/tdd.html).
+As a consequence, there was no way I could release this version without the necessary tooling to achieve it.
+
+All the available environment can be tested, this is why the tile named "Environments" was created.
+But I usually go with mocha &amp;
+my [bdd implementation](http://gpf-js.blogspot.ca/2015/10/my-own-bdd-implementation.html) inside the browser.
+So I created a second tile named "Tests".
+
+![Mocha in a browser](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/mocha.png)
+![BDD in a browser](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/bdd.png)
+
+### Selenium
+
+Manual testing in a browser is one thing but it is even better when it is fully automated.
+
+So I implemented [Selenium](http://www.seleniumhq.org/) to manipulate browsers and I wrote an
+[explanation to configure it](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/TESTME.md#selenium-drivers).
+
+I had to create three helper files to deal with selenium drivers:
+
+* [detectSelenium.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/detectSelenium.js): which is going over the
+list of possible drivers (see [selenium.json](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/selenium.json)) and
+try to instantiate each of them. As a result, a file is generated in the tmp folder and it determines what can be
+used on the current host (grunt tasks will be
+[dynamically generated](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/exec.js#L108-L111) from this file).
+
+* [seleniumDriverFactory.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/seleniumDriverFactory.js): which is
+responsible of initializing and configuring the driver for the selected browser
+
+* Once the selenium tests are made browser-agnostic, the
+[selenium.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/selenium.js) program executes the tests
+and waits for the result.
+
+This can be triggered through grunt tasks and it has been integrated in the build process (so that it fails if anything
+goes wrong).
+
+### Backward compatibility
+
+Each release comes with several files:
+* **gpf.js**: the minified library (see below to see how this version is built), v0.1.5 is
+[here](https://arnaudbuchholz.github.io/gpf/0.1.5/gpf.js)
+* **gpf-debug.js**: the concatenated library (with comments), v0.1.5 is
+[here](https://arnaudbuchholz.github.io/gpf/0.1.5/gpf-debug.js)
+* **test.js**: the minified concatenation of all test files, v0.1.5 is
+[here](https://arnaudbuchholz.github.io/gpf/0.1.5/tests.js)
+
+As it is important to ensure the backward compatibility of the API, I have some
+[plans](https://github.com/ArnaudBuchholz/gpf-js/issues/115) to keep track of all release
+tests files in order to check them constantly.
+
+### Developing tests
+
+I would have some funny stories to tell about test development...
+
+But this will be a long article so I will only give some advices learned the hard way:
+
+* Asynchronous testing is complex, never take any assumption on the performance of the host running your tests.
+When I developed the
+[timeout ones](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/test/compatibility/timeout.js),
+I had some hard times understanding that the timer resolution does not allow me to consider intervals that are smaller
+than 10ms. Also, I had to make sure that concurrent timeouts are triggered simultaneously.
+
+* Testing the internal logic of the library might be necessary: the public API might rely on internal helpers.
+I decided to
+[expose those internals](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/compatibility/timeout.js#L104-L111)
+when using the source version. This becomes even more complicated when the library supports different platforms but only
+one is used for code coverage. A good example is the compatibility layer: NodeJS and most browsers support all the
+modern API but not Rhino or cscript. Hence, I had to develop
+[tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/test/compatibility/timeout.js) that are capable of checking
+both version (native and [polyfill](https://remysharp.com/2010/10/08/what-is-a-polyfill)).
+
+## Code coverage
+
+
+
+Based on NodeJS execution
+reminder about .internals
+
+When using the source version, the library is
+[loaded](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js#L277-L293) by almost concatenating all the
+files in one big string and evaluating it.
+
+    Use of ignore
+    Had to fix the instrumented files
+
+    https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/tasks/istanbul.js#L5-L22
+
+## Quality with Plato
 
 ![Total/Average Lines](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Average number of lines.png)
 
 ![Average maintainability](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Average maintainability.png)
 
-### Development process
+## Documentation
+
+My own jsdoc plugin
+
+## Development process
 
 Modified files are immediatly checked (lint) and evaluated (plato)
 Will be tested soon
 
-### Time management
+## Build process
+
+Custom debug to release process
+
+    Plan for future optimization by manipulating the AST structure
+
+Uglify and WScript
+
+## Time management
 
 The reason why I love GitHub is that it keeps detailed statistics on my work.
 
@@ -200,7 +305,13 @@ are distributed between the night and mid day. Usually, it is around 15 minutes 
 ![Punch card](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/punch card.png)
 
 
-### What's next
+## What's next
+
+class definition
+interfaces
+attributes
+parsing helpers
+...
 
 </code>
 <!-- Drop those two lines -->
