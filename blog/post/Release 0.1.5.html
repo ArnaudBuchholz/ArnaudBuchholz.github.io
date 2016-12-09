@@ -151,13 +151,14 @@ shows the count of sources depending on this one. Each bubble details the depend
 * **Load checkbox**: the source will be part of the library when ticked
 * **Test checkbox**: it appears only if a matching test file exists and it configures if it is included in the test
 suite
-* **Doc checkbox**: jsdoc integration appeared very late, I wanted to be able to control which files the documentation
-is extracted from
+* **Doc checkbox**: [jsdoc](http://usejsdoc.org/) integration appeared very late, I wanted to be able to control which
+files the documentation is extracted from
 * **Description**: this is directly extracted from the source by searching the
 [@file](http://usejsdoc.org/tags-file.html) comment
 
-As of today, only 28 are part of the library for a total of 100. Indeed, because quality is measured, I was looking for
-an easy way to exclude files without physically remove them from the project.
+As of today, only 28 are part of the library for a total of 100 existing sources.
+Indeed, because quality is measured, I was looking for an easy way to exclude files without physically remove them from
+the project.
 
 All these files accesses are implemented through another
 [middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/connect-middleware/fs.js) to the
@@ -167,9 +168,9 @@ It implements basic [CRUD methods](https://en.wikipedia.org/wiki/Create,_read,_u
 (...) Well, Delete is not yet enabled because I didn't need it.
 
 (...) You might also have valid concerns about security as this middleware not only allows reads but also updates.
-I will need to add an extra path checking algorithm to make sure that only
-[project files are available](https://github.com/ArnaudBuchholz/gpf-js/issues/116). As they are backed up by git, those
-files can be easily restored if anything goes wrong.
+I will add an extra path checking algorithm to make sure that only
+[project files are available](https://github.com/ArnaudBuchholz/gpf-js/issues/116).
+As they are backed up by git, those files can be easily restored if anything goes wrong.
 
 As the complexity of the [sources.json](https://github.com/ArnaudBuchholz/gpf-js/commits/v0.1.5/src/sources.json) file
 constantly grows, this tool rapidly demonstrated value. I recently had to re-organize the order, this was done in a
@@ -181,8 +182,8 @@ I am constantly advocating for [Test Driven Development](http://agiledata.org/es
 As a consequence, there was no way I could release this version without the necessary tooling to achieve it.
 
 All the available environment can be tested, this is why the tile named "Environments" was created.
-But I usually go with mocha &amp;
-my [bdd implementation](http://gpf-js.blogspot.ca/2015/10/my-own-bdd-implementation.html) inside the browser.
+But I usually go with mocha &amp; my
+[bdd implementation](http://gpf-js.blogspot.ca/2015/10/my-own-bdd-implementation.html) inside the browser.
 So I created a second tile named "Tests".
 
 ![Mocha in a browser](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/mocha.png)
@@ -216,12 +217,12 @@ goes wrong).
 ### Backward compatibility
 
 Each release comes with several files:
-* **gpf.js**: the minified library (see below to see how this version is built), v0.1.5 is
-[here](https://arnaudbuchholz.github.io/gpf/0.1.5/gpf.js)
-* **gpf-debug.js**: the concatenated library (with comments), v0.1.5 is
-[here](https://arnaudbuchholz.github.io/gpf/0.1.5/gpf-debug.js)
-* **test.js**: the minified concatenation of all test files, v0.1.5 is
-[here](https://arnaudbuchholz.github.io/gpf/0.1.5/tests.js)
+* **gpf.js**: the minified library (see below to see how this version is built), version
+[0.1.5](https://arnaudbuchholz.github.io/gpf/0.1.5/gpf.js)
+* **gpf-debug.js**: the concatenated library (with comments), version
+[0.1.5](https://arnaudbuchholz.github.io/gpf/0.1.5/gpf-debug.js)
+* **test.js**: the minified concatenation of all test files, version
+[0.1.5](https://arnaudbuchholz.github.io/gpf/0.1.5/tests.js)
 
 As it is important to ensure the backward compatibility of the API, I have some
 [plans](https://github.com/ArnaudBuchholz/gpf-js/issues/115) to keep track of all release
@@ -233,38 +234,58 @@ I would have some funny stories to tell about test development...
 
 But this will be a long article so I will only give some advices learned the hard way:
 
+* Tests are a critical part of the project. The test code must be clean and easily maintainable.
+When something is broken after a modification, you will be happy if you can quickly identify the reason from the tests.
+
 * Asynchronous testing is complex, never take any assumption on the performance of the host running your tests.
 When I developed the
 [timeout ones](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/test/compatibility/timeout.js),
 I had some hard times understanding that the timer resolution does not allow me to consider intervals that are smaller
 than 10ms. Also, I had to make sure that concurrent timeouts are triggered simultaneously.
 
-* Testing the internal logic of the library might be necessary: the public API might rely on internal helpers.
+* Testing the internal logic of the library might be necessary: the public API rely on internal helpers. This is
+also true when the library supports different platforms but only one is used for code coverage (NodeJS in my case).
 I decided to
 [expose those internals](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/compatibility/timeout.js#L104-L111)
-when using the source version. This becomes even more complicated when the library supports different platforms but only
-one is used for code coverage. A good example is the compatibility layer: NodeJS and most browsers support all the
-modern API but not Rhino or cscript. Hence, I had to develop
+when using the source version.  A good example is the compatibility layer: NodeJS and most browsers support all the
+modern API but Rhino or cscript don't. Hence, I had to develop
 [tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/test/compatibility/timeout.js) that are capable of checking
 both version (native and [polyfill](https://remysharp.com/2010/10/08/what-is-a-polyfill)).
 
 ## Code coverage
 
+I decided to go with [istanbul](http://gotwarlost.github.io/istanbul/) for
+[code coverage](https://en.wikipedia.org/wiki/Code_coverage). I also evaluated [Blanket.JS](http://blanketjs.org/)
+(see my [training on JavaScript functions using stubs](https://github.com/ArnaudBuchholz/training-functions-stub)) but
+the first one offers more flexibility.
 
+The code coverage is evaluated by running the tests on the source version (see build process).
 
-Based on NodeJS execution
-reminder about .internals
+### Ignoring untested path
+
+There are almost 41 use of
+[istanbul ignore](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md) in the sources.
+For instance, the [host detection](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/boot.js#L160) algorithm
+inside boot.js.
+
+This comment must be followed by an explanation of its purpose. I wrote a documentation on
+[this topic](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/tutorials/CODESTYLE.md#code-coverage).
+
+### Fixing instrumentation
 
 When using the source version, the library is
-[loaded](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js#L277-L293) by almost concatenating all the
+[loaded](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js#L277-L293) by concatenating all the
 files in one big string and evaluating it.
 
-    Use of ignore
+The way sources are instrumented by istanbul
+
     Had to fix the instrumented files
 
     https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/tasks/istanbul.js#L5-L22
 
 ## Quality with Plato
+
+[Plato](https://github.com/es-analysis/plato) is probably the tool that
 
 ![Total/Average Lines](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Average number of lines.png)
 
@@ -272,20 +293,34 @@ files in one big string and evaluating it.
 
 ## Documentation
 
-My own jsdoc plugin
+My own [jsdoc plugin](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js) to avoid repetition
+An article will come soon
 
 ## Development process
 
-Modified files are immediatly checked (lint) and evaluated (plato)
+The grunt default task monitors the source folder.
+Modified files are immediately checked (lint) and evaluated (plato)
 Will be tested soon
 
 ## Build process
 
+The library offers three flavors:
+* Source version
+* debug version
+* release version
+
+The debug version is almost generated by concatenating source files and wrapping them inside
 Custom debug to release process
+
+[esprima](http://esprima.org/index.html)
+[escodegen](https://github.com/estools/escodegen)
 
     Plan for future optimization by manipulating the AST structure
 
-Uglify and WScript
+### UglifyJS and wscript
+
+An [issue](https://github.com/mishoo/UglifyJS2/issues/1397) was open on [UglifyJS2](https://github.com/mishoo/UglifyJS2)
+project
 
 ## Time management
 
