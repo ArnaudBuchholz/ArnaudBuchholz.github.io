@@ -105,7 +105,7 @@ When I use grunt --help, the following commands are listed:
      pre-serve  Custom task.
          serve  Alias for "pre-serve", "connect:server", "watch" tasks.`
 
-(...) The exec task has also 27 configurations...
+(...) The exec task also has 27 sub configurations...
 
 As I am too lazy to remember (or even type) all the grunt tasks, I decided to create a small web interface that would
 offer me all the commands I need in one click.
@@ -126,12 +126,12 @@ to the browser. As a result, you can trace the task execution in real time:
 
 ![grunt make](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/make.png)
 
-If you are interested by the implementation, I added a
+From an implementation point of view, I added a
 [middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/connect-middleware/grunt.js) to the
 [connect task](https://github.com/gruntjs/grunt-contrib-connect).
 
 (...) This is not the code I am the most proud of... but it works.
-I am planning to rework this code as soon as the library will offer decent parsing helpers.
+I am planning to improve this code as soon as the library will offer decent parsing helpers.
 
 ## Source management
 
@@ -259,94 +259,211 @@ I decided to go with [istanbul](http://gotwarlost.github.io/istanbul/) for
 (see my [training on JavaScript functions using stubs](https://github.com/ArnaudBuchholz/training-functions-stub)) but
 the first one offers more flexibility.
 
-The code coverage is evaluated by running the tests on the source version (see build process).
+The code coverage is evaluated by running the tests on the source version (see build process). Some
+[threshold values](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/make/metrics.json) are defined to determine if
+the files satisfy the expectations regarding the minimum coverage. If not, the build process fails.
 
 ### Ignoring untested path
 
 There are almost 41 use of
-[istanbul ignore](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md) in the sources.
+[istanbul ignore](https://github.com/gotwarlost/istanbul/blob/v0.1.5/ignoring-code-for-coverage.md) in the sources.
 For instance, the [host detection](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/boot.js#L160) algorithm
-inside boot.js.
+inside boot.js can't be fully covered because NodeJS goes only through one branch.
 
-This comment must be followed by an explanation of its purpose. I wrote a documentation on
+Each comment must be followed by an explanation of its purpose. I wrote a documentation on
 [this topic](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/tutorials/CODESTYLE.md#code-coverage).
+
+To be fully transparent, I detail the coverage inside the [readme](https://github.com/ArnaudBuchholz/gpf-js#metrics)
+file.
 
 ### Fixing instrumentation
 
-When using the source version, the library is
-[loaded](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/boot.js#L277-L293) by concatenating all the
-files in one big string and evaluating it.
+Most of the time, code coverage rely on source instrumentation: this step is required to add instructions in the source
+code and keep track of what has been executed.
 
-The way sources are instrumented by istanbul
+(...) [Blanket.JS](http://blanketjs.org/) does it on the fly
 
-    Had to fix the instrumented files
+For [istanbul](http://gotwarlost.github.io/istanbul/), a container variable is declared at the beginning of each
+modified source and this variable is referenced everywhere.
 
-    https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/tasks/istanbul.js#L5-L22
+`"use strict";
+var __cov_wAQFT3LPP9UQX7F5lrKtpA = (Function('return this'))();
+if (!__cov_wAQFT3LPP9UQX7F5lrKtpA.__coverage__) {
+    __cov_wAQFT3LPP9UQX7F5lrKtpA.__coverage__ = {};
+}
+__cov_wAQFT3LPP9UQX7F5lrKtpA = __cov_wAQFT3LPP9UQX7F5lrKtpA.__coverage__;
+
+/* ... */
+
+__cov_wAQFT3LPP9UQX7F5lrKtpA.s['1']++;
+_gpfExtend(gpf, {
+    clone: function (obj) {
+        __cov_wAQFT3LPP9UQX7F5lrKtpA.f['1']++;
+        __cov_wAQFT3LPP9UQX7F5lrKtpA.s['2']++;
+        return JSON.parse(JSON.stringify(obj));
+    }
+});`
+
+If you have read the other articles (in particular the
+[template mechanism one](http://gpf-js.blogspot.ca/2016/08/my-own-templates-implementation.html)), you know that I like
+doing code generation. Sometimes, I rely on a function that is converted to string, altered and converted
+back to a function.
+
+One annoying consequence of this method is that the newly created function can't use any variable declared outside of
+its scope. There are some workarounds such as passing those variables to a function factory. One good example is the
+[polyfill for bind](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/compatibility/function.js#L35-L36).
+
+However, things get more complicated when you don't know that the created function requires variables because
+it was modified by code coverage instrumentation... This one gave me some headaches...
+
+![Need a new savior?](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/futurama-zoidsus.jpg)
+
+Once I understood the issue, the solution became obvious: I had to make sure that those container remain available even
+if the function is dynamically created. I modified the
+[task](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/tasks/istanbul.js#L5-L22) to add them to the
+[NodeJS global dictionary](https://nodejs.org/api/globals.html#globals_global).
 
 ## Quality with Plato
 
-[Plato](https://github.com/es-analysis/plato) is probably the tool that
+[Plato](https://github.com/es-analysis/plato) is probably the tool that really changed the way I develop the library.
+I use it to measure the quality of the project.
+
+Below you can see the evolution of the main criteria.
 
 ![Total/Average Lines](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Average number of lines.png)
 
 ![Average maintainability](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/Average maintainability.png)
 
+(...) Note that the measure taken by the 19th of February was done on all the files. Now it is done only with the files
+included in the library.
+
+On top of global metrics, a report is generated for each file, showing which functions are the most complex.
+This gives you valuable hint on where you should put your efforts to make the file more maintainable.
+
+You can check the [version 0.1.5 analysis](https://arnaudbuchholz.github.io/gpf/0.1.5/plato/index.html).
+
+Again, I defined a
+[minimum maintainability value](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/make/metrics.json) which fails
+the build process if one source does not respect it.
+
 ## Documentation
 
-My own [jsdoc plugin](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js) to avoid repetition
-An article will come soon
+A good library is a documented one. Writing documentation and making sure it is up-to-date is a painful process and the
+more you can automate, the better it is.
+Luckily we, JavaScript developers, can use [jsdoc](http://usejsdoc.org/) to extract relevant information from the
+sources.
+
+Documentation for version 0.1.5 can be accessed [here](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/index.html).
+
+### Improved automation
+
+Did I mention I am lazy? I also hate repeating myself and I do follow the
+[DRY principle](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
+
+That's why I created my own [jsdoc plugin](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js) to avoid
+repetition and automate obvious information such as:
+* Private accessibility when the function / member name starts with
+[an underscore](http://stackoverflow.com/questions/8288756/in-javascript-what-does-this-underscore-mean)
+* Member types from their default value
+* [Custom tags](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/tutorials/CODESTYLE.md#documentation)
+
+This plugin also allowed me to generate
+[extensive documentation](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.Error.html#.abstractMethod__anchor)
+on errors based on the
+[_gpfErrorDeclare instruction](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/error.js#L128).
+
+An [article](https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/issues/14) will come soon...
 
 ## Development process
 
-The grunt default task monitors the source folder.
-Modified files are immediately checked (lint) and evaluated (plato)
-Will be tested soon
+Following [TDD](http://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html), I develop the tests first.
+Then, I start the implementation until the test succeeds.
+
+To help me in that task, I modified the grunt tasks
+[watch](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/watch.js) and
+[serve](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/tasks/serve.js)
+to monitor the [src](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.5/src) folder.
+
+Every modified file triggers the linters and plato.
+Soon, it will also [trigger the right test](https://github.com/ArnaudBuchholz/gpf-js/issues/117).
+
+In the mean time, I just refresh my test page in the browser.
 
 ## Build process
 
 The library offers three flavors:
-* Source version
-* debug version
-* release version
+* **Source version**: this version is used for development, it
+[loads all the sources files one by one](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/boot.js#L244-L299)
+and permits the access to the internals of the library.
 
-The debug version is almost generated by concatenating source files and wrapping them inside
-Custom debug to release process
+* **debug version**: this version is generated from the sources. It is built almost by concatenating the files after
+small transformations. A first step of preprocessing deals with special comments like `/*#ifdef(DEBUG)*/`.
+Then a step of [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) transformation done with
+[esprima](http://esprima.org/index.html) is used to inject the sources inside the
+[Universal Module Definition](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/make/UMD.js).
+The resulting AST is converted back to JavaScript using [escodegen](https://github.com/estools/escodegen).
+The whole processed is configured with a
+[file](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/make/debug.json).
 
-[esprima](http://esprima.org/index.html)
-[escodegen](https://github.com/estools/escodegen)
+* **release version**: it uses almost the same process than the debug version but with a different
+[configuration  file](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/make/release.json). Then a step of
+[minification](https://en.wikipedia.org/wiki/Minification_%28programming%29) is triggered.
 
-    Plan for future optimization by manipulating the AST structure
+(...) I have some ideas for performance optimization by manipulating the AST structure but this will come later.
+
+### Google closure compiler
+
+Initially, I was using the [Google closure compiler](https://developers.google.com/closure/compiler/) to minify the
+release version. However, this tool takes too much liberty on the initial code
+(such as changing the functions' signature) and I ended up choosing another tool.
 
 ### UglifyJS and wscript
 
-An [issue](https://github.com/mishoo/UglifyJS2/issues/1397) was open on [UglifyJS2](https://github.com/mishoo/UglifyJS2)
-project
+Now I am using [UglifyJS2](https://github.com/mishoo/UglifyJS2) to generate the final release version.
+I opened an [issue](https://github.com/mishoo/UglifyJS2/issues/1397) because the code is not compatible with cscript but
+I ended up developing my [own fix](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/make/fix_uglify.js).
 
 ## Time management
 
-The reason why I love GitHub is that it keeps detailed statistics on my work.
+I often got the same question: "how do you find the time to work on this project?"
+
+[GitHub](https://github.com/) provides lots of statistics regarding how much I worked over the last years...
 
 ![2013](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/2013.png)
 ![2014](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/2014.png)
 ![2015](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/2015.png)
 ![2016](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/2016.png)
 
-Each file is pushed individually, I estimate I require 5 minutes per push and I probably developped 300 days over the last
-year. This gives me an average of 4 pushes a day i.e. almost half an hour every day. When we look the punch card we see that pushes
-are distributed between the night and mid day. Usually, it is around 15 minutes after lunch and more time every two nights.
+I force myself to push at least one file or issue every day but, in the end, I don't spend lot of time.
+Over the years, I found the proper balance between my personal life, my job and my projects.
+
+![Yeah !](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/futurama-applause.jpg)
+
+I take care of pushing each little change individually. I estimate that each change requires a maximum of 5 minutes.
+Over the last year, because this is not the only project I worked on, I probably spend over 250 days on the library.
 
 ![Last year contributions](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/contributions.png)
 
-![Punch card](https://arnaudbuchholz.github.io/blog/post/Release%200.1.5/punch card.png)
+So it means I almost did 5 pushes by day which represents an average 25 minutes of work every day (but the graph shows
+that it is far from linear).
 
+I guess the secret is "interruptibility": the ability to pause what you are doing and resume it later without losing the
+focus.
 
 ## What's next
 
-class definition
-interfaces
-attributes
-parsing helpers
-...
+I started to plan the releases more carefully: I write stories and I document the bugs.
+I also maintain a [backlog](https://github.com/ArnaudBuchholz/gpf-js/milestone/4).
+
+The next versions will focus on putting back existing code into the library, this includes:
+* classes
+* interfaces
+* attributes
+* parsing helpers
+
+In a near future, I would like to provide sample codes in the documentation: ideally, this would be based on the tests.
+
+More cool stuff will come soon so stay tuned!
 
 </code>
 <!-- Drop those two lines -->
