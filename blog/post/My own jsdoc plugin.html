@@ -36,12 +36,16 @@ configured [two tasks](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grun
 To make sure my jsdoc comments were consistent and correctly used, I also
 [configured eslint](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/.eslintrc#L29-L44) to validate them.
 
-Finally, to avoid getting thousands of errors, I decided to control which files would be used to generate documentation
-(using the source tile).
+(...) jsdoc offers many aliases (for instance @return and @returns).
+That's why eslint allows you to decide which tokens you prefer.
+
+
+Finally, I decided to control which files would be used to generate documentation (using the source tile).
 
 ### The reality
 
-I quickly realized that I had to do lot of copy & paste to avoid errors and generate the proper documentation.
+After fixing all the linter errors, I quickly realized that I had to do lot of copy & paste to generate the proper
+documentation.
 
 For example: when an internal method is exposed as a public API, the comment must be copied.
 * On one hand, the internal method must be flagged with
@@ -80,19 +84,30 @@ gpf.extend = _gpfExtend;`
 This implies double maintenance with the risk of forgetting to replace @private with @public.
 
 The lazy developer in me started to get annoyed and I started to look at ways I could do things more efficiently.
+
 In that case, we could instruct jsdoc to copy the comment from the internal method and use the name to detect if
 the API is public or private (depending if it starts with '_').
 
 ### jsdoc plugins
 
-Not much documentation
-    http://usejsdoc.org/about-plugins.html
+That's quite paradoxical for a documentation tool to have such limited explanations on
+[plugins](http://usejsdoc.org/about-plugins.html).
+
+I guess the most important sentence that I should have read several times is the following:
+
+A plugin can affect the parse results by doing any of the following:
+
+    Defining event handlers
+    Defining tags
+    Defining a visitor for abstract syntax tree nodes
+jsdoc offers
 
 Members are poorly documented (for instance type...)
 doclets can't easily be created ==> go with beforeParse to add new comments
     with the drawback of pointing to unknown lines
 
-    developed a trace to see content
+The best way to know how to generate or alter a doclet is to create one using the proper jsdoc comments and then dump
+the structure to see how jsdoc generated the doclet.
 
 ## gpf.js plugin
 
@@ -187,6 +202,8 @@ valid-jsdoc.js
     parameter handling (signature defined)
 
 ## @since
+
+## Markdown?
 
 ## Conclusion
 
