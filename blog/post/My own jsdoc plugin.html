@@ -11,21 +11,82 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
-    Jsdoc provides a convenient way to document APIs by adding comments to the code.
-    However, the task can be really tedious when it comes to documenting every details of each symbol.
+    Jsdoc provides a convenient way to document APIs by adding comments directly in the code.
+    However, the task can be tedious when it comes to documenting every details of each symbol.
     Luckily, the tool provides ways to interact with the parsing process through the creation of plugins.
 </div>
 <code class="markdown">
 ## Introduction
 
-Just before the release of version 0.1.5, I started to focus on documentation.
-I knew I had to use [jsdoc](http://usejsdoc.org/) but I started experimenting very late.
+Just before the release of [version 0.1.5](http://gpf-js.blogspot.ca/2016/12/release-015.html), I focused on
+[documenting the API](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/index.html).
+I knew I had to use [jsdoc](http://usejsdoc.org/) so I started adding comments early in the
+development process.
 
-I soon realized that I had to do lot of copy & paste...
+### Automation and validation
+
+To make it a part of the build process, I installed [grunt-jsdoc](https://github.com/krampstudio/grunt-jsdoc) and
+configured [two tasks](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/jsdoc.js):
+* One 'private' to see all symbols (including the private and the internal ones)
+* One 'public' for the official documentation (only the public symbols)
+
+(...) The default rendering of jsdoc is quite boring, I decided to go with
+[ink-docstrap](https://www.npmjs.com/package/ink-docstrap) for the public documentation.
+
+To make sure my jsdoc comments were consistent and correctly used, I also
+[configured eslint](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/.eslintrc#L29-L44) to validate them.
+
+Finally, to avoid getting thousands of errors, I decided to control which files would be used to generate documentation
+(using the source tile).
+
+### The reality
+
+I quickly realized that I had to do lot of copy & paste to avoid errors and generate the proper documentation.
+
+For example: when an internal method is exposed as a public API, the comment must be copied.
+* On one hand, the internal method must be flagged with
+[@private](http://usejsdoc.org/tags-private.html)
+* On the other hand, the public method has the same comment but flagged with
+[@public](http://usejsdoc.org/tags-public.html)
+
+`/**
+ * Extends the destination object by copying own enumerable properties from the source object.
+ * If the member already exists, it is overwritten.
+ *
+ * @param {Object} destination Destination object
+ * @param {...Object} source Source objects
+ * @return {Object} Destination object
+ * @private
+ */
+function _gpfExtend (destination, source) {
+    _gpfIgnore(source);
+    [].slice.call(arguments, 1).forEach(function (nthSource) {
+        _gpfObjectForEach(nthSource, _gpfAssign, destination);
+    });
+    return destination;
+}
+
+/**
+ * Extends the destination object by copying own enumerable properties from the source object.
+ * If the member already exists, it is overwritten.
+ *
+ * @param {Object} destination Destination object
+ * @param {...Object} source Source objects
+ * @return {Object} Destination object
+ * @public
+ */
+gpf.extend = _gpfExtend;`
+
+This implies double maintenance with the risk of forgetting to replace @private with @public.
+
 The lazy developer in me started to get annoyed and I started to look at ways I could do things more efficiently.
+In that case, we could instruct jsdoc to copy the comment from the internal method and use the name to detect if
+the API is public or private (depending if it starts with '_').
 
-The official jsdoc documentation page about plugin is quite short...
-Lack of documentation
+### jsdoc plugins
+
+
+    http://usejsdoc.org/about-plugins.html
 
 ## Member types
 
@@ -89,6 +150,8 @@ Example:
 valid-jsdoc.js
     return handling (
     parameter handling (signature defined)
+
+## @since
 
 ## Conclusion
 
