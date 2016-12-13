@@ -85,29 +85,65 @@ the API is public or private (depending if it starts with '_').
 
 ### jsdoc plugins
 
-
+Not much documentation
     http://usejsdoc.org/about-plugins.html
 
-## Member types
+Members are poorly documented (for instance type...)
+doclets can't easily be created ==> go with beforeParse to add new comments
+    with the drawback of pointing to unknown lines
+
+    developed a trace to see content
+
+## gpf.js plugin
+
+### Member types
 
     When creating a class, I use to declare members and initialize them with a default value
     Most of the time the value type can be deduced from this default value
 
-## Access type
+    error sample
 
-### Naming convetion
+_gpfExtend(_GpfError.prototype, /** @lends gpf.Error.prototype */ {
+
+    constructor: _GpfError,
+
+    /**
+     * Error code
+     *
+     * @readonly
+     * @since 0.1.5
+     */
+    code: 0,
+
+    /**
+     * Error name
+     *
+     * @readonly
+     * @since 0.1.5
+     */
+    name: "Error",
+
+    /**
+     * Error message
+     *
+     * @readonly
+     * @since 0.1.5
+     */
+    message: "",
+
+### Access type based on naming convention
 
     By default, all symbols are public.
     I follow the naming convention where the underscore at the beginning of the member names means that the member
     is private.
 
-### Class definitions
+### Access type based on class definitions
 
     In the next versions, I will implement a class definition method and the structure will provide information about
     member visibility. The idea would be to avoid writing @private / @protected
     Will also handle @static
 
-## Custom tags
+### Custom tags
 
 chainable
     Same return type
@@ -117,18 +153,17 @@ read / write
     Defining property getters and setters
 
 sameas
-    Revealing pattern / DRY principle applied to comments
+    DRY principle applied to comments
 
-## The enumeration case
+### The enumeration case
 
     What's the point of showing the value of an enum?
     I removed it.
 
-## The error classes example
-
-    That one is the most interesting example I had to go through
 
 ### Error generation in GPF-JS
+
+    That one is the most interesting example I had to go through
 
     Explain that everything starts from _gpfErrorDeclare
 Example:
