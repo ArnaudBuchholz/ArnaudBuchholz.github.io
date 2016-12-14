@@ -37,8 +37,7 @@ To make sure my jsdoc comments were consistent and correctly used, I also
 [configured eslint](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/.eslintrc#L29-L44) to validate them.
 
 (...) jsdoc offers many aliases (for instance @return and @returns).
-That's why eslint allows you to decide which tokens you prefer.
-
+That's why eslint allows you to decide which tokens should be preferred.
 
 Finally, I decided to control which files would be used to generate documentation (using the source tile).
 
@@ -88,20 +87,106 @@ The lazy developer in me started to get annoyed and I started to look at ways I 
 In that case, we could instruct jsdoc to copy the comment from the internal method and use the name to detect if
 the API is public or private (depending if it starts with '_').
 
-### jsdoc plugins
+## jsdoc plugins
 
-That's quite paradoxical for a documentation tool to have such limited explanations on
+That's quite paradoxical for a documentation tool to have such a short explanation on
 [plugins](http://usejsdoc.org/about-plugins.html).
 
-I guess the most important sentence that I should have read several times is the following:
+### Comments and doclets
 
-A plugin can affect the parse results by doing any of the following:
+So let's start with the [basis](http://usejsdoc.org/about-getting-started.html):
+jsdoc relies on specific comment blocks (starting with exactly two stars) to detect documentation placeholders.
+It is not required for these blocks to be closed to a symbol but, when they do, the symbol context is used to determine
+what is documented.
 
-    Defining event handlers
-    Defining tags
-    Defining a visitor for abstract syntax tree nodes
-jsdoc offers
+`/** this is a valid jsdoc comment documenting variable a */
+var a;
 
+/**
+    @file This is also a valid jsdoc comment, documenting the whole file
+*/
+
+/*** this comment is not a valid jsdoc one */
+
+/*
+ * This is not a valid jsdoc comment, even if it contains jsdoc tags
+ * @return {Object} Empty object
+ * @public
+ */
+function () {
+    return {}
+}`
+
+Each valid jsdoc comment block is converted into a JavaScript object, named doclet, containing extracted information.
+
+For instance, the following comment and function:
+`/**
+ * Extends the destination object by copying own enumerable properties from the source object.
+ * If the member already exists, it is overwritten.
+ *
+ * @param {Object} destination Destination object
+ * @param {...Object} source Source objects
+ * @return {Object} Destination object
+ * @private
+ */
+function _gpfExtend (destination, source) {
+    _gpfIgnore(source);
+    [].slice.call(arguments, 1).forEach(function (nthSource) {
+        _gpfObjectForEach(nthSource, _gpfAssign, destination);
+    });
+    return destination;
+}`
+
+generates the following doclet:
+`{ comment: '/**\n * Extends the destination object by copying own enumerable properties from the source object.\n * If the member already exists, it is overwritten.\n *\n * @param {Object} destination Destination object\n * @param {...Object} source Source objects\n * @return {Object} Destination object\n * @since 0.1.5\n */',
+  meta:
+   { range: [ 834, 1061 ],
+     filename: 'extend.js',
+     lineno: 34,
+     path: 'J:\\Nano et Nono\\Arnaud\\dev\\GitHub\\gpf-js\\src',
+     code:
+      { id: 'astnode100000433',
+        name: '_gpfExtend',
+        type: 'FunctionDeclaration',
+        paramnames: [Object] },
+     vars: { '': null } },
+  description: 'Extends the destination object by copying own enumerable properties from the source object.\nIf the member already exists, it is overwritten.',
+  params:
+   [ { type: [Object],
+       description: 'Destination object',
+       name: 'destination' },
+     { type: [Object],
+       variable: true,
+       description: 'Source objects',
+       name: 'source' } ],
+  returns: [ { type: [Object], description: 'Destination object' } ],
+  name: '_gpfExtend',
+  longname: '_gpfExtend',
+  kind: 'function',
+  scope: 'global',
+  access: 'private' }`
+
+The structure itself is not fully documented as it depends on the tags used and the symbol context.
+However, some properties are most likely to be found, see the [newDoclet event](http://usejsdoc.org/about-plugins.html)
+documentation.
+
+### Plugins interaction
+
+The plugins can be used to do three different things, representing three different levels:
+* Interact with the parsing process through event handlers (beforeParse, jsdocCommentFound, newDoclet,
+processingComplete...)
+* Define tags and be notified when they are encountered inside a jsdoc comment
+* Interact with the parsing process through an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) node visitor
+
+
+
+The most important thing to understand is that you can interfere with doclet generation by altering them or even
+preventing them. But, I struggled to find ways to generate them on the fly.
+
+(...) It looks like there is a way to generate new doclets with a node visitor. However, the documentation is very
+not clear on that part.
+
+As of today, the only wai
 Members are poorly documented (for instance type...)
 doclets can't easily be created ==> go with beforeParse to add new comments
     with the drawback of pointing to unknown lines
