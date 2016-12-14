@@ -185,13 +185,12 @@ documentation.
 
 ### Plugins interaction
 
-The plugins can be used to do three different things, representing three different levels:
+The plugins can be used to interact with jsdoc at three different levels:
 * Interact with the parsing process through event handlers (beforeParse, jsdocCommentFound, newDoclet,
 processingComplete...)
-* Define tags and be notified when they are encountered inside a jsdoc comment
+* Define tags and be notified when they are encountered inside a jsdoc comment: it gives you the chance to alter the
+doclet that is generated
 * Interact with the parsing process through an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) node visitor
-
-
 
 The most important thing to understand is that you can interfere with doclet generation by altering them or even
 preventing them. But, I struggled to find ways to generate them on the fly.
