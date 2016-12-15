@@ -219,7 +219,7 @@ of the expected member type.
 This works well with primitive types or arrays but it gets more complicated when dealing with object references (which
 are most of the time initialized with null).
 
-For instance, in [error.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/error.js#L25-L35):
+For instance, in [error.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/error.js#L25-L35):
 
 `_gpfExtend(_GpfError.prototype, /** @lends gpf.Error.prototype */ {
 
@@ -323,13 +323,16 @@ Sadly, jsdoc reveals this value as the 'default value' in the generated document
 
 Hence, I decided to remove it.
 
-This is done [here](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/gpf.js#L146-L151),
-based on [this condition](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/gpf.js#L162-L164).
+This is done [here](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L146-L151),
+based on [this condition](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L162-L164).
 
 (...) Actually, the type is also listed but the enumeration itself is a type...
 It will be [removed](https://github.com/ArnaudBuchholz/gpf-js/issues/119).
 
 ### Error generation in GPF-JS
+
+That's probably the example that demonstrates that laziness can become a virtue.
+The library will throw errors.
 
     That one is the most interesting example I had to go through
 
