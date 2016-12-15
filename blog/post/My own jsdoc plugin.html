@@ -52,7 +52,8 @@ To make sure my jsdoc comments were consistent and correctly used, I also
 (...) jsdoc offers many aliases (for instance @return and @returns).
 That's why eslint allows you to decide which tokens should be preferred.
 
-Finally, I decided to control which files would be used to generate documentation (using the source tile).
+Finally, I decided to control which files would be used to generate documentation through the
+[sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/sources.json) doc properties.
 
 ### The reality
 
@@ -112,11 +113,11 @@ jsdoc relies on specific comment blocks (starting with exactly two stars) to det
 It is not required for these blocks to be closed to a symbol but, when they do, the symbol context is used to determine
 what is documented.
 
-`/** this is a valid jsdoc comment documenting variable a */
+`/** this is a valid jsdoc description for variable a */
 var a;
 
 /**
-    @file This is also a valid jsdoc comment, documenting the whole file
+    @file This is also a valid jsdoc description for the whole file
 */
 
 /*** this comment is not a valid jsdoc one */
@@ -183,6 +184,13 @@ The structure itself is not fully documented as it depends on the tags used and 
 However, some properties are most likely to be found, see the [newDoclet event](http://usejsdoc.org/about-plugins.html)
 documentation.
 
+I strongly recommend running jsdoc using the command line and output
+[some traces](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L15-L23) to have a better understanding
+on how doclets are generated.
+
+(...) In the GPF-JS welcome page, I created a link named "JSDoc plugin test" for that purpose. It uses an
+[exec:jsdoc task](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/exec.js#L49-L56).
+
 ### Plugins interaction
 
 The plugins can be used to interact with jsdoc at three different levels:
@@ -192,30 +200,24 @@ processingComplete...)
 doclet that is generated
 * Interact with the parsing process through an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) node visitor
 
-The most important thing to understand is that you can interfere with doclet generation by altering them or even
-preventing them. But, I struggled to find ways to generate them on the fly.
+The most important thing to remember is that you can interfere with doclet generation by altering them or even
+preventing them. But, I struggled to find ways to generate them on the fly (i.e. with no jsdoc block comment).
 
-(...) It looks like there is a way to generate new doclets with a node visitor. However, the documentation is very
-not clear on that part.
-
-As of today, the only wai
-Members are poorly documented (for instance type...)
-doclets can't easily be created ==> go with beforeParse to add new comments
-    with the drawback of pointing to unknown lines
-
-The best way to know how to generate or alter a doclet is to create one using the proper jsdoc comments and then dump
-the structure to see how jsdoc generated the doclet.
+(...) It looks like there is a way to generate new doclets with a node visitor. However, the documentation is not very
+clear on that part. See [this example](http://www.zuojj.com/tdocs/jsdoc3/about-plugins.html).
 
 ## gpf.js plugin
 
 ### Member types
 
-    When creating a class, I use to declare members and initialize them with a default value
-    Most of the time the value type can be deduced from this default value
+When creating a class, I usually declare members and initialize them with a default value that is representative
+of the expected member type.
+This works well with primitive types or arrays but it gets more complicated when dealing with object references (which
+are most of the time initialized with null).
 
-    error sample
+For instance, in [error.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/error.js#L25-L35):
 
-_gpfExtend(_GpfError.prototype, /** @lends gpf.Error.prototype */ {
+`_gpfExtend(_GpfError.prototype, /** @lends gpf.Error.prototype */ {
 
     constructor: _GpfError,
 
@@ -225,47 +227,76 @@ _gpfExtend(_GpfError.prototype, /** @lends gpf.Error.prototype */ {
      * @readonly
      * @since 0.1.5
      */
-    code: 0,
+    code: 0,`
 
-    /**
-     * Error name
-     *
-     * @readonly
-     * @since 0.1.5
-     */
-    name: "Error",
+In that case, the member type can easily be deduced from the AST node:
 
-    /**
-     * Error message
-     *
-     * @readonly
-     * @since 0.1.5
-     */
-    message: "",
+`{ comment: '/**\n     * Error code\n     *\n     * @readonly\n     * @since 0.1.5\n     */',
+  meta:
+   { range: [ 801, 808 ],
+     filename: 'error.js',
+     lineno: 35,
+     path: 'J:\\Nano et Nono\\Arnaud\\dev\\GitHub\\gpf-js\\src',
+     code:
+      { id: 'astnode100000209',
+        name: 'code',
+        type: 'Literal',
+        value: 0 } },
+  description: 'Error code',
+  readonly: true,
+  since: '0.1.5',
+  name: 'code',
+  longname: 'gpf.Error#code',
+  kind: 'member',
+  memberof: 'gpf.Error',
+  scope: 'instance' }`
+
+Indeed the AST structure gives me the literal value the member is initialized with (see meta.code.value).
+
+This is done in the [_addMemberType](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L115-L134)
+function.
 
 ### Access type based on naming convention
 
-    By default, all symbols are public.
-    I follow the naming convention where the underscore at the beginning of the member names means that the member
-    is private.
+There are no real private members in JavaScript. There are
+[ways](https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor_s_Guide/Private_Properties) to achieve similar
+behavior (such as function scoped variables used in closure methods) but this is not the discussion here.
+
+The main idea is to detail, through the documentation, which members the developer can rely on (public or protected when
+inherited) and which ones should not be used directly (because they are private).
+
+Because of the way JavaScript is designed, everything is public by default.
+But I follow the naming convention where the underscore at the beginning of the member name means that the member is
+private.
+
+This means that the symbol name gives information about the access type.
+
+This is leveraged in the [_checkAccess](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L136-L144)
+function.
 
 ### Access type based on class definitions
 
-    In the next versions, I will implement a class definition method and the structure will provide information about
-    member visibility. The idea would be to avoid writing @private / @protected
-    Will also handle @static
+In the next version, I will implement a class definition method and the structure will provide information about
+members visibility. This will include a way to define static members.
+
+The idea will be to leverage the node visitor to keep track of which visibility is defined on top of members.
 
 ### Custom tags
 
-chainable
+Through custom tags, I am able to instruct the plugin to modify the doclet in a specific way.
+
+#### gpf:chainable
+
     Same return type
     Simple description
 
-read / write
-    Defining property getters and setters
+#### gpf:read / gpf:write
 
-sameas
-    DRY principle applied to comments
+    Associated with a member name, it provides pre-defined signatures for getters and setters
+
+#### sameas
+
+    DRY principle applied to jsdoc comments
 
 ### The enumeration case
 
