@@ -133,7 +133,7 @@ function () {
 
 Each valid jsdoc comment block is converted into a JavaScript object, named doclet, containing extracted information.
 
-For instance, the following comment and function:
+For instance, the following comment and function
 `/**
  * Extends the destination object by copying own enumerable properties from the source object.
  * If the member already exists, it is overwritten.
@@ -151,7 +151,7 @@ function _gpfExtend (destination, source) {
     return destination;
 }`
 
-generates the following doclet:
+generates the following doclet
 `{ comment: '/**\n * Extends the destination object by copying own enumerable properties from the source object.\n * If the member already exists, it is overwritten.\n *\n * @param {Object} destination Destination object\n * @param {...Object} source Source objects\n * @return {Object} Destination object\n * @since 0.1.5\n */',
   meta:
    { range: [ 834, 1061 ],
@@ -207,6 +207,10 @@ preventing them. But, I struggled to find ways to generate them on the fly (i.e.
 clear on that part. See [this example](http://www.zuojj.com/tdocs/jsdoc3/about-plugins.html).
 
 ## gpf.js plugin
+
+Most of the following mechanisms are triggered during the
+[processingComplete event](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L275-L277)
+so that all doclets are already generated and available.
 
 ### Member types
 
@@ -283,26 +287,47 @@ The idea will be to leverage the node visitor to keep track of which visibility 
 
 ### Custom tags
 
-Through custom tags, I am able to instruct the plugin to modify the doclet in a specific way.
+Through custom tags, I am able to instruct the plugin to modify the generated doclets in specific ways.
+I decided to prefix all custom tags with "gpf:" to easily identify them, a dictionary defines all the existing names and
+their associated handlers. It is leveraged in the
+[_handleCustomTags ](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L96-L113) function.
 
 #### gpf:chainable
 
-    Same return type
-    Simple description
+When a method is designed to return the current instance so that you can easily chain calls, the tag @gpf:chainable is
+used. It instructs jsdoc that the return type is the current class and the description is normalized to
+"Self reference to allow chaining".
+
+It is implemented [here](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L52-L59).
 
 #### gpf:read / gpf:write
 
-    Associated with a member name, it provides pre-defined signatures for getters and setters
+Followed by a member name, it provides pre-defined signatures for getters and setters. Note that the member doclet
+must be defined when the tag is executed.
+
+They are implemented [here](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L61-L74).
 
 #### sameas
 
-    DRY principle applied to jsdoc comments
+This basically solves the problem I mentioned at the beginning of the article by copying another symbol documentation,
+provided the doclet exists.
+
+It is implemented [here](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L76-L92).
 
 ### The enumeration case
 
-    What's the point of showing the value of an enum?
-    I removed it.
+The library uses an enumeration to describe the
+[host type](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.html#.hosts__anchor).
+The advantage of an enumeration is the encapsulation of the value that is used internally.
+Sadly, jsdoc reveals this value as the 'default value' in the generated documentation.
 
+Hence, I decided to remove it.
+
+This is done [here](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/gpf.js#L146-L151),
+based on [this condition](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/gpf.js#L162-L164).
+
+(...) Actually, the type is also listed but the enumeration itself is a type...
+It will be [removed](https://github.com/ArnaudBuchholz/gpf-js/issues/119).
 
 ### Error generation in GPF-JS
 
