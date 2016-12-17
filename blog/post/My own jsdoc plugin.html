@@ -40,13 +40,15 @@ to use them. That's why, you need to document the API.
 
 To make it a part of the build process, I installed [grunt-jsdoc](https://github.com/krampstudio/grunt-jsdoc) and
 configured [two tasks](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/grunt/jsdoc.js):
-* One 'private' to see all symbols (including the private and the internal ones)
-* One 'public' for the official documentation (only the public symbols)
+* One ['private'](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/private.json) to see all symbols (including
+the private and the internal ones)
+* One ['public'](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/public.json) for the official documentation
+(only the public symbols)
 
 (...) The default rendering of jsdoc is quite boring, I decided to go with
 [ink-docstrap](https://www.npmjs.com/package/ink-docstrap) for the public documentation.
 
-To make sure my jsdoc comments were consistent and correctly used, I also
+To make sure my jsdoc comments are consistent and correctly used, I also
 [configured eslint](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/.eslintrc#L29-L44) to validate them.
 
 (...) jsdoc offers many aliases (for instance @return and @returns).
@@ -110,8 +112,8 @@ That's quite paradoxical for a documentation tool to have such a short explanati
 
 So let's start with the [basis](http://usejsdoc.org/about-getting-started.html):
 jsdoc relies on specific comment blocks (starting with exactly two stars) to detect documentation placeholders.
-It is not required for these blocks to be closed to a symbol but, when they do, the symbol context is used to determine
-what is documented.
+It is not required for these blocks to be located near a symbol but, when they do, the symbol context is used to
+determine what is documented.
 
 `/** this is a valid jsdoc description for variable a */
 var a;
@@ -201,7 +203,7 @@ doclet that is generated
 * Interact with the parsing process through an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) node visitor
 
 The most important thing to remember is that you can interfere with doclet generation by altering them or even
-preventing them. But, I struggled to find ways to generate them on the fly (i.e. with no jsdoc block comment).
+preventing them. But, I struggled to find ways to generate them on the fly (i.e. without any jsdoc block comment).
 
 (...) It looks like there is a way to generate new doclets with a node visitor. However, the documentation is not very
 clear on that part. See [this example](http://www.zuojj.com/tdocs/jsdoc3/about-plugins.html).
@@ -255,7 +257,7 @@ In that case, the member type can easily be deduced from the AST node:
   memberof: 'gpf.Error',
   scope: 'instance' }`
 
-Indeed the AST structure gives me the literal value the member is initialized with (see meta.code.value).
+Indeed the AST structure provides the literal value the member is initialized with (see meta.code.value).
 
 This is done in the [_addMemberType](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L115-L134)
 function.
@@ -273,12 +275,12 @@ Because of the way JavaScript is designed, everything is public by default.
 But I follow the naming convention where the underscore at the beginning of the member name means that the member is
 private.
 
-This means that the symbol name gives information about the access type.
+As a consequence, the symbol name gives information about its access type.
 
 This is leveraged in the [_checkAccess](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L136-L144)
 function.
 
-### Access type based on class definitions
+#### Access type based on class definitions
 
 In the next version, I will implement a class definition method and the structure will provide information about
 members visibility. This will include a way to define static members.
@@ -292,7 +294,7 @@ I decided to prefix all custom tags with "gpf:" to easily identify them, a dicti
 their associated handlers. It is leveraged in the
 [_handleCustomTags ](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L96-L113) function.
 
-#### gpf:chainable
+#### @gpf:chainable
 
 When a method is designed to return the current instance so that you can easily chain calls, the tag @gpf:chainable is
 used. It instructs jsdoc that the return type is the current class and the description is normalized to
@@ -300,14 +302,14 @@ used. It instructs jsdoc that the return type is the current class and the descr
 
 It is implemented [here](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L52-L59).
 
-#### gpf:read / gpf:write
+#### @gpf:read / @gpf:write
 
 Followed by a member name, it provides pre-defined signatures for getters and setters. Note that the member doclet
 must be defined when the tag is executed.
 
 They are implemented [here](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L61-L74).
 
-#### sameas
+#### @gpf:sameas
 
 This basically solves the problem I mentioned at the beginning of the article by copying another symbol documentation,
 provided the doclet exists.
@@ -331,41 +333,115 @@ It will be [removed](https://github.com/ArnaudBuchholz/gpf-js/issues/119).
 
 ### Error generation in GPF-JS
 
-That's probably the example that demonstrates that laziness can become a virtue.
-The library will throw errors.
+That's probably the best example to demonstrate that laziness can become a virtue.
 
-    That one is the most interesting example I had to go through
+In the library, error management is handled through specific exceptions.
+Each error is associated to a specific class which comes with an error code and a message. The message can be built
+with substitution placeholders. The [gpf.Error](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.Error.html) class
+offers shortcut methods to create and throw errors in one call.
 
-    Explain that everything starts from _gpfErrorDeclare
-Example:
+For instance, the [AssertionFailed](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.Error.AssertionFailed.html)
+error is thrown with:
+`gpf.Error.assertionFailed({
+    message: message
+});`
 
-    One method is created
-    One class is created
+The [test case](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/test/error.js#L33-L47) shows the exception details:
+`var exceptionCaught;
+try {
+    gpf.Error.assertionFailed({
+        message: "Test"
+    });
+} catch (e) {
+    exceptionCaught = e;
+}
+assert(exceptionCaught instanceof gpf.Error.AssertionFailed);
+assert(exceptionCaught.code === gpf.Error.CODE_ASSERTIONFAILED);
+assert(exceptionCaught.code === gpf.Error.assertionFailed.CODE);
+assert(exceptionCaught.name === "assertionFailed");
+assert(exceptionCaught.message === "Assertion failed: Test");`
 
-### Documentation generation
+#### Errors generation
 
-    Two steps process
+You might wonder how the AssertionFailed class is declared?
 
-    1. Creating new documentation blocks during the beforeParse
+Actually, this is almost done in
+[two lines of code](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/error.js#L155-L169):
+`_gpfErrorDeclare("error", {
+/* ... */
 
-    2. Blocking the default handling through the node visitor
+    /**
+     * ### Summary
+     *
+     * An assertion failed
+     *
+     * ### Description
+     *
+     * This error is triggered when an assertion fails
+     *
+     * @see {@link gpf.assert}
+     * @see {@link gpf.asserts}
+     * @since 0.1.5
+     */
+    assertionFailed:
+        "Assertion failed: {message}",`
 
+The _gpfErrorDeclare internal method is capable of creating the exception class (its properties and throwing helper)
+using only an exception name and a description. It extensively uses
+[code generation technics](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/src/error.js#L72-L106).
+
+#### Documentation generation
+
+As you might notice, the jsdoc block comment preceding the assertionFailed declaration does not contain any class
+or function documentation. Indeed, this comment is reused by the plugin to generate new comments.
+
+Actually, this is done in two steps:
+
+**Creating new documentation blocks during the beforeParse**
+
+Hooking the beforeParse event, the plugin will search for any use of the _gpfErrorDeclare method.
+
+A [regular expression](https://regex101.com/r/DyffIn/1) captures the function and extract the two parameters. Then, a
+[second one](https://regex101.com/r/5878Ac/1) extracts each name, message and description to
+[generate new jsdoc comments](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L172-L203).
+
+**Blocking the default handling through the node visitor**
+
+By default, the initial jsdoc block comment will document a temporary object member. Now that the proper comments
+have been injected through the beforeParse event, a node visitor prevents any doclet to be generated
+**inside** the _gpfErrorDeclare method.
+
+This is implemented [here](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/doc/gpf.js#L251-L255).
+
+(...) Actually, I could have removed the comment block during the beforeParse event but the lines numbering would have
+been altered.
 
 ## ESLint customization
 
-valid-jsdoc.js
-    return handling (
-    parameter handling (signature defined)
+Adding new function signature tags through the jsdoc plugin helps me to reduce the amount of comments required to
+document the code. As mentioned at the beginning of the article, I
+[configured eslint](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/.eslintrc#L29-L44) to validate any jsdoc
+comment.
+
+However, because the linter is not aware of the plugin, it started to tell me that my jsdoc comments were invalid.
+
+So I duplicated and customized the
+[valid-jsdoc.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/.eslintrules/valid-jsdoc.js#L324-L329) rule to
+make it aware of those new tags.
 
 ## @since
 
-## Markdown?
+Knowing in which version an API is introduced may be helpful. The is the purpose of the tag
+[@since](http://usejsdoc.org/tags-since.html). However, manually setting it can be boring (and you might forget some
+comments).
+
+Here again, this was [automated](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/make/version.js).
 
 ## Conclusion
 
-The lazy developper in me is statisfied :-)
+![Bill Gates quote](https://arnaudbuchholz.github.io/blog/post/My%20own%20jsdoc%20plugin/bill-gates-lazy.jpg)
 
-
+Obviously, there is an upfront investment to automate everything but, now, the lazy developer in me is satisfied.
 
 </code>
 <!-- Drop those two lines -->
