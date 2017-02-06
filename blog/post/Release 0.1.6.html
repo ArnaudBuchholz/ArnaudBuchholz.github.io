@@ -17,13 +17,13 @@
 ## New version
 
 Here comes the new version:
-* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/5?closed=1)
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/5?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.6)
 * [Documentation](https://arnaudbuchholz.github.io/gpf/0.1.6/doc/index.html)
 
 ### Easier setup
 
-The very first time you clone the projet and run grunt, a configuration menu will be prompted:
+The very first time you clone the project and run grunt, a configuration menu will be prompted:
 * It allows you to select the http port the server will run on
 * It will detect cscript (or you may force the detection status)
 * It allows you to change the quality metrics
@@ -59,22 +59,26 @@ This version offers the new [gpf.define](https://arnaudbuchholz.github.io/gpf/0.
 It simplifies class creation through a definition dictionary,
 check the [documentation](https://arnaudbuchholz.github.io/gpf/0.1.6/doc/tutorial-DEFINE.html).
 
-(...) Feedback is welcome
+(...) Your feedback is welcome: this is the early stage of entity definition and there is plenty of time to improve it.
 
 ## Lessons learned
 
 ### Improving maintainability using regular expression
 
-I found myself using more and more regular expressions to reduce the code complexity.
+If you have read the other articles on my blog you know that I recently changed my mind about regular expressions.
+Actually, I found myself using those more and more to reduce the code complexity.
 
 ### Removing Selenium
 
 I have lots of troubles with Selenium, this is due to several reasons:
-* I use version 2 and version 3 has been released 5 month ago
-* It requires drivers and our browsers are updated almost automatically, it requires drivers update
-* FireFox does not work anymore
+* I use version 2 and version 3 has been released 5 month ago. FireFox does not work anymore with version 2.
+* Selenium relies on drivers. Browsers are updated automatically which implies that drivers must also be updated
+regularly.
 
-Because of the way I use Selenium to test the library, I am thinking of a more simple mechanism
+Looking at the way I use Selenium, it could be replaced with a simpler mechanism. I just need it to start the browser,
+run the proper page and wait for the final result. There is not much automation involved.
+
+Hence I am planning to remove Selenium and implement a custom mechanism in the next version.
 
 ## Next release
 
