@@ -23,36 +23,57 @@ Here comes the new version:
 
 ### Easier setup
 
-The very first time you clone the projet and run grunt, a configuration menu will be prompted
+The very first time you clone the projet and run grunt, a configuration menu will be prompted:
+* It allows you to select the http port the server will run on
+* It will detect cscript (or you may force the detection status)
+* It allows you to change the quality metrics
+* It detects the selenium-compatible browsers
 
-### Better compatibiltiy across hosts
+![grunt](https://arnaudbuchholz.github.io/blog/post/Release%200.1.6/config.png)
 
-Array.prototype.some
+Once finished, it builds the library so that the metrics will appear in the project homepage.
 
-### Better documentation
+![homepage](https://arnaudbuchholz.github.io/blog/post/Release%200.1.6/homepage.png)
 
-Use of typedef to document structures
+### Better compatibility across hosts
+
+One major feature of the library is to provide the same level of functionalities whatever the host it runs on.
+Consequently, I am always looking for methods that exist in recent JavaScript versions and that are missing on some
+hosts (specifically Rhino and Wscript).
+
+For instance, this version introduces
+[Array.prototype.some](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some).
+
+I am also planning to implement [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+Global_Objects/Object/assign) and deprecate [gpf.extend](https://arnaudbuchholz.github.io/gpf/0.1.6/doc/
+gpf.html#.extend__anchor) as it does the same.
 
 ### Backward compatibility
 
-Each version test file is kept and re-tested
+Each version's test file is now [kept](https://github.com/ArnaudBuchholz/gpf-js/tree/master/test/legacy) and tested
+automatically during the build process. This ensures backward compatibility.
 
 ### Simple class definition
 
+This version offers the new [gpf.define](https://arnaudbuchholz.github.io/gpf/0.1.6/doc/gpf.html#.define__anchor) API.
+It simplifies class creation through a definition dictionary,
+check the [documentation](https://arnaudbuchholz.github.io/gpf/0.1.6/doc/tutorial-DEFINE.html).
 
-    https://arnaudbuchholz.github.io/gpf/0.1.6/doc/tutorial-DEFINE.html
-
-
-    ## Lessons learned
+## Lessons learned
 
 ### Improving maintainability using regular expression:
 
     https://jsfiddle.net/ArnaudBuchholz/o5vgn2jf/1/
     https://jsfiddle.net/ArnaudBuchholz/o5vgn2jf/2/
 
-### Remvoving Selenium
+### Removing Selenium
 
+I have lots of troubles with Selenium, this is due to several reasons:
+* I use version 2 and version 3 has been released 5 month ago
+* It requires drivers and our browsers are updated almost automatically, it requires drivers update
+* FireFox does not work anymore
 
+Because of the way I use Selenium to test the library, I am thinking of a more simple mechanism
 
 ## Next release
 
