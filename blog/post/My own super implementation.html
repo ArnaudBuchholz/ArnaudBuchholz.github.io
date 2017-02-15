@@ -1,0 +1,81 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    My own super implementation
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
+    Release 0.1.6 of GPF-JS delivers a basic class definition mechanism.
+    Working on the release 0.1.7, I am securing this implementation by providing mechanism that mimic
+    the ES6 class definition. In particular, the super keyword is replaced with a $super member that provides
+    the same level of functionalities. Here is how.
+</div>
+<code class="markdown">
+## Introduction
+
+Explain use of super keyword in ES6
+Show that it is dynamic using prototype overriding
+
+Explain that super being a reserved keyword, I could not introduce it. Instead I choose to define a $super member
+
+The problem it causes is in the syntax:
+
+this.$super() => $super method receives this, it's OK
+this.$super.methodName() => methodName receives this.$super which is a method
+
+How can we make methodName receive this?
+
+## An history of bind and weak binding
+
+Explain the initial implementation of bind that leaded to the creation of Function.prototype.bind
+Shows the impact of 'strong' binding that limits the use .call or .apply
+
+Explain the concept of weak binding: a default binding that can be overridden with .call and .apply
+
+## A super idea
+
+### Wrapping a method
+
+Explain the use of function builder to replicate method signature and inject symbols
+I can also clean the this object once the method has been called in order to make sure it does not leak
+
+### Static mapping of super method
+
+It all started with static mapping because the wrapper is created while the class prototype is built
+
+### Dynamic mapping of super method
+
+Then the idea changed to be more dynamic and handle error cases where super does not make sense.
+
+### Dynamic members of super
+
+Beside the fact that the methodName should exist in the inherited prototype, we still need to overcome two problems:
+
+1) if $super is equal to the inherited method, I am not allowed to modify it
+2) if invoked with .call or .apply, I want the this to be modifiable
+3) For performance reasons, I don't want to define *all* possible members of $super by copying the inherited methods
+
+#### Building a new $super method object
+
+A JavaScript function being an object, I am allowed to add methods onto it
+
+#### Weak binding
+
+$super being known when the methods are defined, I can check that this === $super and substitute when needed
+
+#### Detecting $super members
+
+Guess what, a regular expression is being used
+
+
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
