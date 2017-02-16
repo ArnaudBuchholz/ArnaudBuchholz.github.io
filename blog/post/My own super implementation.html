@@ -19,8 +19,113 @@
 <code class="markdown">
 ## Introduction
 
-Explain use of super keyword in ES6
-Show that it is dynamic using prototype overriding
+The [super](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super) keyword was introduced
+with ECMAScript 2015. Its goal is to simplify the access to parent methods of an object.
+It can be used within a class definition or directly in object literals.
+
+### Class examples
+
+To demonstrate the value, let define a class A.
+`class A {
+
+    constructor (value) {
+        this._a = true;
+        if (undefined !== value) {
+            this._value = value;
+        }
+    }
+
+    getValue () {
+        return this._value;
+    }
+
+}`
+
+Then, let subclass it to a class B.
+`class B extends A {
+
+    constructor () {
+        super("b");
+        this._b = true;
+    }
+
+    getValue () {
+        return super.getValue().toUpperCase();
+    }
+}`
+
+The way B is defined changes the behavior of the method getValue so that the result of A implementation is uppercase'd.
+Also, when instance of B are built, the constructor of A is explictly called with a parameter.
+
+Without the ES6 syntax, you could do it this way:
+`function A (value) {
+    this._a = true;
+    if (undefined !== value) {
+        this._value = value;
+    }
+}
+
+Object.assign(A.prototype, {
+    getValue: function () {
+        return this._value;
+    }
+});
+
+function B () {
+    A.call(this, "b");
+    this._b = true;
+}
+
+B.prototype = Object.create(A.prototype);
+Object.assign(B.prototype, {
+    getValue: function () {
+        return A.prototype.getValue.call(this).toUpperCase();
+    }
+});`
+
+(...) There are several ways to implement inheritance in JavaScript.
+In this example, I applied the pattern used in GPF-JS.
+
+### Syntax differences
+
+Whether you use one syntax or the other, both versions of A and B will look almost the same:
+* A and B are functions
+* A.prototype has a method named getValue
+* b instances only have own properties _a, _b and _value
+* b instanceof A works
+
+[Class version (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/um9511we/)
+
+[Function version](https://jsfiddle.net/ArnaudBuchholz/kj457uvu/1/)
+
+### So, why would you use the the super keyword?
+
+As you may see in the examples, accessing the parent methods without ES6 is possible but requires the knowledge of the
+parent class being extended:
+* In the constructor, `super("b")` is replaced with `A.call(this, "b")`
+
+* In a method, `super.getValue()` is replaced with `A.prototype.getValue.call(this)`
+
+As a consequence, any update in the class hierarchy would lead to a mass search & replace in the code.
+
+Hence, one could say that this keyword is a typical example of
+[syntaxic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar) as it does not bring new feature.
+
+(...) if you forget about object literals...
+
+### Exploring the feature
+
+#### Redefining parent method
+
+
+
+[Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/Layhbjye/)
+
+#### Getting function object
+
+[Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/34n4ae99/1/)
+
+## A super idea
 
 Explain that super being a reserved keyword, I could not introduce it. Instead I choose to define a $super member
 
@@ -31,14 +136,13 @@ this.$super.methodName() => methodName receives this.$super which is a method
 
 How can we make methodName receive this?
 
-## An history of bind and weak binding
+### An history of bind and weak binding
 
 Explain the initial implementation of bind that leaded to the creation of Function.prototype.bind
 Shows the impact of 'strong' binding that limits the use .call or .apply
 
 Explain the concept of weak binding: a default binding that can be overridden with .call and .apply
 
-## A super idea
 
 ### Wrapping a method
 
