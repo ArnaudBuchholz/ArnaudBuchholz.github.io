@@ -117,13 +117,22 @@ Hence, one could say that this keyword is a typical example of
 
 #### Redefining parent method
 
+When I studied the feature I had a question about the dynamism of the super association.
+What happens if the parent prototype is modified? Does it call the modified method or does it call the method that was
+existing when the child method is defined.
 
+It appears that the link is dynamic (as when A.prototype.getValue is used).
 
 [Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/Layhbjye/)
 
 #### Getting function object
 
-[Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/34n4ae99/1/)
+Another question was about the super value itself: is it possible to access it without invoking it?
+Does it return a function object?
+
+Indeed, it returns the parent function object.
+
+[Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/34n4ae99/2/)
 
 ## A super idea
 
