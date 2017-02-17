@@ -25,7 +25,7 @@ It can be used within a class definition or directly in object literals.
 
 ### Class examples
 
-To demonstrate the value, let define a class A.
+To demonstrate the usage, let define a class A.
 `class A {
 
     constructor (value) {
@@ -54,8 +54,8 @@ Then, let subclass it to a class B.
     }
 }`
 
-The way B is defined changes the behavior of the method getValue so that the result of A implementation is uppercase'd.
-Also, when instance of B are built, the constructor of A is explictly called with a parameter.
+The way B is defined changes the behavior of the method getValue so that the result of A implementation is uppercased.
+Also, when instance of B are built, the constructor of A is explicitly called with a parameter.
 
 Without the ES6 syntax, you could do it this way:
 `function A (value) {
@@ -98,7 +98,7 @@ Whether you use one syntax or the other, both versions of A and B will look almo
 
 [Function version](https://jsfiddle.net/ArnaudBuchholz/kj457uvu/1/)
 
-### So, why would you use the the super keyword?
+### So, why would you use the super keyword?
 
 As you may see in the examples, accessing the parent methods without ES6 is possible but requires the knowledge of the
 parent class being extended:
@@ -108,50 +108,84 @@ parent class being extended:
 
 As a consequence, any update in the class hierarchy would lead to a mass search & replace in the code.
 
-Hence, one could say that this keyword is a typical example of
+Beside this, one could say that this keyword is a typical example of
 [syntaxic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar) as it does not bring new feature.
 
 (...) if you forget about object literals...
 
 ### Exploring the feature
 
+The very first time I was exposed to the super keyword, I had some questions about the way it react to
+[edge cases](https://en.wikipedia.org/wiki/Edge_case).
+
 #### Redefining parent method
 
-When I studied the feature I had a question about the dynamism of the super association.
 What happens if the parent prototype is modified? Does it call the modified method or does it call the method that was
 existing when the child method is defined.
 
-It appears that the link is dynamic (as when A.prototype.getValue is used).
+It appears that the link is dynamic.
 
 [Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/Layhbjye/)
 
+(...) This is consistent with the function implementation: A.prototype.getValue re-evaluates the member every time it
+is called.
+
 #### Getting function object
 
-Another question was about the super value itself: is it possible to access it without invoking it?
-Does it return a function object?
+Is it possible to access the parent method without invoking it? Does it return a function object?
 
 Indeed, it returns the parent function object.
 
-[Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/34n4ae99/2/)
+[Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/34n4ae99/4/)
+
+(...) It is important to notice that when invoked outside of the method, it appears that the value of
+[this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) is undefined.
+
+#### Checking parent method existence
+
+Finally, I was also wondering how the super keyword validates the method that is accessed: what happens if you try to
+reference a non existing member: does it fail when generating the class or upon method execution?
+
+Accessing a non existing member returns
+[undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined).
+
+[Example (Chrome & Firefox only)](https://jsfiddle.net/54L2eovo/1/)
+
+(...) Because it supports dynamism, I suspected that the error would be thrown at evaluation time.
 
 ## A super idea
 
-Explain that super being a reserved keyword, I could not introduce it. Instead I choose to define a $super member
+One of the goal of [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) is to provide the same feature set whatever the
+host running the script. Because some of them are old (Rhino and WScript), it is not only impossible to use ES6 features
+but also it prevents the use of
+[transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them).
 
-The problem it causes is in the syntax:
+[gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class) is a class definition
+helper exposed by the library. I wanted it to offer a mechanism that would mimic the super keyword.
 
-this.$super() => $super method receives this, it's OK
-this.$super.methodName() => methodName receives this.$super which is a method
+However, super being a reserved keyword, I could not use it.
 
-How can we make methodName receive this?
+As the library reserves $ properties for specific usage, I came with the idea of defining $super.
 
-### An history of bind and weak binding
+I initially tried to make the $super keyword a global one (like super) but the library had to tweak the global
+context object which generated lots of issue. So I ended up defining this.$super inside class methods.
+
+I wanted to support two different forms:
+
+* Calling `this.$super()` must be equivalent to `super()`
+
+* Calling `this.$super.methodName()` must be equivalent to `super.methodName()`
+
+### Invoking a function
+
+Explain how a.b() makes a this inside b
+
+### Binding
 
 Explain the initial implementation of bind that leaded to the creation of Function.prototype.bind
 Shows the impact of 'strong' binding that limits the use .call or .apply
 
 Explain the concept of weak binding: a default binding that can be overridden with .call and .apply
-
 
 ### Wrapping a method
 
