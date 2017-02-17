@@ -160,37 +160,80 @@ host running the script. Because some of them are old (Rhino and WScript), it is
 but also it prevents the use of
 [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them).
 
+(...) Yes, I do like challenges...
+
 [gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class) is a class definition
-helper exposed by the library. I wanted it to offer a mechanism that would mimic the super keyword.
+helper exposed by the library. But it would not be complete without a mechanism that would mimic the super keyword in
+order to reduce the complexity of calling parent methods.
 
-However, super being a reserved keyword, I could not use it.
-
-As the library reserves $ properties for specific usage, I came with the idea of defining $super.
+super being a reserved keyword, I could not use it. But as the library reserves $ properties for specific usage, I came
+with the idea of defining $super.
 
 I initially tried to make the $super keyword a global one (like super) but the library had to tweak the global
 context object which generated lots of issue. So I ended up defining this.$super inside class methods.
 
-I wanted to support two different forms:
+Two different syntaxes had to be supported:
 
 * Calling `this.$super` must be equivalent to `super`
 
 * Calling `this.$super.methodName` must be equivalent to `super.methodName`
 
+### Wrapping methods
+
+Before being able to cope with this.$super calls, the library has to make sure that the member is defined before calling
+the class method.
+
+A long time ago, when studying JavaScript inheritance, I found this very interesting
+[article](http://ejohn.org/blog/simple-javascript-inheritance/) from [John Resig](https://www.linkedin.com/in/jeresig)
+(the creator of [jQuery](https://jquery.com/)).
+
+It took me ages to understand its Class.extend helper but this one demonstrates a brilliant JavaScript ninja technique:
+by testing the method with a regular expression, he is capable of finding out if a class method uses the _super keyword.
+If so, the method is wrapped inside a container function that defines the _super member for the lifetime of the call.
+
+`// Check if we’re overwriting an existing function
+prototype[name] = typeof prop[name] == "function" &&
+typeof _super[name] == "function" && fnTest.test(prop[name]) ?
+    (function(name, fn){
+        return function() {
+            var tmp = this._super;
+
+            // Add a new ._super() method that is the same method
+            // but on the super-class
+            this._super = _super[name];
+
+            // The method only need to be bound temporarily, so we
+            // remove it when we’re done executing
+            var ret = fn.apply(this, arguments);
+            this._super = tmp;
+
+            return ret;
+        };
+    })(name, prop[name])
+    : prop[name];`
+
+
+
+
 ### Invoking a function
 
-The very first problem that quickly became obvious is related to the second form.
-How do you make sure that when calling `this.$super.methodName()`
-the proper [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) is transmitted to
-methodName?
+When calling this.$super(), the method $super would obviously receive the proper context.
+
+However, things are more complicated when calling this.$super.methodName().
 
 If you understand how
 [JavaScript function invocation](https://www.safaribooksonline.com/library/view/javascript-the-good/9780596517748/
-ch04s03.html) works, you know that inside methodName, it would be equal to this.$super... which is a function.
+ch04s03.html) works, you know that inside methodName,
+[this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) would be equal to this.$super.
 
-I could use binding to force the value of this inside the function but then I would loose the possibility to invoke it
-with any context.
+And that is a function.
 
-### Binding
+So how could I make sure that the proper context would be transmitted to methodName?
+
+Function binding could be use to force the value of this inside the function but then we would loose the possibility to
+invoke it with any context.
+
+### Function binding
 
 Before [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
 Function/bind) was introduced, people used to create a closure to force the value of this inside a function.
@@ -204,7 +247,7 @@ Function/bind) was introduced, people used to create a closure to force the valu
 
 This concept was also made popular with [jQuery.proxy](https://api.jquery.com/jQuery.proxy/).
 
-Once a function is bound, it is no more possible to change the context it is executed with.
+The drawback is that, once a function is bound, it is no more possible to change the context it is executed with.
 
 [Demonstration](https://jsfiddle.net/ArnaudBuchholz/duxnd03m/)
 `function getValue() {
@@ -233,13 +276,8 @@ var reboundGetValue = boundGetValue.bind({
 });
 log(reboundGetValue());  // output "Bound"`
 
-Back to my $super.methodName example, I needed a way to bind the method so that it could be called with a different
+Back to the $super.methodName example, I needed a way to bind the method so that it could be called with a different
 context: a sort of weak bind.
-
-### Wrapping a method
-
-Explain the use of function builder to replicate method signature and inject symbols
-I can also clean the this object once the method has been called in order to make sure it does not leak
 
 ### Static mapping of super method
 
