@@ -172,20 +172,69 @@ context object which generated lots of issue. So I ended up defining this.$super
 
 I wanted to support two different forms:
 
-* Calling `this.$super()` must be equivalent to `super()`
+* Calling `this.$super` must be equivalent to `super`
 
-* Calling `this.$super.methodName()` must be equivalent to `super.methodName()`
+* Calling `this.$super.methodName` must be equivalent to `super.methodName`
 
 ### Invoking a function
 
-Explain how a.b() makes a this inside b
+The very first problem that quickly became obvious is related to the second form.
+How do you make sure that when calling `this.$super.methodName()`
+the proper [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) is transmitted to
+methodName?
+
+If you understand how
+[JavaScript function invocation](https://www.safaribooksonline.com/library/view/javascript-the-good/9780596517748/
+ch04s03.html) works, you know that inside methodName, it would be equal to this.$super... which is a function.
+
+I could use binding to force the value of this inside the function but then I would loose the possibility to invoke it
+with any context.
 
 ### Binding
 
-Explain the initial implementation of bind that leaded to the creation of Function.prototype.bind
-Shows the impact of 'strong' binding that limits the use .call or .apply
+Before [Function.prototype.bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+Function/bind) was introduced, people used to create a closure to force the value of this inside a function.
 
-Explain the concept of weak binding: a default binding that can be overridden with .call and .apply
+`Function.prototype.bind = function(oThis) {
+    var fToBind = this;
+    return function () {
+        return fToBind.apply(oThis, arguments);
+    }
+};`
+
+This concept was also made popular with [jQuery.proxy](https://api.jquery.com/jQuery.proxy/).
+
+Once a function is bound, it is no more possible to change the context it is executed with.
+
+[Demonstration](https://jsfiddle.net/ArnaudBuchholz/duxnd03m/)
+`function getValue() {
+  return this.value;
+}
+
+// Passing the context
+log(getValue.call({
+	value: "Hello World"
+})); // output "Hello World"
+
+// Binding
+var boundGetValue = getValue.bind({
+	value: "Bound"
+});
+log(boundGetValue());  // output "Bound"
+
+// Trying to pass a different context
+log(boundGetValue.call({
+	value: "Hello World"
+})); // output "Bound"
+
+// Trying to bind again
+var reboundGetValue = boundGetValue.bind({
+	value: "Hello World"
+});
+log(reboundGetValue());  // output "Bound"`
+
+Back to my $super.methodName example, I needed a way to bind the method so that it could be called with a different
+context: a sort of weak bind.
 
 ### Wrapping a method
 
