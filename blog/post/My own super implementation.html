@@ -168,6 +168,9 @@ host running the script. Because some of them are old (Rhino and WScript), it is
 features but also it prevents the use of
 [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them).
 
+(...) Transpilers like [babel](https://babeljs.io/) are capable of generating compatible JavaScript code out of next-gen
+JavaScript source.
+
 [gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class) is a class definition
 helper exposed by the library since [version 0.1.6](http://gpf-js.blogspot.ca/2017/02/release-016.html).
 But it would not be complete without a mechanism that mimics the super keyword in order to reduce the complexity of
@@ -186,7 +189,7 @@ this.$super was defined and had to support two different syntaxes:
 
 * Calling `this.$super.methodName` must be equivalent to `super.methodName`
 
-### Introducing class definition
+### Class definition
 
 The library internally uses an object to retain the initial definition dictionary, parse it and build the class handler.
 This [class definition](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/define/class/class.js) object is not
@@ -197,8 +200,7 @@ This object is a key component of this implementation as it
 such as the extended base class. This will be leveraged to access parent methods.
 
 (...) [Object.getPrototypeOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
-getPrototypeOf) could be used to escalate the prototype chain and retrieve the base class and methods.
-However, this method is
+getPrototypeOf) could be used to escalate the prototype chain and retrieve the base methods. However, it is
 [poorly polyfilled](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/compatibility/object.js#L52-L60) on old
 hosts and it does not work as expected with standard objects.
 
@@ -245,7 +247,61 @@ super.js#L191-L196) the method in a new one that defines the value of this.$supe
 the same as the initial one. Indeed, GPF-JS will soon enable interfaces validation and signatures of methods have to
 match.
 
-### Invoking a function
+### Dynamic mapping of super method
+
+So, when the class is being defined, a dictionary mapping method names to their implementation is passed to
+[gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class).
+This definition dictionary is enumerated so that when the $super use is detected in a method, the name of the parent
+method is known.
+
+This name (as well as members of $super, it will be explained right after) is remembered in a
+[closure](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
+super.js#L195) and passed to the function [_get$Super](https://github.com/ArnaudBuchholzgpf-js/blob/
+90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L147) before calling the method.
+
+### Building a new $super method object
+
+The class definition method _get$Super [creates a new function](https://github.com/ArnaudBuchholz/gpf-js/blob/
+90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L195) instead of reusing the parent one. The reason
+is quite simple: a JavaScript function being an object, it is allowed to add properties to it... and this will be
+required to define expected additional super method names.
+
+But then you may wonder why the parent function object is not used? those additional member names could be backed up,
+overwritten and restored once the call is completed.
+
+However, there are several limitations here:
+* This object could be frozen with [Object.freeze](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/
+Global_Objects/Object/freeze). No member could be added to it
+* If the developer expects to get members on the parent method, he would probably refer to them through the function name.
+For instance:
+
+
+However, GPF-JS tries to limit its impact on objects defined by the developer:
+* The library tries to keep the development
+* The developer may
+    (maybe he already added some members to
+its function).
+
+    (...) While redacting this article, I realized that this encapsulation prevents the developer to have
+    (...) Actually, the keyword super can't be used alone outside of the constructor function. this.$super overcomes this
+    limitation.
+
+
+    ### Dynamic members of super
+
+    Beside the fact that the methodName should exist in the inherited prototype, we still need to overcome two problems:
+
+    1) if $super is equal to the inherited method, I am not allowed to modify it
+    2) if invoked with .call or .apply, I want the this to be modifiable
+    3) For performance reasons, I don't want to define *all* possible members of $super by copying the inherited methods
+
+    #### Detecting $super members
+
+    Guess what, a regular expression is being used to list members that are used.
+
+
+
+    ### Invoking a super method
 
 When calling this.$super(), the method $super would obviously receive the proper context.
 
@@ -309,44 +365,9 @@ log(reboundGetValue());  // output "Bound"`
 Back to the $super.methodName example, I needed a way to bind the method so that it could be called with a different
 context: a sort of weak bind.
 
-### Dynamic mapping of super method
-
-When the class is being defined, a dictionary mapping method names to their implementation is passed to
-[gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class).
-This definition dictionary is enumerated so that when the $super use is detected in a method, the name of the parent
-method is known.
-
-This name (as well as members of $super) is remembered in a [closure](https://github.com/ArnaudBuchholz/gpf-js/blob/
-90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L195) and passed to the function
-[_get$Super](https://github.com/ArnaudBuchholzgpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
-super.js#L147) before calling the method.
-
-(...) Actually, the keyword super can't be used alone outside of the constructor function. this.$super overcomes this
-limitation.
-
-### Building a new $super method object
-
-The class definition method _get$Super [creates a new function](https://github.com/ArnaudBuchholz/gpf-js/blob/
-90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L195) instead of reusing the parent one. The reason
-is quite simple. A JavaScript function being an object, it is allowed to add methods to it.
-However, the libray is not supposed to alter objects defined by the developer (maybe he already added some members to
-its function).
-
-### Dynamic members of super
-
-Beside the fact that the methodName should exist in the inherited prototype, we still need to overcome two problems:
-
-1) if $super is equal to the inherited method, I am not allowed to modify it
-2) if invoked with .call or .apply, I want the this to be modifiable
-3) For performance reasons, I don't want to define *all* possible members of $super by copying the inherited methods
-
 #### Weak binding
 
 $super being known when the methods are defined, I can check that this === $super and substitute when needed
-
-#### Detecting $super members
-
-Guess what, a regular expression is being used to list members that are used.
 
 
 
