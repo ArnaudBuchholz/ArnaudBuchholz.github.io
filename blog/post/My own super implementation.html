@@ -168,17 +168,17 @@ host running the script. Because some of them are old (Rhino and WScript), it is
 features but also it prevents the use of
 [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them).
 
-(...) Yes, I do like challenges...
-
 [gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class) is a class definition
 helper exposed by the library. But it would not be complete without a mechanism that would mimic the super keyword in
 order to reduce the complexity of calling parent methods.
 
-super being a reserved keyword, I could not use it. But as the library reserves $ properties for specific usage, I came
-with the idea of defining $super.
+super being a reserved keyword, it could not be used. But as the library reserves $ properties for specific usage, the
+idea of defining $super naturally came up.
 
-I initially tried to make the $super keyword a global one (like super) but the library had to tweak the global
-context object which generated lots of issue. So I ended up defining this.$super inside class methods.
+In order to make the $super keyword a global one (like super), the library had to tweak the global context object which
+generated lots of issue (leaks detected in mocha, validation errors in linters, the variable could be defined by
+the developer...). So, $super had to be attached to the context of the class instance. this.$super can appear inside
+class methods.
 
 Two different syntaxes had to be supported:
 
@@ -188,15 +188,15 @@ Two different syntaxes had to be supported:
 
 ### Wrapping methods
 
-Before being able to cope with this.$super calls, the library has to make sure that the member is defined before calling
+Before being able to cope with this.$super calls, the library has to make sure that the member exists before executing
 the class method.
 
 A long time ago, when studying JavaScript inheritance, I found this very interesting
 [article](http://ejohn.org/blog/simple-javascript-inheritance/) from [John Resig](https://www.linkedin.com/in/jeresig)
 (the creator of [jQuery](https://jquery.com/)).
 
-It took me ages to understand its Class.extend helper but this one demonstrates a brilliant JavaScript ninja technique:
-by testing the method with a regular expression, he is capable of finding out if a class method uses the _super keyword.
+It took me ages to fully understand its Class.extend helper but it demonstrates a brilliant JavaScript ninja technique:
+by testing the method with a regular expression, it is capable of finding out if a class method uses the _super keyword.
 If so, the method is wrapped inside a container function that defines the _super member for the lifetime of the call.
 
 `// Check if we’re overwriting an existing function
@@ -220,8 +220,14 @@ typeof _super[name] == "function" && fnTest.test(prop[name]) ?
     })(name, prop[name])
     : prop[name];`
 
+Typically, GPF-JS uses the same strategy to [detect](https://github.com/ArnaudBuchholz/gpf-js/blob/
+90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L207-L210) the use of $super and
+[wrap](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
+super.js#L191-L196) the method in a new one that defines the value of this.$super.
 
-
+(...) The use of _gpfFunctionDescribe and _gpfFunctionBuild guarantees that the signature of the final method will be
+the same as the initial one. Indeed, GPF-JS will soon enable interfaces validation and signatures of methods have to
+match.
 
 ### Invoking a function
 
@@ -313,7 +319,7 @@ $super being known when the methods are defined, I can check that this === $supe
 
 #### Detecting $super members
 
-Guess what, a regular expression is being used
+Guess what, a regular expression is being used to list members that are used.
 
 
 
