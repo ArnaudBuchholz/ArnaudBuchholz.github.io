@@ -180,7 +180,7 @@ In order to make the $super keyword a global one (like super), the library had t
 generated lots of issues (leaks detected in mocha, validation errors in linters, the variable could already be defined
 by the developer...). So, $super had to be attached to the context of the class instance.
 
-this.$super had to be supported two different syntaxes:
+this.$super was defined and had to support two different syntaxes:
 
 * Calling `this.$super` must be equivalent to `super`
 
@@ -192,14 +192,15 @@ The library internally uses an object to retain the initial definition dictionar
 This [class definition](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/define/class/class.js) object is not
 yet exposed but will be in the future through a read-only interface.
 
-This object is important as it [keeps track](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/define/class/
-check.js) of the class properties such as the extended base class. This will be leveraged to access parent methods.
+This object is a key component of this implementation as it
+[keeps track](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/define/class/check.js) of the class properties
+such as the extended base class. This will be leveraged to access parent methods.
 
 (...) [Object.getPrototypeOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
 getPrototypeOf) could be used to escalate the prototype chain and retrieve the base class and methods.
 However, this method is
 [poorly polyfilled](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/compatibility/object.js#L52-L60) on old
-hosts and it does not work as expected on standard objects.
+hosts and it does not work as expected with standard objects.
 
 ### Wrapping methods
 
