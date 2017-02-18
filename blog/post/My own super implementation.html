@@ -12,7 +12,7 @@
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
     Release 0.1.6 of GPF-JS delivers a basic class definition mechanism.
-    Working on the release 0.1.7, I am securing this implementation by providing mechanism that mimic
+    Working on the release 0.1.7, the focus is to improve this implementation by providing mechanism that mimic
     the ES6 class definition. In particular, the super keyword is replaced with a $super member that provides
     the same level of functionalities. Here is how.
 </div>
@@ -21,18 +21,16 @@
 
 The [super](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super) keyword was introduced
 with ECMAScript 2015. Its goal is to simplify the access to parent methods of an object.
-It can be used within a class definition or directly in object literals.
+It can be used within a class definition or directly in object literals. We will focus on class definition.
 
 ### Class examples
 
-To demonstrate the usage, let define a class A.
+To demonstrate the usage, let define a simple class A.
 `class A {
 
-    constructor (value) {
+    constructor (value = "a") {
         this._a = true;
-        if (undefined !== value) {
-            this._value = value;
-        }
+        this._value = value;
     }
 
     getValue () {
@@ -41,7 +39,12 @@ To demonstrate the usage, let define a class A.
 
 }`
 
-Then, let subclass it to a class B.
+In that example, the class A offers a constructor with an optional parameter (defaulted to "a").
+Upon execution, it sets the member _a to true (this will be used later to validate the constructor call).
+Also, the member _value receives the value of the parameter.
+Finally, the method getValue exposes _value.
+
+Then, let subclass it with class B.
 `class B extends A {
 
     constructor () {
@@ -54,15 +57,17 @@ Then, let subclass it to a class B.
     }
 }`
 
-The way B is defined changes the behavior of the method getValue so that the result of A implementation is uppercased.
-Also, when instance of B are built, the constructor of A is explicitly called with a parameter.
+When instances of B are built, the constructor of A is explicitly called with the parameter "b".
+Also, the behavior of the method getValue is modified to uppercase the result of parent implementation.
 
-Without the ES6 syntax, you could do it this way:
+None of these features are new to JavaScript. Indeed, the exact same definition can be achieved without any of the
+ECMAScript 2015 keywords.
+
+For instance:
+
 `function A (value) {
     this._a = true;
-    if (undefined !== value) {
-        this._value = value;
-    }
+    this._value = value || "a";
 }
 
 Object.assign(A.prototype, {
@@ -84,24 +89,26 @@ Object.assign(B.prototype, {
 });`
 
 (...) There are several ways to implement inheritance in JavaScript.
-In this example, I applied the pattern used in GPF-JS.
+In this example, the pattern used in GPF-JS is demonstrated.
 
-### Syntax differences
+### Differences
 
-Whether you use one syntax or the other, both versions of A and B will look almost the same:
+Whether you use one syntax or the other, both versions of A and B will look (and behave) the same:
 * A and B are functions
 * A.prototype has a method named getValue
 * b instances only have own properties _a, _b and _value
 * b instanceof A works
 
-[Class version (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/um9511we/)
+[Class version (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/um9511we/1/)
 
-[Function version](https://jsfiddle.net/ArnaudBuchholz/kj457uvu/1/)
+[Function version](https://jsfiddle.net/ArnaudBuchholz/kj457uvu/2/)
 
 ### So, why would you use the super keyword?
 
-As you may see in the examples, accessing the parent methods without ES6 is possible but requires the knowledge of the
-parent class being extended:
+As you may see in the examples, accessing the parent methods without super is possible but requires the knowledge of the
+parent class being extended. Furthermore the syntax is not easy to remember... Well, after using it a thousand times,
+you end knowing it by heart.
+
 * In the constructor, `super("b")` is replaced with `A.call(this, "b")`
 
 * In a method, `super.getValue()` is replaced with `A.prototype.getValue.call(this)`
@@ -115,7 +122,7 @@ Beside this, one could say that this keyword is a typical example of
 
 ### Exploring the feature
 
-The very first time I was exposed to the super keyword, I had some questions about the way it react to
+Even if the documentation on super is extensive, some questions remains about the way it reacts to
 [edge cases](https://en.wikipedia.org/wiki/Edge_case).
 
 #### Redefining parent method
@@ -123,7 +130,7 @@ The very first time I was exposed to the super keyword, I had some questions abo
 What happens if the parent prototype is modified? Does it call the modified method or does it call the method that was
 existing when the child method is defined.
 
-It appears that the link is dynamic.
+The link is dynamic.
 
 [Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/Layhbjye/)
 
@@ -134,16 +141,16 @@ is called.
 
 Is it possible to access the parent method without invoking it? Does it return a function object?
 
-Indeed, it returns the parent function object.
+It returns the parent function object.
 
 [Example (Chrome & Firefox only)](https://jsfiddle.net/ArnaudBuchholz/34n4ae99/4/)
 
-(...) It is important to notice that when invoked outside of the method, it appears that the value of
+(...) It is important to notice that if not invoked immediately (look at getSuperGetValue in the example), the value of
 [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) is undefined.
 
 #### Checking parent method existence
 
-Finally, I was also wondering how the super keyword validates the method that is accessed: what happens if you try to
+Finally, how does the super keyword validate the method that is accessed: what happens if you try to
 reference a non existing member: does it fail when generating the class or upon method execution?
 
 Accessing a non existing member returns
@@ -151,13 +158,14 @@ Accessing a non existing member returns
 
 [Example (Chrome & Firefox only)](https://jsfiddle.net/54L2eovo/1/)
 
-(...) Because it supports dynamism, I suspected that the error would be thrown at evaluation time.
+(...) This is also consistent with the function implementation: it makes sense that the error is thrown at evaluation
+time.
 
 ## A super idea
 
 One of the goal of [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) is to provide the same feature set whatever the
-host running the script. Because some of them are old (Rhino and WScript), it is not only impossible to use ES6 features
-but also it prevents the use of
+host running the script. Because some of them are old (Rhino and WScript), it is not only impossible to use recent
+features but also it prevents the use of
 [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them).
 
 (...) Yes, I do like challenges...
