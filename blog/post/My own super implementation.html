@@ -169,18 +169,18 @@ features but also it prevents the use of
 [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them).
 
 [gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class) is a class definition
-helper exposed by the library. But it would not be complete without a mechanism that would mimic the super keyword in
-order to reduce the complexity of calling parent methods.
+helper exposed by the library since [version 0.1.6](http://gpf-js.blogspot.ca/2017/02/release-016.html).
+But it would not be complete without a mechanism that mimics the super keyword in order to reduce the complexity of
+calling parent methods.
 
 super being a reserved keyword, it could not be used. But as the library reserves $ properties for specific usage, the
 idea of defining $super naturally came up.
 
 In order to make the $super keyword a global one (like super), the library had to tweak the global context object which
-generated lots of issue (leaks detected in mocha, validation errors in linters, the variable could be defined by
-the developer...). So, $super had to be attached to the context of the class instance. this.$super can appear inside
-class methods.
+generated lots of issues (leaks detected in mocha, validation errors in linters, the variable could already be defined
+by the developer...). So, $super had to be attached to the context of the class instance.
 
-Two different syntaxes had to be supported:
+this.$super had to be supported two different syntaxes:
 
 * Calling `this.$super` must be equivalent to `super`
 
@@ -308,23 +308,28 @@ log(reboundGetValue());  // output "Bound"`
 Back to the $super.methodName example, I needed a way to bind the method so that it could be called with a different
 context: a sort of weak bind.
 
-#### Building a new $super method object
-
-
-A JavaScript function being an object, I am allowed to add methods onto it
-
 ### Dynamic mapping of super method
 
 When the class is being defined, a dictionary mapping method names to their implementation is passed to
 [gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class).
-This dictionary is enumerated so that when the $super use is detected, the name of the parent method that must
-be associated is known.
+This definition dictionary is enumerated so that when the $super use is detected in a method, the name of the parent
+method is known.
 
-This name (as well as members of $super), is passed to the function [_get$Super](https://github.com/ArnaudBuchholz/
-gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L147).
+This name (as well as members of $super) is remembered in a [closure](https://github.com/ArnaudBuchholz/gpf-js/blob/
+90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L195) and passed to the function
+[_get$Super](https://github.com/ArnaudBuchholzgpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
+super.js#L147) before calling the method.
 
 (...) Actually, the keyword super can't be used alone outside of the constructor function. this.$super overcomes this
 limitation.
+
+### Building a new $super method object
+
+The class definition method _get$Super [creates a new function](https://github.com/ArnaudBuchholz/gpf-js/blob/
+90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L195) instead of reusing the parent one. The reason
+is quite simple. A JavaScript function being an object, it is allowed to add methods to it.
+However, the libray is not supposed to alter objects defined by the developer (maybe he already added some members to
+its function).
 
 ### Dynamic members of super
 
