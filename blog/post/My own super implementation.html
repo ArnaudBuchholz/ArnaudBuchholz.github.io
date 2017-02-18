@@ -186,10 +186,25 @@ Two different syntaxes had to be supported:
 
 * Calling `this.$super.methodName` must be equivalent to `super.methodName`
 
+### Introducing class definition
+
+The library internally uses an object to retain the initial definition dictionary, parse it and build the class handler.
+This [class definition](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/define/class/class.js) object is not
+yet exposed but will be in the future through a read-only interface.
+
+This object is important as it [keeps track](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/define/class/
+check.js) of the class properties such as the extended base class. This will be leveraged to access parent methods.
+
+(...) [Object.getPrototypeOf](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+getPrototypeOf) could be used to escalate the prototype chain and retrieve the base class and methods.
+However, this method is
+[poorly polyfilled](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/compatibility/object.js#L52-L60) on old
+hosts and it does not work as expected on standard objects.
+
 ### Wrapping methods
 
-Before being able to cope with this.$super calls, the library has to make sure that the member exists before executing
-the class method.
+Before being able to cope with this.$super calls inside a method, the library has to make sure that the $super member
+exists before executing the method.
 
 A long time ago, when studying JavaScript inheritance, I found this very interesting
 [article](http://ejohn.org/blog/simple-javascript-inheritance/) from [John Resig](https://www.linkedin.com/in/jeresig)
@@ -240,12 +255,12 @@ If you understand how
 ch04s03.html) works, you know that inside methodName,
 [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) would be equal to this.$super.
 
-And that is a function.
+And that is a function object.
 
 So how could I make sure that the proper context would be transmitted to methodName?
 
-Function binding could be use to force the value of this inside the function but then we would loose the possibility to
-invoke it with any context.
+Function binding could be use to force the value of but then we would loose the possibility to invoke it with any
+context.
 
 ### Function binding
 
@@ -293,13 +308,23 @@ log(reboundGetValue());  // output "Bound"`
 Back to the $super.methodName example, I needed a way to bind the method so that it could be called with a different
 context: a sort of weak bind.
 
-### Static mapping of super method
+#### Building a new $super method object
 
-It all started with static mapping because the wrapper is created while the class prototype is built
+
+A JavaScript function being an object, I am allowed to add methods onto it
 
 ### Dynamic mapping of super method
 
-Then the idea changed to be more dynamic and handle error cases where super does not make sense.
+When the class is being defined, a dictionary mapping method names to their implementation is passed to
+[gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class).
+This dictionary is enumerated so that when the $super use is detected, the name of the parent method that must
+be associated is known.
+
+This name (as well as members of $super), is passed to the function [_get$Super](https://github.com/ArnaudBuchholz/
+gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L147).
+
+(...) Actually, the keyword super can't be used alone outside of the constructor function. this.$super overcomes this
+limitation.
 
 ### Dynamic members of super
 
@@ -308,10 +333,6 @@ Beside the fact that the methodName should exist in the inherited prototype, we 
 1) if $super is equal to the inherited method, I am not allowed to modify it
 2) if invoked with .call or .apply, I want the this to be modifiable
 3) For performance reasons, I don't want to define *all* possible members of $super by copying the inherited methods
-
-#### Building a new $super method object
-
-A JavaScript function being an object, I am allowed to add methods onto it
 
 #### Weak binding
 
