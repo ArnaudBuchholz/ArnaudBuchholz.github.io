@@ -106,7 +106,7 @@ Whether you use one syntax or the other, both versions of A and B will look (and
 ### So, why would you use the super keyword?
 
 As you may see in the examples, accessing the parent methods without super is possible but requires the knowledge of the
-parent class being extended. Furthermore the syntax is not easy to remember... Well, after using it a thousand times,
+parent class being extended. Furthermore, the syntax is not easy to remember... Well, after using it a thousand times,
 you end knowing it by heart.
 
 * In the constructor, `super("b")` is replaced with `A.call(this, "b")`
@@ -151,9 +151,9 @@ It returns the parent function object.
 #### Checking parent method existence
 
 Finally, how does the super keyword validate the method that is accessed: what happens if you try to
-reference a non existing member: does it fail when generating the class or upon method execution?
+reference a non-existing member: does it fail when generating the class or upon method execution?
 
-Accessing a non existing member returns
+Accessing a non-existing member returns
 [undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined).
 
 [Example (Chrome & Firefox only)](https://jsfiddle.net/54L2eovo/1/)
@@ -163,7 +163,7 @@ time.
 
 ## A super idea
 
-One of the goal of [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) is to provide the same feature set whatever the
+One of the goals of [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) is to provide the same feature set whatever the
 host running the script. Because some of them are old (Rhino and WScript), it is not only impossible to use recent
 features but also it prevents the use of
 [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them).
@@ -206,7 +206,7 @@ hosts and it does not work as expected with standard objects.
 
 ### Wrapping methods
 
-Before being able to cope with this.$super calls inside a method, the library has to make sure that the $super member
+In order to be able to cope with this.$super calls inside a method, the library has to make sure that the $super member
 exists before executing the method.
 
 A long time ago, when studying JavaScript inheritance, I found this very interesting
@@ -241,9 +241,9 @@ typeof _super[name] == "function" && fnTest.test(prop[name]) ?
 Typically, GPF-JS uses the same strategy to [detect](https://github.com/ArnaudBuchholz/gpf-js/blob/
 90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L207-L210) the use of $super and
 [wrap](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
-super.js#L191-L196) the method in a new one that defines the value of this.$super.
+super.js#L191-L196) the method in a new one that defines the value of this.$super upon execution.
 
-(...) The use of _gpfFunctionDescribe and _gpfFunctionBuild guarantees that the signature of the final method will be
+(...) The use of _gpfFunctionDescribe and _gpfFunctionBuild ensures that the signature of the final method will be
 the same as the initial one. Indeed, GPF-JS will soon enable interfaces validation and signatures of methods have to
 match.
 
@@ -252,7 +252,7 @@ match.
 So, when the class is being defined, a dictionary mapping method names to their implementation is passed to
 [gpf.define](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/tutorials/DEFINE.md#class).
 This definition dictionary is enumerated so that when the $super use is detected in a method, the name of the parent
-method is known.
+method is deduced.
 
 This name (as well as members of $super, it will be explained right after) is remembered in a
 [closure](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
@@ -263,47 +263,55 @@ super.js#L195) and passed to the function [_get$Super](https://github.com/Arnaud
 
 The class definition method _get$Super [creates a new function](https://github.com/ArnaudBuchholz/gpf-js/blob/
 90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/super.js#L195) instead of reusing the parent one. The reason
-is quite simple: a JavaScript function being an object, it is allowed to add properties to it... and this will be
+is quite simple: JavaScript functions being objects, it is allowed to add properties to them... and this will be
 required to define expected additional super method names.
 
 But then you may wonder why the parent function object is not used? those additional member names could be backed up,
-overwritten and restored once the call is completed.
+overwritten and restored once the call is completed. In the end, it would allow the child method to use parent one
+members.
 
-However, there are several limitations here:
+However, there are several considerations here:
 * This object could be frozen with [Object.freeze](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/
-Global_Objects/Object/freeze). No member could be added to it
-* If the developer expects to get members on the parent method, he would probably refer to them through the function name.
-For instance:
+Global_Objects/Object/freeze) meaning it would be read-only.
 
+* This function object could be used elsewhere meaning that the modification could be visible outside of the method.
 
-However, GPF-JS tries to limit its impact on objects defined by the developer:
-* The library tries to keep the development
-* The developer may
-    (maybe he already added some members to
-its function).
+(...) One may argue that this is also true for this.$super. However, detection of this member makes it to be
+overwritten.
 
-    (...) While redacting this article, I realized that this encapsulation prevents the developer to have
-    (...) Actually, the keyword super can't be used alone outside of the constructor function. this.$super overcomes this
-    limitation.
+(...) While writing this above comment, I realized that the current implementation has an
+[issue](https://github.com/ArnaudBuchholz/gpf-js/issues/145). If you ever wonder why I wrote this article, this is a
+good reason.
 
+* Even if super returns the parent method object, it would be extremely confusing to have members that are being used.
+Consider the following example: super.getValue, how do you know if it is a parent method named getValue or the member
+getValue of the parent method?
 
-    ### Dynamic members of super
+(...) I suspect this is the reason why super() is supported only in constructor functions.
+Try using super() in a class method, you will get an error "SyntaxError: 'super' keyword unexpected here".
+this.$super overcomes this limitation.
 
-    Beside the fact that the methodName should exist in the inherited prototype, we still need to overcome two problems:
+* If the developer expects to get members on the parent method, he would have a hard time defining them and reusing
+them (not mentioning the code complexity). This encapsulation prevents this bad practice and avoids headaches.
 
-    1) if $super is equal to the inherited method, I am not allowed to modify it
-    2) if invoked with .call or .apply, I want the this to be modifiable
-    3) For performance reasons, I don't want to define *all* possible members of $super by copying the inherited methods
+### Detecting $super members
 
-    #### Detecting $super members
+Once $super is detected in a method content, the list of $super members is
+[extracted](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
+super.js#L208) using a
+[regular expression](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/
+class/super.js#L118-L134).
 
-    Guess what, a regular expression is being used to list members that are used.
+(...) This detection part is critical as it greatly improves performances by generating only what is required.
 
+Then, for each extracted name, the member is
+[created](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
+super.js#L150-L152) inside _get$Super right after allocating $super.
 
+### Invoking super methods
 
-    ### Invoking a super method
-
-When calling this.$super(), the method $super would obviously receive the proper context.
+When calling this.$super(), the method $super would obviously receive the proper
+[context](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this).
 
 However, things are more complicated when calling this.$super.methodName().
 
@@ -314,9 +322,9 @@ ch04s03.html) works, you know that inside methodName,
 
 And that is a function object.
 
-So how could I make sure that the proper context would be transmitted to methodName?
+So how can the library make sure that the proper context is transmitted to methodName?
 
-Function binding could be use to force the value of but then we would loose the possibility to invoke it with any
+Function binding could be used to force the value of this but then we would lose the possibility to invoke it with any
 context.
 
 ### Function binding
@@ -367,9 +375,11 @@ context: a sort of weak bind.
 
 #### Weak binding
 
-$super being known when the methods are defined, I can check that this === $super and substitute when needed
+$super being known when the methods are created, it can be compared with the value of this and
+[substituted](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
+super.js#L92)if matched.
 
-
+This ensure the weak binding and allows the developer to bind, call or apply the method without any problem.
 
 </code>
 <!-- Drop those two lines -->
