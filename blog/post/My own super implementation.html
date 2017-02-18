@@ -370,16 +370,26 @@ var reboundGetValue = boundGetValue.bind({
 });
 log(reboundGetValue());  // output "Bound"`
 
-Back to the $super.methodName example, I needed a way to bind the method so that it could be called with a different
-context: a sort of weak bind.
+Back to the $super.methodName example, it requires a sort of weak bind: a method binding that could be overwritten with
+a different context using
+[bind](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind),
+[call](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/call) or
+[apply](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/apply).
 
-#### Weak binding
+### Weak binding
 
 $super being known when the methods are created, it can be compared with the value of this and
 [substituted](https://github.com/ArnaudBuchholz/gpf-js/blob/90b7c70c900a226fb652e7efd10a8573be5e270c/src/define/class/
-super.js#L92)if matched.
+super.js#L92) when matched.
 
-This ensure the weak binding and allows the developer to bind, call or apply the method without any problem.
+This realizes the weak binding and allows the developer to bind, call or apply the method without any problem.
+
+## Conclusion
+
+There is no revolution in this article and many will consider this realization useless as they focus on modern
+environment and they use latest JavaScript features. However,
+[my curiosity](https://www.linkedin.com/pulse/curious-arnaud-buchholz) is satisfied as I learned a lot about the super
+feature. Moreover, the library will soon deliver new features on top of this one that should make the difference.
 
 </code>
 <!-- Drop those two lines -->
