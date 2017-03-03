@@ -1,0 +1,77 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.1.7
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This new release secures the class mechanism and improves project tools.
+</div>
+<code class="markdown">
+## New version
+
+Here comes the new version:
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/6?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.7)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/0.1.7/doc/index.html)
+
+### Improved $super keyword
+
+When writing the article
+[My own super implementation](http://gpf-js.blogspot.in/2017/02/my-own-super-implementation.html)
+I found several small issues that were immediately adressed in the library.
+
+### Better tooling
+
+The following tools were modified:
+* It is now possible to remove a unused file from the sources page
+* Each file modification triggers one pass of tests (they take less than 1 second to execute)
+* fs middelware is secured and supports DELETE
+* sources.json modification updates the files being monitored and linted so that grunt doesn't have to be restarted
+
+### More flavors for browser testing
+
+Selenium was upgraded to version 3, the detection has been fixed to make it more reliable.
+A command line execution wrapper combined with a caching service (to store & grab results) allows to test non
+automatable browsers (such as Safari on Windows).
+
+### Automated release
+
+Releasing a version has never been so easy, a script using [github-api](https://www.npmjs.com/package/github-api) module
+and based on [GitHub API](https://developer.github.com/v3/) implements the following steps:
+* Check version number
+* Update package.json (if needed)
+* Check GitHub milestones to identify the milestone details and check that all issues are closed
+* Update README.md
+* Grunt make
+* Copy tmp/plato/report.history.* to build/ (grunt copy:releasePlatoHistory)
+* commit & push
+* Create a new release on GitHub
+* Copy build/tests.js into test/host/legacy/{version}.js
+* commit & push
+
+However, I forgot to close the milestone, an [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/148) is created.
+
+## Lessons learned
+
+### Documenting features makes them better
+
+
+### Better Selenium detection
+
+NodeJS Exception handling
+
+## Next release
+
+The [next release](https://github.com/ArnaudBuchholz/gpf-js/milestone/7) will introduce the interface concept.
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
