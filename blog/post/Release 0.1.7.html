@@ -25,26 +25,37 @@ Here comes the new version:
 
 When writing the article
 [My own super implementation](http://gpf-js.blogspot.in/2017/02/my-own-super-implementation.html)
-I found several small issues that were immediately adressed in the library.
+I found several issues that were immediately fixed.
 
 ### Better tooling
 
 The following tools were modified:
-* It is now possible to remove a unused file from the sources page
-* Each file modification triggers one pass of tests (they take less than 1 second to execute)
-* fs middelware is secured and supports DELETE
-* sources.json modification updates the files being monitored and linted so that grunt doesn't have to be restarted
+* It is now possible to remove unused files from the sources page
+* Each file modification triggers one pass of tests (it takes less than 1 second to execute). This way, I know as soon
+as possible if something goes wrong
+* [fs middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/fs.js) is secured to
+limit access to the project files only. It now supports the DELETE verb
+* The [watch](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/watch.js) and
+[serve](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/tasks/serve.js) tasks are monitoring the
+[sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json) file modifications to update the
+list of linted files. This way, it is no more required to restart the grunt task.
 
 ### More flavors for browser testing
 
-Selenium was upgraded to version 3, the detection has been fixed to make it more reliable.
-A command line execution wrapper combined with a caching service (to store & grab results) allows to test non
-automatable browsers (such as Safari on Windows).
+Selenium was upgraded to version 3 and the
+[detection](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/selenium/detect.js) has been fixed to make it
+more reliable.
+
+On top of Selenium, a
+[command line execution wrapper](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/browser.js) combined
+with a [caching service](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/cache.js)
+(to store & grab the results) allows testing of non automated browsers (such as Safari on Windows).
+Once the tests are done, the command line is killed.
 
 ### Automated release
 
 Releasing a version has never been so easy, a script using [github-api](https://www.npmjs.com/package/github-api) module
-and based on [GitHub API](https://developer.github.com/v3/) implements the following steps:
+to call the [GitHub API](https://developer.github.com/v3/) implements the following steps:
 * Check version number
 * Update package.json (if needed)
 * Check GitHub milestones to identify the milestone details and check that all issues are closed
@@ -56,7 +67,8 @@ and based on [GitHub API](https://developer.github.com/v3/) implements the follo
 * Copy build/tests.js into test/host/legacy/{version}.js
 * commit & push
 
-However, I forgot to close the milestone, an [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/148) is created.
+However, once last step was forgotten: closing the milestone.
+An [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/148) is created.
 
 ## Lessons learned
 
