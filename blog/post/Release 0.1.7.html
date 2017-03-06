@@ -49,7 +49,7 @@ more reliable.
 On top of Selenium, a
 [command line execution wrapper](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/browser.js) combined
 with a [caching service](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/cache.js)
-(to store & grab the results) allows testing of non automated browsers (such as Safari on Windows).
+(to store & grab the results) allows testing of non-automated browsers (such as Safari on Windows).
 Once the tests are done, the command line is killed.
 
 ### Automated release
@@ -74,10 +74,22 @@ An [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/148) is created.
 
 ### Documenting features makes them better
 
+I will task the risk of repeating myself here but the article about
+[super](http://gpf-js.blogspot.in/2017/02/my-own-super-implementation.html) made me realize several mistakes in the
+implementation of the $super equivalent. Furthermore, taking the time to explore the ECMAScript super keyword gave me a
+better understanding of the feature.
+
+In general, it is valuable to step back from the code and document the intent behind a feature.
 
 ### Better Selenium detection
 
-NodeJS Exception handling
+One of the reasons why I wanted to remove Selenium was the buggy detection.
+Indeed, there are some failures which are not encapsulated properly in a Promise.
+As a result, the whole process fails when it happens.
+
+After digging on the web, I found this excellent thread on
+[NodeJS Exception handling](http://stackoverflow.com/questions/7310521/node-js-best-practice-exception-handling).
+It allowed me to handle those unmanaged exceptions the proper way and it secured the detection.
 
 ## Next release
 
