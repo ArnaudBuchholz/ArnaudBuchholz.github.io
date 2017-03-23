@@ -11,19 +11,37 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/ninja.png" align="left">
-    A ninja is a master of disguise: how do you hide an object member so that nobody
-    can use it? Here are several ways.
+    A ninja is a master of disguise. How do you apply the JavaScript ninjutsu to hide an object member so that nobody
+    can see (and use) it? Here are several ways.
 </div>
 <code class="markdown">
 ### The context
 
-These days, I am starting a new task on my [gpf-js project](https://github.com/ArnaudBuchholz/gpf-js) and it implies
-manipulating an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) structure within
-[NodeJS](https://nodejs.org/en/).
-Because the structure analysis requires to have access to the parent nodes, the AST items are augmented with a link to
-their parent. This structure is later serialized into
-[JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
-for tracing purpose but the generated circular reference breaks the conversion.
+These days, I started a new [task](https://github.com/ArnaudBuchholz/gpf-js/issues/151) on my
+[gpf-js project](https://github.com/ArnaudBuchholz/gpf-js) and it implies manipulating an
+[AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) structure within [NodeJS](https://nodejs.org/en/).
+Because the structure analysis requires to have access to the parent nodes, I augmented the AST items with a link to
+their parent. The result is later serialized into
+[JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON) for tracing purpose but
+the generated circular reference broke the conversion.
+
+Actually, I could have used the replacer parameter of the
+[JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) method
+but this circular reference also caused trouble in my own code. Hence I had to find another way.
+
+### Reflection
+
+The JavaScript language offers some [reflection](https://en.wikipedia.org/wiki/Reflection_%28computer_programming%29)
+mechanisms. Indeed, the [for..in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in)
+syntax is capable of listing all [enumerable properties](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+Enumerability_and_ownership_of_properties) of any object.
+
+(...) I would recommend using [Object.keys](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+Global_Objects/Object/keys) instead. However, the lack of support of old browsers requires that you polyfilled it
+with for..in.
+
+This fundamental machinery is widely used internally and by libraries.
+That's also why the language offers tools to...
 
 ### Object.defineProperty
 
@@ -33,11 +51,27 @@ defineProperty) method can be used to define
 [Compatibility](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
 defineProperty#Browser_compatibility)
 
+PROS
+    easy to implement
+    can be used since IE8
+
+CONS
+    if the dev knows the member name, he can extract the info
+
 ### Symbol
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol#Browser_compatibility)
+
+PROS
+    easy to implement
+    symbol can be 'private'
+
+CONS
+    Supported only from
+
+### Wrapper
 
 </code>
 <!-- Drop those two lines -->
