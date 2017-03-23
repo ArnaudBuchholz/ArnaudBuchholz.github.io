@@ -1,0 +1,45 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Sneaky JavaScript Technics III
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/ninja.png" align="left">
+    A ninja is a master of disguise: how do you hide an object member so that nobody
+    can use it? Here are several ways.
+</div>
+<code class="markdown">
+### The context
+
+These days, I am starting a new task on my [gpf-js project](https://github.com/ArnaudBuchholz/gpf-js) and it implies
+manipulating an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) structure within
+[NodeJS](https://nodejs.org/en/).
+Because the structure analysis requires to have access to the parent nodes, the AST items are augmented with a link to
+their parent. This structure is later serialized into
+[JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+for tracing purpose but the generated circular reference breaks the conversion.
+
+### Object.defineProperty
+
+The [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+defineProperty) method can be used to define
+
+[Compatibility](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+defineProperty#Browser_compatibility)
+
+### Symbol
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol#Browser_compatibility)
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
