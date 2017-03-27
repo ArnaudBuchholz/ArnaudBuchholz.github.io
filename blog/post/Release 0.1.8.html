@@ -25,8 +25,9 @@ Here comes the new version:
 ### Interfaces
 
 A new entity type can now be defined: [interface](https://arnaudbuchholz.github.io/gpf/0.1.8/doc/tutorial-DEFINE.html).
-Being able to define interfaces and to check if an object conforms with their specification will improve the way
-encapsulations are handled within the library but also when using it.
+
+Being able to define interfaces and to check if an object conforms with their specification will normalize and improve
+the way encapsulations are handled within the library but also when using it.
 
 ### Release optimization
 
@@ -41,16 +42,66 @@ using [esprima](https://www.npmjs.com/package/esprima)
 Before this release, the debug and release versions were almost the same.
 The main differences were:
 * The release version is serialized without the comments
+(see [rewriteOptions](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/release.json))
 * Also, the release version is minified using [UglifyJS](https://github.com/mishoo/UglifyJS)
 
 Because I am planning to implement some optimization patterns on the release
-version, I started to redesigned the build process. After converting all the relevant sources to ES6, I realized that
+version, I started to redesigne the build process. After converting all the relevant sources to ES6, I realized that
 the former [AST manipulation](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.7/make/ast.js) was not working
 properly. Indeed, it was trying to rename all variables to shorten them but... it didn't work. Not a big deal because
-UglifyJS was doing the job.
+UglifyJS was already doing the job.
 
-So I rewrote the AST manipulation to start optimizing the release AST structure.
+So I rewrote the [AST manipulation](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.8/make/ast.js) to start
+optimizing the concatenated AST structure.
 
+#### Estimating functions usage
+
+I implemented a detection of unused functions which revealed that
+[_gpfIsUnsignedByte](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.8/src/constants.js#L140-L142) was actually not
+used ! Hence, it is removed from the output.
+
+#### NOP
+
+The build process includes a [pre-processor](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.8/make/preprocess.js)
+capable of conditioning some JavaScript lines using C-like defines. However, as a lazy developer, I don't want to wrap
+all DEBUG specific functions inside a #ifdef / #endif pair.
+
+That's why some variables are tagged with a comment containing only gpf:nop. This is a way to signal that the variable
+represents a no operation.
+
+For instance:
+```javascript
+/*#ifdef(DEBUG)*/
+
+// DEBUG specifics
+
+_gpfAssertAttributeClassOnly = function (value) {
+    _gpfAsserts({
+        "Expected a class parameter": "function" === typeof value,
+        "Expected an Attribute-like class parameter": value.prototype instanceof _gpfAttribute
+    });
+};
+
+_gpfAssertAttributeOnly = function (value) {
+    _gpfAssert(value instanceof _gpfAttribute, "Expected an Attribute-like parameter");
+};
+
+/* istanbul ignore if */ // Because tested in DEBUG
+if (!_gpfAssertAttributeClassOnly) {
+
+/*#else*/
+
+    /*gpf:nop*/ _gpfAssertAttributeClassOnly = _gpfEmptyFunc;
+    /*gpf:nop*/ _gpfAssertAttributeOnly = _gpfEmptyFunc;
+
+/*#endif*/
+
+/*#ifdef(DEBUG)*/
+
+}
+```
+
+The optimizer is now capable of locating all variables flagged with gpf:nop and safely remove them from the output.
 
 ### Automated release (final)
 
