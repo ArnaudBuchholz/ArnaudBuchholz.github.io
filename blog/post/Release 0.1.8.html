@@ -30,7 +30,7 @@ encapsulations are handled within the library but also when using it.
 
 ### Release optimization
 
-When the library is built, some complex source manipulations occur:
+When the library is built, some source manipulations occur:
 
 * Each module is individually transformed into an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) structure
 using [esprima](https://www.npmjs.com/package/esprima)
@@ -39,14 +39,18 @@ using [esprima](https://www.npmjs.com/package/esprima)
 * Eventually, the result is serialized using [escodegen](https://www.npmjs.com/package/escodegen)
 
 Before this release, the debug and release versions were almost the same.
-However, two
-Building
-Only two differences could be mentionned:
-* The release version was serialized without the comments
+The main differences were:
+* The release version is serialized without the comments
 * Also, the release version is minified using [UglifyJS](https://github.com/mishoo/UglifyJS)
 
-Because I am planning to implement optimization patterns on the release
-version, I started to redesigned the build process. After migrating all sources to ES6,
+Because I am planning to implement some optimization patterns on the release
+version, I started to redesigned the build process. After converting all the relevant sources to ES6, I realized that
+the former [AST manipulation](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.7/make/ast.js) was not working
+properly. Indeed, it was trying to rename all variables to shorten them but... it didn't work. Not a big deal because
+UglifyJS was doing the job.
+
+So I rewrote the AST manipulation to start optimizing the release AST structure.
+
 
 ### Automated release (final)
 
