@@ -1,0 +1,88 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.1.8
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This new release introduces the interface concept and also prepares future optimizations
+    of the release version.
+</div>
+<code class="markdown">
+## New version
+
+Here comes the new version:
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/7?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.8)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/0.1.8/doc/index.html)
+
+### Interfaces
+
+A new entity type can now be defined: [interface](https://arnaudbuchholz.github.io/gpf/0.1.8/doc/tutorial-DEFINE.html).
+Being able to define interfaces and to check if an object conforms with their specification will improve the way
+encapsulations are handled within the library but also when using it.
+
+### Release optimization
+
+When the library is built, some complex source manipulations occur:
+
+* Each module is individually transformed into an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) structure
+using [esprima](https://www.npmjs.com/package/esprima)
+* These structures are concatenated inside an
+[Universal Module Definition loader](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/UMD.js)
+* Eventually, the result is serialized using [escodegen](https://www.npmjs.com/package/escodegen)
+
+Before this release, the debug and release versions were almost the same.
+However, two
+Building
+Only two differences could be mentionned:
+* The release version was serialized without the comments
+* Also, the release version is minified using [UglifyJS](https://github.com/mishoo/UglifyJS)
+
+Because I am planning to implement optimization patterns on the release
+version, I started to redesigned the build process. After migrating all sources to ES6,
+
+### Automated release (final)
+
+In the last release, I forgot one last step: closing the milestone.
+This is now [done](https://github.com/ArnaudBuchholz/gpf-js/issues/148).
+
+## Lessons learned
+
+### Performance measurement
+
+One of the biggest challenge when dealing with performances is to establish one point of reference. Indeed, if you want
+to quantify how much you gain, you need to make sure that the environment remains the same for each measurement session.
+
+In my case, this is tough. Furthermore, I don't have any performance specific tests.
+Hence, I decided to reuse the test cases (that cover almost all the library) and compare the debug version with the release one.
+By quantifying the difference of execution between the two versions, this would give me a good indication on how much
+the release is optimized.
+Today, both version demonstrates similar performances, even after implementing some of the optimizations
+
+### jsdoc plugin
+
+In the article [My own jsdoc plugin](http://gpf-js.blogspot.ca/2016/12/my-own-jsdoc-plugin.html), I explained how
+I tweaked jsdoc to facilitate generation of the documentation.
+
+However, I noticed that the defineTags could be a better alternative to define custom tags. After trying to experiment
+it (knowing that jsdoc plugins are really badly documented), it appeared that it is extremely limited:
+* No lookup function to access other doclets
+* Very limited information on the current doclet (for instance: I tried to implement @gpf:chainable but the memberOf
+property was not set). Indeed, we can't know when the onTagged is triggered (no control on the order).
+
+## Next release
+
+The [next release](https://github.com/ArnaudBuchholz/gpf-js/milestone/8) will introduce some features that are required
+for a side project I created.
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
