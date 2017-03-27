@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>GPF Library Index</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.spacelab.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">GPF Library</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.html">gpf</a></li><li><a href="gpf.interfaces.html">gpf.interfaces</a></li><li><a href="gpf.node.html">gpf.node</a></li><li><a href="gpf.typedef.html">gpf.typedef</a></li><li><a href="gpf.web.html">gpf.web</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.Error.html">gpf.Error</a></li><li><a href="gpf.Error.AbstractMethod.html">gpf.Error.AbstractMethod</a></li><li><a href="gpf.Error.AssertionFailed.html">gpf.Error.AssertionFailed</a></li><li><a href="gpf.Error.InterfaceExpected.html">gpf.Error.InterfaceExpected</a></li><li><a href="gpf.Error.InvalidParameter.html">gpf.Error.InvalidParameter</a></li><li><a href="gpf.Error.NotImplemented.html">gpf.Error.NotImplemented</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="interfaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Interfaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.interfaces.IUnknown.html">gpf.interfaces.IUnknown</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-CODESTYLE.html">GPF Library code style</a></li><li><a href="tutorial-COMPATIBILITY.html">GPF Library compatibility layer</a></li><li><a href="tutorial-DEFINE.html">GPF Entity definition</a></li><li><a href="tutorial-LOADING.html">Loading GPF Library</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+
+
+
+
+    <section class="readme-section">
+        <article><h1>GPF Library</h1><p><a href="http://gruntjs.com/"><img src="https://cdn.gruntjs.com/builtwith.png" alt="Built with Grunt"></a></p>
+<p>A multi-purpose JavaScript library created and maintained by
+<a href="http://gpf-js.blogspot.com/">Arnaud Buchholz</a>.</p>
+<p><a href="https://nodei.co/npm/gpf-js/"><img src="https://nodei.co/npm/gpf-js.png?downloads=true&amp;&amp;downloadRank=true&amp;stars=true" alt="NPM"></a>
+<a href="https://nodei.co/npm/gpf-js/"><img src="https://nodei.co/npm-dl/gpf-js.png?months=3&amp;height=3" alt="NPM"></a></p>
+<h2>Features</h2><ul>
+<li>Compatible with several hosts
+(<a href="http://technet.microsoft.com/en-us/library/bb490887.aspx">cscript/wscript</a>,
+<a href="http://nodejs.org/">NodeJS</a>, <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino">Rhino</a>,
+<a href="http://phantomjs.org/">PhantomJS</a>, most <em>recent</em> browsers)</li>
+<li>Namespace and class system <em>-- not implemented yet</em></li>
+<li>Java-like annotation tool (attributes) <em>-- not implemented yet</em></li>
+<li>Interface based <em>-- not implemented yet</em></li>
+<li>Asynchronous binary / textual streams <em>-- not implemented yet</em></li>
+<li>XML-aware <em>-- not implemented yet</em></li>
+<li>Self-Tested</li>
+</ul>
+<p>This library is developed in conjunction with a
+<a href="http://gpf-js.blogspot.com/">blog</a> where the concepts and algorithms are
+documented and explained.</p>
+<h2>Metrics</h2><p>This part is automatically updated upon a successful build:</p>
+<ul>
+<li>Code coverage is based on NodeJS execution, ignored parts are mostly relevant of other hosts</li>
+<li>The <a href="https://arnaudbuchholz.github.io/gpf/0.1.5/plato/index.html">maintainability</a> is based
+on <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/
+maintainability-index-range-and-meaning.aspx">plato evaluation</a></li>
+</ul>
+<p><strong>SME</strong> stands for <strong>s</strong>ource <strong>m</strong>inimal <strong>e</strong>xpectation.</p>
+<table>
+<thead>
+<tr>
+<th>Metric name</th>
+<th>average</th>
+<th>total</th>
+<th>SME</th>
+<th>comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Statements coverage</td>
+<td>99.78%</td>
+<td></td>
+<td>90%</td>
+<td><em>8.4% ignored</em></td>
+</tr>
+<tr>
+<td>Branches coverage</td>
+<td>99.32%</td>
+<td></td>
+<td>90%</td>
+<td><em>14.86% ignored</em></td>
+</tr>
+<tr>
+<td>Functions coverage</td>
+<td>100%</td>
+<td></td>
+<td>90%</td>
+<td><em>8.23% ignored</em></td>
+</tr>
+<tr>
+<td>Maintainability</td>
+<td>82.25</td>
+<td></td>
+<td>70</td>
+<td></td>
+</tr>
+<tr>
+<td>Number of tests</td>
+<td></td>
+<td>396</td>
+<td></td>
+<td><em>pending: 0, duration: 938ms</em></td>
+</tr>
+<tr>
+<td>Number of sources</td>
+<td></td>
+<td>48</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Lines of code</td>
+<td>89</td>
+<td>4277</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>Setup</h2><ul>
+<li>Clone repository</li>
+<li>install <a href="http://gruntjs.com/">grunt</a></li>
+<li>at the root of the cloned repository: <code>npm install</code>, then <code>grunt</code></li>
+</ul>
+<h2>Testing</h2><p>See <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/TESTME.md">TESTME.md</a></p>
+<h2>Versions</h2><table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Label</th>
+<th>Release</th>
+<th>Debug</th>
+<th>Plato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.5">0.1.5</a> / <a href="https://arnaudbuchholz.github.io/gpf/0.1.5/doc/index.html">doc</a></td>
+<td>The new core</td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.5/gpf.js">lib</a> / <a href="https://arnaudbuchholz.github.io/gpf/test.html?release=0.1.5">test</a></td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.5/gpf-debug.js">lib</a> / <a href="https://arnaudbuchholz.github.io/gpf/test.html?debug=0.1.5">test</a></td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.5/plato/index.html">plato</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.6">0.1.6</a> / <a href="https://arnaudbuchholz.github.io/gpf/0.1.6/doc/index.html">doc</a></td>
+<td>gpf.define</td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.6/gpf.js">lib</a> / <a href="https://arnaudbuchholz.github.io/gpf/test.html?release=0.1.6">test</a></td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.6/gpf-debug.js">lib</a> / <a href="https://arnaudbuchholz.github.io/gpf/test.html?debug=0.1.6">test</a></td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.6/plato/index.html">plato</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.7">0.1.7</a> / <a href="https://arnaudbuchholz.github.io/gpf/0.1.7/doc/index.html">doc</a></td>
+<td>Securing gpf.define</td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.7/gpf.js">lib</a> / <a href="https://arnaudbuchholz.github.io/gpf/test.html?release=0.1.7">test</a></td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.7/gpf-debug.js">lib</a> / <a href="https://arnaudbuchholz.github.io/gpf/test.html?debug=0.1.7">test</a></td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.7/plato/index.html">plato</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.8">0.1.8</a> / <a href="https://arnaudbuchholz.github.io/gpf/0.1.8/doc/index.html">doc</a></td>
+<td>Interfaces</td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.8/gpf.js">lib</a> / <a href="https://arnaudbuchholz.github.io/gpf/test.html?release=0.1.8">test</a></td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.8/gpf-debug.js">lib</a> / <a href="https://arnaudbuchholz.github.io/gpf/test.html?debug=0.1.8">test</a></td>
+<td><a href="https://arnaudbuchholz.github.io/gpf/0.1.8/plato/index.html">plato</a></td>
+</tr>
+</tbody>
+</table>
+<h2>Credits</h2><ul>
+<li>Code rewriting based on <a href="http://esprima.org/">esprima</a> and <a href="https://github.com/Constellation/escodegen">escodegen</a></li>
+<li>Markdown specification inspired from <a href="http://en.wikipedia.org/wiki/Markdown">wikipedia</a></li>
+<li>UTF-8 encode/decode based on <a href="http://www.webtoolkit.info/">webtoolkit</a></li>
+<li>Promise/A+ implementation based on <a href="https://github.com/taylorhakes/promise-polyfill">promise-polyfill</a></li>
+<li><a href="http://mochajs.org/">mocha</a> test suite</li>
+<li><a href="https://github.com/gotwarlost/istanbul">istanbul</a> code coverage tool</li>
+<li>JavaScript task runner: <a href="http://gruntjs.com/">Grunt</a></li>
+<li>Icons from <a href="https://www.iconfinder.com/iconsets/hawcons">Hawcons</a></li>
+<li>Documentation generated from <a href="http://usejsdoc.org/">jsdoc syntax</a>
+with <a href="https://github.com/krampstudio/grunt-jsdoc">grunt-jsdoc</a>
+using template from <a href="https://www.npmjs.com/package/ink-docstrap">ink-docstrap</a></li>
+</ul></article>
+    </section>
+
+
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on 2017-03-26T23:41:47-04:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
