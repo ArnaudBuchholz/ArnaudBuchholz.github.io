@@ -106,16 +106,21 @@ The optimizer is now capable of locating all variables flagged with gpf:nop and 
 ### Automated release (final)
 
 In the last release, I forgot one last step: closing the milestone.
-This is now [done](https://github.com/ArnaudBuchholz/gpf-js/issues/148).
+This is now [completed](https://github.com/ArnaudBuchholz/gpf-js/issues/148).
 
 ## Lessons learned
 
 ### Performance measurement
 
-One of the biggest challenge when dealing with performances is to establish one point of reference. Indeed, if you want
-to quantify how much you gain, you need to make sure that the environment remains the same for each measurement session.
+When dealing with performances, one of the biggest challenge is to establish the point of reference. Indeed, if you want
+to quantify how much you gain, you need to make sure that the measurement environment is stable enough so that you can
+compare your results.
 
-In my case, this is tough. Furthermore, I don't have any performance specific tests.
+In my case, this is tough: the JavaScript hosts are evolving very fast and, since I started this project, I already
+changed my workstation twice. Furthermore, I don't have any performance specific tests.
+
+So I decided to take a pragmatic approach.
+
 Hence, I decided to reuse the test cases (that cover almost all the library) and compare the debug version with the release one.
 By quantifying the difference of execution between the two versions, this would give me a good indication on how much
 the release is optimized.
