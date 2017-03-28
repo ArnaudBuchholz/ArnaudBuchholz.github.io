@@ -25,7 +25,9 @@ their parent. The result is later serialized into
 [JSON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON) for tracing purpose but
 the generated circular reference broke the conversion.
 
-Actually, I could have used the replacer parameter of the
+Actually, I could have used the
+[replacer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#Parameters)
+parameter of the
 [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) method
 but this circular reference also caused trouble in my own code. Hence I had to find another way.
 
@@ -38,15 +40,36 @@ Enumerability_and_ownership_of_properties) of any object.
 
 (...) I would recommend using [Object.keys](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 Global_Objects/Object/keys) instead. However, the lack of support of old browsers requires that you polyfilled it
-with for..in.
+with for..in combined with
+[hasOwnProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty)
+.
 
-This fundamental machinery is widely used internally and by libraries.
-That's also why the language offers tools to...
+This fundamental machinery is widely used:
+* [ESlint](http://eslint.org/) offers a rule to detect [unsafe uses](http://eslint.org/docs/rules/guard-for-in)
+* JavaScript evolved to make the enumerable state configurable on a property
 
 ### Object.defineProperty
 
-The [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
-defineProperty) method can be used to define
+The simplest way to add a property to an object is to simply do it:
+`var obj = {};
+obj.newProperty = "value";`
+
+This newly created property will be enumerable by default.
+
+[ECMAScript 5.1](http://www.ecma-international.org/ecma-262/5.1/#sec-15.2.3.6) introduced
+[Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+defineProperty) to create a configurable property.
+
+It can be used in different ways and most of them are beyond the scope of this article.
+I will mostly focus on the possibility to create a non-enumerable property:
+
+`var obj = {};
+Object.defineProperty(obj, "newProperty", {
+  value: "value",
+  writable: true,
+  enumerable: false,
+  configurable: false
+});`
 
 [Compatibility](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
 defineProperty#Browser_compatibility)
@@ -59,6 +82,14 @@ CONS
     if the dev knows the member name, he can extract the info
 
 ### Symbol
+
+Another simple way to add a property to an object is to use the square bracket syntax:
+`var obj = {};
+var newPropertyName = "newProperty";
+obj[newPropertyName] = "value";`
+
+In that example, the newly created property will be named newProperty, as per the value of the variable.
+
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol
 
