@@ -46,19 +46,19 @@ The main differences were:
 * Also, the release version is minified using [UglifyJS](https://github.com/mishoo/UglifyJS)
 
 Because I am planning to implement some optimization patterns on the release
-version, I started to redesigne the build process. After converting all the relevant sources to ES6, I realized that
+version, I started to redesign the build process. After converting all the relevant sources to ES6, I realized that
 the former [AST manipulation](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.7/make/ast.js) was not working
 properly. Indeed, it was trying to rename all variables to shorten them but... it didn't work. Not a big deal because
 UglifyJS was already doing the job.
 
-So I rewrote the [AST manipulation](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.8/make/ast.js) to start
+Finally, I rewrote the [AST manipulation](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.8/make/ast.js) to start
 optimizing the concatenated AST structure.
 
 #### Estimating functions usage
 
 I implemented a detection of unused functions which revealed that
-[_gpfIsUnsignedByte](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.8/src/constants.js#L140-L142) was actually not
-used ! Hence, it is removed from the output.
+[_gpfIsUnsignedByte](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.8/src/constants.js#L140-L142) was not used!
+Hence, it is removed from the output.
 
 #### NOP
 
@@ -119,21 +119,23 @@ compare your results.
 In my case, this is tough: the JavaScript hosts are evolving very fast and, since I started this project, I already
 changed my workstation twice. Furthermore, I don't have any performance specific tests.
 
-So I decided to take a pragmatic approach.
+So, I decided to take a pragmatic approach.
 
-Hence, I decided to reuse the test cases (that cover almost all the library) and compare the debug version with the release one.
+I reuse the test cases (that cover almost all the library) and compare the debug version with the release one.
 By quantifying the difference of execution between the two versions, this would give me a good indication on how much
 the release is optimized.
-Today, both version demonstrates similar performances, even after implementing some of the optimizations
+
+Today, both version demonstrates similar performances, even after implementing some of the optimizations.
 
 ### jsdoc plugin
 
 In the article [My own jsdoc plugin](http://gpf-js.blogspot.ca/2016/12/my-own-jsdoc-plugin.html), I explained how
 I tweaked jsdoc to facilitate generation of the documentation.
 
-However, I noticed that the defineTags could be a better alternative to define custom tags. After trying to experiment
-it (knowing that jsdoc plugins are really badly documented), it appeared that it is extremely limited:
-* No lookup function to access other doclets
+However, I noticed that the [defineTags](http://usejsdoc.org/about-plugins.html) could be a better alternative to define
+custom tags. After trying to experiment it (knowing that jsdoc plugins are badly documented),
+it appeared that it is extremely limited:
+* No lookup function to access other existing doclets
 * Very limited information on the current doclet (for instance: I tried to implement @gpf:chainable but the memberOf
 property was not set). Indeed, we can't know when the onTagged is triggered (no control on the order).
 
