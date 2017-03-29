@@ -106,7 +106,7 @@ The only difference with the dot syntax is the use of a variable to name the pro
 But what if the variable is not a string?
 
 For most standard objects (and primitive types), the variable value is converted to string.
-As a consequence, the following syntax is valid (even if it does not make sense):
+Consequently, the following syntax is valid (even if it does not make sense):
 `var obj = {};
 function any () {}
 obj[any] = "value";`
@@ -117,20 +117,20 @@ The created property name will be "function any() {}"
 [identifiers](https://developer.mozilla.org/en-US/docs/Glossary/Identifier).
 Hence, it is mandatory to use the bracket syntax to access them.
 
-However, there is one object that
+However, there is one mechanism that behaves differently.
+It was introduced with [ECMAScript 2015](http://www.ecma-international.org/ecma-262/6.0).
+Every time you call the
+[Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol) function, it returns a
+unique value. This value type is primitive **but** it does not convert to string.
 
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol
+This feature is [implemented](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+Symbol#Browser_compatibility) only by most recent browsers and not by IE.
 
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol#Browser_compatibility)
+The advantages are:
+* It is easy to implement
+* There is no way to access the property unless you have the symbol value
 
-PROS
-    easy to implement
-    symbol can be 'private'
-
-CONS
-    Supported only from
-
-### Wrapper
+<script async src="//jsfiddle.net/ArnaudBuchholz/h7psxsym/embed/js,html/"></script>
 
 </code>
 <!-- Drop those two lines -->
