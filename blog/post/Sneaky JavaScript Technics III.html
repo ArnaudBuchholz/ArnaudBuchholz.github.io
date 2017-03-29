@@ -58,7 +58,9 @@ This newly created property will be enumerable by default.
 
 [ECMAScript 5.1](http://www.ecma-international.org/ecma-262/5.1/#sec-15.2.3.6) introduced
 [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
-defineProperty) to create a configurable property.
+defineProperty) to create a property with options.
+This feature is [implemented](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+defineProperty#Browser_compatibility) by most recent browsers with some limitations when using it on DOM objects.
 
 It can be used in different ways and most of them are beyond the scope of this article.
 I will mostly focus on the possibility to create a non-enumerable property:
@@ -71,15 +73,25 @@ Object.defineProperty(obj, "newProperty", {
   configurable: false
 });`
 
-[Compatibility](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
-defineProperty#Browser_compatibility)
+By setting [enumerable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+defineProperty#Enumerable_attribute) to false, this property will not be enumerated when using the for..in syntax.
+By setting [configurable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+defineProperty#Configurable_attribute) to false, this property can't be deleted and can't be reconfigured to make it
+visible again.
 
-PROS
-    easy to implement
-    can be used since IE8
+The advantages are:
+* It is easy to implement
+* It is available since IE9
 
-CONS
-    if the dev knows the member name, he can extract the info
+But, regarding the initial purpose, it comes with drawbacks:
+* As soon as the name of the property is known, anybody can access it
+* [Object.getOwnPropertyDescriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+Object/getOwnPropertyDescriptors) is a workaround to enumerate existing properties
+
+You may generate a complex random name to make the task harder for the hacker to figure it out and store it in a
+'private' variable for simpler access.
+
+<script async src="//jsfiddle.net/ArnaudBuchholz/yycjow6e/2/embed/js,html/"></script>
 
 ### Symbol
 
@@ -88,8 +100,24 @@ Another simple way to add a property to an object is to use the square bracket s
 var newPropertyName = "newProperty";
 obj[newPropertyName] = "value";`
 
-In that example, the newly created property will be named newProperty, as per the value of the variable.
+In that example, the newly created property will be named "newProperty", as per the value of the variable.
+The only difference with the dot syntax is the use of a variable to name the property.
 
+But what if the variable is not a string?
+
+For most standard objects (and primitive types), the variable value is converted to string.
+As a consequence, the following syntax is valid (even if it does not make sense):
+`var obj = {};
+function any () {}
+obj[any] = "value";`
+
+The created property name will be "function any() {}"
+
+(...) This obviously means that you can use names that are not valid
+[identifiers](https://developer.mozilla.org/en-US/docs/Glossary/Identifier).
+Hence, it is mandatory to use the bracket syntax to access them.
+
+However, there is one object that
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol
 
