@@ -122,7 +122,7 @@ const
     cols = [],
     squares = [],
 
-    masks = [
+    digitZeros = [
         0b111111110,
         0b111111101,
         0b111111011,
@@ -190,8 +190,8 @@ const
                         squareId = square(id),
                         bits = rows[y] | cols[x] | squares[squareId],
                     digit;
-                    masks.forEach((mask, index) => {
-                        if (bits === mask) {
+                    digitZeros.forEach((digitZeroBit, index) => {
+                        if (bits === digitZeroBit) {
                             digit = index;
                         }
                     });
@@ -200,7 +200,7 @@ const
                         set(id, digit);
                     }
                 }
-                return changed;
+                return false && changed; // one loop for now
             };
         let count = 0;
         while (check()) {
