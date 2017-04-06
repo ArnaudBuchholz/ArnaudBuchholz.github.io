@@ -50,7 +50,7 @@ div.mark {
     position: absolute;
     width: 6px;
     height: 6px;
-    background-color: #0a6ebd;
+    background-color: rgba(0, 0, 255, .2);
 }
 
 div.mark.off {
@@ -120,7 +120,19 @@ const
     // State
     rows = [],
     cols = [],
-    squares = [];
+    squares = [],
+
+    masks = [
+        0b111111110,
+        0b111111101,
+        0b111111011,
+        0b111110111,
+        0b111101111,
+        0b111011111,
+        0b110111111,
+        0b101111111,
+        0b011111111,
+    ];
 
     // Reset
     reset = () => {
@@ -169,6 +181,33 @@ const
     }
 
     // Solve
+    solve = () => {
+        const
+            check = () => {
+                let changed = false;
+                for (let id = 0; id < 81; ++id) {
+                    let {x, y} = toXY(id),
+                        squareId = square(id),
+                        bits = rows[y] | cols[x] | squares[squareId],
+                    digit;
+                    masks.forEach((mask, index) => {
+                        if (bits === mask) {
+                            digit = index;
+                        }
+                    });
+                    if (digit) {
+                        changed = true;
+                        set(id, digit);
+                    }
+                }
+                return changed;
+            };
+        let count = 0;
+        while (check()) {
+            ++count;
+        }
+        alert("Iterations: " + count);
+    }
     ;
 
 window.addEventListener("load", () => {
