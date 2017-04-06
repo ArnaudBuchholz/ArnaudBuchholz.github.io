@@ -121,6 +121,7 @@ const
     rows = [],
     cols = [],
     squares = [],
+    digits = [],
 
     digitZeros = [
         0b111111110,
@@ -140,6 +141,7 @@ const
         rows.length = 0;
         cols.length = 0;
         squares.length = 0;
+        digits.length = 0;
         for (let index = 0; index < 9; ++index) {
             rows.push(0);
             cols.push(0);
@@ -166,6 +168,7 @@ const
             row = rows[y] |= bit,
             col = cols[x] |= bit,
             sqr = squares[squareId] |= bit;
+        digits[id] = digit;
         show("row" + y, row);
         show("col" + x, col);
         show("square" + squareId, sqr);
@@ -186,13 +189,16 @@ const
             check = () => {
                 let changed = false;
                 for (let id = 0; id < 81; ++id) {
+                    if (undefined !== digits[id]) {
+                        continue;
+                    }
                     let {x, y} = toXY(id),
                         squareId = square(id),
                         bits = rows[y] | cols[x] | squares[squareId],
                     digit;
                     digitZeros.forEach((digitZeroBit, index) => {
                         if (bits === digitZeroBit) {
-                            digit = index;
+                            digit = index + 1;
                         }
                     });
                     if (digit) {
