@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>SUDOKU</title>
+        <title>SUDOKU Solver</title>
         <style type="text/css">
 
 body {
@@ -11,183 +11,246 @@ body {
     color: black;
 }
 
-table#grid td {
+#grid {
+    border: 0;
+}
+
+#grid td {
     width: 32px;
     height: 32px;
     vertical-align: middle;
     text-align: center;
 }
 
-table#grid td.shaded {
-    background-color: lightgray;
+#grid td {
+    background-color: #FFFFFF;
+}
+
+#grid td.shaded {
+    background-color: #EEEEEE;
+}
+
+#grid td.control {
+    border: 0;
+    cursor: hand;
+    position: relative;
+    font-weight: bold;
+    font-size: 18pt;
+}
+
+#grid td.null {
+    border: 0;
+}
+
+#grid td.highlight {
+    background-color: yellow;
+}
+
+div.mark {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: #0a6ebd;
+}
+
+div.mark.off {
+    display: none;
+}
+
+div.mark.digit1 {
+    top: 2px;
+}
+
+div.mark.digit2 {
+    top: 2px;
+    left: 14px;
+}
+
+div.mark.digit3 {
+    top: 2px;
+    left: 26px;
+}
+
+div.mark.digit4 {
+    top: 14px;
+}
+
+div.mark.digit5 {
+    top: 14px;
+    left: 14px;
+}
+
+div.mark.digit6 {
+    top: 14px;
+    left: 26px;
+}
+
+div.mark.digit7 {
+    top: 26px;
+}
+
+div.mark.digit8 {
+    top: 26px;
+    left: 14px;
+}
+
+div.mark.digit9 {
+    top: 26px;
+    left: 26px;
 }
 
         </style>
         <script language="javascript">
-var
-    grids,
-    grid;
 
-function squareIdx(x, y) {
-    return Math.floor(x / 3) + 3 * Math.floor(y / 3);
-}
+const
+    // Helpers
+    toXY = id => {
+        let x = id % 9;
+        return {
+            x: x,
+            y: (id - x) / 9
+        };
+    }
+    square = id => {
+        let {x, y} = toXY(id);
+        return Math.floor(x / 3) + 3 * Math.floor(y / 3);
+    },
+    select = (selector, base = document) => [].slice.call(base.querySelectorAll(selector) || []),
 
-function squareLimits(idx) {
-    var
-        x = idx % 3,
-        y = Math.floor(idx / 3);
-    return {
-        fromX: 3 * x,
-        toX: 3 * (x + 1),
-        fromY: 3 * y,
-        toY: 3 * (y + 1)
-    };
-}
+    // State
+    rows = [],
+    cols = [],
+    squares = [];
 
-function onLoad() {
-    var
-        x, y,
-        tr, td;
-    grid = document.getElementById("grid");
-    for (y = 0; y < 9; ++y) {
-        tr = grid.appendChild(document.createElement("tr"));
-        for (x = 0; x < 9; ++x) {
-            td = tr.appendChild(document.createElement("td"));
-            td.innerHTML = "&nbsp;";
-            if (squareIdx(x, y) % 2 === 0) {
-                td.className = 'shaded';
+    // Reset
+    reset = () => {
+        select(".cell").forEach(cell => cell.innerHTML = "&nbsp;");
+        rows.length = 0;
+        cols.length = 0;
+        squares.length = 0;
+        for (let index = 0; index < 9; ++index) {
+            rows.push(0);
+            cols.push(0);
+            squares.push(0);
+        }
+    },
+
+    // Visual indication of remaining values
+    show = (id, bits) => {
+        let cell = document.getElementById(id);
+        select("div.mark", cell).forEach(mark => mark.className = mark.className.replace(" off", ""));
+        for (let bit = 1, digit = 1; digit < 10; bit <<= 1, ++digit) {
+            if (bits & bit) {
+                select("div.mark.digit" + digit, cell).forEach(mark => mark.className += " off");
             }
         }
     }
-    loadGrid();
-}
 
-function loadGrid() {
-    var tr, td;
-    if (!grids) {
-        grids = document.getElementById('grids');
+    // Set
+    set = (id, digit) => {
+        let {x, y} = toXY(id),
+            bit = 2**(digit - 1),
+            squareId = square(id),
+            row = rows[y] |= bit,
+            col = cols[x] |= bit,
+            sqr = squares[squareId] |= bit;
+        show("row" + y, row);
+        show("col" + x, col);
+        show("square" + squareId, sqr);
+        document.getElementById(id).innerHTML = digit;
+    },
+
+    // Load sample grid
+    load = () => {
+        const samples = document.getElementById("samples"),
+              data = samples.options[samples.selectedIndex].value;
+        reset();
+        data.split("").forEach((digit, index) => digit !== "." ? set(index, digit) : 0);
     }
-    var
-        option = grids.options[grids.selectedIndex],
-        x, y, pos = 0, digit;
-    for (y = 0; y < 9; ++y) {
-        tr = grid.childNodes[y];
-        for (x = 0; x < 9; ++x) {
-            td = tr.childNodes[x];
-            digit = option.value.charAt(pos);
-            if (digit !== '.') {
-                td.innerHTML = "<B>" + digit + "</B>";
-            } else {
-                td.innerHTML = "&nbsp;";
-            }
-            ++pos;
-        }
-    }
-}
 
-function showDigit(x, y, digit) {
-    var
-        tr = grid.childNodes[y],
-        td = tr.childNodes[x];
-    td.innerHTML = digit;
-}
-
-function algo_1() {
-    console.time("algo_1");
-    /*
-     * Create an array of numbers used per rows, cols & squares
-     * To speed up things, each number is represented by a bit
-     * (i.e. from 1 to 256)
-     */
-    var
-        grid = grids.options[grids.selectedIndex].value,
-        bits = [1, 2, 4, 8, 16, 32, 64, 128, 256],
-        rows = [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        cols = [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        squares = [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        result = [],
-        pos = 0,
-        left = 9 * 9,
-        x, y, limits,
-        resX, resY, count,
-        digit,
-        bit,
-        changed,
-        setDigit = function(x, y, digit) {
-            var bit =  bits[digit - 1];
-            rows[y] |= bit;
-            cols[x] |= bit;
-            squares[squareIdx(x, y)] |= bit;
-            --left;
-        }
+    // Solve
     ;
 
-    // Initialisation
-    for (y = 0; y < 9; ++y) {
-        result.push([]);
-        for (x = 0; x < 9; ++x) {
-            digit = grid.charAt(pos);
-            if (digit !== '.') {
-                setDigit(x, y, digit);
-                result[y].push(digit);
-            } else {
-                result[y].push('');
+window.addEventListener("load", () => {
+    const
+        grid = document.getElementById("grid"),
+        marks = cell => {
+            for (let digit = 1; digit < 10; ++digit) {
+                let div = document.createElement("div");
+                div.className = "mark digit" + digit;
+                cell.appendChild(div);
             }
-            ++pos;
+        };
+    for (let y = -1; y < 9; ++y) {
+        let tr = grid.appendChild(document.createElement("tr"));
+        for (let x = -1; x < 10; ++x) {
+            let td = tr.appendChild(document.createElement("td"));
+            if (-1 === y) {
+                if (-1 === x || 9 === x) {
+                    td.className += " null";
+                    td.innerHTML = "&nbsp;";
+                } else {
+                    td.className += " control";
+                    td.innerHTML = "&darr;";
+                    td.id = "col" + x;
+                    td.setAttribute("down", x);
+                    marks(td);
+                }
+            } else if (-1 === x) {
+                td.className += " control";
+                td.innerHTML = "&rarr;";
+                td.id = "row" + y;
+                td.setAttribute("right", y);
+                marks(td);
+
+            } else if (9 === x) {
+                td.className += " control";
+                td.innerHTML = "&square;";
+                td.id = "square" + y;
+                td.setAttribute("square", y);
+                marks(td);
+
+            } else {
+                let id = y * 9 + x,
+                    squareId = square(id);
+                td.id = id;
+                td.className = "cell row" + y + " col" + x + " square" + squareId;
+                td.innerHTML = "&nbsp;";
+                if (squareId % 2 === 0) {
+                    td.className += " shaded";
+                }
+            }
         }
     }
-    console.log("Cells to deduce: " + left);
-    // First round, for each square check if a digit can be set
-    // loop until nothing set
-    do {
-        changed = false;
-        for (digit = 1; digit < 10; ++digit) {
-            bit = bits[digit - 1];
-            for (pos = 0; pos < 9; ++pos) {
-                if (squares[pos] & bit) {
-                    // already set, skip
-                    continue;
+    grid.addEventListener("mouseover", event => {
+        select(".highlight").forEach(cell => {
+            cell.className = cell.className.replace(/\bhighlight\b/, () => "").trim();
+        });
+        const
+            target = event.target,
+            test = (name, classPrefix) => {
+                let value = target.getAttribute(name);
+                if (value) {
+                    return `.${classPrefix || name}${value}`;
                 }
-                // See if only one position possible inside the square
-                count = 0;
-                limits = squareLimits(pos);
-                for (y = limits.fromY; y < limits.toY; ++y) {
-                    if (rows[y] & bit) {
-                        continue;
-                    }
-                    for (x = limits.fromX; x < limits.toX; ++x) {
-                        if (cols[x] & bit) {
-                            continue;
-                        }
-                        if (result[y][x]) {
-                            continue;
-                        }
-                        console.log( digit + ":[" + pos + "]= " + x + "," + y);
-                        if (1 === ++count) {
-                            resX = x;
-                            resY = y;
-                        }
-                    }
-                }
-                if (1 === count) {
-                    setDigit(resX, resY, digit);
-                    showDigit(resX, resY, digit);
-                    changed = true;
-                }
-            }
+            },
+            classToHighlight = test("down", "col") || test("right", "row") || test("square");
+        if (classToHighlight) {
+            select(classToHighlight).concat(target).forEach(cell => cell.className += " highlight");
         }
-    } while( changed );
-    console.timeEnd("algo_1");
-}
+    });
+    document.getElementById("solve").addEventListener("click", solve);
+    document.getElementById("samples").addEventListener("change", load);
+    load();
+});
 
         </script>
     </head>
-    <body onload="onLoad()">
-        <select id="grids" onchange="loadGrid()">
-            <option value="4........8....1276...72..38.6....1..29.1.4.87..1....5.51..82...9274....1........5">http://freesudoku.free.fr/ - medium</option>
+    <body>
+        <select id="samples">
+            <option value="4........8....1276...72..38.6....1..29.1.4.87..1....5.51..82...9274....1........5">Sample 1 (medium)</option>
         </select>
-        <input type="button" value="Algo 1" onclick="algo_1()">
+        <input type="button" id="solve" value="Solve"">
         <table id="grid" border="1"></table>
-
     </body>
 </html>
