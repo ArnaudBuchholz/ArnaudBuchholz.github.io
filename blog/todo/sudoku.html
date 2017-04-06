@@ -24,6 +24,7 @@ body {
 
 #grid td {
     background-color: #FFFFFF;
+    position: relative;
 }
 
 #grid td.shaded {
@@ -33,7 +34,6 @@ body {
 #grid td.control {
     border: 0;
     cursor: hand;
-    position: relative;
     font-weight: bold;
     font-size: 18pt;
 }
@@ -51,6 +51,10 @@ div.mark {
     width: 6px;
     height: 6px;
     background-color: rgba(0, 0, 255, .2);
+}
+
+td#preview div.mark {
+    background-color: yellow;
 }
 
 div.mark.off {
@@ -206,7 +210,7 @@ const
                         set(id, digit);
                     }
                 }
-                return false && changed; // one loop for now
+                return changed;
             };
         let count = 0;
         while (check()) {
@@ -234,26 +238,28 @@ window.addEventListener("load", () => {
                 if (-1 === x || 9 === x) {
                     td.className += " null";
                     td.innerHTML = "&nbsp;";
+                    if (x * y !== 1) {
+                        continue;
+                    } else {
+                        td.id = "preview";
+                    }
                 } else {
                     td.className += " control";
                     td.innerHTML = "&darr;";
                     td.id = "col" + x;
                     td.setAttribute("down", x);
-                    marks(td);
                 }
             } else if (-1 === x) {
                 td.className += " control";
                 td.innerHTML = "&rarr;";
                 td.id = "row" + y;
                 td.setAttribute("right", y);
-                marks(td);
 
             } else if (9 === x) {
                 td.className += " control";
                 td.innerHTML = "&square;";
                 td.id = "square" + y;
                 td.setAttribute("square", y);
-                marks(td);
 
             } else {
                 let id = y * 9 + x,
@@ -265,6 +271,7 @@ window.addEventListener("load", () => {
                     td.className += " shaded";
                 }
             }
+            marks(td);
         }
     }
     grid.addEventListener("mouseover", event => {
@@ -282,7 +289,13 @@ window.addEventListener("load", () => {
             classToHighlight = test("down", "col") || test("right", "row") || test("square");
         if (classToHighlight) {
             select(classToHighlight).concat(target).forEach(cell => cell.className += " highlight");
+        } else if (target.className.includes("cell")) {
+            let id = parseInt(target.id, 10),
+                {x, y} = toXY(id),
+                bits = rows[y] | cols[x] | squares[square(id)];
+            show("preview", bits);
         }
+
     });
     document.getElementById("solve").addEventListener("click", solve);
     document.getElementById("samples").addEventListener("change", load);
