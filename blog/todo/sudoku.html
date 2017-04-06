@@ -31,6 +31,14 @@ body {
     background-color: #EEEEEE;
 }
 
+#grid td.resolved {
+    background-color: #FFFFAA;
+}
+
+#grid td.shaded.resolved {
+    background-color: #EEEE88;
+}
+
 #grid td.control {
     border: 0;
     cursor: hand;
@@ -165,18 +173,23 @@ const
     }
 
     // Set
-    set = (id, digit) => {
+    set = (id, digit, className) => {
         let {x, y} = toXY(id),
             bit = 2**(digit - 1),
             squareId = square(id),
             row = rows[y] |= bit,
             col = cols[x] |= bit,
-            sqr = squares[squareId] |= bit;
+            sqr = squares[squareId] |= bit,
+            cell;
         digits[id] = digit;
         show("row" + y, row);
         show("col" + x, col);
         show("square" + squareId, sqr);
-        document.getElementById(id).innerHTML = digit;
+        cell = document.getElementById(id);
+        cell.innerHTML = digit;
+        if (className) {
+            cell.className += " " + className;
+        }
     },
 
     // Load sample grid
@@ -207,7 +220,7 @@ const
                     });
                     if (digit) {
                         changed = true;
-                        set(id, digit);
+                        set(id, digit, "resolved");
                     }
                 }
                 return changed;
