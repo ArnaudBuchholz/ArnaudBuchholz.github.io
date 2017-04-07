@@ -33,6 +33,7 @@ body {
 
 #grid td span.resolved {
     font-style: italic;
+    font-weight: bold;
 }
 
 #grid td span.resolved.new {
@@ -122,64 +123,70 @@ div#status {
         <script language="javascript">
 
 const
-    // Helpers
-    toXY = id => {
-        let x = id % 9;
+    // From 0 to 80, each grid cell is represented by a unique id, this functions converts this id to coordinates
+    coordinates = id => {
+        let x = id % 9,
+            y = (id - x) / 9;
         return {
-            x: x,
-            y: (id - x) / 9
+            col: x,
+            row: y,
+            square: Math.floor(x / 3) + 3 * Math.floor(y / 3)
         };
-    }
-    toSquareId = id => {
-        let {x, y} = toXY(id);
-        return Math.floor(x / 3) + 3 * Math.floor(y / 3);
     },
+
+    // DOM helpers
     select = (selector, base = document) => [].slice.call(base.querySelectorAll(selector) || []),
+    addClass = (selector, className, base = document) => select(selector, base)
+        .forEach(tag => tag.className += " " + className),
+    removeClass = (selector, className, base = document) => select(selector, base)
+        .forEach(tag => tag.className = tag.className.replace(className, "").trim()),
+
+    // Status message
     setStatus = text => document.getElementById("status").innerHTML = text || "",
 
-    // State
-    rows = [],
-    cols = [],
-    squares = [],
-    digits = [],
+    // The algorithm relies on bit masks representing the digits already set
+    digitsMaskPerRow = [],
+    digitsMaskPerCol = [],
+    digitsMaskPerSquare = [],
+
+    // This contains the digits that are known and placed
+    digitsPlaced = [],
 
     reset = () => {
         select(".cell").forEach(cell =>  cell.innerHTML = "&nbsp;");
-        rows.length = 0;
-        cols.length = 0;
-        squares.length = 0;
-        digits.length = 0;
+        digitsMaskPerRow.length = 0;
+        digitsMaskPerCol.length = 0;
+        digitsMaskPerSquare.length = 0;
+        digitsPlaced.length = 0;
         for (let index = 0; index < 9; ++index) {
-            rows.push(0);
-            cols.push(0);
-            squares.push(0);
+            digitsMaskPerRow.push(0);
+            digitsMaskPerCol.push(0);
+            digitsMaskPerSquare.push(0);
         }
         setStatus();
     },
 
-    showRemainingDigits = (id, bits) => {
+    showRemainingDigits = (id, digitsMask) => {
         let cell = document.getElementById(id);
-        select("div.mark", cell).forEach(mark => mark.className = mark.className.replace(" off", ""));
+        removeClass("div.mark", "off", cell);
         for (let bit = 1, digit = 1; digit < 10; bit <<= 1, ++digit) {
-            if (bits & bit) {
-                select("div.mark.digit" + digit, cell).forEach(mark => mark.className += " off");
+            if (digitsMask & bit) {
+                addClass("div.mark.digit" + digit, "off", cell);
             }
         }
     }
 
-    set = (id, digit, className) => {
-        let {x, y} = toXY(id),
-            bit = 2**(digit - 1),
-            squareId = toSquareId(id),
-            row = rows[y] |= bit,
-            col = cols[x] |= bit,
-            sqr = squares[squareId] |= bit,
-            cell;
-        digits[id] = digit;
-        showRemainingDigits("row" + y, row);
-        showRemainingDigits("col" + x, col);
-        showRemainingDigits("square" + squareId, sqr);
-        cell = document.getElementById(id);
+    placeDigit = (id, digit, className) => {
+        let {col, row, square} = coordinates(id),
+            bit = Math.pow(2, digit - 1),
+            rowDigitsMask = digitsMaskPerRow[row] |= bit,
+            colDigitsMask = digitsMaskPerCol[col] |= bit,
+            squareDigitsMask = digitsMaskPerSquare[square] |= bit,
+            cell = document.getElementById(id);
+        digitsPlaced[id] = digit;
+        showRemainingDigits("row" + row, rowDigitsMask);
+        showRemainingDigits("col" + col, colDigitsMask);
+        showRemainingDigits("square" + square, squareDigitsMask);
         if (className) {
             span = document.createElement("span");
             span.className = className;
@@ -192,19 +199,21 @@ const
         const samples = document.getElementById("samples"),
               data = samples.options[samples.selectedIndex].value;
         reset();
-        data.split("").forEach((digit, index) => digit !== "." ? set(index, digit) : 0);
+        data.split("").forEach((digit, id) => digit !== "." ? placeDigit(id, digit) : 0);
     }
 
     searchForDigits = () => {
         let
             found = 0,
-            rowDigits = [[], [], [], [], [], [], [], [], []],
-            colDigits = [[], [], [], [], [], [], [], [], []],
-            squareDigits = [[], [], [], [], [], [], [], [], []];
+            // For each row, col and square, we verify if a digit fits only one place
+            rowCandidates = [[], [], [], [], [], [], [], [], []],
+            colCandidates = [[], [], [], [], [], [], [], [], []],
+            squareCandidates = [[], [], [], [], [], [], [], [], []];
 
         const
-            isSet = id => undefined !== digits[id],
+            isSet = id => undefined !== digitsPlaced[id],
 
+            // Add the candidate to the row / col / square
             addCandidate = (candidates, digit, id) => {
                 if (undefined === candidates[digit]) {
                     candidates[digit] = id; // First candidate
@@ -215,7 +224,7 @@ const
 
             solve = (id, digit) => {
                 ++found;
-                set(id, digit, "resolved new");
+                placeDigit(id, digit, "resolved new");
             }
 
             checkCandidates = arrayOfCandidates => {
@@ -226,79 +235,84 @@ const
                 }));
             };
 
-        select(".new").forEach(cell => cell.className = cell.className.replace(" new", ""));
+        removeClass(".new", "new");
 
         for (let id = 0; id < 81; ++id) {
             if (isSet(id)) {
                 continue;
             }
             let
-                {x, y} = toXY(id),
-                squareId = toSquareId(id),
-                bits = rows[y] | cols[x] | squares[squareId],
-                digit;
+                {row, col, square} = coordinates(id),
+                digitsMask = digitsMaskPerRow[row] | digitsMaskPerCol[col] | digitsMaskPerSquare[square];
             [
-                0b111111110,
-                0b111111101,
+                0b111111110, // 1 missing
+                0b111111101, // 2 missing
                 0b111111011,
                 0b111110111,
-                0b111101111,
+                0b111101111, // ...
                 0b111011111,
                 0b110111111,
-                0b101111111,
-                0b011111111,
-            ].forEach((digitZeroBit, index) => {
+                0b101111111, // 8 missing
+                0b011111111, // 9 missing
+            ].every((missingDigitMask, index) => {
+                let digit = index + 1;
+
                 // If only one choice possible
-                if (bits === digitZeroBit) {
-                    digit = index + 1;
-                } else  if ((bits & digitZeroBit) === bits) {
-                    addCandidate(rowDigits[y], index + 1, id);
-                    addCandidate(colDigits[x], index + 1, id);
-                    addCandidate(squareDigits[squareId], index + 1, id);
+                if (digitsMask === missingDigitMask) {
+                    solve(id, digit);
+                    return false; // Stop here
                 }
+
+                if ((digitsMask & missingDigitMask) === digitsMask) {
+                    // Digit is missing at this place
+                    addCandidate(rowCandidates[row], digit, id);
+                    addCandidate(colCandidates[col], digit, id);
+                    addCandidate(squareCandidates[square], digit, id);
+                }
+                return true; // continue
             });
-            if (digit) {
-                solve(id, digit);
-            }
         }
         if (!found) {
-            checkCandidates(rowDigits);
-            checkCandidates(colDigits);
-            checkCandidates(squareDigits);
+            checkCandidates(rowCandidates);
+            checkCandidates(colCandidates);
+            checkCandidates(squareCandidates);
         }
         return found;
     },
 
-    // Solve
     solve = oneStep => {
-        let count = 0,
+        let start = new Date(),
+            timeSpent,
+            count = 0,
             totalFound = 0,
             found = 0;
         do {
             totalFound += found;
             ++count;
         } while ((found = searchForDigits()) && !oneStep);
+        timeSpent = new Date() - start;
         totalFound += found;
-        setStatus("Iterations: " + count + " - Found: " + totalFound);
+        setStatus(`Iterations: ${count} - Found: ${totalFound} - Spent: ${timeSpent}ms`);
     };
 
 window.addEventListener("load", () => {
     const
         grid = document.getElementById("grid"),
-        marks = cell => {
+        generateDigitsMarks = cell => {
             for (let digit = 1; digit < 10; ++digit) {
                 let div = document.createElement("div");
                 div.className = "mark digit" + digit;
                 cell.appendChild(div);
             }
         };
+
     for (let y = -1; y < 9; ++y) {
         let tr = grid.appendChild(document.createElement("tr"));
         for (let x = -1; x < 10; ++x) {
             let td = tr.appendChild(document.createElement("td"));
             if (-1 === y) {
                 if (-1 === x || 9 === x) {
-                    td.className += " null";
+                    td.className = "null";
                     td.innerHTML = "&nbsp;";
                     if (x * y !== 1) {
                         continue;
@@ -306,41 +320,39 @@ window.addEventListener("load", () => {
                         td.id = "preview";
                     }
                 } else {
-                    td.className += " control";
+                    td.className = "control";
                     td.innerHTML = "&darr;";
                     td.id = "col" + x;
                     td.setAttribute("down", x);
                 }
             } else if (-1 === x) {
-                td.className += " control";
+                td.className = "control";
                 td.innerHTML = "&rarr;";
                 td.id = "row" + y;
                 td.setAttribute("right", y);
 
             } else if (9 === x) {
-                td.className += " control";
+                td.className = "control";
                 td.innerHTML = "&square;";
                 td.id = "square" + y;
                 td.setAttribute("square", y);
 
             } else {
                 let id = y * 9 + x,
-                    squareId = toSquareId(id);
+                    square = coordinates(id).square;
                 td.id = id;
                 td.title = id;
-                td.className = "cell row" + y + " col" + x + " square" + squareId;
+                td.className = "cell row" + y + " col" + x + " square" + square;
                 td.innerHTML = "&nbsp;";
-                if (squareId % 2 === 0) {
+                if (square % 2 === 0) {
                     td.className += " shaded";
                 }
             }
-            marks(td);
+            generateDigitsMarks(td);
         }
     }
     grid.addEventListener("mouseover", event => {
-        select(".highlight").forEach(cell => {
-            cell.className = cell.className.replace(/\bhighlight\b/, () => "").trim();
-        });
+        removeClass(".highlight", "highlight");
         const
             target = event.target,
             test = (name, classPrefix) => {
@@ -351,12 +363,14 @@ window.addEventListener("load", () => {
             },
             classToHighlight = test("down", "col") || test("right", "row") || test("square");
         if (classToHighlight) {
-            select(classToHighlight).concat(target).forEach(cell => cell.className += " highlight");
+            target.className += " highlight";
+            addClass(classToHighlight, "highlight");
+
         } else if (target.className.includes("cell")) {
             let id = parseInt(target.id, 10),
-                {x, y} = toXY(id),
-                bits = rows[y] | cols[x] | squares[toSquareId(id)];
-            showRemainingDigits("preview", bits);
+                {col, row, square} = coordinates(id),
+                digitsMask = digitsMaskPerRow[row] | digitsMaskPerCol[col] | digitsMaskPerSquare[square];
+            showRemainingDigits("preview", digitsMask);
         }
 
     });
@@ -372,6 +386,7 @@ window.addEventListener("load", () => {
         <select id="samples">
             <option value="4........8....1276...72..38.6....1..29.1.4.87..1....5.51..82...9274....1........5">Sample 1 (medium)</option>
             <option value=".5.8..4..7..9.3.....87...1...2.5.....6...73.4..9...62.1..4.9.....4...2..29..7...8">Sample 2 (metro.ca 2017-04-07 )</option>
+            <option value="..7.2....69...125....98.1...21.9.6....5..7....8.215.97.......82.4.8....9..9.5....">Sample 3 (metro.ca 2017-04-06 )</option>
         </select>
         <input type="button" id="solve" value="Solve"">
         <input type="button" id="solve1" value="One step"">
