@@ -1,0 +1,175 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.1.9: Records files
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This new release leverages the interface concept and delivers a file storage implementation for NodeJS and WScript.
+    It also introduces the necessary tools for a side project I am currently working on.
+</div>
+<code class="markdown">
+## New version
+
+Here comes the new version:
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/8?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.9)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/index.html)
+
+### Path management
+
+Because this version comes with file management, it all started with path management.
+Some existing [code](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/src/path.js) was waiting to be re-enabled
+in the library. This was done easily.
+
+The [gpf.path](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.path.html) helpers are considering that the normal
+[path separator](https://en.wikipedia.org/wiki/Path_%28computing%29) is the Unix one. The translation is done whenever
+necessary and the [tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/test/path.js#L212-L213) are considering
+each case.
+
+### IFileStorage and streams
+
+Three new interfaces were designed in this release:
+* [IFileStorage](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.interfaces.IFileStorage.html)
+* [IReadableStream](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.interfaces.IReadableStream.html)
+* [IWritableStream](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.interfaces.IWritableStream.html)
+
+The purpose is to encapsulate the file system in a flexible way using
+[Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) to handle
+asynchronicity. Also, streams were introduced to abstract files concept to reading or writing data.
+
+The method [gpf.fs.getFileStorage](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.fs.html#.getFileStorage__anchor)
+retrieves the current host's IFileStorage (if existing).
+
+Reading a file becomes host independent:
+
+`function read (path) {
+    var iFileStorage = gpf.fs.getFileStorage(),
+        iWritableStream = new gpf.stream.WritableString();
+    return iFileStorage.openTextStream(path, gpf.fs.openFor.reading)
+        .then(function (iReadableStream) {
+            return iReadableStream.read(iWritableStream);
+                .then(function () {
+                    return iFileStorage.close(iReadableStream);
+                })
+                .then(function () {
+                    return iWritableStream.toString();
+                });
+        });
+}`
+
+And so is writing to a file:
+
+`function write (path, content) {
+    var iFileStorage = gpf.fs.getFileStorage();
+    return iFileStorage.openTextStream(path, gpf.fs.openFor.appending)
+        .then(function (iWritableStream) {
+            return iWritableStream.write(content)
+                .then(function () {
+                    return iFileStorage.close(iWritableStream);
+                });
+        });
+}`
+
+Following [TDD](https://en.wikipedia.org/wiki/Test-driven_development) practice, all the methods were
+[first tested](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/test/fs.js) and then implemented for:
+* [NodeJS](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/src/fs/NodeJS.js)
+* [WScript](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/src/fs/wscript.js)
+
+Some notes:
+* If you need to replace a file content, you must [delete](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/
+gpf.interfaces.IFileStorage.html#deleteFile__anchor) it first.
+* File storage, streams and hosts implementation were existing and were waiting to be re-enabled. However, they were
+using a convoluted notification mechanism that has been dropped for Promises.
+* Some existing code handles binary streams (even with WScript). However, I doubt this would be useful for the
+coming projects so I removed it. Indeed, the file storage method is named
+[OpenTextStream](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.interfaces.IFileStorage.html#openTextStream__anchor)
+.
+* I plan to later implement file storage for rhino and even browsers (with a dedicated backend).
+
+### Filters and Sorters
+
+This release was labeled "Record files" because I started a side project in which thousands of records will be
+manipulated. Handling an array of records requires that you can easily filter or sort them on any property.
+
+(...) As of now, records are supposed to be flat objects.
+
+To make it efficient, the code generation approach was preferred.
+
+Two functions are proposed:
+
+* [gpf.createFilterFunction](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.html#.createFilterFunction__anchor)
+
+The chosen syntax is [documented](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.typedef.html#.filterItem) and lots
+of examples can be found in the [test cases](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/test/filter.js).
+I also integrated a [regular expression operator](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/
+gpf.typedef.html#.filterLike) that allows interesting [extractions](https://github.com/ArnaudBuchholz/gpf-js/blob/
+v0.1.9/test/filter.js#L82-L99).
+
+I plan to create some parsers to generate the filter from more readable syntaxes
+([SQL](https://en.wikipedia.org/wiki/SQL#Queries),
+[LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare)...).
+
+* [gpf.createSortFunction](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.html#.createSortFunction__anchor)
+
+Sorting can be done on any property, two types of comparison are offered:
+* Number *(default)* where values are compared using a subtraction
+* String through [localCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+String/localeCompare)
+
+You may sort on several properties, see the [examples](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/test/
+sort.js).
+
+## Lessons learned
+
+### WScript specific behaviors
+
+WScript has a pretty weak JavaScript implementation: I found two issues that broke some of my tests.
+
+* Object properties enumeration has to be tweaked because some are simply ignored, see this
+[WScript specific forEach implementation](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/src/foreach.js#L50-L58)
+
+* Newly created prototypes automatically have the [constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+Reference/Global_Objects/Object/constructor) property assigned. I had to remove it for interfaces, see this
+[fix](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/src/define/interface/build.js#L25)
+
+### Tests
+
+The library has [now](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.9#metrics) 541 tests.
+If you compare with version [0.1.8](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.8#metrics) that had 396, it is
+almost 1/3 more!
+
+In terms of the time required to execute them, it takes only 1.5 second to run one round them with NodeJS.
+It is still acceptable.
+
+One notable challenge was to test the NodeJS streams wrappers. Some error situations are almost impossible to simulate.
+With the help of [mocking](https://en.wikipedia.org/wiki/Test_double), and a good comprehension of the stream events,
+the [code was secured]((https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/test/stream/NodeJS.js).
+
+### Code coverage
+
+Now that the library offers two different implementations for the file storage object, a big change occurred in the way
+coverage is measured. Indeed, the source version now only loads what's specific to the host so that it prevents adding
+countless "istanbul ignore" comments. But this also means that some files are not covered anymore.
+
+I plan to [fix](https://github.com/ArnaudBuchholz/gpf-js/issues/160) that in the next version.
+
+## Next release
+
+The [next release](https://github.com/ArnaudBuchholz/gpf-js/milestone/9) will be dedicated to support my other project:
+* A streamed line reader will be developed (and it may lead to a CSV reader)
+* The library will be published to NPM (automatically when releasing the library)
+* As stated above, the coverage will be re-designed to include other hosts
+
+However, because of the side project, the release frequency may slow down.
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
