@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/stream/nodejs.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/stream/nodejs.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">79.80</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">203</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">16.14</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.54</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file NodeJS specific stream implementation
+ * @since 0.1.9
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _GPF_HOST*/ // Host types
+/*global _gpfDefine*/ // Shortcut for gpf.define
+/*global _gpfEmptyFunc*/ // An empty function
+/*global _gpfHost*/ // Host type
+/*global _gpfStreamSecureRead*/ // Generate a wrapper to secure multiple calls to stream#read
+/*global _gpfStreamSecureWrite*/ // Generates a wrapper to secure multiple calls to stream#write
+/*exported _GpfNodeBaseStream*/ // gpf.node.BaseStream
+/*exported _GpfNodeReadableStream*/ // gpf.node.ReadableStream
+/*exported _GpfNodeWritableStream*/ // gpf.node.WritableStream
+/*#endif*/
+
+/* istanbul ignore else */ // Because tested with NodeJS
+if (_GPF_HOST.NODEJS === _gpfHost) {
+
+    var
+        _GpfNodeBaseStream = _gpfDefine(/** @lends gpf.node.BaseStream */ {
+            $class: &quot;gpf.node.BaseStream&quot;,
+
+            /**
+             * Base class wrapping NodeJS streams
+             *
+             * @param {Object} stream NodeJS stream object
+             * @param {Function} [close] Close handler
+             *
+             * @constructor gpf.node.BaseStream
+             * @private
+             * @since 0.1.9
+             */
+            constructor: function (stream, close) {
+                this._stream = stream;
+                if (&quot;function&quot; === typeof close) {
+                    this._close = close;
+                }
+                stream.on(&quot;error&quot;, this._onError.bind(this));
+            },
+
+            /**
+             * Function to be called when the stream is closed
+             * @type {Function}
+             * @since 0.1.9
+             */
+            _close: _gpfEmptyFunc,
+
+            /**
+             * Close the stream
+             *
+             * @return {Promise} Resolved when closed
+             * @since 0.1.9
+             */
+            close: function () {
+                return this._close();
+            },
+
+            //region Error handling
+
+            /**
+             * NodeJS stream object
+             * @since 0.1.9
+             */
+            _stream: null,
+
+            /**
+             * The stream has an invalid state and can&#039;t be used anymore
+             * @since 0.1.9
+             */
+            _invalid: false,
+
+            /**
+             * Current promise rejection callback
+             * @type {Function}
+             * @since 0.1.9
+             */
+            _reject: gpf.Error.invalidStreamState,
+
+            /**
+             * If the stream has an invalid state, the exception {@see gpf.Error.InvalidStreamState} is thrown
+             *
+             * @throws {gpf.Error.InvalidStreamState}
+             * @since 0.1.9
+             */
+            _checkIfValid: function () {
+                if (this._invalid) {
+                    gpf.Error.invalidStreamState();
+                }
+            },
+
+            /**
+             * Bound to the error event of the stream, reject the current promise if it occurs.
+             *
+             * @param {*} error Stream error
+             * @since 0.1.9
+             */
+            _onError: function (error) {
+                this._invalid = true;
+                this._reject(error);
+            }
+
+            //endregion
+
+        }),
+
+        /**
+         * Wraps a readable stream from NodeJS into a IReadableStream
+         *
+         * @param {Object} stream NodeJS stream object
+         * @param {Function} [close] Close handler
+         *
+         * @class gpf.node.ReadableStream
+         * @extends gpf.node.BaseStream
+         * @implements {gpf.interfaces.IReadableStream}
+         * @since 0.1.9
+         */
+        _GpfNodeReadableStream = _gpfDefine(/** @lends gpf.node.ReadableStream */{
+            $class: &quot;gpf.node.ReadableStream&quot;,
+            $extend: &quot;gpf.node.BaseStream&quot;,
+
+            //region gpf.interfaces.IReadableStream
+
+            /**
+             * @gpf:sameas gpf.interfaces.IReadableStream#read
+             * @since 0.1.9
+             */
+            read: _gpfStreamSecureRead(function (output) {
+                var me = this,  //eslint-disable-line no-invalid-this
+                    stream = me._stream;
+                return new Promise(function (resolve, reject) {
+                    me._reject = reject;
+                    me._checkIfValid();
+                    stream
+                        .on(&quot;data&quot;, me._onData.bind(me, output))
+                        .on(&quot;end&quot;, function () {
+                            me._invalid = true;
+                            resolve();
+                        });
+                });
+            }),
+
+            //endregion
+
+            /**
+             * Stream &#039;data&#039; event handler
+             *
+             * @param {gpf.interfaces.IWritableStream} output Output stream
+             * @param {Object} chunk Buffer
+             * @since 0.1.9
+             */
+            _onData: function (output, chunk) {
+                var me = this,
+                    stream = me._stream;
+                stream.pause();
+                output.write(chunk)
+                    .then(function () {
+                        stream.resume();
+                    }, me._reject);
+            }
+
+        }),
+
+        /**
+         * Wraps a writable stream from NodeJS into a IWritableStream
+         *
+         * @param {Object} stream NodeJS stream object
+         * @param {Function} [close] Close handler
+         *
+         * @class gpf.node.WritableStream
+         * @extends gpf.node.BaseStream
+         * @implements {gpf.interfaces.IWritableStream}
+         * @since 0.1.9
+         */
+        _GpfNodeWritableStream = _gpfDefine(/** @lends gpf.node.WritableStream */{
+            $class: &quot;gpf.node.WritableStream&quot;,
+            $extend: &quot;gpf.node.BaseStream&quot;,
+
+            //region gpf.interfaces.IWritableStream
+
+            /**
+             * @gpf:sameas gpf.interfaces.IWritableStream#write
+             * @since 0.1.9
+             */
+            write: _gpfStreamSecureWrite(function (buffer) {
+                var me = this,  //eslint-disable-line no-invalid-this
+                    stream = me._stream;
+                return new Promise(function (resolve, reject) {
+                    me._reject = reject;
+                    me._checkIfValid();
+                    if (stream.write(buffer)) {
+                        return resolve();
+                    }
+                    stream.once(&quot;drain&quot;, resolve);
+                });
+            })
+
+            //endregion
+
+        });
+
+}</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

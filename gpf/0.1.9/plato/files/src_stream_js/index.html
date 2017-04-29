@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/stream.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/stream.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">78.47</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">177</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">14.38</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.49</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file Streams helpers
+ * @since 0.1.9
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*global _gpfIReadableStream*/ // gpf.interfaces.IReadableStream
+/*global _gpfIWritableStream*/ // gpf.interfaces.IWritableStream
+/*global _gpfInterfaceQuery*/ // gpf.interfaces.query
+/*exported _GPF_STREAM_DEFAULT_READ_SIZE*/ // Global default for stream read size
+/*exported _gpfStreamQueryReadable*/ // Get an IReadableStream or fail if not implemented
+/*exported _gpfStreamQueryWritable*/ // Get an IWritableStream or fail if not implemented
+/*exported _gpfStreamSecureInstallProgressFlag*/ // Install the progress flag used by _gpfStreamSecureRead and Write
+/*exported _gpfStreamSecureRead*/ // Generate a wrapper to secure multiple calls to stream#read
+/*exported _gpfStreamSecureWrite*/ // Generates a wrapper to secure multiple calls to stream#write
+/*#endif*/
+
+_gpfErrorDeclare(&quot;stream&quot;, {
+
+    /**
+     * ### Summary
+     *
+     * A read operation is already in progress
+     *
+     * ### Description
+     *
+     * This error is triggered if two reads are made simultaneously on the stream
+     * @since 0.1.9
+     */
+    readInProgress:
+        &quot;A read operation is already in progress&quot;,
+
+    /**
+     * ### Summary
+     *
+     * A write operation is already in progress
+     *
+     * ### Description
+     *
+     * This error is triggered if two writes are made simultaneously on the stream
+     * @since 0.1.9
+     */
+    writeInProgress:
+        &quot;A write operation is already in progress&quot;,
+
+    /**
+     * ### Summary
+     *
+     * Stream is in an invalid state
+     *
+     * ### Description
+     *
+     * If an error occurred while using the stream, no additional operations can be made
+     * @since 0.1.9
+     */
+    invalidStreamState:
+        &quot;Stream is in an invalid state&quot;
+});
+
+/**
+ * @namespace gpf.stream
+ * @description Root namespace for GPF streams
+ * @since 0.1.9
+ */
+gpf.stream = {};
+
+/**
+ * Get an IReadableStream or fail if not implemented
+ *
+ * @param {Object} queriedObject Object to query
+ * @return {gpf.interfaces.IReadableStream} IReadableStream interface
+ * @throws {gpf.Error.InterfaceExpected}
+ * @since 0.1.9
+ */
+function _gpfStreamQueryReadable (queriedObject) {
+    var iReadableStream = _gpfInterfaceQuery(_gpfIReadableStream, queriedObject);
+    if (!iReadableStream) {
+        gpf.Error.interfaceExpected({
+            name: &quot;gpf.interfaces.IReadableStream&quot;
+        });
+    }
+    return iReadableStream;
+}
+
+/**
+ * Get an IWritableStream or fail if not implemented
+ *
+ * @param {Object} queriedObject Object to query
+ * @return {gpf.interfaces.IWritableStream} IWritableStream interface
+ * @throws {gpf.Error.InterfaceExpected}
+ * @since 0.1.9
+ */
+function _gpfStreamQueryWritable (queriedObject) {
+    var iWritableStream = _gpfInterfaceQuery(_gpfIWritableStream, queriedObject);
+    if (!iWritableStream) {
+        gpf.Error.interfaceExpected({
+            name: &quot;gpf.interfaces.IWritableStream&quot;
+        });
+    }
+    return iWritableStream;
+}
+
+var _gpfStreamInProgressPropertyName = &quot;gpf.stream#inProgress&quot;;
+
+/**
+ * Install the progress flag used by _gpfStreamSecureRead and Write
+ *
+ * @param {Function} constructor Class constructor
+ * @since 0.1.9
+ */
+function _gpfStreamSecureInstallProgressFlag (constructor) {
+    constructor.prototype[_gpfStreamInProgressPropertyName] = false;
+}
+
+/**
+ * Generate a wrapper to query IWritableStream from the parameter and secure multiple calls to stream#read
+ *
+ * @param {Function} read Read function
+ * @return {Function} Function exposing {@see gpf.interfaces.IReadableStream#read}
+ * @gpf:closure
+ * @since 0.1.9
+ */
+function _gpfStreamSecureRead (read) {
+    return function (output) {
+        var me = this; //eslint-disable-line no-invalid-this
+        if (me[_gpfStreamInProgressPropertyName]) {
+            gpf.Error.readInProgress();
+        }
+        var iWritableStream = _gpfStreamQueryWritable(output);
+        me[_gpfStreamInProgressPropertyName] = true;
+        return read.call(me, iWritableStream)
+            .then(function (result) {
+                me[_gpfStreamInProgressPropertyName] = false;
+                return Promise.resolve(result);
+            }, function (reason) {
+                me[_gpfStreamInProgressPropertyName] = false;
+                return Promise.reject(reason);
+            });
+    };
+}
+
+/**
+ * Generate a wrapper to secure multiple calls to stream#write
+ *
+ * @param {Function} write Write function
+ * @return {Function} Function exposing {@see gpf.interfaces.IWritableStream#write}
+ * @gpf:closure
+ * @since 0.1.9
+ */
+function _gpfStreamSecureWrite (write) {
+    return function (buffer) {
+        var me = this; //eslint-disable-line no-invalid-this
+        if (me[_gpfStreamInProgressPropertyName]) {
+            gpf.Error.writeInProgress();
+        }
+        me[_gpfStreamInProgressPropertyName] = true;
+        return write.call(me, buffer) //eslint-disable-line no-invalid-this
+            .then(function (result) {
+                me[_gpfStreamInProgressPropertyName] = false;
+                return Promise.resolve(result);
+            }, function (reason) {
+                me[_gpfStreamInProgressPropertyName] = false;
+                return Promise.reject(reason);
+            });
+    };
+}
+
+/*#ifndef(UMD)*/
+
+gpf.internals._gpfStreamQueryReadable = _gpfStreamQueryReadable;
+gpf.internals._gpfStreamQueryWritable = _gpfStreamQueryWritable;
+gpf.internals._gpfStreamSecureInstallProgressFlag = _gpfStreamSecureInstallProgressFlag;
+gpf.internals._gpfStreamSecureRead = _gpfStreamSecureRead;
+gpf.internals._gpfStreamSecureWrite = _gpfStreamSecureWrite;
+
+/*#endif*/</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
