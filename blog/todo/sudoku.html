@@ -183,7 +183,7 @@ const
             colDigitsMask = digitsMaskPerCol[col] |= bit,
             squareDigitsMask = digitsMaskPerSquare[square] |= bit,
             cell = document.getElementById(id);
-        digitsPlaced[id] = digit;
+        digitsPlaced[id] = {digit, className};
         showRemainingDigits("row" + row, rowDigitsMask);
         showRemainingDigits("col" + col, colDigitsMask);
         showRemainingDigits("square" + square, squareDigitsMask);
@@ -195,12 +195,21 @@ const
         cell.innerHTML = digit;
     },
 
+    saveState = () => [].concat(digitsPlaced),
+
+    restoreState = state => {
+        reset();
+        state.forEach((info, id) => placeDigit(id, info.digit, info.className));
+    },
+
     load = () => {
         const samples = document.getElementById("samples"),
               data = samples.options[samples.selectedIndex].value;
         reset();
         data.split("").forEach((digit, id) => digit !== "." ? placeDigit(id, digit) : 0);
-    }
+    },
+
+    solved = () => digitsPlaced.filter(x => !!x).length === 81,
 
     searchForDigits = () => {
         let
@@ -277,6 +286,9 @@ const
             checkCandidates(colCandidates);
             checkCandidates(squareCandidates);
         }
+        if (!found && !solved()) {
+            alert("argh");
+        }
         return found;
     },
 
@@ -292,7 +304,7 @@ const
         } while ((found = searchForDigits()) && !oneStep);
         timeSpent = new Date() - start;
         totalFound += found;
-        setStatus(`Iterations: ${count} - Found: ${totalFound} - Spent: ${timeSpent}ms`);
+        setStatus(`Iterations: ${count} - Found: ${totalFound} - Spent: ${timeSpent}ms - Solved: ${solved()}`);
     };
 
 window.addEventListener("load", () => {
@@ -392,8 +404,8 @@ window.addEventListener("load", () => {
             <option value="......85..84....2.5728.....3...416.............769...2.....4198.1....37..68......">Sample 6 (very hard)</option>
             <option value=".1.....6763...78....8.2...4....61....9.273.5....85....8...9.3....94...8635.....9.">Sample 7 (extreme)</option>
         </select>
-        <input type="button" id="solve" value="Solve"">
-        <input type="button" id="solve1" value="One step"">
+        <input type="button" id="solve" value="Solve">
+        <input type="button" id="solve1" value="One step">
         <table id="grid" border="1"></table>
         <div id="status"></div>
     </body>
