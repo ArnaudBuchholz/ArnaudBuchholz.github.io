@@ -41,6 +41,10 @@ body {
     font-style: italic;
 }
 
+#grid td.twochoices {
+    background-color: rgb(255, 0, 255);
+}
+
 #grid td.control {
     border: 0;
     cursor: hand;
@@ -245,6 +249,7 @@ const
             };
 
         removeClass(".new", "new");
+        removeClass(".twochoices", "twochoices");
 
         for (let id = 0; id < 81; ++id) {
             if (isSet(id)) {
@@ -252,7 +257,8 @@ const
             }
             let
                 {row, col, square} = coordinates(id),
-                digitsMask = digitsMaskPerRow[row] | digitsMaskPerCol[col] | digitsMaskPerSquare[square];
+                digitsMask = digitsMaskPerRow[row] | digitsMaskPerCol[col] | digitsMaskPerSquare[square],
+                missing = [];
             [
                 0b111111110, // 1 missing
                 0b111111101, // 2 missing
@@ -273,6 +279,7 @@ const
                 }
 
                 if ((digitsMask & missingDigitMask) === digitsMask) {
+                    missing.push(digit);
                     // Digit is missing at this place
                     addCandidate(rowCandidates[row], digit, id);
                     addCandidate(colCandidates[col], digit, id);
@@ -280,6 +287,9 @@ const
                 }
                 return true; // continue
             });
+            if (missing.length === 2) {
+                document.getElementById(id).className += " twochoices";
+            }
         }
         if (!found) {
             checkCandidates(rowCandidates);
