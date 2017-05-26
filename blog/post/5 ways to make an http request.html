@@ -1,0 +1,68 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<!--
+    5 ways to make an http request in JavaScript
+
+    ...And the 5th is shocking :-)
+
+-->
+<h3 class="post-title entry-title">
+    5 ways to make an http request
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
+</div>
+<code class="markdown">
+
+## The need for HTTP requests
+
+Almost all modern applications are split into two parts: the User Interface and the engine.
+One web applications, the UI will be inside the browser and the engine is on the web server where persistency and
+business logic is implemented.
+HTTP offers connectivity with virtually all systems
+    Web services / Microservices
+
+
+## How to test HTTP request
+
+Because the TDD approach is applied in this project, the first task was to figure out how the whole HTTP layer
+could be tested.
+
+GRUNT + connect + middleware echo
+
+## The different environments
+
+Project architecture & coverage information
+
+### NodeJS
+
+require("http")
+
+### Browsers
+
+new XmlHttpRequest()
+
+### WScript
+
+new ActiveXObject("WinHttp.WinHttpRequest.5.1")
+
+### Rhino
+
+JAVA + Streams
+
+new java.net.URL(request.url).openConnection();
+
+### PhantomJS
+
+XHR + Security option
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
