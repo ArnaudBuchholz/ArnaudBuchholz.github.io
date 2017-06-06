@@ -22,11 +22,22 @@
 
 ## The need for HTTP requests
 
-Almost all modern applications are split into two parts: the User Interface and the engine.
+Almost all modern applications are split in two parts: the user interface and the engine where the logic is implemented.
+
 One web applications, the UI will be inside the browser and the engine is on the web server where persistency and
 business logic is implemented.
 HTTP offers connectivity with virtually all systems
     Web services / Microservices
+
+
+At some point, the HTTP layer is even more useful than the file
+
+jQuery was initially designed to offer APIs that would work the same way on any browser.
+Today, most modern libraries are focusing on one environment only. Otherwise, they deliver feature that work both in
+    browsers and NodeJS.
+In my case, I added three additional hosts: PhantomJS, WScript and Rhino.
+
+
 
 
 ## How to test HTTP request
@@ -38,9 +49,12 @@ GRUNT + connect + middleware echo
 
 ## The different environments
 
+The GPF-JS library is a project I started almost three years ago. Initially, it was a playground to learn how a big
+JS project
 Project architecture & coverage information
 
 ### NodeJS
+
 
 require("http")
 
