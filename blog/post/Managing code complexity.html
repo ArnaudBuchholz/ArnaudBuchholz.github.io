@@ -17,11 +17,29 @@
 </div>
 <code class="markdown">
 
-##
+## Overview
 
-When I started the GPF-JS project,
+When I started the GPF-JS project, I had several goals in mind. First, I wanted to improve my knowledge in JavaScript.
+At that time, I had written many scripts and even started to build a sort of library but I wanted to better understand
+how a big JavaScript project could be designed following the best practices.
+
+The first year, I mostly focused in adding features to the library without caring much about the structure and the tests.
+From the beginning, I wanted the library to address a large audience by making it compatible with several hosts.
+Naturally, I came up with polyfills concepts.
+
+Rather quickly, testing became a necessity. Indeed, as I was looking for the perfect way of doing things, I was constantly
+refactoring the code... which also means I broke it many times.
+
+I also quickly understood that the code became hard to maintain: too many concepts, ...
+
+The first big improvement came with TDD.
+    Then came the use of Plato and coverage tools: this drastically changed the way I developped the library.
 
 ## TDD
+
+### TDD with UI Automation
+
+
 
 ## Linters
 
@@ -37,6 +55,11 @@ Normalize the code writing
 ## Documentation
 
 ## Source management
+
+## Automation
+
+Grunt significantly reduced the time spent on the 'administrative' tasks.
+Every code change is automatically linted, tested with NodeJS and Plato is triggered to estimate the change in code complexity
 
 </code>
 <!-- Drop those two lines -->
