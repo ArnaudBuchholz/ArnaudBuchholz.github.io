@@ -23,29 +23,66 @@ Here comes the new version:
 * [Documentation](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/index.html)
 * [NPM package](https://www.npmjs.com/package/gpf-js)
 
+### NPM Publishing
+
+Starting from this version, the library will be published as an [NPM](https://www.npmjs.com/) package.
+It was already done in the past (version 0.1.4) but this version almost breaks everything that was defined at that time.
+That's the reason why I changed the MINOR version number.
+
+(...) I now that it is violating the normal [backward compatibility rule](http://semver.org/) but, actually, nobody was
+really using it... And I didn't want to use MAJOR 1 until the library offers something significant.
+
+An [.npmignore](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.npmignore) file instructs NPM which files should
+be included or not. The package is almost limited to the build folder.
+
 ### HTTP Requests
 
+HTTP requests using the same API for all hosts and asynchronous through Promises.
+
+NOTE that the promise is resolved when the server provides a response, whatever the status code.
+
+```JavaScript
+gpf.http.get(requestUrl).then(function (response) {
+    if (response.status === 500) {
+        return Promise.reject("Internal Error");
+    }
+    return process(response.responseText);
+})
+.catch(function (reason) {
+    onError(reason);
+});
+```
+
+The documentation is available [here](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.request__anchor).
 
 ### Improved coverage
 
-### NPM Publishing
+Because each host has its own implementation, it was important to be sure of the code coverage.
+Before this version, coverage was based on instanbul and a mochaTest task.
 
-... and loading
+After analyzing the way istanbul generates, stores and consolidates the coverage information, I found a way to
+trigger instrumented code on all host (and use http request to save the collected information).
+
+A new [task](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/grunt/tasks/istanbul.js#L46-L58) consolidate all hosts
+data into the global one.
 
 ## Lessons learned
 
+### ECHO service
+
+To be able to test the HTTP helpers, I needed a server which I could control the answers.
+
+    More details will come in a future article.
+
 ### Some code was definitely not tested
 
-###
+Once coverage was applied to all the sources I discovered untested code.
+This leaded to some simplifications (boot for instance) but also to new tests.
 
 ## Next release
 
-The [next release](https://github.com/ArnaudBuchholz/gpf-js/milestone/9) will be dedicated to support my other project:
-* A streamed line reader will be developed (and it may lead to a CSV reader)
-* The library will be published to NPM (automatically when releasing the library)
-* As stated above, the coverage will be re-designed to include other hosts
-
-However, because of the side project, the release frequency may slow down.
+For now the project is on pause because of vacations. I will take some time to plan the next iteration more carefully
+but, still, I have to support my side project by creating a CSV reader as well as a record container.
 
 </code>
 <!-- Drop those two lines -->
