@@ -23,29 +23,44 @@
 
 ## Overview
 
-When I started the [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) project, I had quite a clear vision of what I
-wanted to achieve but I was unsure about the how.
+Nearly four years ago, the [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) project was started.
+At that time, I had quite a clear vision of what I wanted to achieve but I was unsure about the how.
 
+First, I wanted to improve my knowledge in JavaScript, to master the subtleties of the language.
+I was fascinated by the notion of [JavaScript ninja](https://www.manning.com/books/secrets-of-the-javascript-ninja) and
+I was amazed by both the complexity and simplicity of [John Resig](https://johnresig.com/)'s code.
 
-Actually, I wanted to improve my knowledge in JavaScript.
+So I wanted to be able to try out things without breaking everything.
 
+Also, I wanted to discover the JavaScript ecosystem: my experience was limited to browsers and
+[wscript](https://msdn.microsoft.com/en-us/library/hh875526(v=ws.10).aspx). I was aware of
+[NodeJS](https://nodejs.org/en/) and its associated tooling (such as [Grunt](https://gruntjs.com/)) but I never tried
+to use it productively.
 
-    several goals in mind and quite
-a clear vision of what .
+Being used to notepad and command line, I wanted to try automation.
 
+At that time, I had written many scripts and even started to build a sort of library.
+But it was quite a mess:
+* one big file
+* manually minified (variables named a/*myIndexVariable*/
+* no tests
+* no documentation
 
-    First, I wanted to improve my knowledge in JavaScript.
-At that time, I had written many scripts and even started to build a sort of library but I wanted to better understand
-how a big JavaScript project could be designed following the best practices.
+You got the idea, I wanted it to look 'professional'.
 
-The first year, I mostly focused in adding features to the library without caring much about the structure and the tests.
-From the beginning, I wanted the library to address a large audience by making it compatible with several hosts.
-Naturally, I came up with polyfills concepts.
+### The first year
 
-Rather quickly, testing became a necessity. Indeed, as I was looking for the perfect way of doing things, I was constantly
-refactoring the code... which also means I broke it many times.
+I mostly focused in adding features to the library without caring much about the structure or the tests.
+Because the library addresses a large audience by being compatible with several hosts, it comes with
+[polyfills](https://remysharp.com/2010/10/08/what-is-a-polyfill).
 
-I also quickly understood that the code became hard to maintain: too many concepts, ...
+Rather quickly, testing became a necessity. Indeed, as I was striving for the perfect way of doing things, the code
+was constantly refactored... which also means constantly broken.
+
+At some point, it was discouraging.
+The code base became hard to understand and to maintain.
+
+###
 
 The first big improvement came with TDD.
     Then came the use of Plato and coverage tools: this drastically changed the way I developped the library.
