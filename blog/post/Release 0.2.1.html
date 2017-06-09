@@ -25,37 +25,56 @@ Here comes the new version:
 
 ### NPM Publishing
 
-Starting from this version, the library will be published as an [NPM](https://www.npmjs.com/) package.
-It was already done in the past (version 0.1.4) but this version almost breaks everything that was defined at that time.
-That's the reason why I changed the MINOR version number.
+Starting from this version, the library will be published as an [NPM](https://www.npmjs.com/) package on every release.
 
-(...) I now that it is violating the normal [backward compatibility rule](http://semver.org/) but, actually, nobody was
-really using it... And I didn't want to use MAJOR 1 until the library offers something significant.
+The package was already existing since it was first published for version
+[0.1.4](https://github.com/ArnaudBuchholz/gpf-js/tree/cdd69ac0459904c0096853dd5402a33d4b242065).
+However, the library has since been redesigned in a way that is not backward compatible.
+That's the reason why I increased the MINOR version number.
+
+(...) It is violating the normal [backward compatibility rule](http://semver.org/) but, actually, nobody was
+really using it... And I didn't want to increase the MAJOR number to 1 until the library is ready.
 
 An [.npmignore](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.npmignore) file instructs NPM which files should
 be included or not. The package is almost limited to the build folder.
 
 ### HTTP Requests
 
-HTTP requests using the same API for all hosts and asynchronous through Promises.
+The prominent feature of this version is the
+[gpf.http.request](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.request__anchor) helper.
+With it, you can trigger [HTTP requests](https://developer.mozilla.org/en-US/docs/Web/HTTP) from any supported host
+using only one API. The response is given back to the script asynchronously through
+[Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-NOTE that the promise is resolved when the server provides a response, whatever the status code.
+(...) The promise is resolved when the server provides a response, whatever the status code.
 
-```JavaScript
+Some shortcuts are also defined to improve code readability:
+
+`
 gpf.http.get(requestUrl).then(function (response) {
     if (response.status === 500) {
-        return Promise.reject("Internal Error");
+        return Promise.reject(new Error("Internal Error"));
     }
     return process(response.responseText);
 })
 .catch(function (reason) {
     onError(reason);
 });
-```
+`
 
-The documentation is available [here](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.request__anchor).
+The supported (and tested) features are:
+* Most common [HTTP verbs](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.methods__anchor)
+* Possibility to provide request headers
+* Possibility to access response headers
+* Possibility to submit textual payload (on POST and PUT)
+* Access to response text
+
+Other features will be added depending on the needs but this is enough to make it fully functional.
+
+(...) I will soon write an article about this very specific part as I had lot of challenges to test and implement it.
 
 ### Improved coverage
+
 
 Because each host has its own implementation, it was important to be sure of the code coverage.
 Before this version, coverage was based on instanbul and a mochaTest task.
@@ -78,6 +97,8 @@ To be able to test the HTTP helpers, I needed a server which I could control the
 
 Once coverage was applied to all the sources I discovered untested code.
 This leaded to some simplifications (boot for instance) but also to new tests.
+
+### Incomplete design for ending a stream
 
 ## Next release
 
