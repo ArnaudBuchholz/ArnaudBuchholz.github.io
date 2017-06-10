@@ -11,8 +11,8 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
-    This new release introduces the http request helper on all supported hosts and improves the coverage measurement.
-    It is also the first version to be published again as an NPM package.
+    This new release supports my side projects by implementing html generation and http request helpers.
+    It also improves the coverage measurement and this is the first version to be published again as an NPM package.
 </div>
 <code class="markdown">
 ## New version
@@ -37,6 +37,18 @@ really using it... And I didn't want to increase the MAJOR number to 1 until the
 
 An [.npmignore](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.npmignore) file instructs NPM which files should
 be included or not. The package is almost limited to the build folder.
+
+### HTML generation helper
+
+I was listening to the excellent [funfunfunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q) video
+about [the hidden costs of templating languages](https://www.youtube.com/watch?v=EmGfdlixQHo) and, at some point, he
+showed some HTML generation helpers wich syntax amazed me.
+
+Hence, to support my side project, I decided to create my own
+[HTML generation helpers](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/test/web/tag.js) based on this syntax.
+
+Sadly, I realize that I completely forgot the
+[document the feature properly](https://github.com/ArnaudBuchholz/gpf-js/issues/175).
 
 ### HTTP Requests
 
@@ -75,38 +87,49 @@ Other features will be added depending on the needs but this is enough to make i
 
 ### Improved coverage
 
-Because each host benefits from its own http request implementation, it was important to check the code coverage.
+Because each host benefits from its own http request implementation, it was important to assess the code coverage.
+
 Up to this version, the coverage was measured with NodeJS through [istanbul](https://github.com/gotwarlost/istanbul)
 and [mochaTest](https://github.com/pghalliday/grunt-mocha-test). Each host specific code was flagged to be ignored
 using the [istanbul ignore comment](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md).
 
+However, as the library grows, more code was actually not measured.
 
-Before this version, coverage was based on instanbul and a mochaTest task.
+After analyzing how istanbul generates, stores and consolidates the coverage information, I found a way to
+run the instrumented code on all hosts. A new
+[grunt task](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/grunt/tasks/istanbul.js#L46-L58) consolidate all data
+into the global one.
 
-After analyzing the way istanbul generates, stores and consolidates the coverage information, I found a way to
-trigger instrumented code on all host (and use http request to save the collected information).
+In the end, there are still some branches / instructions that are ignored but they are all
+[documented](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/tutorial-COVERAGE.html).
 
-A new [task](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/grunt/tasks/istanbul.js#L46-L58) consolidate all hosts
-data into the global one.
-
-    https://arnaudbuchholz.github.io/gpf/0.2.1/doc/tutorial-COVERAGE.html
+* Statements ignored: 0.74%
+* Branches ignored: 1.77%
+* Functions ignored: 1.36%
 
 ## Lessons learned
 
 ### ECHO service
 
-To be able to test the HTTP helpers, I needed a server which I could control the answers.
+To be able to test the http helpers, I needed a server which I could control the responses.
+I already had some [middleware](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.1/grunt/connect-middleware)
+plugged inside the [grunt connect](https://github.com/gruntjs/grunt-contrib-connect) task. I decided to create
+the [ECHO service](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/grunt/connect-middleware/echo.js).
 
-    More details will come in a future article.
+I took me a while to figure out the proper coding and how to disable the cache.
 
-Test configuration to get HTTP port
+Also, I had to change the way tests are running to transmit the http port information.
+This is done through the [config](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/test/http.js#L5-L7) global
+object.
 
 ### Some code was definitely not tested
 
-Once coverage was applied to all the sources I discovered untested code.
+Having the coverage measured on almost every lines revealed sections of untested code.
 This leaded to some simplifications (boot for instance) but also to new tests.
 
 ### Incomplete design for ending a stream
+
+In order to prepare the CSV reader, I created a
 
 ## Next release
 
