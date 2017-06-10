@@ -75,8 +75,12 @@ Other features will be added depending on the needs but this is enough to make i
 
 ### Improved coverage
 
+Because each host benefits from its own http request implementation, it was important to check the code coverage.
+Up to this version, the coverage was measured with NodeJS through [istanbul](https://github.com/gotwarlost/istanbul)
+and [mochaTest](https://github.com/pghalliday/grunt-mocha-test). Each host specific code was flagged to be ignored
+using the [istanbul ignore comment](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md).
 
-Because each host has its own implementation, it was important to be sure of the code coverage.
+
 Before this version, coverage was based on instanbul and a mochaTest task.
 
 After analyzing the way istanbul generates, stores and consolidates the coverage information, I found a way to
@@ -85,6 +89,8 @@ trigger instrumented code on all host (and use http request to save the collecte
 A new [task](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/grunt/tasks/istanbul.js#L46-L58) consolidate all hosts
 data into the global one.
 
+    https://arnaudbuchholz.github.io/gpf/0.2.1/doc/tutorial-COVERAGE.html
+
 ## Lessons learned
 
 ### ECHO service
@@ -92,6 +98,8 @@ data into the global one.
 To be able to test the HTTP helpers, I needed a server which I could control the answers.
 
     More details will come in a future article.
+
+Test configuration to get HTTP port
 
 ### Some code was definitely not tested
 
