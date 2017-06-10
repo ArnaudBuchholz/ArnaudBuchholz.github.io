@@ -40,15 +40,27 @@ be included or not. The package is almost limited to the build folder.
 
 ### HTML generation helper
 
-I was listening to the excellent [funfunfunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q) video
+I was watching the excellent [funfunfunction](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q) video
 about [the hidden costs of templating languages](https://www.youtube.com/watch?v=EmGfdlixQHo) and, at some point, he
 showed some HTML generation helpers wich syntax amazed me.
 
 Hence, to support my side project, I decided to create my own
-[HTML generation helpers](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/test/web/tag.js) based on this syntax.
+[HTML generation helpers](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.web.html#.createTagFunction__anchor) based
+on this syntax.
 
-Sadly, I realize that I completely forgot the
-[document the feature properly](https://github.com/ArnaudBuchholz/gpf-js/issues/175).
+For instance:
+`
+var div = gpf.web.createTagFunction("div"),
+    span = gpf.web.createTagFunction("span");
+document.getElementById("placeholder") =
+    div({className: "test1"}, "Hello ",
+        span({className: "test2"}, "World!")
+    ).toString();
+`
+
+Sadly, I realize that I completely forgot to
+[document the feature properly](https://github.com/ArnaudBuchholz/gpf-js/issues/175). Fortunately, the
+[tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/test/web/tag.js) demonstrate the feature.
 
 ### HTTP Requests
 
