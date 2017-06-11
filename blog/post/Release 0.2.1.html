@@ -105,7 +105,7 @@ Up to this version, the coverage was measured with NodeJS through [istanbul](htt
 and [mochaTest](https://github.com/pghalliday/grunt-mocha-test). Each host specific code was flagged to be ignored
 using the [istanbul ignore comment](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md).
 
-However, as the library grows, more code was actually not measured.
+However, as the library grows, more code was actually not verified.
 
 After analyzing how istanbul generates, stores and consolidates the coverage information, I found a way to
 run the instrumented code on all hosts. A new
@@ -123,12 +123,13 @@ In the end, there are still some branches / instructions that are ignored but th
 
 ### ECHO service
 
-To be able to test the http helpers, I needed a server which I could control the responses.
+To be able to test the http helpers, I needed a server which responses could be controlled.
 I already had some [middleware](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.1/grunt/connect-middleware)
 plugged inside the [grunt connect](https://github.com/gruntjs/grunt-contrib-connect) task. I decided to create
 the [ECHO service](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/grunt/connect-middleware/echo.js).
 
-I took me a while to figure out the proper coding and how to disable the cache.
+I took me a while to figure out the proper coding: for instance, I had to disable the cache because Internet Explorer
+was storing the request results and it was failing the tests.
 
 Also, I had to change the way tests are running to transmit the http port information.
 This is done through the [config](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/test/http.js#L5-L7) global
@@ -142,6 +143,21 @@ This leaded to some simplifications (boot for instance) but also to new tests.
 ### Incomplete design for ending a stream
 
 In order to prepare the CSV reader, I created a
+[line adatper stream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.stream.LineAdapter.html).
+It implements both the
+[IReadableStream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IReadableStream.html) and
+[IWritableStream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IWritableStream.html) interfaces.
+It caches the data being received with write until some line separator is detected.
+
+However, because of caching, it requires a method to flush the buffered data.
+
+As of now, I decided to create a
+[method](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.stream.LineAdapter.html#.endOfStream__anchor) to explicitly
+flush the stream.
+
+However, I am still wondering if it may change in the future: if you pipe several streams together, it could be
+convenient to have a standard way to flush all the different levels. One idea could be to introduce a special token
+that would be written at the end of a stream but then it would require all streams to implement it.
 
 ## Next release
 
