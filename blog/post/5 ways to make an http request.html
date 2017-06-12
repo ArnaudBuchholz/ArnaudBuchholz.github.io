@@ -17,6 +17,8 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
+    The version 0.2.1 of the GPF-JS library delivers an HTTP request helper that can be used on all supported hosts.
+    It was quite a challenge as it implied 5 different developments.
 </div>
 <code class="markdown">
 
@@ -39,9 +41,9 @@ Today, most modern libraries are focusing on one environment only. Otherwise, th
 In my case, I added three additional hosts: PhantomJS, WScript and Rhino.
 
 
-
-
 ## How to test HTTP request
+
+
 
 Because the TDD approach is applied in this project, the first task was to figure out how the whole HTTP layer
 could be tested.
@@ -56,18 +58,36 @@ Project architecture & coverage information
 
 ### NodeJS
 
+Beside being a JavaScript host, NodeJS offers a complete set of API for the most common tasks.
+In particular, it comes with the [http feature](https://nodejs.org/api/http.html#http_http).
 
-require("http")
+Using the [http.request](https://nodejs.org/api/http.html#http_http_request_options_callback) method, you can allocate
+an [http.ClientRequest](https://nodejs.org/api/http.html#http_class_http_clientrequest).
 
 ### Browsers
+
+AJAX request
+    => network communication is handled by the browser
+    => callback is triggered only when the engine is free
+
+Older browsers had different ways to trigger requests. This is where jQuery became so usefull by encapsulating browser
+differences inside a single API.
+
+Most recent browsers offer the [XmlHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) object.
 
 new XmlHttpRequest()
 
 ### WScript
 
-new ActiveXObject("WinHttp.WinHttpRequest.5.1")
+WScript offers the possibility to reuse [COM components](https://en.wikipedia.org/wiki/Component_Object_Model).
+In particular, the
+[WinHttp.WinHttpRequest.5.1](https://msdn.microsoft.com/en-us/library/windows/desktop/aa384106%28v=vs.85%29.aspx)
+
+However, the object offers synchronous methods.
 
 ### Rhino
+
+One of the most challenging implementation because it relies on JAVA API.
 
 JAVA + Streams
 
@@ -75,6 +95,8 @@ new java.net.URL(request.url).openConnection();
 
 ### PhantomJS
 
+PhantomJS is a command line simulating a browser...
+I sometimes struggles with PhantomJS to decide if it
 XHR + Security option
 
 </code>
