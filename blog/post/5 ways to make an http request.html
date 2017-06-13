@@ -18,7 +18,7 @@
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
     The version 0.2.1 of the GPF-JS library delivers an HTTP request helper that can be used on all supported hosts.
-    It was quite a challenge as it implied 5 different developments.
+    It was quite a challenge as it implied 5 different developments, here are the details.
 </div>
 <code class="markdown">
 
@@ -43,12 +43,29 @@ In my case, I added three additional hosts: PhantomJS, WScript and Rhino.
 
 ## How to test HTTP request
 
+When you follow the [TDD practice](https://en.wikipedia.org/wiki/Test-driven_development), you write tests before
+writing any line of production code. But in that case, the first challenge was to figure out how the whole HTTP layer
+could be tested. [Mocking](https://en.wikipedia.org/wiki/Mock_object) was not an option.
 
+The project itself heavily relies on the [grunt connect](https://github.com/gruntjs/grunt-contrib-connect) task to
+deliver the dashboard: a place where you can access all the tools (source list, tests, documentation...).
 
-Because the TDD approach is applied in this project, the first task was to figure out how the whole HTTP layer
-could be tested.
+![dashboard](https://arnaudbuchholz.github.io/blog/post/Release%200.1.6/homepage.png)
 
-GRUNT + connect + middleware echo
+(...) As a lazy developper, I don't need any command line for my development, all the tools are available within the
+dashboard.
+
+Some middleware were also plugged to add extra features such as:
+* [cache](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/cache.js): introduced with
+[version 0.1.7](http://gpf-js.blogspot.ca/2017/03/release-017.html), it is leveraged by the command line used to test
+browsers when [Selenium](http://www.seleniumhq.org/) is not available. It implements a data storing service similar to
+[Redis](https://redis.io/).
+* [fs](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/fs.js): a file access service used
+to read, create and delete files within the project storage.
+* [grunt](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/grunt.js): a wrapper used to
+generate and format the log of grunt tasks.
+
+Based on this,
 
 ## The different environments
 
@@ -77,6 +94,8 @@ Most recent browsers offer the [XmlHttpRequest](https://developer.mozilla.org/en
 
 new XmlHttpRequest()
 
+Building helpers _gpfHttpGenSetHeaders / _gpfHttpGenSend
+
 ### WScript
 
 WScript offers the possibility to reuse [COM components](https://en.wikipedia.org/wiki/Component_Object_Model).
@@ -85,6 +104,8 @@ In particular, the
 
 However, the object offers synchronous methods.
 
+Helpers could be used but does not support bind (had to change the way helper is built)
+
 ### Rhino
 
 One of the most challenging implementation because it relies on JAVA API.
@@ -92,6 +113,9 @@ One of the most challenging implementation because it relies on JAVA API.
 JAVA + Streams
 
 new java.net.URL(request.url).openConnection();
+
+If a status code 5 comes back from the server, the response stream differs.
+This is handled specifically as the API has to succeed no matter what
 
 ### PhantomJS
 
