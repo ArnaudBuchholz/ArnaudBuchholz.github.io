@@ -24,22 +24,47 @@
 
 ## The need for HTTP requests
 
-Almost all modern applications are split in two parts: the user interface and a data processing engine where
-persistency and logic are implemented. More specifically, for web applications, the UI will be executed in the
-browser and the engine is somewhere on the web server.
+Almost all modern applications are split in two distinct parts:
+* The user interface where information is displayed and user input is received and processed
+* A processing engine where data persistency and business logic are implemented
+
+Sometimes those two parts are together on the same hardware, sometimes they are running on separate hosts.
+For web applications, the UI is executed in the user browser and the engine runs in a web server.
+
+Since [cloud platforms](https://en.wikipedia.org/wiki/Category:Cloud_platforms) became the new standard to
+develop, deliver and maintain large scale applications, communication standard were stabilized to simplify data exchange
+between the UI and the engine. At a broader scale, the engine itself might be broken down into several parts
+([microservices](https://en.wikipedia.org/wiki/Microservices)).
+
+
+
+This leads to overarching concepts such as:
+* Representational state transfer ([REST](https://en.wikipedia.org/wiki/Representational_state_transfer)) APIs
+* [Web services](https://en.wikipedia.org/wiki/Web_service)
+* OData
+* [JSONP](https://en.wikipedia.org/wiki/JSONP) (or [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing))
+...
+
+All the above concepts rely on a single layer to convery the message between the UI and the engine: the HTTP layer.
 
 When the two communicate, the HTTP layer is : it abstracts the
-HTTP offers connectivity with virtually all systems
-    Web services / Microservices
+HTTP offers [connectivity](https://en.wikipedia.org/wiki/Internet_access)
+and [Interoperability](https://en.wikipedia.org/wiki/Interoperability) with virtually all systems of the internet.
 
+### Evolution of HTTP requests in browsers
 
-At some point, the HTTP layer is even more useful than the file
+Before [AJAX](https://en.wikipedia.org/wiki/Ajax_%28programming%29) requests, web pages had to be fully refreshed to
+reflect any change of the server state. From a user experience point of view, it was OK (mostly because we had no other
+models) but this prevented the development of SPA.
+
+Then AJAX appeared and this deeply modified the way web pages were developped: they were faster, crisper ..
+
+The only problem was that each browser offered different way of doing those AJAX requests.
 
 jQuery was initially designed to offer APIs that would work the same way on any browser.
 Today, most modern libraries are focusing on one environment only. Otherwise, they deliver feature that work both in
     browsers and NodeJS.
 In my case, I added three additional hosts: PhantomJS, WScript and Rhino.
-
 
 ## How to test HTTP request
 
