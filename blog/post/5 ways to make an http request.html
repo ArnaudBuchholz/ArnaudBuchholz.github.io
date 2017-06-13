@@ -65,9 +65,21 @@ to read, create and delete files within the project storage.
 * [grunt](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/grunt.js): a wrapper used to
 generate and format the log of grunt tasks.
 
-Based on this,
+Based on this experience, I thought of another extension: the
+[echo](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/echo.js) service.
+It basically accepts any HTTP request and the response either reflects the request details or can be modified through
+URL parameters.
 
-## The different environments
+Then, [POSTMAN](https://www.getpostman.com/) was used to test the tool that will be used to test the HTTP layer...
+
+![GET](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/echo%20test%20GET.png)
+
+![GET 500](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/
+echo%20test%20GET%20500.png)
+
+![POST](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/echo%20test%20POST.png)
+
+    ## The different environments
 
 The GPF-JS library is a project I started almost three years ago. Initially, it was a playground to learn how a big
 JS project
