@@ -24,49 +24,49 @@
 
 ## The need for HTTP requests
 
-In a world of interoperability, internet of things and micro services, the HTTP
+In a world of [interoperability](https://en.wikipedia.org/wiki/Interoperability),
+[internet of things](https://en.wikipedia.org/wiki/Internet_of_things) and
+[microservices](https://en.wikipedia.org/wiki/Microservices), the - old -
+[HTTP protocol](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) defines a communication medium that is widely
+known and implemented.
 
-Almost all modern applications are split in two distinct parts:
-* The user interface where information is displayed and user input is received and processed
-* A processing engine where data persistency and business logic are implemented
-
-Sometimes those two parts are together on the same hardware, sometimes they are running on separate hosts.
-For web applications, the UI is executed in the user browser and the engine runs in a web server.
-
-Since [cloud platforms](https://en.wikipedia.org/wiki/Category:Cloud_platforms) became the new standard to
-develop, deliver and maintain large scale applications, communication standard were stabilized to simplify data exchange
-between the UI and the engine. At a broader scale, the engine itself might be broken down into several parts
-([microservices](https://en.wikipedia.org/wiki/Microservices)).
-
-
-
-This leads to overarching concepts such as:
+Originally designed for human-to-machine communication, this protocol also supports machine-to-machine communication
+through standardized concepts and interfaces:
 * Representational state transfer ([REST](https://en.wikipedia.org/wiki/Representational_state_transfer)) APIs
 * [Web services](https://en.wikipedia.org/wiki/Web_service)
-* OData
+* [OData](http://www.odata.org/)
 * [JSONP](https://en.wikipedia.org/wiki/JSONP) (or [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing))
 ...
 
-All the above concepts rely on a single layer to convery the message between the UI and the engine: the HTTP layer.
-
-When the two communicate, the HTTP layer is : it abstracts the
-HTTP offers [connectivity](https://en.wikipedia.org/wiki/Internet_access)
-and [Interoperability](https://en.wikipedia.org/wiki/Interoperability) with virtually all systems of the internet.
-
 ### Evolution of HTTP requests in browsers
 
-Before [AJAX](https://en.wikipedia.org/wiki/Ajax_%28programming%29) requests, web pages had to be fully refreshed to
-reflect any change of the server state. From a user experience point of view, it was OK (mostly because we had no other
-models) but this prevented the development of SPA.
+[Web browsers](https://en.wikipedia.org/wiki/Web_browser) were the first applications implementing this protocol to
+access the [World Wide Web](https://en.wikipedia.org/wiki/World_Wide_Web).
 
-Then AJAX appeared and this deeply modified the way web pages were developped: they were faster, crisper ..
+Before [AJAX](https://en.wikipedia.org/wiki/Ajax_%28programming%29) was conceptualized, web pages had to be fully
+refreshed from the server to reflect any change. From a user experience point of view, it was OK (mostly because we had
+no other choices) but this limited the development of advanced user interfaces.
 
-The only problem was that each browser offered different way of doing those AJAX requests.
+Then AJAX introduced new ways to design web pages: only the new information could be fetched from the server without
+reloading the page. As a consequence, the pages were faster, crisper and fully asynchronous.
 
-jQuery was initially designed to offer APIs that would work the same way on any browser.
-Today, most modern libraries are focusing on one environment only. Otherwise, they deliver feature that work both in
-    browsers and NodeJS.
-In my case, I added three additional hosts: PhantomJS, WScript and Rhino.
+However, each browser had different implementations of AJAX requests (not mentioning DOM, event handling and other
+incompatibilities). And that's why [jQuery](https://jquery.com/), which was initially designed to offer an APIs that
+would work identically on any browser, became so popular.
+
+Today, the situation has changed: almost all browsers are implementing the same APIs and, consequently, modern
+libraries are considering browsers to be one environment only.
+
+### GPF-JS
+
+[GPF-JS](https://www.npmjs.com/package/gpf-js) obviously supports browsers and it clearly leverages AJAX requests to
+implement HTTP requests. But the library is also compatible with [NodeJS](http://nodejs.org/) as well as other - less
+common - command line hosts:
+* [PhantomJS](http://phantomjs.org/)
+* [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx)
+* [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino)
+
+In order to design only one API that is compatible with all these hosts, I had to deal with each host specific tools.
 
 ## How to test HTTP request
 
