@@ -26,13 +26,13 @@
 
 In a world of [interoperability](https://en.wikipedia.org/wiki/Interoperability),
 [internet of things](https://en.wikipedia.org/wiki/Internet_of_things) and
-[microservices](https://en.wikipedia.org/wiki/Microservices), the - old -
+[microservices](https://en.wikipedia.org/wiki/Microservices), the - almost 30 years old -
 [HTTP protocol](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) defines a communication medium that is widely
 known and implemented.
 
 Originally designed for human-to-machine communication, this protocol also supports machine-to-machine communication
 through standardized concepts and interfaces:
-* Representational state transfer ([REST](https://en.wikipedia.org/wiki/Representational_state_transfer)) APIs
+* Representational state transfer APIs ([REST](https://en.wikipedia.org/wiki/Representational_state_transfer))
 * [Web services](https://en.wikipedia.org/wiki/Web_service)
 * [OData](http://www.odata.org/)
 * [JSONP](https://en.wikipedia.org/wiki/JSONP) (or [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing))
@@ -45,14 +45,14 @@ access the [World Wide Web](https://en.wikipedia.org/wiki/World_Wide_Web).
 
 Before [AJAX](https://en.wikipedia.org/wiki/Ajax_%28programming%29) was conceptualized, web pages had to be fully
 refreshed from the server to reflect any change. From a user experience point of view, it was OK (mostly because we had
-no other choices) but this limited the development of advanced user interfaces.
+no other choices) but this limited the development of user interfaces.
 
 Then AJAX introduced new ways to design web pages: only the new information could be fetched from the server without
 reloading the page. As a consequence, the pages were faster, crisper and fully asynchronous.
 
-However, each browser had different implementations of AJAX requests (not mentioning DOM, event handling and other
-incompatibilities). And that's why [jQuery](https://jquery.com/), which was initially designed to offer an APIs that
-would work identically on any browser, became so popular.
+However, each browser had its own implementation of AJAX requests (not mentioning DOM, event handling and other
+incompatibilities). And that's why [jQuery](https://jquery.com/), which was initially designed to offer a uniform API
+that would work identically on any browser, became so popular.
 
 Today, the situation has changed: almost all browsers are implementing the same APIs and, consequently, modern
 libraries are considering browsers to be one environment only.
@@ -74,30 +74,32 @@ When you follow the [TDD practice](https://en.wikipedia.org/wiki/Test-driven_dev
 writing any line of production code. But in that case, the first challenge was to figure out how the whole HTTP layer
 could be tested. [Mocking](https://en.wikipedia.org/wiki/Mock_object) was not an option.
 
-The project itself heavily relies on the [grunt connect](https://github.com/gruntjs/grunt-contrib-connect) task to
-deliver the dashboard: a place where you can access all the tools (source list, tests, documentation...).
+The project development environment heavily relies on the
+[grunt connect](https://github.com/gruntjs/grunt-contrib-connect) task to deliver the dashboard: a place where
+the developer can access all the tools (source list, tests, documentation...).
 
 ![dashboard](https://arnaudbuchholz.github.io/blog/post/Release%200.1.6/homepage.png)
 
-(...) As a lazy developper, I don't need any command line for my development, all the tools are available within the
-dashboard.
+(...) As a lazy developer, I just need one command line for my development (grunt).
+Then all the tools are available within the dashboard.
 
-Some middleware were also plugged to add extra features such as:
+Some middleware are plugged to add extra features such as:
 * [cache](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/cache.js): introduced with
 [version 0.1.7](http://gpf-js.blogspot.ca/2017/03/release-017.html), it is leveraged by the command line used to test
 browsers when [Selenium](http://www.seleniumhq.org/) is not available. It implements a data storing service similar to
 [Redis](https://redis.io/).
 * [fs](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/fs.js): a file access service used
-to read, create and delete files within the project storage.
+to read, create and delete files within the project storage. For instance, it is used by the browser test page to save
+the coverage information.
 * [grunt](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/grunt.js): a wrapper used to
 generate and format the log of grunt tasks.
 
-Based on this experience, I thought of another extension: the
+Based on this experience, it became obvious that the project needed another extension: the
 [echo](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/echo.js) service.
 It basically accepts any HTTP request and the response either reflects the request details or can be modified through
 URL parameters.
 
-Then, [POSTMAN](https://www.getpostman.com/) was used to test the tool that will be used to test the HTTP layer...
+[POSTMAN](https://www.getpostman.com/) was used to test the tool that will be used to test the HTTP layer...
 
 ![GET](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/echo%20test%20GET.png)
 
@@ -108,16 +110,38 @@ echo%20test%20GET%20500.png)
 
 ## One API to rule them all
 
-Request
-* verb
-* URL
-* headers
-* data (for POST and PUT)
+Now that the HTTP layer can be tested, the API must be designed to write the tests.
 
-Response
-* statusCode
-* headers
-* responseText
+An HTTP request starts with some parameters:
+* The [Uniform Resource Locator](https://en.wikipedia.org/wiki/URL) which determines the web address you want to send
+the request to
+* The [request method](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods) (also known as verb)
+which specifies the kind of action you want to execute
+* An optional list of [header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields)
+* The request body (data), mostly used for POST and PUT actions.
+
+Even if the library supports the concept of
+[streams](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IWritableStream.html), most of the expected use
+cases imply sending an envelop that is already built (text, JSON, XML...). Also, JavaScript (in general) is not good at
+handling binary data, hence a simple string is expected as a request body.
+
+This leads to the definition of the
+[httpRequestSettings](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.typedef.html#.httpRequestSettings) type.
+
+On completion, the server sends back a response composed of:
+* A [status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+* Response headers
+* Response body
+
+Regarding the response body, we could also use a
+[readable stream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IReadableStream.html). But, for the same
+reasons, a simple string containing the whole response text will be returned.
+
+This leads to the definition of the
+[httpRequestResponse](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.typedef.html#.httpRequestResponse) type.
+
+(...) If needed, the API may evolve later to introduce the possibility to use streams.
+
 
 Asynchronous API => Promises
 
