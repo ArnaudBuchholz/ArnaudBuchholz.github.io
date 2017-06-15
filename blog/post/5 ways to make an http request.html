@@ -112,6 +112,8 @@ echo%20test%20GET%20500.png)
 
 Now that the HTTP layer can be tested, the API must be designed to write the tests.
 
+### Input
+
 An HTTP request starts with some parameters:
 * The [Uniform Resource Locator](https://en.wikipedia.org/wiki/URL) which determines the web address you want to send
 the request to
@@ -128,6 +130,8 @@ handling binary data, hence a simple string is expected as a request body.
 This leads to the definition of the
 [httpRequestSettings](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.typedef.html#.httpRequestSettings) type.
 
+### Output
+
 On completion, the server sends back a response composed of:
 * A [status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
 * Response headers
@@ -142,10 +146,27 @@ This leads to the definition of the
 
 (...) If needed, the API may evolve later to introduce the possibility to use streams.
 
+### Waiting for the completion
 
-Asynchronous API => Promises
+An HTTP request is asynchronous. To avoid the [callback hell](http://callbackhell.com/), a
+[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) is used to
+represent the eventual completion of the request.
 
-Shortcut to write simple requests
+This leads to the definition of the
+[gpf.http.request](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.request) API.
+
+### Shortcuts
+
+For simple requests such as a GET with no specific header, the API must be easy to use.
+Shortcuts are defined to shorten the call, for instance:
+
+`
+gpf.http.get(baseUrl).then(function (response) {
+    process(response.responseText);
+}, handleError);
+`
+
+See [complete documentation](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html).
 
 ## Handling different environments
 
