@@ -106,11 +106,41 @@ echo%20test%20GET%20500.png)
 
 ![POST](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/echo%20test%20POST.png)
 
-    ## The different environments
+## One API to rule them all
 
-The GPF-JS library is a project I started almost three years ago. Initially, it was a playground to learn how a big
-JS project
-Project architecture & coverage information
+Request
+* verb
+* URL
+* headers
+* data (for POST and PUT)
+
+Response
+* statusCode
+* headers
+* responseText
+
+Asynchronous API => Promises
+
+Shortcut to write simple requests
+
+## Handling different environments
+
+Switch mechanism using a dictionary of request implementation
+(promise encapsulation)
+
+### Browsers
+
+AJAX request
+=> network communication is handled by the browser
+=> callback is triggered only when the engine is free
+
+Rely on the [XmlHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) object.
+
+new XmlHttpRequest()
+
+Building helpers _gpfHttpGenSetHeaders / _gpfHttpGenSend
+
+
 
 ### NodeJS
 
@@ -120,20 +150,13 @@ In particular, it comes with the [http feature](https://nodejs.org/api/http.html
 Using the [http.request](https://nodejs.org/api/http.html#http_http_request_options_callback) method, you can allocate
 an [http.ClientRequest](https://nodejs.org/api/http.html#http_class_http_clientrequest).
 
-### Browsers
+URL parsing
 
-AJAX request
-    => network communication is handled by the browser
-    => callback is triggered only when the engine is free
+Sending data with Content-Length
+Don't use end (texT)
 
-Older browsers had different ways to trigger requests. This is where jQuery became so usefull by encapsulating browser
-differences inside a single API.
+Response body reading through a stream
 
-Most recent browsers offer the [XmlHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) object.
-
-new XmlHttpRequest()
-
-Building helpers _gpfHttpGenSetHeaders / _gpfHttpGenSend
 
 ### WScript
 
@@ -141,7 +164,8 @@ WScript offers the possibility to reuse [COM components](https://en.wikipedia.or
 In particular, the
 [WinHttp.WinHttpRequest.5.1](https://msdn.microsoft.com/en-us/library/windows/desktop/aa384106%28v=vs.85%29.aspx)
 
-However, the object offers synchronous methods.
+However, the object offers synchronous methods. => Asynchronous is mocked through the setTimeout polyfill
+    => Requires a timer loop
 
 Helpers could be used but does not support bind (had to change the way helper is built)
 
@@ -150,6 +174,10 @@ Helpers could be used but does not support bind (had to change the way helper is
 One of the most challenging implementation because it relies on JAVA API.
 
 JAVA + Streams
+
+Stream to send
+Stream to read
+
 
 new java.net.URL(request.url).openConnection();
 
