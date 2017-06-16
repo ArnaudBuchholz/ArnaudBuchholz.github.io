@@ -116,27 +116,38 @@ Now that the HTTP layer can be tested, the API must be designed to write the tes
 
 An HTTP request starts with some parameters:
 * The [Uniform Resource Locator](https://en.wikipedia.org/wiki/URL) which determines the web address you want to send
-the request to
-* The [request method](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods) (also known as verb)
-which specifies the kind of action you want to execute
-* An optional list of [header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields)
-* The request body (data), mostly used for POST and PUT actions.
+the request to. There are several ways to specify this location: NodeJS offers an
+[URL class](https://nodejs.org/api/url.html#url_class_url) which exposes the different parts of it (host, port ...).
+However, the simplest representation remains the one everybody is used to: the string you can read inside the browser
+location bar.
 
+* The [request method](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods) (also known as verb)
+which specifies the kind of action you want to execute.
+
+* An optional list of [header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields). The simplest way to
+provide this list is to use a key/value dictionary, meaning an
+[object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object).
+
+* The [request body](https://en.wikipedia.org/wiki/HTTP_message_body) (data), mostly used for POST and PUT actions.
 Even if the library supports the concept of
 [streams](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IWritableStream.html), most of the expected use
-cases imply sending an envelop that is already built (text, JSON, XML...). Also, JavaScript (in general) is not good at
-handling binary data, hence a simple string is expected as a request body.
+cases imply sending an envelop that is synchronously built (text, JSON, XML...). Also, JavaScript (in general) is not
+good at handling binary data, hence a simple string is expected as a request body.
 
 This leads to the definition of the
 [httpRequestSettings](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.typedef.html#.httpRequestSettings) type.
 
 ### Output
 
-On completion, the server sends back a response composed of:
-* A [status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
-* Response headers
-* Response body
+On completion, the server sends back a [response](https://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html) composed of:
+* A [status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) that provides feedback about how the server
+processed the request. Typically, 200 means everything went well. On the contrary, 4xx messages signal an error.
 
+* A list of response headers. For instance, this is how [cookies](https://en.wikipedia.org/wiki/HTTP_cookie) are
+transmitted by the server to the client (and, by the way, they are also sent back by the client to the server
+through headers).
+
+* The response body: depending on what has been requested, the response will contain the answer.
 Regarding the response body, we could also use a
 [readable stream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IReadableStream.html). But, for the same
 reasons, a simple string containing the whole response text will be returned.
@@ -148,12 +159,19 @@ This leads to the definition of the
 
 ### Waiting for the completion
 
-An HTTP request is asynchronous. To avoid the [callback hell](http://callbackhell.com/), a
+An HTTP request is asynchronous, hence the client has to wait for the server to answer.
+To avoid the [callback hell](http://callbackhell.com/), a
 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) is used to
 represent the eventual completion of the request.
 
 This leads to the definition of the
 [gpf.http.request](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.request) API.
+
+The promise is
+[resolved](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve) when the
+server answered, whatever the status code
+(including [500](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500)). The only way the promise would be rejected is when something wrong happened
+during communication.
 
 ### Shortcuts
 
@@ -166,7 +184,7 @@ gpf.http.get(baseUrl).then(function (response) {
 }, handleError);
 `
 
-See [complete documentation](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html).
+See the [documentation](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html).
 
 ## Handling different environments
 
