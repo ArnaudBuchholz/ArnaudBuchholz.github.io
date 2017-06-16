@@ -188,8 +188,24 @@ See the [documentation](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.
 
 ## Handling different environments
 
-Switch mechanism using a dictionary of request implementation
-(promise encapsulation)
+Inside the library, there are almost as many implementations as there are supported hosts.
+This will be detailed right after. Starting from that fact, there are basically several ways to call the proper
+implementation depending on the host:
+
+* Inside the request API, create an if / else condition that tests every possibility
+* Have one global variable receiving the proper implementation, using an if / else condition...
+* Create a dictionary that index all implementations per host
+
+My preference goes to the last choice for several reasons:
+* It is simpler to manipulate a dictionary to dynamically declare a new host or even update an existing implementation.
+Indeed, we could imaging a plugin mechanism that would change the way requests are working by replacing the default
+handler.
+* if / else conditions generates cyclomatic complexity: they are useless when used to compare a variable (here the
+current host) with a list of predefined values (the list of host names).
+
+As a consequence, the internal library variable
+[_gpfHttpRequestImplByHost](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http.js#L48-L67) contains all
+implementations indexed by host name. The request API calls the proper one by fetching the implementation at runtime.
 
 ### Browsers
 
