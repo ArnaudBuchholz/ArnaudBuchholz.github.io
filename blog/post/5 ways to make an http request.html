@@ -189,17 +189,53 @@ See the [documentation](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.
 ## Handling different environments
 
 Inside the library, there are almost as many implementations as there are supported hosts.
-This will be detailed right after. Starting from that fact, there are basically several ways to call the proper
-implementation depending on the host:
+Each one is inside a self-titled file below the
+[http source folder](https://github.com/ArnaudBuchholz/gpf-js/tree/master/src/http).
+This will be detailed right after.
+
+Consequently, there are basically many ways to call the proper implementation depending on the host:
 
 * Inside the request API, create an if / else condition that tests every possibility
-* Have one global variable receiving the proper implementation, using an if / else condition...
+`gpf.http.request = function (/*...*/) {
+    if (_GPF_HOST.NODEJS === _gpfHost) {
+        // call NodeJS implementation
+    } else if (_GPF_HOST.BROWSER === _gpfHost) {
+        // call Browser implementation
+    } else /* ... */
+};`
+
+* Have a global variable receiving the proper implementation, using an if condition inside each implementation file
+`// Inside src/host/nodejs.js
+if (_GPF_HOST.NODEJS === _gpfHost) {
+    _gpfHttpRequestImpl = function (/*...*/) {
+        /* ... NodeJS implementation ... */
+    };
+}
+
+// Inside src/http.js
+gpf.http.request = function (/*...*/) {
+    _gpfHttpRequestImpl(/*...*/);
+};`
+
 * Create a dictionary that index all implementations per host
+`// Inside src/host/nodejs.js
+_gpfHttpRequestImplByHost[_GPF_HOST.NODEJS] = function () {
+    /* ... NodeJS implementation ... */
+};
+
+// Inside src/http.js
+gpf.http.request = function (/*...*/) {
+    _gpfHttpRequestImplByHost[_gpfHost](/*...*/);
+};`
+
 
 My preference goes to the last choice for several reasons:
+* In terms of [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity), the less if the better.
+
 * It is simpler to manipulate a dictionary to dynamically declare a new host or even update an existing implementation.
 Indeed, we could imaging a plugin mechanism that would change the way requests are working by replacing the default
 handler.
+
 * if / else conditions generates cyclomatic complexity: they are useless when used to compare a variable (here the
 current host) with a list of predefined values (the list of host names).
 
