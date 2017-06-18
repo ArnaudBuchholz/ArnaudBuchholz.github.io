@@ -230,14 +230,13 @@ gpf.http.request = function (/*...*/) {
 
 
 My preference goes to the last choice for several reasons:
-* In terms of [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity), the less if the better.
+* if / else conditions generates [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity).
+In general, the less if the better. For that particular case, they are useless because used to compare a variable (here
+the current host) with a list of predefined values (the list of host names). A dictionary is more efficient.
 
 * It is simpler to manipulate a dictionary to dynamically declare a new host or even update an existing implementation.
 Indeed, we could imaging a plugin mechanism that would change the way requests are working by replacing the default
 handler.
-
-* if / else conditions generates cyclomatic complexity: they are useless when used to compare a variable (here the
-current host) with a list of predefined values (the list of host names).
 
 As a consequence, the internal library variable
 [_gpfHttpRequestImplByHost](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http.js#L48-L67) contains all
