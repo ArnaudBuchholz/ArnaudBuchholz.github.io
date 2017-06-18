@@ -239,20 +239,29 @@ Indeed, we could imaging a plugin mechanism that would change the way requests a
 handler.
 
 As a consequence, the internal library variable
-[_gpfHttpRequestImplByHost](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http.js#L48-L67) contains all
+[_gpfHttpRequestImplByHost](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/src/http.js#L48-L67) contains all
 implementations indexed by host name. The request API calls the proper one by fetching the implementation at runtime.
 
 ### Browsers
 
-AJAX request
-=> network communication is handled by the browser
-=> callback is triggered only when the engine is free
+As explained in the introduction, browsers provide AJAX requests. It relies on the
+[XmlHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) object.
 
-Rely on the [XmlHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) object.
+In terms of processing, it is interesting to note that, once triggered from JavaScript, the network communication is
+fully handled by the browser: it does not require the JavaScript engine. This means that the page may execute some code
+while the request is being sent to the server. However, to be able to process the response (i.e. the callback),
+the JavaScript engine must be idle.
 
-new XmlHttpRequest()
+![Test preview](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/browser.png)
 
-Building helpers _gpfHttpGenSetHeaders / _gpfHttpGenSend
+Host implementation is done inside
+[src/http/xhr.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/xhr.js).
+
+Two helpers are defined inside
+[src/http/helpers.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/helpers.js):
+* [_gpfHttpGenSetHeaders](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/src/http/helpers.js#L31-L47)
+* [_gpfHttpGenSend](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/src/http/helpers.js#L49-L65)
+
 
 
 
