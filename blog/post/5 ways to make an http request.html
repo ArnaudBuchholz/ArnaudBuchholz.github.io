@@ -249,6 +249,7 @@ As explained in the introduction, browsers implement AJAX requests. This is poss
 
 If needed, you will find many examples on the web on
 [how to use it](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest).
+Long story short, you can trigger a simple AJAX request in 5 lines of code.
 
 In terms of processing, it is interesting to note that, once triggered from JavaScript, the network communication is
 fully handled by the browser: it does not require the JavaScript engine. This means that the page may execute some code
@@ -271,26 +272,36 @@ specialized versions capable of calling host specific methods.
 
 ### NodeJS
 
-Besides being a JavaScript host, NodeJS offers a complete set of API for the most common tasks.
+Besides being a JavaScript host, [NodeJS](https://nodejs.org/) comes with a complete
+[set of API](https://nodejs.org/en/docs/) for a wide variety of tasks.
 Specifically, it comes with the [http feature](https://nodejs.org/api/http.html#http_http).
+
+But unlike AJAX requests, triggering an HTTP requests requires more effort than in a browser.
 
 The [http.request](https://nodejs.org/api/http.html#http_http_request_options_callback) method allocates
 an [http.ClientRequest](https://nodejs.org/api/http.html#http_class_http_clientrequest).
 However, it expects a structure that details the web address.
 That's why the
-[URL parsing API](https://nodejs.org/api/url.html#url_url_parse_urlstring_parsequerystring_slashesdenotehost) is used.
+[URL parsing API](https://nodejs.org/api/url.html#url_url_parse_urlstring_parsequerystring_slashesdenotehost) is needed.
 
-The clientRequest exposes API to write data. However, if the request headers are not set appropriately, NodeJS generates
-the error HPE_UNEXPECTED_CONTENT_LENGTH. So, when data is specified, the list of request headers is modified to
-pass the proper Content-Length.
+The clientRequest object is also a [writable stream](https://nodejs.org/api/stream.html#stream_class_stream_writable)
+and it exposes the method to push data over the connection. Things being done at the lowest level, you are
+responsible of ensuring the consistency of the request details. Indeed, it is mandatory to set the request headers
+properly. For instance, forgetting the
+[Content-Length specification](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length) on a PUSH or
+a PUT will lead to the HPE_UNEXPECTED_CONTENT_LENGTH error.
+The library is taking care of that part.
 
-The response body is readable through a NodeJS stream. Fortunately, GPF-JS provides a generic stream reader and it
-deserializes the content inside a string (using _gpfStringFromStream).
+The same way, the response body is a [readable stream](https://nodejs.org/api/stream.html#stream_class_stream_readable).
+Fortunately, GPF-JS provides a
+[NodeJS-specific stream reader](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/stream/nodejs.js#L103-L158) and
+it deserializes the content inside a string
+using [_gpfStringFromStream](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/string/fromStream.js).
 
 ![Test preview](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/nodejs.png)
 
 NodeJS implementation is done inside
-[src/http/xhr.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/nodejs.js).
+[src/http/nodejs.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/nodejs.js).
 
 ### WScript
 
