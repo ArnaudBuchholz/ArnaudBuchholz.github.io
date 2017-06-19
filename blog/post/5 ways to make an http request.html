@@ -48,7 +48,7 @@ refreshed from the server to reflect any change. From a user experience point of
 no other choices) but this limited the development of user interfaces.
 
 Then AJAX introduced new ways to design web pages: only the new information could be fetched from the server without
-reloading the page. As a consequence, the pages were faster, crisper and fully asynchronous.
+reloading the page. Therefore, the pages were faster, crisper and fully asynchronous.
 
 However, each browser had its own implementation of AJAX requests (not mentioning DOM, event handling and other
 incompatibilities). And that's why [jQuery](https://jquery.com/), which was initially designed to offer a uniform API
@@ -66,7 +66,7 @@ common - command line hosts:
 * [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx)
 * [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino)
 
-In order to design only one API that is compatible with all these hosts, I had to deal with each host specific tools.
+To design only one API that is compatible with all these hosts, I had to deal with each host specific tools.
 
 ## How to test HTTP request
 
@@ -83,10 +83,10 @@ the developer can access all the tools (source list, tests, documentation...).
 (...) As a lazy developer, I just need one command line for my development (grunt).
 Then all the tools are available within the dashboard.
 
-Some middleware are plugged to add extra features such as:
+Some middleware is plugged to add extra features such as:
 * [cache](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/cache.js): introduced with
 [version 0.1.7](http://gpf-js.blogspot.ca/2017/03/release-017.html), it is leveraged by the command line used to test
-browsers when [Selenium](http://www.seleniumhq.org/) is not available. It implements a data storing service similar to
+browsers when [Selenium](http://www.seleniumhq.org/) is not available. It implements a data storing service like
 [Redis](https://redis.io/).
 * [fs](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/fs.js): a file access service used
 to read, create and delete files within the project storage. For instance, it is used by the browser test page to save
@@ -131,7 +131,7 @@ provide this list is to use a key/value dictionary, meaning an
 * The [request body](https://en.wikipedia.org/wiki/HTTP_message_body) (data), mostly used for POST and PUT actions.
 Even if the library supports the concept of
 [streams](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IWritableStream.html), most of the expected use
-cases imply sending an envelop that is synchronously built (text, JSON, XML...). Also, JavaScript (in general) is not
+cases imply sending an envelope that is synchronously built (text, JSON, XML...). Also, JavaScript (in general) is not
 good at handling binary data, hence a simple string is expected as a request body.
 
 This leads to the definition of the
@@ -159,7 +159,7 @@ This leads to the definition of the
 
 ### Waiting for the completion
 
-An HTTP request is asynchronous, hence the client has to wait for the server to answer.
+An HTTP request is asynchronous; hence the client must wait for the server to answer.
 To avoid the [callback hell](http://callbackhell.com/), a
 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) is used to
 represent the eventual completion of the request.
@@ -175,7 +175,7 @@ during communication.
 
 ### Shortcuts
 
-For simple requests such as a GET with no specific header, the API must be easy to use.
+For simple requests, such as a GET with no specific header, the API must be easy to use.
 Shortcuts are defined to shorten the call, for instance:
 
 `
@@ -230,15 +230,15 @@ gpf.http.request = function (/*...*/) {
 
 
 My preference goes to the last choice for the following reasons:
-* if / else conditions generates [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity).
-In general, the less if the better. For that particular case, they are useless because used to compare a variable (here
+* if / else conditions generate [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity).
+In general, the less if the better. For that case, they are useless because used to compare a variable (here
 the current host) with a list of predefined values (the list of host names). A dictionary is more efficient.
 
 * It is simpler to manipulate a dictionary to dynamically declare a new host or even update an existing implementation.
-Indeed, we could imaging a plugin mechanism that would change the way requests are working by replacing the default
+Indeed, we could imagine a plugin mechanism that would change the way requests are working by replacing the default
 handler.
 
-As a consequence, the internal library variable
+Consequently, the internal library variable
 [_gpfHttpRequestImplByHost](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/src/http.js#L48-L67) contains all
 implementations indexed by host name. The request API calls the proper one by fetching the implementation at runtime.
 
@@ -271,8 +271,8 @@ specialized versions capable of calling host specific methods.
 
 ### NodeJS
 
-Beside being a JavaScript host, NodeJS offers a complete set of API for the most common tasks.
-In particular, it comes with the [http feature](https://nodejs.org/api/http.html#http_http).
+Besides being a JavaScript host, NodeJS offers a complete set of API for the most common tasks.
+Specifically, it comes with the [http feature](https://nodejs.org/api/http.html#http_http).
 
 The [http.request](https://nodejs.org/api/http.html#http_http_request_options_callback) method allocates
 an [http.ClientRequest](https://nodejs.org/api/http.html#http_class_http_clientrequest).
@@ -296,7 +296,9 @@ NodeJS implementation is done inside
 
 WScript (or cscript) offers the possibility to
 reuse [COM components](https://en.wikipedia.org/wiki/Component_Object_Model).
-In particular, the
+
+
+, the
 [WinHttp.WinHttpRequest.5.1](https://msdn.microsoft.com/en-us/library/windows/desktop/aa384106%28v=vs.85%29.aspx)
 
 However, the object offers synchronous methods. => Asynchronous is mocked through the setTimeout polyfill
