@@ -305,9 +305,23 @@ NodeJS implementation is done inside
 
 ### WScript
 
-WScript (or cscript) offers the possibility to
-reuse [COM components](https://en.wikipedia.org/wiki/Component_Object_Model).
+WScript is the scripting host available on almost all Microsoft Windows operating systems. It comes in two flavors:
+* **WScript.exe** which is showing outputs in dialog boxes
+* **cscript.exe** which is the command line counter part
 
+This host has a rather old and weird support of the JavaScript features.
+But despite all these troubles, it has one unique advantage over the other hosts: it offers the possibility to
+manipulate [COM components](https://en.wikipedia.org/wiki/Component_Object_Model).
+
+And this gives you access to thousands of features within a script:
+* file access, like in
+[wscript's IFileStorage implementation](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/fs/wscript.js)
+* xml parsers ([DOM and SAX](https://stackoverflow.com/questions/6828703/what-is-the-difference-between-sax-and-dom))
+* office applications (outlook, word, excel...)
+* ...
+
+(...) For instance, few years ago, I created a script capable of reconfiguring a virtual host to fit user
+preferences and make it unique on the network.
 
 , the
 [WinHttp.WinHttpRequest.5.1](https://msdn.microsoft.com/en-us/library/windows/desktop/aa384106%28v=vs.85%29.aspx)
