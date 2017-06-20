@@ -27,8 +27,8 @@
 In a world of [interoperability](https://en.wikipedia.org/wiki/Interoperability),
 [internet of things](https://en.wikipedia.org/wiki/Internet_of_things) and
 [microservices](https://en.wikipedia.org/wiki/Microservices), the - almost 30 years old -
-[HTTP protocol](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) defines a communication medium that is widely
-known and implemented.
+[HTTP protocol](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) defines a communication foundation that is
+widely known and implemented.
 
 Originally designed for human-to-machine communication, this protocol also supports machine-to-machine communication
 through standardized concepts and interfaces:
@@ -43,9 +43,15 @@ through standardized concepts and interfaces:
 [Web browsers](https://en.wikipedia.org/wiki/Web_browser) were the first applications implementing this protocol to
 access the [World Wide Web](https://en.wikipedia.org/wiki/World_Wide_Web).
 
+![Netscape communicator loading screen](http://arnaudbuchholz.github.io/blog/post/
+5%20ways%20to%20make%20an%20http%20request/netscape%20communicator.png)
+
 Before [AJAX](https://en.wikipedia.org/wiki/Ajax_%28programming%29) was conceptualized, web pages had to be fully
 refreshed from the server to reflect any change. From a user experience point of view, it was OK (mostly because we had
 no other choices) but this limited the development of user interfaces.
+
+![I guess](http://arnaudbuchholz.github.io/blog/post/
+5%20ways%20to%20make%20an%20http%20request/I%20guess.jpg)
 
 Then AJAX introduced new ways to design web pages: only the new information could be fetched from the server without
 reloading the page. Therefore, the pages were faster, crisper and fully asynchronous.
@@ -53,6 +59,9 @@ reloading the page. Therefore, the pages were faster, crisper and fully asynchro
 However, each browser had its own implementation of AJAX requests (not mentioning DOM, event handling and other
 incompatibilities). And that's why [jQuery](https://jquery.com/), which was initially designed to offer a uniform API
 that would work identically on any browser, became so popular.
+
+![jQuery everywhere](http://arnaudbuchholz.github.io/blog/post/
+5%20ways%20to%20make%20an%20http%20request/jQuery%20everywhere.jpg)
 
 Today, the situation has changed: almost all browsers are implementing the same APIs and, consequently, modern
 libraries are considering browsers to be one environment only.
@@ -62,9 +71,9 @@ libraries are considering browsers to be one environment only.
 [GPF-JS](https://www.npmjs.com/package/gpf-js) obviously supports browsers and it clearly leverages AJAX requests to
 implement HTTP requests. But the library is also compatible with [NodeJS](http://nodejs.org/) as well as other - less
 common - command line hosts:
-* [PhantomJS](http://phantomjs.org/)
 * [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx)
 * [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino)
+* [PhantomJS](http://phantomjs.org/)
 
 To design only one API that is compatible with all these hosts, I had to deal with each host specific tools.
 
@@ -347,39 +356,47 @@ Wscript implementation is done inside
 ### Rhino
 
 [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino) is probably one of the most challenging - and
-fun - environment because it relies on JAVA... and I don't have much experience with JAVA.
-I mean, I know the syntax and I am able to read JAVA code but I never used any libraries.
+fun - environment because it is based on [java](https://docs.oracle.com/javase/7/docs/api/)... and I don't have much
+experience with it. I mean, I know the syntax, some concepts and I am able to read the code but I never used any
+libraries.
 
-What is beautiful with Rhino is that it is a JavaScript engine implemented in JAVA. This means that you have access to
-JAVA classes within the JavaScript code.
+The fascinating aspect of Rhino comes from the tight integration between the two languages. Indeed, the JavaScript
+engine is implemented in java and you can access any java class from JavaScript.
+In terms of language support, it is almost the same than WScript: no timers and written on an old specification.
+Here again, the polyfills are taking care of levelling the environment up.
 
-JAVA + Streams
+To implement HTTP requests, one have to figure out which part of the java platform would be used. After doing some
+investigations (thanks [Google](http://lmgtfy.com/?q=java+http+request)), the solution appeared to be the
+[java.net.URL](https://docs.oracle.com/javase/7/docs/api/index.html?java/net/URL.html) class.
 
-Stream to send
-Stream to read
+Like NodeJS, java streams are used to send or receive data over the connection. Likewise, the library offers
+[rhino-specific streams implementation](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/stream/rhino.js).
 
+(...) Stream reading works by consuming bytes. To read text, a
+[java.util.Scanner](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/src/stream/rhino.js#L93-L94) instance is used.
 
-new java.net.URL(request.url).openConnection();
-
-If a status code 5 comes back from the server, the response stream differs.
-This is handled specifically as the API has to succeed no matter what
+Surprisingly, if the status code is in the 5xx range, then
+[getting the response stream](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/src/http/rhino.js#L32-L38) will fail
+and you have to go with the error stream.
 
 ![Test preview](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/rhino.png)
 
 Rhino implementation is done inside
-[src/http/xhr.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/nodejs.js).
+[src/http/rhino.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/rhino.js).
 
 ### PhantomJS
 
-To put it in a nutshell, [PhantomJS](http://phantomjs.org/) is a command line simulating a browser...
-I sometimes struggles with PhantomJS to decide if it
-XHR + Security option
+To put it in a nutshell, [PhantomJS](http://phantomjs.org/) is a command line simulating a browser... So the
+XmlHttpRequest object can be used too.
+
+However, this object is also subject to security concerns. You are not allowed to request a server that is not the
+one being opened. Hence, if you use PhantomJS to script outside of a document coming from a website, all requests will
+be blocked. That's why a security parameter is added to the command line to remove this limitation.
 
 ![Test preview](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/phantomjs.png)
 
 PhantomJS implementation is done inside
 [src/http/xhr.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/xhr.js).
-
 
 </code>
 <!-- Drop those two lines -->
