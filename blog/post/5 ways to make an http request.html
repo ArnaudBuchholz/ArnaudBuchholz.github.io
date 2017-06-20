@@ -256,10 +256,12 @@ implementations indexed by host name. The request API calls the proper one by fe
 
 ### Browsers
 
-As explained in the introduction, browsers have AJAX requests. This is possible through the
+As explained in the introduction, browsers offer AJAX requests. This is possible through the
 [XmlHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) JavaScript class.
 
-    !!!!SECURITY WARNING!!!!
+(...) There is one major restriction when dealing with AJAX requests. You are mainly limited to the server you are
+currently browsing. If you try to access a different server (or even a different port on the same server), then you are
+entering the realm of [cross-origin requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
 
 If needed, you will find many examples on the web on
 [how to use it](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest).
