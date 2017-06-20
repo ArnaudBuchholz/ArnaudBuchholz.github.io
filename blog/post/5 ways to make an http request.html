@@ -256,7 +256,7 @@ implementations indexed by host name. The request API calls the proper one by fe
 
 ### Browsers
 
-As explained in the introduction, browsers offer AJAX requests. This is possible through the
+As explained in the introduction, browsers offer AJAX requests to make HTTP Requests. This is possible through the
 [XmlHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) JavaScript class.
 
 (...) There is one major restriction when dealing with AJAX requests. You are mainly limited to the server you are
@@ -277,12 +277,12 @@ However, to be able to process the result (i.e. trigger the callback), the JavaS
 Browser implementation is done inside
 [src/http/xhr.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/xhr.js).
 
-Two helpers are defined inside
+Two external helpers are defined inside
 [src/http/helpers.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/helpers.js):
 * [_gpfHttpGenSetHeaders](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/src/http/helpers.js#L31-L47)
 * [_gpfHttpGenSend](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.1/src/http/helpers.js#L49-L65)
 
-Setting the request headers and sending request data is almost done the same way for three hosts.
+Setting the request headers and sending request data are almost done the same way for three hosts.
 To avoid [code duplication](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), those two functions generates
 specialized versions capable of calling host specific methods.
 
