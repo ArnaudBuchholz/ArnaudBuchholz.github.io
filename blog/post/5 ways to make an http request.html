@@ -69,14 +69,15 @@ libraries are considering browsers to be one environment only.
 
 ### GPF-JS
 
-[GPF-JS](https://www.npmjs.com/package/gpf-js) obviously supports browsers and it clearly leverages AJAX requests to
-implement HTTP requests. But the library is also compatible with [NodeJS](http://nodejs.org/) as well as other - less
-common - command line hosts:
+[GPF-JS](https://www.npmjs.com/package/gpf-js) obviously supports browsers and it leverages AJAX requests to implement
+HTTP requests in this environment.
+But the library is also compatible with [NodeJS](http://nodejs.org/) as well as other - less common - command line
+hosts:
 * [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx)
 * [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino)
 * [PhantomJS](http://phantomjs.org/)
 
-To design only one API that is compatible with all these hosts, I had to deal with each host specificities.
+Designing only one API that is compatible with all these hosts means to deal with each host specificities.
 
 ## How to test HTTP request
 
@@ -267,9 +268,10 @@ If needed, you will find many examples on the web on
 [how to use it](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest).
 Long story short, you can trigger a simple AJAX request in 5 lines of code.
 
-In terms of processing, it is interesting to note that, once triggered from JavaScript, the network communication is
-fully handled by the browser: it does not require the JavaScript engine. This means that the page may execute some code
-while the request is being transmitted to the server as well as while waiting for the response.
+In terms of processing, it is interesting to note that, once triggered from the JavaScript code, the network
+communication is fully handled by the browser: it does not require the JavaScript engine.
+This means that the page may execute some code while the request is being transmitted to the server as well as while
+waiting for the response.
 However, to be able to process the result (i.e. trigger the callback), the JavaScript engine must be idle.
 
 ![Test preview](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/browser.png)
@@ -363,14 +365,12 @@ Wscript implementation is done inside
 ### Rhino
 
 [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino) is probably one of the most challenging - and
-fun - environment because it is based on [java](https://docs.oracle.com/javase/7/docs/api/)... and I don't have much
-experience with it. I mean, I know the syntax, some concepts and I am able to read the code but I never used any
-libraries.
+fun - environment because it is based on [java](https://docs.oracle.com/javase/7/docs/api/).
 
 The fascinating aspect of Rhino comes from the tight integration between the two languages. Indeed, the JavaScript
 engine is implemented in java and you can access any java class from JavaScript.
-In terms of language support, it is almost the same than WScript: no timers and written on an old specification.
-Here again, the polyfills are taking care of levelling the environment up.
+In terms of language support, it is almost the same than WScript: no timers and written on a relatively old
+specification. Here again, the polyfills are taking care of filling the blanks.
 
 To implement HTTP requests, one have to figure out which part of the java platform would be used. After doing some
 investigations (thanks [Google](http://lmgtfy.com/?q=java+http+request)), the solution appeared to be the
@@ -393,12 +393,26 @@ Rhino implementation is done inside
 
 ### PhantomJS
 
-To put it in a nutshell, [PhantomJS](http://phantomjs.org/) is a command line simulating a browser... So the
-XmlHttpRequest object can be used too.
+To put it in a nutshell, [PhantomJS](http://phantomjs.org/) is a command line simulating a browser. It is mainly used
+to script access to web sites and it is the perfect tool for
+[test automation](https://en.wikipedia.org/wiki/Test_automation).
 
-However, this object is also subject to security concerns. You are not allowed to request a server that is not the
-one being opened. Hence, if you use PhantomJS to script outside of a document coming from a website, all requests will
-be blocked. That's why a security parameter is added to the command line to remove this limitation.
+But there are basically two styles of PhantomJS scripts:
+* On one hand, it browses a website and simulates what would happen in a browser
+* On the other hand, it is a command line executing some JavaScript code
+
+As a matter of fact, GPF-JS uses those two ways:
+* [mocha](https://github.com/kmiyashiro/grunt-mocha) is used to automate browser testing with PhantomJS
+* a dedicated [command line](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/phantomjs.js) runs the
+test suite without any web page
+
+As a result, in this environment, the XmlHttpRequest JavaScript class is available.
+
+However, like in a browser, this host is also subject to security concerns.
+Hence you are not allowed to request a server that is not the one being opened.
+
+Luckily, you can bypass this constraint using a command line parameter:
+[--web-security=false](http://phantomjs.org/api/command-line.html).
 
 ![Test preview](https://arnaudbuchholz.github.io/blog/post/5%20ways%20to%20make%20an%20http%20request/phantomjs.png)
 
