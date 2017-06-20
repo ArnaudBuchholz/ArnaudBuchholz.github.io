@@ -207,7 +207,7 @@ This will be detailed right after.
 
 Consequently, there are basically many ways to call the proper implementation depending on the host:
 
-* Inside the request API, create an if / else condition that tests every possibility
+* Inside the request API, create an if / else condition that checks every possibility
 `gpf.http.request = function (/*...*/) {
     if (_GPF_HOST.NODEJS === _gpfHost) {
         // call NodeJS implementation
@@ -229,7 +229,7 @@ gpf.http.request = function (/*...*/) {
     _gpfHttpRequestImpl(/*...*/);
 };`
 
-* Create a dictionary that index all implementations per host
+* Create a dictionary indexing all implementations per host and then fetch the proper one on call
 `// Inside src/host/nodejs.js
 _gpfHttpRequestImplByHost[_GPF_HOST.NODEJS] = function () {
     /* ... NodeJS implementation ... */
@@ -243,7 +243,7 @@ gpf.http.request = function (/*...*/) {
 
 My preference goes to the last choice for the following reasons:
 * if / else conditions generate [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity).
-In general, the less if the better. For that case, they are useless because used to compare a variable (here
+In general, the less if the better. In this case, they are useless because used to compare a variable (here
 the current host) with a list of predefined values (the list of host names). A dictionary is more efficient.
 
 * It is simpler to manipulate a dictionary to dynamically declare a new host or even update an existing implementation.
@@ -256,8 +256,10 @@ implementations indexed by host name. The request API calls the proper one by fe
 
 ### Browsers
 
-As explained in the introduction, browsers implement AJAX requests. This is possible through the
+As explained in the introduction, browsers have AJAX requests. This is possible through the
 [XmlHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) JavaScript class.
+
+    !!!!SECURITY WARNING!!!!
 
 If needed, you will find many examples on the web on
 [how to use it](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest).
