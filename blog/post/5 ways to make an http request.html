@@ -56,8 +56,8 @@ no other choices) but this limited the development of user interfaces.
 Then AJAX introduced new ways to design web pages: only the new information could be fetched from the server without
 reloading the page. Therefore, the pages were faster, crisper and fully asynchronous.
 
-However, each browser had its own implementation of AJAX requests (not mentioning DOM, event handling and other
-incompatibilities). And that's why [jQuery](https://jquery.com/), which was initially designed to offer a uniform API
+However, each browser had its own implementation of AJAX requests *(not mentioning DOM, event handling and other
+incompatibilities)*. And that's why [jQuery](https://jquery.com/), which was initially designed to offer a uniform API
 that would work identically on any browser, became so popular.
 
 ![jQuery everywhere](http://arnaudbuchholz.github.io/blog/post/
@@ -75,7 +75,7 @@ common - command line hosts:
 * [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino)
 * [PhantomJS](http://phantomjs.org/)
 
-To design only one API that is compatible with all these hosts, I had to deal with each host specific tools.
+To design only one API that is compatible with all these hosts, I had to deal with each host specificities.
 
 ## How to test HTTP request
 
@@ -397,6 +397,10 @@ be blocked. That's why a security parameter is added to the command line to remo
 
 PhantomJS implementation is done inside
 [src/http/xhr.js](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/http/xhr.js).
+
+## Conclusion
+
+
 
 </code>
 <!-- Drop those two lines -->
