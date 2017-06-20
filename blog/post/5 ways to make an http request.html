@@ -36,7 +36,7 @@ through standardized concepts and interfaces:
 * [Web services](https://en.wikipedia.org/wiki/Web_service)
 * [OData](http://www.odata.org/)
 * [JSONP](https://en.wikipedia.org/wiki/JSONP) (or [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing))
-...
+* ...
 
 ### Evolution of HTTP requests in browsers
 
@@ -47,7 +47,8 @@ access the [World Wide Web](https://en.wikipedia.org/wiki/World_Wide_Web).
 5%20ways%20to%20make%20an%20http%20request/netscape%20communicator.png)
 
 Before [AJAX](https://en.wikipedia.org/wiki/Ajax_%28programming%29) was conceptualized, web pages had to be fully
-refreshed from the server to reflect any change. From a user experience point of view, it was OK (mostly because we had
+refreshed from the server to reflect any change. JavaScript was used for simple client manipulations.
+From a user experience point of view, it was OK (mostly because we had
 no other choices) but this limited the development of user interfaces.
 
 ![I guess](http://arnaudbuchholz.github.io/blog/post/
@@ -98,10 +99,10 @@ Some middleware is plugged to add extra features such as:
 browsers when [Selenium](http://www.seleniumhq.org/) is not available. It implements a data storing service like
 [Redis](https://redis.io/).
 * [fs](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/fs.js): a file access service used
-to read, create and delete files within the project storage. For instance, it is used by the browser test page to save
-the coverage information.
+to read, create and delete files within the project storage. For instance, it is used by the sources tile to check if a
+source has a corresponding test file.
 * [grunt](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/grunt.js): a wrapper used to
-generate and format the log of grunt tasks.
+execute and format the log of grunt tasks.
 
 Based on this experience, it became obvious that the project needed another extension: the
 [echo](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/echo.js) service.
@@ -133,12 +134,13 @@ location bar.
 * The [request method](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods) (also known as verb)
 which specifies the kind of action you want to execute.
 
-* An optional list of [header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields). The simplest way to
-provide this list is to use a key/value dictionary, meaning an
+* An optional list of [header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields) meant to
+configure the request processing *(such as specifying the expected answer type...)*.
+The simplest way to provide this list is to use a key/value dictionary, meaning an
 [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object).
 
-* The [request body](https://en.wikipedia.org/wiki/HTTP_message_body) (data), mostly used for POST and PUT actions.
-Even if the library supports the concept of
+* The [request body](https://en.wikipedia.org/wiki/HTTP_message_body), mostly used for POST and PUT actions, which
+contains that data to upload to the server. Even if the library supports the concept of
 [streams](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IWritableStream.html), most of the expected use
 cases imply sending an envelope that is synchronously built (text, JSON, XML...). Also, JavaScript (in general) is not
 good at handling binary data, hence a simple string is expected as a request body.
@@ -150,14 +152,15 @@ This leads to the definition of the
 
 On completion, the server sends back a [response](https://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html) composed of:
 * A [status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) that provides feedback about how the server
-processed the request. Typically, 200 means everything went well. On the contrary, 4xx messages signal an error.
+processed the request. Typically, 200 means everything went well. On the contrary, 4xx messages signal an error and 500
+is a critical server error.
 
 * A list of response headers. For instance, this is how [cookies](https://en.wikipedia.org/wiki/HTTP_cookie) are
-transmitted by the server to the client (and, by the way, they are also sent back by the client to the server
+transmitted by the server to the client (and, actually, they are also sent back by the client to the server
 through headers).
 
-* The response body: depending on what has been requested, the response will contain the answer.
-Regarding the response body, we could also use a
+* The response body: depending on what has been requested, it will contain the server answer.
+This response could be deserialized using a
 [readable stream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IReadableStream.html). But, for the same
 reasons, a simple string containing the whole response text will be returned.
 
