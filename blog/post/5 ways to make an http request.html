@@ -421,7 +421,24 @@ PhantomJS implementation is done inside
 
 ## Conclusion
 
+If you survived the whole article, congratulations *(and sorry for the broken English)*.
 
+Now you might be wondering...
+
+![What's the point?](http://arnaudbuchholz.github.io/blog/post/
+5%20ways%20to%20make%20an%20http%20request/whats%20the%20point.jpg)
+
+Actually, this kind of challenge satisfies [my curiosity](https://www.linkedin.com/pulse/curious-arnaud-buchholz).
+I learned a lot by implementing this feature and, actually, it was immediately used to greatly [improve the coverage
+measurement](http://gpf-js.blogspot.ca/2017/06/release-021-side-project-support.html).
+
+Indeed, each host is tested with instrumented files and the collected coverage data is serialized to be later consolidated
+and reported on. However, as of today, only two hosts supports file storage: NodeJS and WScript.
+But thanks to the HTTP support, all hosts are
+[sending the coverage data](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/loader.js#L187-L197) to the
+fs middleware so that it generates the file.
+
+[Q.E.D.](https://en.wikipedia.org/wiki/Q.E.D.)
 
 </code>
 <!-- Drop those two lines -->
