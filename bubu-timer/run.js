@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,12 +70,15 @@
 "use strict";
 
 
-var _tag = function _tag(tagName, properties, children) {
+var _tag = function _tag(tagName) {
+    var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var children = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+
     var element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
     Object.keys(properties).forEach(function (name) {
         element.setAttribute(name, properties[name]);
     });
-    [].concat(children || []).map(function (def) {
+    [].concat(children).map(function (def) {
         return typeof def === "string" ? document.createTextNode(def) : def;
     }).forEach(function (node) {
         return element.appendChild(node);
@@ -122,6 +125,100 @@ module.exports = {
 "use strict";
 
 
+if (!Object.assign) {
+    Object.assign = function (target, properties) {
+        Object.keys(properties).forEach(function (propertyName) {
+            target[propertyName] = properties[propertyName];
+        });
+        return target;
+    };
+}
+
+module.exports = true;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var noop = function noop() {};
+
+module.exports = function (setup) {
+
+    window.addEventListener("load", function () {
+        var touchTarget = void 0;
+        var mapping = setup(),
+            defaultHandler = mapping["undefined"] || noop,
+            click = function click(target) {
+            var id = void 0;
+            while (!id && target) {
+                id = target.id;
+                target = target.parentNode;
+            }
+            (mapping[id] || defaultHandler)();
+        };
+
+        window.addEventListener("click", function (e) {
+            return click(e.target);
+        }, false);
+        window.addEventListener("touchstart", function (e) {
+            touchTarget = e.target;
+        }, false);
+        window.addEventListener("touchmove", function () {
+            touchTarget = null;
+        }, false);
+        window.addEventListener("touchend", function () {
+            if (null !== touchTarget) {
+                click(touchTarget);
+                touchTarget = null;
+            }
+        }, false);
+    });
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _get = function _get(id) {
+    return document.getElementById(id);
+},
+    _clear = function _clear(id) {
+    var node = _get(id);
+    var child = node.firstChild,
+        next = void 0;
+    while (child) {
+        next = child.nextSibling;
+        node.removeChild(child);
+        child = next;
+    }
+    return node;
+},
+    _setText = function _setText(id, text) {
+    var node = _clear(id);
+    node.appendChild(document.createTextNode(text));
+    return node;
+};
+
+module.exports = {
+
+    clear: _clear,
+    setText: _setText
+
+};
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var svg = __webpack_require__(0),
     colors = __webpack_require__(1);
 
@@ -130,7 +227,7 @@ module.exports = function () {
 };
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -153,7 +250,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -182,14 +279,14 @@ module.exports = function (tick) {
 };
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(6);
+module.exports = __webpack_require__(9);
 
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -197,17 +294,21 @@ module.exports = __webpack_require__(6);
 
 /*eslint-disable no-alert*/
 
+__webpack_require__(2);
+
 var TOTAL_OUTER = 0.98,
     TOTAL_INNER = 0.88,
     STEP_OUTER = 0.83,
     STEP_INNER = 0.73,
+    browser = __webpack_require__(3),
+    dom = __webpack_require__(4),
     svg = __webpack_require__(0),
     colors = __webpack_require__(1),
-    gradients = __webpack_require__(2),
-    sequenceSerializer = __webpack_require__(3),
-    tickGenerator = __webpack_require__(7),
-    tickConverter = __webpack_require__(8),
-    tickFormatter = __webpack_require__(4),
+    gradients = __webpack_require__(5),
+    sequenceSerializer = __webpack_require__(6),
+    tickGenerator = __webpack_require__(10),
+    tickConverter = __webpack_require__(11),
+    tickFormatter = __webpack_require__(7),
 
 
 // alarm1 = new Audio(require("./res/alarm1.mp3")),
@@ -255,18 +356,18 @@ defaultRequestAnimFrame = function defaultRequestAnimFrame(callback) {
         step = 1 - convertedTick.remaining / currentDuration,
         formattedRemaining = tickFormatter(convertedTick.remaining);
 
-    document.getElementById("time").innerHTML = formattedRemaining.time;
-    document.getElementById("ms").innerHTML = "." + formattedRemaining.ms;
+    dom.setText("time", formattedRemaining.time);
+    dom.setText("ms", "." + formattedRemaining.ms);
 
     if (convertedTick.step < sequence.length) {
         document.getElementById("total").setAttribute("d", getCirclePath(total, TOTAL_OUTER, TOTAL_INNER));
         document.getElementById("step").setAttribute("d", getCirclePath(step, STEP_OUTER, STEP_INNER));
-        document.getElementById("stepOn").innerHTML = convertedTick.step + 1 + " / " + sequence.length;
+        dom.setText("stepOn", convertedTick.step + 1 + " / " + sequence.length);
         requestAnimFrame(ticker.tick.bind(ticker));
     } else {
         document.getElementById("total").setAttribute("d", getCirclePath(0, TOTAL_OUTER, TOTAL_INNER));
         document.getElementById("step").setAttribute("d", getCirclePath(0, STEP_OUTER, STEP_INNER));
-        document.getElementById("stepOn").innerHTML = "done.";
+        dom.setText("stepOn", "done.");
     }
 },
     progressContainer = function progressContainer(_ref) {
@@ -282,7 +383,10 @@ defaultRequestAnimFrame = function defaultRequestAnimFrame(callback) {
         fill: color, stroke: color, "stroke-opacity": 0.2, "stroke-width": 0.01 })];
 },
     setup = function setup() {
-
+    if (0 === sequence.length) {
+        alert("No sequence to play");
+        return {};
+    }
     document.body.appendChild(svg({
         width: "100%",
         height: "100%",
@@ -308,27 +412,18 @@ defaultRequestAnimFrame = function defaultRequestAnimFrame(callback) {
         "font-family": "Arial", "font-size": 0.1, x: 0, y: 0.3, "text-anchor": "middle",
         fill: colors.text.step,
         stroke: "url(#outerBorder)", "stroke-opacity": 0.2, "stroke-width": 0.01 }, "1 / 2")])));
+    ticker.on(onTick);
+    return {
+        "undefined": function undefined() {
+            return ticker.isPaused() ? ticker.resume() : ticker.pause();
+        }
+    };
 };
 
-window.addEventListener("load", function () {
-    if (0 === sequence.length) {
-        alert("No sequence to play");
-    } else {
-        setup();
-        ticker.on(onTick);
-    }
-});
-
-window.addEventListener("click", function () {
-    if (ticker.isPaused()) {
-        ticker.resume();
-    } else {
-        ticker.pause();
-    }
-});
+browser(setup);
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -402,7 +497,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
