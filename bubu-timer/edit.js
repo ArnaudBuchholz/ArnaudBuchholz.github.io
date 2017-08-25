@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -131,6 +131,40 @@ if (!Object.assign) {
             target[propertyName] = properties[propertyName];
         });
         return target;
+    };
+}
+
+function FakeAudio() {}
+
+FakeAudio.prototype.play = function () {};
+
+if ("undefined" === typeof Audio) {
+    window.Audio = FakeAudio;
+}
+
+var video = document.createElement("video");
+if ("function" !== typeof video.play) {
+    var initialCreateElement = document.createElement,
+        fakeVideo = {
+        setAttribute: function setAttribute() {},
+        addEventListener: function addEventListener() {},
+        // Copied from NoSleepJS
+        play: function play() {
+            fakeVideo.pause();
+            fakeVideo.noSleepTimer = window.setInterval(function () {
+                window.location.href = "/";
+                window.setTimeout(window.stop, 0);
+            }, 15000);
+        },
+        pause: function pause() {
+            if (fakeVideo.noSleepTimer) {
+                window.clearInterval(fakeVideo.noSleepTimer);
+                fakeVideo.noSleepTimer = null;
+            }
+        }
+    };
+    document.createElement = function (tagName) {
+        return tagName === "video" ? fakeVideo : initialCreateElement.call(document, tagName);
     };
 }
 
@@ -884,15 +918,14 @@ module.exports = function (tick) {
 /* 17 */,
 /* 18 */,
 /* 19 */,
-/* 20 */,
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(22);
+module.exports = __webpack_require__(21);
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -907,7 +940,7 @@ var browser = __webpack_require__(3),
     svg = __webpack_require__(0),
     colors = __webpack_require__(1),
     gradients = __webpack_require__(10),
-    sequenceEditor = __webpack_require__(23).allocate(),
+    sequenceEditor = __webpack_require__(22).allocate(),
     sequenceSerializer = __webpack_require__(11),
     digitProperties = {
     "font-family": "Arial", "font-size": 0.25, "text-anchor": "middle",
@@ -1001,7 +1034,7 @@ var browser = __webpack_require__(3),
 browser(setup);
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
