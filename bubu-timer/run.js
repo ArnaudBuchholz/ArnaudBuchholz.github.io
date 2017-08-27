@@ -928,6 +928,9 @@ module.exports = __webpack_require__(14);
 
 __webpack_require__(2);
 
+var tickSound = void 0,
+    doneSound = void 0;
+
 var TOTAL_OUTER = 0.98,
     TOTAL_INNER = 0.88,
     STEP_OUTER = 0.83,
@@ -943,8 +946,6 @@ var TOTAL_OUTER = 0.98,
     tickFormatter = __webpack_require__(12),
     NoSleep = __webpack_require__(17),
     noSleep = new NoSleep(),
-    tickSound = new Audio(__webpack_require__(18)),
-    doneSound = new Audio(__webpack_require__(19)),
     defaultRequestAnimFrame = function defaultRequestAnimFrame(callback) {
     return setTimeout(callback, 1000 / 60);
 },
@@ -1073,6 +1074,10 @@ var TOTAL_OUTER = 0.98,
     ticker.on(onTick);
     return {
         "undefined": function undefined() {
+            if (!tickSound) {
+                tickSound = new Audio(__webpack_require__(18));
+                doneSound = new Audio(__webpack_require__(19));
+            }
             if (ticker.isPaused()) {
                 noSleep.enable();
                 ticker.resume();
