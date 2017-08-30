@@ -134,40 +134,6 @@ if (!Object.assign) {
     };
 }
 
-function FakeAudio() {}
-
-FakeAudio.prototype.play = function () {};
-
-if ("undefined" === typeof Audio) {
-    window.Audio = FakeAudio;
-}
-
-var video = document.createElement("video");
-if ("function" !== typeof video.play) {
-    var initialCreateElement = document.createElement,
-        fakeVideo = {
-        setAttribute: function setAttribute() {},
-        addEventListener: function addEventListener() {},
-        // Copied from NoSleepJS
-        play: function play() {
-            fakeVideo.pause();
-            fakeVideo.noSleepTimer = window.setInterval(function () {
-                window.location.href = "/";
-                window.setTimeout(window.stop, 0);
-            }, 15000);
-        },
-        pause: function pause() {
-            if (fakeVideo.noSleepTimer) {
-                window.clearInterval(fakeVideo.noSleepTimer);
-                fakeVideo.noSleepTimer = null;
-            }
-        }
-    };
-    document.createElement = function (tagName) {
-        return tagName === "video" ? fakeVideo : initialCreateElement.call(document, tagName);
-    };
-}
-
 module.exports = true;
 
 /***/ }),
@@ -990,7 +956,7 @@ var browser = __webpack_require__(3),
         height: "100%",
         viewBox: "-1 -1 2 2",
         style: "background-color: " + colors.background + ";"
-    }, [gradients()].concat(createDigit(-0.4, 0), createDigit(-0.15, 1), svg.text(Object.assign({ x: 0, y: -0.52 }, digitProperties), ":"), createDigit(0.15, 2), createDigit(0.4, 3)).concat(createButton({ id: "remove", cx: -0.4, x: -0.4, y: 0.75, label: "-" }), createButton({ id: "add", cx: 0, x: 0, y: 0.77, label: "+" }), createButton({ id: "run", cx: 0.4, x: 0.42, y: 0.77, label: "▶" }), svg.g({ id: "list" }))));
+    }, [gradients()].concat(createDigit(-0.4, 0), createDigit(-0.15, 1), svg.text(Object.assign({ x: 0, y: -0.52 }, digitProperties), ":"), createDigit(0.15, 2), createDigit(0.4, 3)).concat(createButton({ id: "remove", cx: -0.4, x: -0.4, y: 0.75, label: "-" }), createButton({ id: "add", cx: 0, x: 0, y: 0.77, label: "+" }), createButton({ id: "run", cx: 0.4, x: 0.40, y: 0.77, label: "Go" }), svg.g({ id: "list" }))));
     sequenceEditor.set(sequenceSerializer.read(location.hash.substr(1)));
     sequenceEditor.on(refresh);
 
