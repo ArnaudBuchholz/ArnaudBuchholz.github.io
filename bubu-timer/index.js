@@ -1216,7 +1216,8 @@ var sequence = void 0,
     ticker = void 0,
     options = void 0,
     sequenceTotal = void 0,
-    lastSecond = void 0;
+    lastSecond = void 0,
+    frameDelay = void 0;
 
 var TOTAL_OUTER = 0.98,
     TOTAL_INNER = 0.88,
@@ -1231,14 +1232,18 @@ var TOTAL_OUTER = 0.98,
     tickConverter = __webpack_require__(21),
     tickFormatter = __webpack_require__(6),
     sounds = __webpack_require__(22),
-    defaultRequestAnimFrame = function defaultRequestAnimFrame(callback) {
-    return setTimeout(callback, 1000 / 60);
-},
-    requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame // Chrome & Safari
+    verticalSync = window.requestAnimationFrame || window.webkitRequestAnimationFrame // Chrome & Safari
 || window.mozRequestAnimationFrame // Firefox
 || window.oRequestAnimationFrame // Opera
 || window.msRequestAnimationFrame // Internet Explorer
-|| defaultRequestAnimFrame,
+|| function (callback) {
+    return callback();
+},
+    nextFrame = function nextFrame(callback) {
+    return setTimeout(function () {
+        return verticalSync(callback);
+    }, frameDelay);
+},
     ratio2Coords = function ratio2Coords(ratio) {
     var radius = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
     var precision = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10000;
@@ -1317,7 +1322,7 @@ var TOTAL_OUTER = 0.98,
         document.getElementById("total").setAttribute("d", getCirclePath(total, TOTAL_OUTER, TOTAL_INNER));
         document.getElementById("step").setAttribute("d", getCirclePath(step, STEP_OUTER, STEP_INNER));
         dom.setText("stepOn", convertedTick.step + 1 + " / " + sequence.length);
-        requestAnimFrame(ticker.tick.bind(ticker));
+        nextFrame(ticker.tick.bind(ticker));
     } else {
         done();
     }
@@ -1339,12 +1344,20 @@ var TOTAL_OUTER = 0.98,
     ticker = tickGenerator.allocate();
     options = Object.assign({
         ms: true,
-        visualpulse: true
+        visualpulse: true,
+        battery: false
     }, hash.getOptions());
     sequenceTotal = sequence.reduce(function (total, tick) {
         return total + tick;
     }, 0);
     lastSecond = undefined;
+    var frequency = void 0;
+    if (options.battery) {
+        frequency = 20;
+    } else {
+        frequency = 60;
+    }
+    frameDelay = Math.floor(1000 / frequency);
 },
     setup = function setup() {
     reset();
@@ -1545,6 +1558,7 @@ var noop = __webpack_require__(0),
         }
         if (currentTime < _sprites.blank.to && _endRequested) {
             _media.pause();
+            _endRequested = false;
         }
     });
 },
