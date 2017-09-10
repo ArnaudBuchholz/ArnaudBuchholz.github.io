@@ -1216,7 +1216,11 @@ var sequence = void 0,
     ticker = void 0,
     options = void 0,
     sequenceTotal = void 0,
-    lastSecond = void 0,
+    lastSecondDisplayed = void 0,
+    lastStepDisplayed = void 0,
+    radiusPrecision = void 0,
+    lastStepRadius = void 0,
+    lastTotalRadius = void 0,
     frameDelay = void 0;
 
 var TOTAL_OUTER = 0.98,
@@ -1284,10 +1288,11 @@ var TOTAL_OUTER = 0.98,
     }
     sounds.tick();
 },
-    pulseOnSeconds = function pulseOnSeconds(remaining) {
+    pulseOnSeconds = function pulseOnSeconds(remaining, formattedRemaining) {
     var second = Math.floor(remaining / 1000);
-    if (lastSecond !== second) {
-        lastSecond = second;
+    if (lastSecondDisplayed !== second) {
+        dom.setText("time", formattedRemaining.time);
+        lastSecondDisplayed = second;
         if (second < 5) {
             pulse();
         } else {
@@ -1295,34 +1300,60 @@ var TOTAL_OUTER = 0.98,
         }
     }
 },
+    updateRemaining = function updateRemaining(remaining) {
+    var formattedRemaining = void 0;
+    if (options.ms) {
+        formattedRemaining = tickFormatter(remaining);
+        dom.setText("ms", "." + formattedRemaining.ms);
+    } else {
+        // Confusing without ms
+        formattedRemaining = tickFormatter(remaining + 999);
+    }
+    pulseOnSeconds(remaining, formattedRemaining);
+},
+    updateTotalElapsed = function updateTotalElapsed(radius) {
+    return document.getElementById("total").setAttribute("d", getCirclePath(radius, TOTAL_OUTER, TOTAL_INNER));
+},
+    updateStepElapsed = function updateStepElapsed(radius) {
+    return document.getElementById("step").setAttribute("d", getCirclePath(radius, STEP_OUTER, STEP_INNER));
+},
     done = function done() {
-    document.getElementById("total").setAttribute("d", getCirclePath(0, TOTAL_OUTER, TOTAL_INNER));
-    document.getElementById("step").setAttribute("d", getCirclePath(0, STEP_OUTER, STEP_INNER));
+    updateTotalElapsed(0);
+    updateStepElapsed(0);
     dom.setText("stepOn", "done.");
     sounds.end();
 },
+    roundRadius = function roundRadius(radius) {
+    return Math.floor(radiusPrecision * radius) / radiusPrecision;
+},
+    updateElapsed = function updateElapsed(tick, convertedTick) {
+    var totalRadius = roundRadius(tick.elapsed / sequenceTotal),
+        stepRadius = 1 - roundRadius(convertedTick.remaining / sequence[convertedTick.step % sequence.length]);
+    if (lastTotalRadius !== totalRadius) {
+        lastTotalRadius = totalRadius;
+        updateTotalElapsed(totalRadius);
+    }
+    if (lastStepRadius !== stepRadius) {
+        lastStepRadius = stepRadius;
+        updateStepElapsed(stepRadius);
+    }
+    if (convertedTick.step !== lastStepDisplayed) {
+        lastStepDisplayed = convertedTick.step;
+        dom.setText("stepOn", convertedTick.step + 1 + " / " + sequence.length);
+    }
+},
     onTick = function onTick(tick) {
-
     if (!sequence) {
         return;
     }
-
-    var convertedTick = tickConverter(tick.elapsed, sequence),
-        currentDuration = sequence[convertedTick.step % sequence.length],
-        total = tick.elapsed / sequenceTotal % 1,
-        step = 1 - convertedTick.remaining / currentDuration,
-        formattedRemaining = tickFormatter(convertedTick.remaining);
-
-    pulseOnSeconds(convertedTick.remaining);
-
-    dom.setText("time", formattedRemaining.time);
-    dom.setText("ms", "." + formattedRemaining.ms);
+    var convertedTick = tickConverter(tick.elapsed, sequence);
+    updateRemaining(convertedTick.remaining);
 
     if (convertedTick.step < sequence.length) {
-        document.getElementById("total").setAttribute("d", getCirclePath(total, TOTAL_OUTER, TOTAL_INNER));
-        document.getElementById("step").setAttribute("d", getCirclePath(step, STEP_OUTER, STEP_INNER));
-        dom.setText("stepOn", convertedTick.step + 1 + " / " + sequence.length);
-        nextFrame(ticker.tick.bind(ticker));
+        updateElapsed(tick, convertedTick);
+        if (!ticker.isPaused()) {
+            nextFrame(ticker.tick.bind(ticker));
+        }
     } else {
         done();
     }
@@ -1339,25 +1370,38 @@ var TOTAL_OUTER = 0.98,
         d: "M 0 -" + outerRadius + " A " + outerRadius + " " + outerRadius + " 0 0 1 " + outerRadius + " 0\n                L " + innerRadius + " 0 A " + innerRadius + " " + innerRadius + " 0 0 0 0 -" + innerRadius + " L 0 -" + outerRadius,
         fill: color, stroke: color, "stroke-opacity": 0.2, "stroke-width": 0.01 })];
 },
+    undefineLasts = function undefineLasts() {
+    lastSecondDisplayed = undefined;
+    lastStepDisplayed = undefined;
+    lastStepRadius = undefined;
+    lastTotalRadius = undefined;
+},
+    defaultOption = function defaultOption(name, value) {
+    if (options[name] === undefined) {
+        options[name] = value;
+    }
+},
     reset = function reset() {
     sequence = hash.getSequence();
     ticker = tickGenerator.allocate();
     options = Object.assign({
-        ms: true,
-        visualpulse: true,
         battery: false
     }, hash.getOptions());
+    defaultOption("ms", !options.battery);
+    defaultOption("visualpulse", !options.battery);
     sequenceTotal = sequence.reduce(function (total, tick) {
         return total + tick;
     }, 0);
-    lastSecond = undefined;
     var frequency = void 0;
     if (options.battery) {
         frequency = 20;
+        radiusPrecision = 100;
     } else {
         frequency = 60;
+        radiusPrecision = 1000;
     }
     frameDelay = Math.floor(1000 / frequency);
+    undefineLasts();
 },
     setup = function setup() {
     reset();
