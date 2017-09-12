@@ -1346,6 +1346,7 @@ var TOTAL_OUTER = 0.98,
     done = function done() {
     updateTotalElapsed(0);
     updateStepElapsed(0);
+    dom.setText("time", "00:00");
     dom.setText("stepOn", "done.");
     sounds.end();
 },
@@ -1419,7 +1420,7 @@ var TOTAL_OUTER = 0.98,
     }, 0);
     var frequency = void 0;
     if (options.battery) {
-        frequency = 20;
+        frequency = 10;
         radiusPrecision = 100;
     } else {
         frequency = 60;
