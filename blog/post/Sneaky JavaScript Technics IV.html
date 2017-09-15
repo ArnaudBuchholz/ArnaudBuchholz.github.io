@@ -1,0 +1,45 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Sneaky JavaScript Technics IV
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/ninja.png" align="left">
+    A ninja is a lazy fighter. As Sun Tzu stated "Every battle is won or lost before it's ever fought".
+    Here are quick tips to simplify your development when dealing with optional parameters.
+</div>
+<code class="markdown">
+
+overloading on signature
+
+Function.prototype.withDefault = function () {
+    var defaultParameters = [].slice.call(arguments, 0),
+        length = this.length,
+        func = this;
+    return function () {
+        var parameters = [].slice.call(arguments, 0);
+        if (length > parameters.length) {
+            parameters.concat(defaultParameters.slice(defaultParameters.length - parameters.length);
+        }
+        return func.apply(this, parameters);
+    };
+}
+
+const
+    add = (value, step) => value + step,
+    addOrInc = add.withDefault(1);
+
+test(add(2,2), 4)
+test(addOrInc(2,2), 4)
+test(addOrInc(2), 3)
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
