@@ -16,28 +16,132 @@
 </div>
 <code class="markdown">
 
-overloading on signature
+### Handling default parameters
 
-Function.prototype.withDefault = function () {
-    var defaultParameters = [].slice.call(arguments, 0),
-        length = this.length,
-        func = this;
+The are many way to default parameters when they are not passed during
+[function invocation](http://yehudakatz.com/2011/08/11/understanding-javascript-function-invocation-and-this/).
+
+[ES6](http://es6-features.org/)
+proposes [a syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)
+to formalize them, you can [try it by yourself](https://babeljs.io/repl/).
+
+The following example:
+`function test (firstParam = "default value")  {
+    return firstParam;
+}`
+
+is [transpiled](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) into:
+`"use strict";
+
+function test() {
+    var firstParam = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "default value";
+    return firstParam;
+}`
+
+Indeed, the [arguments](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments) object
+contains the list of parameters that were passed during function invocation. It looks like an array (but it is not) and
+exposes length as well as all passed parameters.
+
+This is quite complex and I usually go with:
+
+`function test (firstParam)  {
+    if (firstParam === undefined) {
+        firstParam = "default value"
+    }
+    return firstParam;
+}`
+
+Or, shorter,
+
+`function test (firstParam)  {
+    firstParam = firstParam || "default value";
+    return firstParam;
+}`
+
+(...) This last syntax may lead to errors when dealing with
+[falsy values](https://developer.mozilla.org/en-US/docs/Glossary/Falsy)
+
+All these non ES6 syntaxes are working fine but they come with two drawbacks:
+* You have to manually handle the missing parameters
+* The condition adds [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity) to your function
+
+### The lazy solution
+
+Wouldn't it be nice to have a way to wrap a function so that default parameters would be handled without having to
+code anything?
+
+Considering that optional parameters are usually at the end of a function, let's introduce a new method to the function
+object that will default its last parameters.
+
+So considering this function:
+`function add(value, increment) {
+    return value + increment;
+}`
+
+We could define inc as:
+`var inc = add.withDefaults(1);`
+
+That would be equivalent to the ES6 version of:
+`function inc(value, increment = 1) {
+    return add(value, increment);
+}`
+
+#### Forewords
+
+Before going straight to the proposal, you need to understand the following concepts:
+* A function exposes the size of its signature through the property
+[length](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/length): it allows
+any developer to know the number of expected parameters
+
+* The arguments object is not an array but it can be easily converted into one using the following pattern:
+`[].slice.call(arguments)`
+
+* You can create an array of any size using `new Array(size)` It will be filled with
+[undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined) values
+
+* If the provided default parameters are not enough to set missing ones, they are replaced with
+[undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined)
+(as expected)
+
+* If you have read my other articles, you already know
+[Fuction.prototype.apply](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply).
+
+Now you are ready.
+
+#### Proposal
+
+Here is the proposal to handle default values:
+
+`Function.prototype.withDefaults = function () {
+    var defaultParameters = [].slice.call(arguments),
+        wrappedFunction = this;
     return function () {
-        var parameters = [].slice.call(arguments, 0);
-        if (length > parameters.length) {
-            parameters.concat(defaultParameters.slice(defaultParameters.length - parameters.length);
+        var receivedParameters = [].slice.call(arguments),
+            missingCount = wrappedFunction.length - receivedParameters.length,
+            actualParameters,
+            sliceFrom;
+        if (missingCount > 0) {
+            sliceFrom = defaultParameters.length - missingCount;
+            actualParameters = receivedParameters
+                .concat(
+                    new Array(Math.max(-sliceFrom, 0)),
+                    defaultParameters.slice(Math.max(sliceFrom, 0))
+                );
+        } else {
+            actualParameters = receivedParameters;
         }
-        return func.apply(this, parameters);
-    };
-}
+        return wrappedFunction.apply(this, actualParameters);
+    }
+}`
 
-const
-    add = (value, step) => value + step,
-    addOrInc = add.withDefault(1);
+As well as the associated [test case](https://jsfiddle.net/ArnaudBuchholz/4mdfn6qg/1/).
 
-test(add(2,2), 4)
-test(addOrInc(2,2), 4)
-test(addOrInc(2), 3)
+#### Improvements
+
+This solution is not perfect. Indeed, the resulting function has a signature length of 0.
+Consequently, you can't chain with another call to default parameters of such a wrapped function.
+
+(...) There are several ways to work around this limitation but I wanted to keep this article short and simple
 
 </code>
 <!-- Drop those two lines -->
