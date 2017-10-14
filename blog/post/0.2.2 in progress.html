@@ -1,0 +1,59 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    0.2.2 In progress
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This version 0.2.2 is still in progress. Here is a sneak peek of the build process.
+</div>
+<code class="markdown">
+
+When building the [GPF library](https://github.com/ArnaudBuchholz/gpf-js), it is tested with 4 command line hosts:
+    * [NodeJs](http://nodejs.org/)
+    * [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx)
+    * [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino)
+    * [PhantomJS](http://phantomjs.org/)
+
+And at least 3 browsers:
+    * [Chrome](https://www.google.com/chrome/index.html)
+    * [Safari](http://appldnld.apple.com/Safari5/041-5487.20120509.INU8B/SafariSetup.exe)
+    * Internet Explorer
+
+Backward compatibility with all previous versions is checked as well as maintainability ratio (using
+[Plato](https://github.com/es-analysis/plato)) and coverage (using [Jasmine](https://jasmine.github.io/)).
+
+The library is published in three flavors:
+    * source (development version)
+    * debug (concatenated sources)
+    * release (an optimized and [uglify](https://github.com/mishoo/UglifyJS2)-ed version of debug)
+
+The test library contains more than 600 unit tests covering almost 100% of the code (exceptions are
+[documented](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/tutorial-COVERAGE.html).
+
+Last but not least, the code is [linted](https://eslint.org/) and documentation is generated with
+[jsdoc](http://usejsdoc.org/).
+
+This represents a total of 55 test executions.
+
+Obviously, I am too lazy to do it all by myself: everything is automated with [Grunt](https://gruntjs.com/).
+
+Today was a big day working on [version 0.2.2](https://github.com/ArnaudBuchholz/gpf-js/milestone/10) (still in
+progress): I am finalizing a feature that will help me better
+[modularize my code](https://github.com/ArnaudBuchholz/gpf-js/issues/168).
+
+I wanted to share those 2 minutes of pure development joy that concluded my work *(full screen recommended)*.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/QmyPHTzuzYQ?rel=0" frameborder="0" allowfullscreen>
+</iframe>
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
