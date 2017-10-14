@@ -608,10 +608,21 @@
             }
         },
 
+        _gentItContext: function () {
+            var depth = this._describes.length,
+                idx,
+                result = ["<root>"];
+            for (idx = 1; idx < depth; ++idx) { // Skip root
+                result.push(this._describes[idx].label);
+            }
+            return result;
+        },
+
         // Log a failure
         _fail: function (label, startDate, e) {
             ++this._statistics.fail;
             this._callback("it", {
+                context: this._gentItContext(),
                 depth: this._describes.length,
                 label: label,
                 result: false,
@@ -624,6 +635,7 @@
         _success: function (label, startDate) {
             ++this._statistics.success;
             this._callback("it", {
+                context: this._gentItContext(),
                 depth: this._describes.length,
                 label: label,
                 result: true,
@@ -729,6 +741,7 @@
             }
             ++this._statistics.pending;
             this._callback("it", {
+                context: this._gentItContext(),
                 depth: this._describes.length,
                 label: it.label,
                 pending: true
