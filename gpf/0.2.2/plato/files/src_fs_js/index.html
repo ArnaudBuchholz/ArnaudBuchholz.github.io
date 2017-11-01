@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/fs.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/fs.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">86.88</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">183</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">8.95</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.28</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file File system implementation
+ * @since 0.1.9
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _GpfStreamWritableString*/ // gpf.stream.WritableString
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*global _gpfHost*/ // Host type
+/*exported _GPF_FS_OPENFOR*/ // File system stream opening mode
+/*exported _GPF_FS_TYPES*/ // File system types constants
+/*exported _gpfFileStorageByHost*/ // gpf.interfaces.IFileStorage per host
+/*exported _gpfFileStorageRead*/ // Generic read method using FileStorage
+/*exported _gpfFsRead*/ // Generic read method
+/*exported _gpfFsReadImplByHost*/ // gpf.fs.read per host
+/*#endif*/
+
+_gpfErrorDeclare(&quot;fs&quot;, {
+
+    /**
+     * ### Summary
+     *
+     * Incompatible stream
+     *
+     * ### Description
+     *
+     * This error is used when a file storage tries to close a stream that was not allocaetd by itself.
+     * @since 0.1.9
+     */
+    incompatibleStream:
+        &quot;Incompatible stream&quot;
+});
+
+var
+    /**
+     * File system type constants
+     * @since 0.1.9
+     */
+    _GPF_FS_TYPES = {
+        NOT_FOUND: 0,
+        DIRECTORY: 1,
+        FILE: 2,
+        UNKNOWN: 3
+
+    },
+
+    /**
+     * File system stream opening mode
+     * @since 0.1.9
+     */
+    _GPF_FS_OPENFOR = {
+        READING: 0,
+        APPENDING: 1
+
+    },
+
+    /**
+     * {@see gpf.interfaces.IFileStorage} per host
+     *
+     * @type {Object}
+     * @since 0.2.1
+     */
+    _gpfFileStorageByHost = {},
+
+    /**
+     * {@see gpf.fs.read} per host
+     *
+     * @type {Object}
+     * @since 0.2.2
+     */
+    _gpfFsReadImplByHost = {};
+
+/**
+ * Generic read method using FileStorage
+ *
+ * @param {String} path File path
+ * @return {Promise&lt;String&gt;} Resolved with the file content
+ * @since 0.2.2
+ */
+function _gpfFileStorageRead (path) {
+    var fs = _gpfFileStorageByHost[_gpfHost],
+        iWritableStream = new _GpfStreamWritableString();
+    return fs.openTextStream(path, _GPF_FS_OPENFOR.READING)
+        .then(function (iReadStream) {
+            return iReadStream.read(iWritableStream);
+        })
+        .then(function () {
+            return iWritableStream.toString();
+        });
+}
+
+/**
+ * Generic read method
+ *
+ * @param {String} path File path
+ * @return {Promise&lt;String&gt;} Resolved with the file content
+ * @since 0.2.2
+ */
+
+function _gpfFsRead (path) {
+    return _gpfFsReadImplByHost[_gpfHost](path);
+}
+
+/**
+ * @namespace gpf.fs
+ * @description Root namespace for filesystem specifics
+ * @since 0.1.9
+ */
+gpf.fs = {
+
+    /**
+     * File system object type enumeration
+     *
+     * @enum {Number}
+     * @readonly
+     * @since 0.1.9
+     */
+    types: {
+
+        /**
+         * Storage path does not exist
+         * @since 0.1.9
+         */
+        notFound: _GPF_FS_TYPES.NOT_FOUND,
+
+        /**
+         * Storage path points to a container of files
+         * @since 0.1.9
+         */
+        directory: _GPF_FS_TYPES.DIRECTORY,
+
+        /**
+         * Storage path points to a stream-able file
+         * @since 0.1.9
+         */
+        file: _GPF_FS_TYPES.FILE,
+
+        /**
+         * Storage path points to an object but it can&#039;t be handled
+         * @since 0.1.9
+         */
+        unknown: _GPF_FS_TYPES.UNKNOWN
+    },
+
+    /**
+     * File system open mode enumeration
+     *
+     * @enum {Number}
+     * @readonly
+     * @since 0.1.9
+     */
+    openFor: {
+        /**
+         * Read as a IReadableStream from the beginning of the file
+         * @since 0.1.9
+         */
+        reading: _GPF_FS_OPENFOR.READING,
+
+        /**
+         * Append as a IWritableStream to the end of the file.
+         * NOTE: if you want to overwrite a file, delete it first
+         * @since 0.1.9
+         */
+        appending: _GPF_FS_OPENFOR.APPENDING
+    },
+
+    /**
+     * Get the current host file storage (null if none)
+     *
+     * @return {gpf.interfaces.IFileStorage|null} IFileStorage interface
+     * @since 0.1.9
+     */
+    getFileStorage: function () {
+        return _gpfFileStorageByHost[_gpfHost] || null;
+    },
+
+    /**
+     * @gpf:sameas _gpfFsRead
+     * @since 0.2.2
+     */
+    read: _gpfFsRead
+
+};</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

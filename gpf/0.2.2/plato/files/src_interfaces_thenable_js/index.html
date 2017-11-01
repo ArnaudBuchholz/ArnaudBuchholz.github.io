@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/interfaces/thenable.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/interfaces/thenable.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">80.92</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">81</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">6.89</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.09</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file IThenable interface
+ * @since 0.2.2
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _gpfDefineInterface*/ // Internal interface definition helper
+/*global _gpfSyncReadSourceJSON*/ // Reads a source json file (only in source mode)
+/*exported _gpfIThenable*/ // gpf.interfaces.IThenable
+/*exported _gpfPromisify*/ // Converts any value into a Promise
+/*exported _gpfPromisifyDefined*/ // Converts any value but undefined into a Promise
+/*#endif*/
+
+/**
+ * The Thenable interface helps identifying Promise object through the
+ * [then](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method
+ *
+ * @interface gpf.interfaces.IThenable
+ * @since 0.2.2
+ */
+
+/**
+ * The then() method returns a Promise. It takes up to two arguments: callback functions for the success and failure
+ * cases of the Promise
+ *
+ * @method gpf.interfaces.IThenable#then
+ * @param {Function} onFulfilled called if the Promise is fulfilled
+ * @param {Function} [onRejected] called if the Promise is rejected
+ * @return {Promise} Promise
+ * @since 0.2.2
+ */
+
+/**
+ * IThenable interface specifier
+ *
+ * @type {gpf.interfaces.IThenable}
+ * @since 0.2.2
+ */
+var _gpfIThenable = _gpfDefineInterface(&quot;Thenable&quot;,
+    _gpfSyncReadSourceJSON(&quot;interfaces/thenable.json&quot;));
+
+/**
+ * Converts any value into a promise.
+ * If the value implements {@link gpf.interfaces.IThenable}, it is considered as a promise.
+ *
+ * @param {*} value Value to convert
+ * @return {Promise&lt;*&gt;} Promisified version of the value
+ * @since 0.2.2
+ */
+function _gpfPromisify (value) {
+    if (gpf.interfaces.isImplementedBy(gpf.interfaces.IThenable, value)) {
+        return value;
+    }
+    return Promise.resolve(value);
+}
+
+/**
+ * Converts value into a promise if not undefined.
+ * If the value implements {@link gpf.interfaces.IThenable}, it is considered as a promise.
+ *
+ * @param {*} value Value to convert
+ * @return {Promise&lt;*&gt;|undefined} Promisified version of the value or undefined
+ * @since 0.2.2
+ */
+function _gpfPromisifyDefined (value) {
+    if (undefined !== value) {
+        return _gpfPromisify(value);
+    }
+}
+
+/**
+ * @gpf:sameas _gpfPromisify
+ * @since 0.2.2
+ */
+gpf.promisify = _gpfPromisify;
+
+/**
+ * @gpf:sameas _gpfPromisifyDefined
+ * @since 0.2.2
+ */
+gpf.promisifyDefined = _gpfPromisifyDefined;</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

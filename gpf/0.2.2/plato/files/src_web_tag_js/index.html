@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/web/tag.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/web/tag.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">77.71</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">381</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">26.44</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.15</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file Tag generation helper
+ * @since 0.2.1
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _gpfDefine*/ // Shortcut for gpf.define
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*global _gpfIsArray*/ // Return true if the parameter is an array
+/*global _gpfIsLiteralObject*/ // Check if the parameter is a literal object
+/*global _gpfObjectForEach*/ // Similar to [].forEach but for objects
+/*global _gpfStringEscapeFor*/ // Make the string content compatible with lang
+/*global _gpfSyncReadSourceJSON*/ // Reads a source json file (only in source mode)
+/*#endif*/
+
+/**
+ * Tag instance allocated by {@link gpf.typedef.tagFunc}
+ *
+ * @class gpf.typedef.Tag
+ *
+ * @see gpf.web.createTagFunction
+ * @since 0.2.1
+ */
+
+/**
+ * String conversion
+ *
+ * @method gpf.typedef.Tag.prototype.toString
+ * @return {String} HTML result
+ *
+ * @see gpf.web.createTagFunction
+ * @since 0.2.1
+ */
+
+/**
+ * DOM insertion
+ *
+ * @method gpf.typedef.Tag.prototype.appendTo
+ * @param {Object} node DOM parent to append the node to
+ * @return {Object} Created DOM Node
+ *
+ * @see gpf.web.createTagFunction
+ * @since 0.2.1
+ */
+
+/**
+ * Tag generation function child specification.  When string, a text node is created.
+ *
+ * @typedef gpf.typedef.tagChild
+ * @property {String|gpf.typedef.Tag}
+ *
+ * @see gpf.web.createTagFunction
+ * @since 0.2.1
+ */
+
+/**
+ * Tag generation function children specification
+ *
+ * @typedef gpf.typedef.tagChildren
+ * @property {gpf.typedef.tagChild|gpf.typedef.tagChild[]}
+ *
+ * @see gpf.web.createTagFunction
+ * @since 0.2.1
+ */
+
+/**
+ * Tag generation function, it accepts up to two parameters:
+ * - When no parameter is passed, an empty node is created
+ * - If the first parameter is a literal object (see {@link gpf.isLiteralObject}), its properties are used to
+ *   define the node attributes
+ * - Otherwise, the second (or first if not a literal object) is used to define children that will be appended to this
+ *   tag
+ *
+ * @callback gpf.typedef.tagFunc
+ *
+ * @param {Object|gpf.typedef.tagChildren} [attributes=undefined] When a literal object is passed, it is interpreted
+ * as an attribute dictionary
+ * @param {gpf.typedef.tagChildren} [children=undefined] List of children
+ * @return {gpf.typedef.Tag} Tag object
+ *
+ * @see gpf.web.createTagFunction
+ * @since 0.2.1
+ */
+
+_gpfErrorDeclare(&quot;web/tag&quot;, {
+    /**
+     * ### Summary
+     *
+     * Missing node name
+     *
+     * ### Description
+     *
+     * A tag can&#039;t be created if the node name is missing
+     * @since 0.2.1
+     */
+    missingNodeName: &quot;Missing node name&quot;,
+
+    /**
+     * ### Summary
+     *
+     * Unknown namespace prefix
+     *
+     * ### Description
+     *
+     * A prefix has been used prior to be associated with a namespace
+     * @since 0.2.2
+     */
+    unknownNamespacePrefix: &quot;Unknown namespace prefix&quot;,
+
+    /**
+     * ### Summary
+     *
+     * Unable to use namespace in string
+     *
+     * ### Description
+     *
+     * A prefix associated to a namespace has been used and can&#039;t be converted to string
+     * @since 0.2.2
+     */
+    unableToUseNamespaceInString: &quot;Unable to use namespace in string&quot;
+});
+
+/**
+ * Mapping of attribute name aliases
+ * @type {Object}
+ * @since 0.2.1
+ */
+var _gpfWebTagAttributeAliases = _gpfSyncReadSourceJSON(&quot;web/attributes.json&quot;);
+
+/**
+ * Mapping of prefixes for namespaces
+ * @type {Object}
+ * @since 0.2.2
+ */
+var _gpfWebNamespacePrefix = _gpfSyncReadSourceJSON(&quot;web/namespaces.json&quot;);
+
+/**
+ * Retrieves namespace associated to the prefix or fail
+ *
+ * @param {String} prefix Namespace prefix
+ * @return {String} Namespace URI
+ * @throws {gpf.Error.UnknownNamespacePrefix}
+ * @since 0.2.2
+ */
+function _gpfWebGetNamespace (prefix) {
+    var namespace = _gpfWebNamespacePrefix[prefix];
+    if (undefined === namespace) {
+        gpf.Error.unknownNamespacePrefix();
+    }
+    return namespace;
+}
+
+/**
+ * Resolves prefixed name to namespace and name
+ *
+ * @param {String} name Attribute or node name
+ * @return {{namespace, name}|undefined} Namespace and name in a structure if prefixed, undefined otherwise
+ * @since 0.2.2
+ */
+function _gpfWebGetNamespaceAndName (name) {
+    var parts = name.split(&quot;:&quot;);
+    if (parts.length === 2) {
+        return {
+            namespace: _gpfWebGetNamespace(parts[0]),
+            name: parts[1]
+        };
+    }
+}
+
+/**
+ * Fails if the name includes namespace prefix
+ *
+ * @param {String} name Attribute or node name
+ * @throws {gpf.Error.UnableToUseNamespaceInString}
+ * @since 0.2.2
+ */
+function _gpfWebCheckNamespaceSafe (name) {
+    if (-1 !== name.indexOf(&quot;:&quot;)) {
+        gpf.Error.unableToUseNamespaceInString();
+    }
+}
+
+/**
+ * Resolve attribute name
+ *
+ * @param {String} name Attribute name used in the tag function
+ * @return {String} Attribute to set on the node ele,ment
+ * @since 0.2.1
+ */
+function _gpfWebTagAttributeAlias (name) {
+    return _gpfWebTagAttributeAliases[name] || name;
+}
+
+/**
+ * Apply the callback to each array item,
+ * process recursively if the array item is an array
+ *
+ * @param {Array} array array of items
+ * @param {Function} callback Function to apply on each array item
+ * @since 0.2.1
+ */
+function _gpfWebTagFlattenChildren (array, callback) {
+    array.forEach(function (item) {
+        if (_gpfIsArray(item)) {
+            _gpfWebTagFlattenChildren(item, callback);
+        } else {
+            callback(item);
+        }
+    });
+}
+
+var _GpfWebTag = _gpfDefine(/** @lends gpf.web.Tag.prototype */ {
+    $class: &quot;gpf.web.Tag&quot;,
+
+    /**
+     * Tag object
+     *
+     * @param {String} nodeName Node name
+     * @param {Object} [attributes] Dictionary of attributes to set
+     * @param {Array} [children] Children
+     *
+     * @constructor gpf.web.Tag
+     * @private
+     * @since 0.2.1
+     */
+    constructor: function (nodeName, attributes, children) {
+        this._nodeName = nodeName;
+        this._attributes = attributes || {};
+        this._children = children;
+    },
+
+    /**
+     * Node name
+     * @since 0.2.1
+     */
+    _nodeName: &quot;&quot;,
+
+    /**
+     * Node attributes
+     * @since 0.2.1
+     */
+    _attributes: {},
+
+    /**
+     * Node children
+     * @since 0.2.1
+     */
+    _children: [],
+
+    //region toString implementation
+
+    _getAttributesAsString: function () {
+        return Object.keys(this._attributes).map(function (name) {
+            _gpfWebCheckNamespaceSafe(name);
+            return &quot; &quot; + _gpfWebTagAttributeAlias(name)
+                + &quot;=\&quot;&quot; + _gpfStringEscapeFor(this._attributes[name], &quot;html&quot;) + &quot;\&quot;&quot;;
+        }, this).join(&quot;&quot;);
+    },
+
+    _getChildrenAsString: function () {
+        var result = [];
+        _gpfWebTagFlattenChildren(this._children, function (child) {
+            result.push(child.toString());
+        });
+        return result.join(&quot;&quot;);
+    },
+
+    _getClosingString: function () {
+        if (this._children.length) {
+            return &quot;&gt;&quot; + this._getChildrenAsString() + &quot;&lt;/&quot; + this._nodeName + &quot;&gt;&quot;;
+        }
+        return &quot;/&gt;&quot;;
+    },
+
+    /**
+     * Convert the current tag into HTML
+     *
+     * @return {String} HTML representation of the tag
+     * @since 0.2.1
+     */
+    toString: function () {
+        _gpfWebCheckNamespaceSafe(this._nodeName);
+        return &quot;&lt;&quot; + this._nodeName + this._getAttributesAsString() + this._getClosingString();
+    },
+
+    //endregion
+
+    //region appendTo implementation
+
+    _createElement: function (node) {
+        var ownerDocument = node.ownerDocument,
+            qualified = _gpfWebGetNamespaceAndName(this._nodeName);
+        if (qualified) {
+            return ownerDocument.createElementNS(qualified.namespace, qualified.name);
+        }
+        return ownerDocument.createElement(this._nodeName);
+    },
+
+    _setAttributesTo: function (node) {
+        _gpfObjectForEach(this._attributes, function (value, name) {
+            var qualified = _gpfWebGetNamespaceAndName(name);
+            if (qualified) {
+                node.setAttributeNS(qualified.namespace, _gpfWebTagAttributeAlias(qualified.name), value);
+            } else {
+                node.setAttribute(_gpfWebTagAttributeAlias(name), value);
+            }
+        });
+    },
+
+    _appendChildrenTo: function (node) {
+        var ownerDocument = node.ownerDocument;
+        _gpfWebTagFlattenChildren(this._children, function (child) {
+            if (child instanceof _GpfWebTag) {
+                child.appendTo(node);
+            } else {
+                node.appendChild(ownerDocument.createTextNode(child.toString()));
+            }
+        });
+    },
+
+    /**
+     * Appends the tag to the provided node
+     *
+     * @param {Object} node Expected to be a DOM node
+     * @return {Object} Created node
+     * @since 0.2.1
+     */
+    appendTo: function (node) {
+        var element = this._createElement(node);
+        this._setAttributesTo(element);
+        this._appendChildrenTo(element);
+        return node.appendChild(element);
+    }
+
+    //endregion
+
+});
+
+/**
+ * Create a tag generation function
+ *
+ * @param {String} nodeName tag name
+ * @return {gpf.typedef.tagFunc} The tag generation function
+ * @gpf:closure
+ * @since 0.2.1
+ */
+function _gpfWebTagCreateFunction (nodeName) {
+    if (!nodeName) {
+        gpf.Error.missingNodeName();
+    }
+    return function (firstParam) {
+        var sliceFrom,
+            attributes;
+        if (_gpfIsLiteralObject(firstParam)) {
+            attributes = firstParam;
+            sliceFrom = 1;
+        } else {
+            sliceFrom = 0;
+        }
+        return new _GpfWebTag(nodeName, attributes, [].slice.call(arguments, sliceFrom));
+    };
+}
+
+/**
+ * @gpf:sameas _gpfWebTagCreateFunction
+ * @since 0.2.1
+ *
+ * @example &lt;caption&gt;Tree building to string&lt;/caption&gt;
+ * var div = gpf.web.createTagFunction(&quot;div&quot;),
+ *     span = gpf.web.createTagFunction(&quot;span&quot;),
+ * tree = div({className: &quot;test1&quot;}, &quot;Hello &quot;, span({className: &quot;test2&quot;}, &quot;World!&quot;));
+ * // tree.toString() gives &lt;div class=&quot;test1&quot;&gt;Hello &lt;span class=&quot;test2&quot;&gt;World!&lt;/span&gt;&lt;/div&gt;
+ *
+ * @example &lt;caption&gt;Tree building to DOM&lt;/caption&gt;
+ * var mockNode = mockDocument.createElement(&quot;any&quot;),
+ *     div = gpf.web.createTagFunction(&quot;div&quot;),
+ *     span = gpf.web.createTagFunction(&quot;span&quot;),
+ *     tree = div({className: &quot;test&quot;}, &quot;Hello &quot;, span(&quot;World!&quot;)),
+ *     result = tree.appendTo(mockNode);
+ */
+gpf.web.createTagFunction = _gpfWebTagCreateFunction;</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

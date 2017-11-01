@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/define/class/check.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/define/class/check.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">79.49</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">237</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">17.52</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.54</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file Check entity definition
+ * @since 0.1.6
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _GpfClassDefinition*/ // Class definition
+/*global _GpfEntityDefinition*/ // Entity definition
+/*global _gpfContext*/ // Resolve contextual string
+/*global _gpfEmptyFunc*/ // An empty function
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*#endif*/
+
+_gpfErrorDeclare(&quot;define/class/check&quot;, {
+    /**
+     * ### Summary
+     *
+     * The class name is invalid
+     *
+     * ### Description
+     *
+     * Only a valid JavaScript identifier (starting with an uppercase letter, $ or _) is allowed
+     * @since 0.1.6
+     */
+    invalidClassName: &quot;Invalid class name&quot;,
+
+    /**
+     * ### Summary
+     *
+     * The class definition contains an invalid property
+     *
+     * ### Description
+     *
+     * Some keywords are reserved
+     * @since 0.1.6
+     */
+    invalidClassProperty: &quot;Invalid class property&quot;,
+
+    /**
+     * ### Summary
+     *
+     * The class definition contains an invalid $extend
+     *
+     * ### Description
+     *
+     * $extend can be either a class or a string that must resolve to a class using {@see gpf.context}
+     * @since 0.1.6
+     */
+    invalidClassExtend: &quot;Invalid class extend&quot;,
+
+    /**
+     * ### Summary
+     *
+     * The class constructor must be a method
+     *
+     * ### Description
+     *
+     * The constructor member is a special one, see {@tutorial DEFINE}
+     *
+     * @since 0.1.7
+     */
+    invalidClassConstructor: &quot;Invalid class constructor&quot;,
+
+    /**
+     * ### Summary
+     *
+     * A member override is changing the type
+     *
+     * ### Description
+     *
+     * The constructor member is a special one, see {@tutorial DEFINE}
+     *
+     * @since 0.1.7
+     */
+    invalidClassOverride: &quot;Invalid class override&quot;
+
+});
+
+/**
+ * If extend is a string, apply _gpfContext on it
+ *
+ * @param {*} extend Extend value
+ * @return {*} The initial value or the context one
+ * @since 0.1.6
+ */
+function _gpfDefineClassDecontextifyExtend (extend) {
+    if (&quot;string&quot; === typeof extend) {
+        return _gpfContext(extend.split(&quot;.&quot;));
+    }
+    return extend;
+}
+
+Object.assign(_GpfClassDefinition.prototype, /** @lends _gpfClassDefinition.prototype */ {
+
+    /**
+     * @inheritdoc
+     * @since 0.1.6
+     */
+    _allowed$Properties: _GpfEntityDefinition.prototype._allowed$Properties.concat([&quot;extend&quot;]),
+
+    /**
+     * @iheritdoc
+     * @since 0.1.8
+     */
+    _throwInvalidProperty: gpf.Error.invalidClassProperty,
+
+    /**
+     * @inheritdoc
+     * @since 0.1.8
+     */
+    _reMemberName: new RegExp(&quot;^[a-z_][a-zA-Z0-9]*$&quot;),
+
+    /**
+     * Check that the constructor is a method
+     *
+     * @param {*} constructorValue Value read from definition dictionary
+     * @throws {gpf.Error.InvalidClassConstructor}
+     * @since 0.1.7
+     */
+    _checkConstructorMember: function (constructorValue) {
+        if (&quot;function&quot; !== typeof constructorValue) {
+            gpf.Error.invalidClassConstructor();
+        }
+    },
+
+    /**
+     * Check if the value correspond to the overridden value
+     *
+     * @param {*} value Member value
+     * @param {*} overriddenValue Overridden member value
+     * @throws {gpf.Error.InvalidClassOverride}
+     * @since 0.1.7
+     */
+    _checkOverridenMember: function (value, overriddenValue) {
+        if (typeof value !== typeof overriddenValue) {
+            gpf.Error.invalidClassOverride();
+        }
+    },
+
+    /**
+     * Check if the member overrides an inherited one
+     *
+     * @param {String} name Member name
+     * @param {*} value Member value
+     * @throws {gpf.Error.InvalidClassOverride}
+     * @since 0.1.7
+     */
+    _checkIfOverriddenMember: function (name, value) {
+        var overriddenMember = this._extend.prototype[name];
+        if (undefined !== overriddenMember) {
+            this._checkOverridenMember(value, overriddenMember);
+        }
+    },
+
+    /**
+     * Check the value of the member:
+     * - If the member name is &quot;constructor&quot;, it must be a function
+     *
+     * @param {String} name Property name
+     * @param {*} value Property value
+     * @since 0.1.7
+     */
+    _checkMemberValue: function (name, value) {
+        if (&quot;constructor&quot; === name) {
+            this._checkConstructorMember(value);
+        } else {
+            this._checkIfOverriddenMember(name, value);
+        }
+    },
+
+    /**
+     * @inheritdoc
+     * @since 0.1.8
+     */
+    _reName: new RegExp(&quot;^[A-Z_$][a-zA-Z0-9]*$&quot;),
+
+    /**
+     * @iheritdoc
+     * @since 0.1.8
+     */
+    _throwInvalidName: gpf.Error.invalidClassName,
+
+    /**
+     * Base class
+     *
+     * @type {Function}
+     * @since 0.1.6
+     */
+    _extend: Object,
+
+    /**
+     * Read extend property
+     * @since 0.1.6
+     */
+    _readExtend: function () {
+        var extend = _gpfDefineClassDecontextifyExtend(this._initialDefinition.$extend);
+        if (extend) {
+            this._extend = extend;
+        }
+    },
+
+    /**
+     * Check if the extend property points to an interface
+     *
+     * @throws {gpf.Error.InvalidClassExtend}
+     * @since 0.1.8
+     */
+    _checkExtendIsNotAnInterface: function () {
+        if (-1 !== _gpfEmptyFunc.toString.call(this._extend).indexOf(&quot;interfaceConstructorFunction&quot;)) {
+            gpf.Error.invalidClassExtend();
+        }
+    },
+
+    /**
+     * Check extend property
+     *
+     * @throws {gpf.Error.InvalidClassExtend}
+     * @since 0.1.6
+     */
+    _checkExtend: function () {
+        if (&quot;function&quot; !== typeof this._extend) {
+            gpf.Error.invalidClassExtend();
+        }
+        this._checkExtendIsNotAnInterface();
+    },
+
+    /**
+     * @inheritdoc
+     * @since 0.1.6
+     */
+    check: function () {
+        this._readExtend();
+        this._checkExtend();
+        _GpfEntityDefinition.prototype.check.call(this);
+    }
+
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

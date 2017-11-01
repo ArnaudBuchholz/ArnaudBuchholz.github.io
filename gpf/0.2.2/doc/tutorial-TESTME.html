@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>GPF Library Tutorial: Library testing</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.spacelab.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">GPF Library</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.html">gpf</a></li><li><a href="gpf.fs.html">gpf.fs</a></li><li><a href="gpf.http.html">gpf.http</a></li><li><a href="gpf.interfaces.html">gpf.interfaces</a></li><li><a href="gpf.node.html">gpf.node</a></li><li><a href="gpf.path.html">gpf.path</a></li><li><a href="gpf.require.html">gpf.require</a></li><li><a href="gpf.rhino.html">gpf.rhino</a></li><li><a href="gpf.stream.html">gpf.stream</a></li><li><a href="gpf.typedef.html">gpf.typedef</a></li><li><a href="gpf.web.html">gpf.web</a></li><li><a href="gpf.wscript.html">gpf.wscript</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.Error.html">gpf.Error</a></li><li><a href="gpf.Error.AbstractMethod.html">gpf.Error.AbstractMethod</a></li><li><a href="gpf.Error.AssertionFailed.html">gpf.Error.AssertionFailed</a></li><li><a href="gpf.Error.IncompatibleStream.html">gpf.Error.IncompatibleStream</a></li><li><a href="gpf.Error.InterfaceExpected.html">gpf.Error.InterfaceExpected</a></li><li><a href="gpf.Error.InvalidParameter.html">gpf.Error.InvalidParameter</a></li><li><a href="gpf.Error.InvalidRequireConfigureOption.html">gpf.Error.InvalidRequireConfigureOption</a></li><li><a href="gpf.Error.InvalidStreamState.html">gpf.Error.InvalidStreamState</a></li><li><a href="gpf.Error.NotImplemented.html">gpf.Error.NotImplemented</a></li><li><a href="gpf.Error.ReadInProgress.html">gpf.Error.ReadInProgress</a></li><li><a href="gpf.Error.UnreachablePath.html">gpf.Error.UnreachablePath</a></li><li><a href="gpf.Error.WriteInProgress.html">gpf.Error.WriteInProgress</a></li><li><a href="gpf.node.ReadableStream.html">gpf.node.ReadableStream</a></li><li><a href="gpf.node.WritableStream.html">gpf.node.WritableStream</a></li><li><a href="gpf.rhino.ReadableStream.html">gpf.rhino.ReadableStream</a></li><li><a href="gpf.rhino.WritableStream.html">gpf.rhino.WritableStream</a></li><li><a href="gpf.stream.LineAdapter.html">gpf.stream.LineAdapter</a></li><li><a href="gpf.stream.ReadableArray.html">gpf.stream.ReadableArray</a></li><li><a href="gpf.stream.ReadableString.html">gpf.stream.ReadableString</a></li><li><a href="gpf.stream.WritableArray.html">gpf.stream.WritableArray</a></li><li><a href="gpf.stream.WritableString.html">gpf.stream.WritableString</a></li><li><a href="gpf.typedef.Tag.html">gpf.typedef.Tag</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="interfaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Interfaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.interfaces.IEnumerator.html">gpf.interfaces.IEnumerator</a></li><li><a href="gpf.interfaces.IFileStorage.html">gpf.interfaces.IFileStorage</a></li><li><a href="gpf.interfaces.IFlushableStream.html">gpf.interfaces.IFlushableStream</a></li><li><a href="gpf.interfaces.IReadableStream.html">gpf.interfaces.IReadableStream</a></li><li><a href="gpf.interfaces.IThenable.html">gpf.interfaces.IThenable</a></li><li><a href="gpf.interfaces.IUnknown.html">gpf.interfaces.IUnknown</a></li><li><a href="gpf.interfaces.IWritableStream.html">gpf.interfaces.IWritableStream</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-CODESTYLE.html">Code style</a></li><li><a href="tutorial-COMPATIBILITY.html">Compatibility layer</a></li><li><a href="tutorial-COVERAGE.html">Code coverage exceptions</a></li><li><a href="tutorial-DEFINE.html">Entity definition</a></li><li><a href="tutorial-INTERFACES.html">Standard interfaces</a></li><li><a href="tutorial-LOADING.html">Loading GPF Library</a></li><li><a href="tutorial-REQUIRE.html">Modularization</a></li><li><a href="tutorial-TESTME.html">Library testing</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			<section class="tutorial-section">
+
+<header>
+    
+
+    <h2>Library testing</h2>
+</header>
+
+<article>
+    <h2>Command line testing</h2><p>You must first run <code>grunt serve</code>.</p>
+<p>Command lines must be run from the root of the gpf-js folder.</p>
+<ul>
+<li>With <a href="https://mochajs.org/">mocha</a>:<ul>
+<li><code>http://localhost:8000/test/host/mocha/web.html</code></li>
+<li><code>node test/host/mocha/nodejs.js</code></li>
+</ul>
+</li>
+<li>Without mocha:<ul>
+<li><code>http://localhost:8000/test/host/web.html</code></li>
+<li><code>node test/host/nodejs.js</code></li>
+<li><code>phantomjs test/host/phantomjs.js</code></li>
+<li><code>cscript /E:jscript test\host\cscript.js</code></li>
+<li><code>java -jar node_modules\rhino-1_7r5-bin\rhino1_7R5\js.jar test\host\rhino.js</code></li>
+</ul>
+</li>
+<li>With <a href="http://gruntjs.com/">grunt</a>:<ul>
+<li>testing with PhantomJS (as a browser):<ul>
+<li><code>grunt connectIf mocha</code></li>
+<li><code>grunt connectIf mocha:source</code></li>
+<li><code>grunt connectIf mocha:debug</code></li>
+<li><code>grunt connectIf mocha:release</code></li>
+</ul>
+</li>
+<li>testing with NodeJS:<ul>
+<li><code>grunt mochaTest</code></li>
+<li><code>grunt mochaTest:source</code></li>
+<li><code>grunt mochaTest:debug</code></li>
+<li><code>grunt mochaTest:release</code></li>
+</ul>
+</li>
+<li>testing with cscript:<ul>
+<li><code>grunt exec:testWscript</code></li>
+<li><code>grunt exec:testWscriptVerbose</code> <em>(alias: <code>grunt wscript</code>)</em></li>
+<li><code>grunt exec:testWscriptDebug</code></li>
+<li><code>grunt exec:testWscriptRelease</code></li>
+</ul>
+</li>
+<li>testing with rhino:<ul>
+<li><code>grunt exec:testRhino</code></li>
+<li><code>grunt exec:testRhinoVerbose</code> <em>(alias: <code>grunt rhino</code>)</em></li>
+<li><code>grunt exec:testRhinoDebug</code></li>
+<li><code>grunt exec:testRhinoRelease</code></li>
+</ul>
+</li>
+<li>testing with browsers using <a href="http://www.seleniumhq.org/">Selenium</a>:<ul>
+<li>you must first run <code>node detectSelenium</code> to check drivers installation <em>(see below)</em></li>
+<li><code>grunt firefox</code></li>
+<li><code>grunt chrome</code></li>
+<li><code>grunt ie</code></li>
+<li><code>grunt safari</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>Selenium drivers</h2><p>To enable browser automation with <a href="http://www.seleniumhq.org/">Selenium</a>, a driver must be installed for most browsers.
+It is recommended to put them in the current <a href="https://en.wikipedia.org/wiki/PATH_%28variable%29">PATH</a>.</p>
+<p>Please check
+<a href="http://seleniumhq.github.io/selenium/docs/api/javascript/index.html">selenium-webdriver documentation page</a>.</p>
+<h3>Safari</h3><p><a href="http://appldnld.apple.com/Safari5/041-5487.20120509.INU8B/SafariSetup.exe">Safari 5.1.7 for Windows</a></p>
+<h2>Command line browser testing</h2><p>Coming with <a href="http://gpf-js.blogspot.ca/2017/03/release-017.html">version 0.1.7</a>, it is now possible to test a specific
+browser using a command line.</p>
+<p>There are several assumptions:</p>
+<ul>
+<li>The command line is
+<a href="https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options">spawned</a> with only
+one parameter: the URL to open,</li>
+<li>The command line must remain active until the test is completed,</li>
+<li>When the test completes, the spawned process is closed with a
+<a href="https://nodejs.org/api/process.html#process_signal_events">SIGKILL</a> signal.</li>
+</ul>
+<p>To configure the command line:</p>
+<ul>
+<li>Make sure to run <code>grunt</code> at least once: this will initialize the <code>tmp/config.json</code> file. </li>
+<li>Open the <code>tmp/config.json</code> file, look for the <code>&quot;browsers&quot;</code> part</li>
+<li>For each browser you want to test, add a key with type=spawn and the binary path to the command line set in bin</li>
+</ul>
+<p>For instance, Safari testing on Windows:</p>
+<pre class="prettyprint source lang-javascript"><code>    &quot;browsers&quot;: {
+        &quot;chrome&quot;: {
+            &quot;type&quot;: &quot;selenium&quot;
+        },
+        &quot;safari&quot;: {
+            &quot;type&quot;: &quot;spawn&quot;,
+            &quot;bin&quot;: &quot;C:\\Program Files (x86)\\Safari\\Safari.exe&quot;
+        }
+    },</code></pre>
+</article>
+
+</section>
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	
+		on 2017-11-01T17:40:15-04:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
