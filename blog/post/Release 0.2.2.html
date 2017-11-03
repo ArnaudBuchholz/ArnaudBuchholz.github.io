@@ -12,7 +12,7 @@
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
     This new release includes a modularization helper as well as feedback from a side project.
-    It also includes fixes for some annoying bugs.
+    It also includes fixes for some annoying bugs and quality improvement.
 </div>
 <code class="markdown">
 ## New version
@@ -43,6 +43,8 @@ I will later write an article about it as it was my first HTML mobile app experi
 * Finally, this release addresses an issue that appeared from time to time and that was never considered
 seriously. Some tests were failing on a regular basis but not frequently enough to represent a real threat.
 This problem was prioritized and tackled once for all but it brought many time-consuming challenges.
+
+Oh, and I also designed a ![logo](http://arnaudbuchholz.github.io/gpf/gpf_320x200.svg)
 
 ## Release content
 
@@ -91,12 +93,15 @@ it appeared to be surprisingly easy to implement.
 
 Some of you may object that, indeed, it already exists in NodeJS and browsers (natively or through different libraries
 such as [RequireJS](http://requirejs.org/) or [browserify](http://browserify.org/)). But this new mechanism brings one
-uniform feature to all supported platforms. And it comes with a way to alter the require cache to simplify testing by
-injecting mocked dependencies.
+uniform feature to all supported platforms.
+
+And it comes with a way to alter the require cache to simplify testing by injecting
+[mocked](https://en.wikipedia.org/wiki/Mock_object) dependencies.
 
 ### Improved gpf.web.createTagFunction
 
-To develop the mobile app, [Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG) were used.
+To develop the [mobile app](http://arnaudbuchholz.github.io/bubu-timer/index.html#about),
+[Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG) were extensively leveraged.
 In order to create the appropriate markup, some specific DOM APIs must be used (such as
 [createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)).
 That's why the support of the predefined svg namespace was added to
