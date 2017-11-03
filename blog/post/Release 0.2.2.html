@@ -25,25 +25,24 @@ Here comes the new version:
 
 ### Why did it take so long to get a new version?
 
-First of all, no timeline is clearly defined for this project. I usually assign one month per release and I try to
-commit to it. However, I prefer to take the necessary time to make sure that a release contains everything needed.
+First of all, no timeline is clearly defined for the project. Usually, a release spans over one month and an implicit
+commitment is made. However, the necessary time is spent to make sure that a release contains everything needed.
 
-Actually, there are three main reasons to explain the delay of this release.
+In that case, there are three main reasons to explain the delay.
 
 * The first one is
 ![vacations](https://arnaudbuchholz.github.io/blog/post/Release%200.2.2/vacations.jpg)
 
-* The second reason is that I also worked on a [side project](https://github.com/ArnaudBuchholz/bubu-timer) that dragged
-a lot of my time. I will later write an article about it as it was my first HTML mobile app experience with a tough
-customer... my wife.
+* The second reason is that a [side project](https://github.com/ArnaudBuchholz/bubu-timer) dragged a lot of my time.
+I will later write an article about it as it was my first HTML mobile app experience with a tough customer... my wife.
 
 <div align="center">
     <iframe src="http://arnaudbuchholz.github.io/bubu-timer/index.html#about" width="400" height="400"></iframe>
 </div>
 
-* Last but not least, this release addresses an issue that appeared from time to time and that I never considered
+* Last but not least, this release addresses an issue that appeared from time to time and that was never considered
 seriously. Some tests were failing on a regular basis but not frequently enough to represent a real threat.
-I decided to tackle this problem once for all and it brought many time-consuming challenges.
+This problem was prioritized and tackled once for all but it brought many time-consuming challenges.
 
 ## Release content
 
@@ -84,9 +83,9 @@ module.exports = function () {
 };`
 
 
-I was thinking about creating such a mechanism for a while but I had no clue how (and where) to start.
+This mechanism was envisioned for a while but it was hard to figure out how (and where) to start.
 After reading some documentation about NodeJS and now that the library is mature enough,
-I have to say that it was surprisingly easy to implement.
+it appeared to be surprisingly easy to implement.
 
 ![I did it](https://arnaudbuchholz.github.io/blog/post/Release%200.2.2/SANDCASTLES.png)
 
@@ -97,14 +96,13 @@ injecting mocked dependencies.
 
 ### Improved gpf.web.createTagFunction
 
-When developing the mobile app, I had to play with
-[Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG). In order to create the appropriate markup,
-some specific DOM APIs must be used (such as
+To develop the mobile app, [Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG) were used.
+In order to create the appropriate markup, some specific DOM APIs must be used (such as
 [createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)).
-That's why I added the support of namespaces to
+That's why the support of namespaces was added to
 [gpf.web.createTagFunction](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.web.html#.createTagFunction__anchor).
 
-(...) ... But I forgot to document the use of namespaces...
+(...) ... But the use of namespaces is not yet documented...
 an [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/210) is assigned to the next release.
 
 The same way, this method allocates a function that generates tags exposing methods (toString and appendTo).
@@ -113,7 +111,7 @@ The documentation was missing but now this is
 
 ### Improved gpf.http layer
 
-I realized that the [HEAD verb](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD) was not supported by the
+The [HEAD verb](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD) was not supported by the
 [HTTP layer](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.http.html).
 It is now [possible](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.http.html#.head__anchor).
 
