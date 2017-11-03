@@ -12,7 +12,7 @@
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
     This new release includes a modularization helper as well as feedback from a side project.
-    It also include fixes for some annoying bugs.
+    It also includes fixes for some annoying bugs.
 </div>
 <code class="markdown">
 ## New version
@@ -25,7 +25,7 @@ Here comes the new version:
 
 ### Why did it take so long to get a new version?
 
-First of all, no timeline is clearly defined for the project. Usually, a release spans over one month and an implicit
+First, no timeline is clearly defined for the project. Usually, a release spans over one month and an implicit
 commitment is made. However, the necessary time is spent to make sure that a release contains everything needed.
 
 In that case, there are three main reasons to explain the delay.
@@ -40,7 +40,7 @@ I will later write an article about it as it was my first HTML mobile app experi
     <iframe src="http://arnaudbuchholz.github.io/bubu-timer/index.html#about" width="400" height="400"></iframe>
 </div>
 
-* Last but not least, this release addresses an issue that appeared from time to time and that was never considered
+* Finally, this release addresses an issue that appeared from time to time and that was never considered
 seriously. Some tests were failing on a regular basis but not frequently enough to represent a real threat.
 This problem was prioritized and tackled once for all but it brought many time-consuming challenges.
 
@@ -99,7 +99,7 @@ injecting mocked dependencies.
 To develop the mobile app, [Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG) were used.
 In order to create the appropriate markup, some specific DOM APIs must be used (such as
 [createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)).
-That's why the support of namespaces was added to
+That's why the support of the predefined svg namespace was added to
 [gpf.web.createTagFunction](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.web.html#.createTagFunction__anchor).
 
 (...) ... But the use of namespaces is not yet documented...
@@ -151,23 +151,74 @@ gpf.http.get("/echo?status=400");`
 
 ### Improved Timeout & Promise tests
 
-Timeout and promises tests rewritten
+From time to time, with a ratio of 1 of 1000 executions, the WScript tests were failing. It took ages to narrow the
+problem down to the place where the assertion failed:
+* An 'infinite performance' mode was added to the testing command line: it loops forever and shows mean as well
+as deviation on the execution time
+* Error occurring in the testing command line are now documented to help locating the issue
 
-Test legacy management
+![Failure example 1](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/Release%200.2.2/timeout1.png)
+
+![Failure example 2](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/Release%200.2.2/timeout2.png)
+
+(...) This highlights the fact that tests should be small and clear enough to immediately spot a problem when
+it happens.
+
+Upon qualification, it appeared that two test suites were badly designed:
+
+* Promises testing was using timeouts for no good reasons. Removing them from the test suite was easy:
+[diff](https://github.com/ArnaudBuchholz/gpf-js/commit/
+5678f579b136eed6e17f8e5a24dd0dc710512e8f#diff-0efebaf31544407a2e23ae2c22c42478)
+
+* Timeout testing was based on global variables to assess several timeout executions and the data got corrupted
+depending on the executions sequences. Changing the test suite to secure it was more challenging:
+[before](https://github.com/ArnaudBuchholz/gpf-js/blob/dc472d0714d7e25e19ce975481962602e305a6ad/test/compatibility/
+timeout.js) [after](https://github.com/ArnaudBuchholz/gpf-js/blob/d20a1ea1239474aa37e09918ad077c393c39aaee/test/
+compatibility/timeout.js)
+
+Once the whole thing was figured out and fixed, the problem of
+[legacy tests](https://github.com/ArnaudBuchholz/gpf-js/tree/master/test/legacy) remained. Indeed, the test suites are
+saved after each release and they should remain untouched to ensure backward compatibility.
+
+But then, how do you handle tests that were badly designed? You can't just drop the legacy test suites (more than 600
+tests) just because some of them are invalid.
+
+![Legacy code](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/Release%200.2.2/legacy.png)
+
+That's why the idea of a legacy management came out. With the help of the
+[legacy.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/legacy/legacy.json) file, the library offers a
+way to disable some tests based on their name and version.
 
 ### Improved quality and tooling
 
-Increased minimum maintainability ratio to 70
+The minimum [maintainability ratio](https://blogs.msdn.microsoft.com/codeanalysis/2007/11/20/
+maintainability-index-range-and-meaning/) has been
+[increased to 70](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/configFile.js#L26), raising the overall
+quality requirement for source files.
 
-Automatic scroll in grunt connect middleware
+The grunt connect middleware was [modified](https://github.com/ArnaudBuchholz/gpf-js/commit/
+1ad9f27e0a86231700a0546ad8165971acb80052#diff-9e8c92d72950a0def094554de6cd09efR54) to automatically scroll the page
+content. This allowed the recording of this joyful video.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3qU_-wFNdYk" frameborder="0" allowfullscreen>
+</iframe>
 
 ## Lessons learned
 
+* Almost everything can be implemented in oldest JavaScript hosts. This demonstrates the power and flexibility of the
+language.
 
-### Incompatible tests
+* The way tests are written today significantly impacts tomorrow versions. This is something to keep in mind.
+
+* Documentation must be reviewed before releasing. However, it becomes more and more complex and I am not necessarily
+the best person to review my own writing.
 
 ## Next release
 
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/11) will mostly focus on:
+* Improving the streams formalism and implement an CSV from/to records engine
+* Improving the release process
+* Doing some cleaning
 
 </code>
 <!-- Drop those two lines -->
