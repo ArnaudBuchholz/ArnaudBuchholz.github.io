@@ -11,8 +11,8 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
-    This new release supports my side projects by implementing html generation and http request helpers.
-    It also improves the coverage measurement and this is the first version to be published again as an NPM package.
+    This new release includes a modularization helper as well as feedback from a side project.
+    It also include fixes for some annoying bugs.
 </div>
 <code class="markdown">
 ## New version
@@ -49,35 +49,107 @@ I decided to tackle this problem once for all and it brought many time-consuming
 
 ### gpf.require
 
-This is clearly the new feature coming with this version. It allows the developer to modularize its code by creating
+This is clearly the new feature coming with this version. It allows the developer to modularize its project by creating
 separate source files that depend from each other. A separate article will be written to detail the concept (and
 implementation) but, in the meantime, you may read the
 [tutorial](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/tutorial-REQUIRE.html) on how to use it.
 
-I was thinking about creating such a mechanism for a while but I had no clue how to start.
+To put it in a nutshell:
+
+`gpf.require.define({
+    hello: "hello.js"
+}, function (require) {
+    "use strict";
+
+    console.log(require.hello()) // Output "World!"
+
+});`
+
+Provided the hello.js file is in the same folder and contains:
+
+`gpf.require.define({}, function () {
+    "use strict";
+
+    return function () {
+        return "World!";
+    };
+
+});`
+
+Or (using CommonJS syntax)...
+`"use strict";
+
+module.exports = function () {
+    return "World!";
+};`
+
+
+I was thinking about creating such a mechanism for a while but I had no clue how (and where) to start.
 After reading some documentation about NodeJS and now that the library is mature enough,
 I have to say that it was surprisingly easy to implement.
 
 ![I did it](https://arnaudbuchholz.github.io/blog/post/Release%200.2.2/SANDCASTLES.png)
 
 Some of you may object that, indeed, it already exists in NodeJS and browsers (natively or through different libraries
-such as [RequireJS](http://requirejs.org/) or [browserify](http://browserify.org/)).
-
-But this new mechanism brings one uniform feature to all supported platforms. And it comes with a way to alter the
-require cache to simplify testing by injecting mocked dependencies.
+such as [RequireJS](http://requirejs.org/) or [browserify](http://browserify.org/)). But this new mechanism brings one
+uniform feature to all supported platforms. And it comes with a way to alter the require cache to simplify testing by
+injecting mocked dependencies.
 
 ### Improved gpf.web.createTagFunction
 
-Namespace support
+When developing the mobile app, I had to play with
+[Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG). In order to create the appropriate markup,
+some specific DOM APIs must be used (such as
+[createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)).
+That's why I added the support of namespaces to
+[gpf.web.createTagFunction](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.web.html#.createTagFunction__anchor).
 
-better documentation (gpf.web.Tag)
+(...) ... But I forgot to document the use of namespaces...
+an [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/210) is assigned to the next release.
+
+The same way, this method allocates a function that generates tags exposing methods (toString and appendTo).
+The documentation was missing but now this is
+[resolved](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.typedef.Tag.html).
 
 ### Improved gpf.http layer
 
-Support of HEAD
-    >> Issue with the echo service
+I realized that the [HEAD verb](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD) was not supported by the
+[HTTP layer](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.http.html).
+It is now [possible](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.http.html#.head__anchor).
 
-Mocking HTTP requests
+Another improvement is the possibility to mock any HTTP requests by adding a
+[custom handler](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.typedef.html#.mockedRequest).
+Using this feature, any code that involves HTTP communication can be tested independently from the web server.
+
+For instance:
+
+`gpf.http.mock({
+    method: gpf.http.methods.get,
+    url: new RegExp("echo\\?status=([0-9]+)"),
+    response: function (request, status) {
+        if (status === "400") {
+            return; // Don't mock
+        }
+        return {
+            status: parseInt(status, 10) + 1,
+            headers: {
+                "x-mock": true
+            },
+            responseText: "It works"
+        };
+    }
+});
+
+// No HTTP request will be sent to any server
+gpf.http.get("/echo?status=200").then(function (response) {
+    assert(response.status === 201);
+    assert(response.headers["x-mock"] === true);
+    assert(response.responseText === "It works");
+    /*...*/
+});
+
+// But this one will...
+gpf.http.get("/echo?status=400");`
 
 ### Improved Timeout & Promise tests
 
