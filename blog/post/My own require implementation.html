@@ -1,0 +1,83 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    My own require implementation
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
+    Release 0.2.2 of GPF-JS delivers a basic class definition mechanism.
+    Working on the release 0.1.7, the focus is to improve this implementation by providing mechanism that mimic
+    the ES6 class definition. In particular, the super keyword is replaced with a $super member that provides
+    the same level of functionalities. Here is how.
+</div>
+<code class="markdown">
+## Introduction
+
+[Release 0.2.2](https://gpf-js.blogspot.ca/2017/11/release-022-gpfrequire.html)
+
+Talk about code quality, organization and dependency injection
+
+## Existing implementations
+
+RequireJS
+
+Browserify
+
+WebPack
+
+## NodeJS implementation of CommonJS
+
+Find the presentation that allowed me to understand the whole thing
+>> Simplification using Promises
+
+## GPF-JS Implementation
+
+### Context switching
+
+require.define is redefined
+
+### File loading
+
+Switch between web and non web
+    gpf.http.get / gpf.fs.load
+
+
+### Caching
+
+Caching the promises
+Cache modification handler
+
+### Detecting resource type
+
+By file extension
+
+### JavaScript module execution
+
+Detecting module type
+    Based on a regular expression to detect the use of require
+
+    => Should probably be testing module.exports too...
+
+Dealing with inner promises
+
+If the module also uses gpf.require.define OR define itself, you must wait for this function to complete before
+    completing the loading of the module (so that it can be used).
+This was quite challenging but I found using promise wrapping
+
+## Conclusion
+
+Things to improve:
+    - detect cross references
+    - implement new file types (templates?)
+    - implement module properties & hidden variables (https://nodejs.org/docs/latest/api/modules.html#modules_module_children)
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
