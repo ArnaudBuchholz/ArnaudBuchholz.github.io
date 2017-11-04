@@ -19,29 +19,58 @@
 ## Introduction
 
 The [GPF-JS release 0.2.2](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.2) is finally
-[out](https://gpf-js.blogspot.ca/2017/11/release-022-gpfrequire.html). It contains
+[out](https://gpf-js.blogspot.ca/2017/11/release-022-gpfrequire.html) and it contains
 several improvements:
 * Better code quality
 * Better documentation
 * Some tests were rewritten
 
-but the exciting part of it is the new [gpf.require](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.require.html)
+But the exciting part of it is the new [gpf.require](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.require.html)
 namespace that exposes a [modularization helper](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/tutorial-REQUIRE.html).
 
+In this article, several topics will be covered:
+* How modularity helps developer create better code
+* Talk about dependency injection
+* Give an overview of existing solutions
 
+## Modularity
 
+Code segregation & encapsulation / Services in Angular
 
-Here we are, the
+[Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
 
-Talk about code quality, organization and dependency injection
+Maintainability
+
+Team work
+
+## Dependency injection
+
+[Dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle)
+
 
 ## Existing implementations
 
-RequireJS
+### NodeJs
 
-Browserify
 
-WebPack
+
+### RequireJS
+
+The [RequireJS](http://requirejs.org/) library is widely used
+
+https://www.sitepoint.com/understanding-requirejs-for-effective-javascript-module-loading/
+
+### Browserify
+
+The [Browserify](http://browserify.org/) tool is capable of take
+
+### WebPack
+
+[WebPack](https://webpack.js.org/) is like browserify on steroids.
+
+http://blog.namangoel.com/browserify-vs-webpack-js-drama
+
+
 
 ## NodeJS implementation of CommonJS
 
