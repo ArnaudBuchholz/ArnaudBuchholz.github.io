@@ -29,7 +29,7 @@ But the exciting part of it is the new [gpf.require](https://arnaudbuchholz.gith
 namespace that exposes a [modularization helper](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/tutorial-REQUIRE.html).
 
 In this article, several topics will be covered:
-* How modularity helps developer create better code
+* How modularity helps developers create better code
 * What is dependency injection
 * An overview of some existing modularization solutions
 * gpf.require implementation
@@ -37,15 +37,29 @@ In this article, several topics will be covered:
 
 ## Modularity
 
+### Team work
+
+Let's start with an edge case. An application which source code stands in one single file with a development team
+composed of several developers. Assuming they all work simultaneously and a source control system is used to store the
+file, this will lead to several problems:
+
+* First of all, the source file will be large
+* It also means that it will be harder to maintain
+* Indeed, even if guidelines and comments are used, it will be hard to navigate inside the code file because of its
+size
+* Having several modifications being done in the same file usually leads to conflicts when pushing the code
+* Some logic might be repeated because hard to find
+
+Obviously, the same problems may appear on smaller files but, in general, the larger the file the more problems it
+generates.
+
 ### Divide and rule
 
 Code modularity is a good illustration of the [divide and rule](https://en.wikipedia.org/wiki/Divide_and_rule)
-principle.
-
-### Team work
-
-Let's start with an extreme case. An application source code is written in one single file and the team is composed of
-10 developers
+principle. Indeed, by splitting you application into smaller chunks, you have better granularity over your
+modifications:
+* People can work on separate files
+* File organisation should reflect project structure
 
 ### Mocking
 
