@@ -61,13 +61,29 @@ modifications:
 * People can work on separate files
 * File organisation should reflect project structure
 
-### Mocking
 
-Code segregation & encapsulation / Services in Angular
 
-[Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
+    Code segregation & encapsulation / Services in Angular
+
+    [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
 
 ### Maintainability
+
+
+### Mocking
+
+Another subtle benefit of modularity is related to testing.
+
+Let say that you have a module B depending on a module A. The last one is hard to test because it accesses critical
+resources. Because of that, you can't really test B.
+
+However, if your A has a well defined interface and if the modularization system offers you a way to substitute this
+module by another one, you can then
+
+    By isolating a critical feature in a module that has a
+well defined interface, and provided that you can then replace it with a similar one mocking the functionality.
+
+It gives you a total control on t
 
 ## Dependency injection
 
