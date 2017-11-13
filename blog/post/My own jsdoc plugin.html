@@ -19,7 +19,7 @@
 ## Introduction
 
 Just before the release of [version 0.1.5](http://gpf-js.blogspot.ca/2016/12/release-015.html), I focused on
-[documenting the API](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/index.html).
+[documenting the API](https://arnaudbuchholz.github.io/gpf/doc/index.html).
 I knew I had to use [jsdoc](http://usejsdoc.org/) so I started adding comments early in the
 development process.
 
@@ -319,7 +319,7 @@ It is implemented [here](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.5/do
 ### The enumeration case
 
 The library uses an enumeration to describe the
-[host type](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.html#.hosts__anchor).
+[host type](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.hosts__anchor).
 The advantage of an enumeration is the encapsulation of the value that is used internally.
 Sadly, jsdoc reveals this value as the 'default value' in the generated documentation.
 
@@ -337,10 +337,10 @@ That's probably the best example to demonstrate that laziness can become a virtu
 
 In the library, error management is handled through specific exceptions.
 Each error is associated to a specific class which comes with an error code and a message. The message can be built
-with substitution placeholders. The [gpf.Error](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.Error.html) class
+with substitution placeholders. The [gpf.Error](https://arnaudbuchholz.github.io/gpf/doc/gpf.Error.html) class
 offers shortcut methods to create and throw errors in one call.
 
-For instance, the [AssertionFailed](https://arnaudbuchholz.github.io/gpf/0.1.5/doc/gpf.Error.AssertionFailed.html)
+For instance, the [AssertionFailed](https://arnaudbuchholz.github.io/gpf/doc/gpf.Error.AssertionFailed.html)
 error is thrown with:
 `gpf.Error.assertionFailed({
     message: message
