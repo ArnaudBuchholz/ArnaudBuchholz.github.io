@@ -20,7 +20,7 @@
 Here comes the new version:
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/8?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.1.9)
-* [Documentation](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/index.html)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
 
 ### Path management
 
@@ -28,7 +28,7 @@ Because this version comes with file management, it all started with path manage
 Some existing [code](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/src/path.js) was waiting to be re-enabled
 in the library. This was done easily.
 
-The [gpf.path](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.path.html) helpers are considering that the normal
+The [gpf.path](https://arnaudbuchholz.github.io/gpf/doc/gpf.path.html) helpers are considering that the normal
 [path separator](https://en.wikipedia.org/wiki/Path_%28computing%29) is the Unix one. The translation is done whenever
 necessary and the [tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/test/path.js#L212-L213) are considering
 each case.
@@ -36,15 +36,15 @@ each case.
 ### IFileStorage and streams
 
 Three new interfaces were designed in this release:
-* [IFileStorage](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.interfaces.IFileStorage.html)
-* [IReadableStream](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.interfaces.IReadableStream.html)
-* [IWritableStream](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.interfaces.IWritableStream.html)
+* [IFileStorage](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IFileStorage.html)
+* [IReadableStream](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IReadableStream.html)
+* [IWritableStream](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IWritableStream.html)
 
 The purpose is to encapsulate the file system in a flexible way using
 [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) to handle
 asynchronicity. Also, streams were introduced to abstract files concept to reading or writing data.
 
-The method [gpf.fs.getFileStorage](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.fs.html#.getFileStorage__anchor)
+The method [gpf.fs.getFileStorage](https://arnaudbuchholz.github.io/gpf/doc/gpf.fs.html#.getFileStorage__anchor)
 retrieves the current host's IFileStorage (if existing).
 
 Reading a file becomes host independent:
@@ -83,13 +83,13 @@ Following [TDD](https://en.wikipedia.org/wiki/Test-driven_development) practice,
 * [WScript](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/src/fs/wscript.js)
 
 Some notes:
-* If you need to replace a file content, you must [delete](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/
+* If you need to replace a file content, you must [delete](https://arnaudbuchholz.github.io/gpf/doc/
 gpf.interfaces.IFileStorage.html#deleteFile__anchor) it first.
 * File storage, streams and hosts implementation were existing and were waiting to be re-enabled. However, they were
 using a convoluted notification mechanism that has been dropped for Promises.
 * Some existing code handles binary streams (even with WScript). However, I doubt this would be useful for the
 coming projects so I removed it. Indeed, the file storage method is named
-[OpenTextStream](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.interfaces.IFileStorage.html#openTextStream__anchor)
+[OpenTextStream](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IFileStorage.html#openTextStream__anchor)
 .
 * I plan to later implement file storage for rhino and even browsers (with a dedicated backend).
 
@@ -104,11 +104,11 @@ To make it efficient, the code generation approach was preferred.
 
 Two functions are proposed:
 
-* [gpf.createFilterFunction](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.html#.createFilterFunction__anchor)
+* [gpf.createFilterFunction](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.createFilterFunction__anchor)
 
-The chosen syntax is [documented](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.typedef.html#.filterItem) and lots
+The chosen syntax is [documented](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.filterItem) and lots
 of examples can be found in the [test cases](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.1.9/test/filter.js).
-I also integrated a [regular expression operator](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/
+I also integrated a [regular expression operator](https://arnaudbuchholz.github.io/gpf/doc/
 gpf.typedef.html#.filterLike) that allows interesting [extractions](https://github.com/ArnaudBuchholz/gpf-js/blob/
 v0.1.9/test/filter.js#L82-L99).
 
@@ -116,7 +116,7 @@ I plan to create some parsers to generate the filter from more readable syntaxes
 ([SQL](https://en.wikipedia.org/wiki/SQL#Queries),
 [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare)...).
 
-* [gpf.createSortFunction](https://arnaudbuchholz.github.io/gpf/0.1.9/doc/gpf.html#.createSortFunction__anchor)
+* [gpf.createSortFunction](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.createSortFunction__anchor)
 
 Sorting can be done on any property, two types of comparison are offered:
 * Number *(default)* where values are compared using a subtraction
