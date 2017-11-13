@@ -20,7 +20,7 @@
 Here comes the new version:
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/10?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.2)
-* [Documentation](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/index.html)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
 * [NPM package](https://www.npmjs.com/package/gpf-js)
 
 ### Why did it take so long to get a new version?
@@ -53,7 +53,7 @@ Oh, and I also designed a ![logo](http://arnaudbuchholz.github.io/gpf/gpf_320x20
 This is clearly the new feature coming with this version. It allows the developer to modularize its project by creating
 separate source files that depend from each other. A separate article will be written to detail the concept (and
 implementation) but, in the meantime, you may read the
-[tutorial](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/tutorial-REQUIRE.html) on how to use it.
+[tutorial](https://arnaudbuchholz.github.io/gpf/doc/tutorial-REQUIRE.html) on how to use it.
 
 To put it in a nutshell:
 
@@ -105,23 +105,23 @@ To develop the [mobile app](http://arnaudbuchholz.github.io/bubu-timer/index.htm
 In order to create the appropriate markup, some specific DOM APIs must be used (such as
 [createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)).
 That's why the support of the predefined svg namespace was added to
-[gpf.web.createTagFunction](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.web.html#.createTagFunction__anchor).
+[gpf.web.createTagFunction](https://arnaudbuchholz.github.io/gpf/doc/gpf.web.html#.createTagFunction__anchor).
 
 (...) ... But the use of namespaces is not yet documented...
 an [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/210) is assigned to the next release.
 
 The same way, this method allocates a function that generates tags exposing methods (toString and appendTo).
 The documentation was missing but now this is
-[resolved](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.typedef.Tag.html).
+[resolved](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.Tag.html).
 
 ### Improved gpf.http layer
 
 The [HEAD verb](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/HEAD) was not supported by the
-[HTTP layer](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.http.html).
-It is now [possible](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.http.html#.head__anchor).
+[HTTP layer](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html).
+It is now [possible](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.head__anchor).
 
 Another improvement is the possibility to mock any HTTP requests by adding a
-[custom handler](https://arnaudbuchholz.github.io/gpf/0.2.2/doc/gpf.typedef.html#.mockedRequest).
+[custom handler](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.mockedRequest).
 Using this feature, any code that involves HTTP communication can be tested independently from the web server.
 
 For instance:
