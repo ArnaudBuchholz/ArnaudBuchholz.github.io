@@ -59,6 +59,7 @@ We will assume that they all work simultaneously and a version control system is
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="0" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/albert.png" x="0" y="0" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="16" width="32px" height="32px"/>
+    <text x="106" y="34" text-anchor="middle">A</text>
     <path
         marker-end="url(#head)"
         stroke-width="5" fill="none" stroke="red"
@@ -68,6 +69,7 @@ We will assume that they all work simultaneously and a version control system is
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="64" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/britney.png" x="0" y="64" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="80" width="32px" height="32px"/>
+    <text x="106" y="98" text-anchor="middle">A</text>
     <path
             marker-end="url(#head)"
             stroke-width="5" fill="none" stroke="red"
@@ -77,6 +79,7 @@ We will assume that they all work simultaneously and a version control system is
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="128" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/charles.png" x="0" y="128" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="144" width="32px" height="32px"/>
+    <text x="106" y="162" text-anchor="middle">A</text>
     <path
             marker-end="url(#head)"
             stroke-width="5" fill="none" stroke="red"
@@ -86,6 +89,7 @@ We will assume that they all work simultaneously and a version control system is
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="192" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/denise.png" x="0" y="192" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="208" width="32px" height="32px"/>
+    <text x="106" y="226" text-anchor="middle">A</text>
     <path
             marker-end="url(#head)"
             stroke-width="5" fill="none" stroke="red"
@@ -102,6 +106,7 @@ We will assume that they all work simultaneously and a version control system is
     />
 
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="512" y="96" width="64px" height="64px"/>
+    <text x="534" y="116" text-anchor="middle">A</text>
 
 </svg>
 
@@ -169,6 +174,97 @@ is a little under 100 lines. But it has not
 My%20own%20require%20implementation/plato%20average%20lines.png)
 
 ### Divide and rule
+
+Now let consider that the project is split into several files
+
+<svg width="100%" height="256"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <marker id="head" orient="auto" markerWidth="2" markerHeight="4" refX="0.1" refY="2">
+            <path d="M0,0 V4 L2,2 Z" fill="red" />
+        </marker>
+    </defs>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="0" width="64px" height="64px"/>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/albert.png" x="0" y="0" width="64px" height="64px"/>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="16" width="32px" height="32px"/>
+    <text x="106" y="34" text-anchor="middle">A</text>
+    <path
+        marker-end="url(#head)"
+        stroke-width="5" fill="none" stroke="red"
+        d="M128,32 L232,104"
+    />
+
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="64" width="64px" height="64px"/>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/britney.png" x="0" y="64" width="64px" height="64px"/>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="80" width="32px" height="32px"/>
+    <text x="106" y="98" text-anchor="middle">B</text>
+    <path
+            marker-end="url(#head)"
+            stroke-width="5" fill="none" stroke="red"
+            d="M128,96 L232,120"
+    />
+
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="128" width="64px" height="64px"/>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/charles.png" x="0" y="128" width="64px" height="64px"/>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="144" width="32px" height="32px"/>
+    <text x="106" y="162" text-anchor="middle">C</text>
+    <path
+            marker-end="url(#head)"
+            stroke-width="5" fill="none" stroke="red"
+            d="M128,160 L232,136"
+    />
+
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="192" width="64px" height="64px"/>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/denise.png" x="0" y="192" width="64px" height="64px"/>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="208" width="32px" height="32px"/>
+    <text x="106" y="226" text-anchor="middle">D</text>
+    <path
+            marker-end="url(#head)"
+            stroke-width="5" fill="none" stroke="red"
+            d="M128,224 L232,152"
+    />
+
+    <rect x="256" y="64" width="128px" height="128px" strike="black" fill="silver"></rect>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/cloud database.png" x="256" y="64" width="128px" height="128px"/>
+
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="16" width="32px" height="32px"/>
+    <text x="436" y="34" text-anchor="middle">A</text>
+    <path
+            marker-end="url(#head)"
+            stroke-width="5" fill="none" stroke="red"
+            d="M460,32 L512,104"
+    />
+
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="80" width="32px" height="32px"/>
+    <text x="436" y="98" text-anchor="middle">B</text>
+    <path
+            marker-end="url(#head)"
+            stroke-width="5" fill="none" stroke="red"
+            d="M460,96 L512,120"
+    />
+
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="144" width="32px" height="32px"/>
+    <text x="436" y="162" text-anchor="middle">C</text>
+    <path
+            marker-end="url(#head)"
+            stroke-width="5" fill="none" stroke="red"
+            d="M460,160 L512,136"
+    />
+
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="208" width="32px" height="32px"/>
+    <text x="436" y="226" text-anchor="middle">D</text>
+    <path
+            marker-end="url(#head)"
+            stroke-width="5" fill="none" stroke="red"
+            d="M460,224 L512,152"
+    />
+
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="512" y="96" width="64px" height="64px"/>
+    <text x="534" y="116" text-anchor="middle">Z</text>
+
+</svg>
+
+Now that we understood the impact of big files
 
 Code modularity is a good illustration of the [divide and rule](https://en.wikipedia.org/wiki/Divide_and_rule)
 principle. Indeed, by splitting you application into smaller chunks, you have better granularity over your
