@@ -142,12 +142,12 @@ The simplest way to provide this list is to use a key/value dictionary, meaning 
 
 * The [request body](https://en.wikipedia.org/wiki/HTTP_message_body), mostly used for POST and PUT actions, which
 contains that data to upload to the server. Even if the library supports the concept of
-[streams](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IWritableStream.html), most of the expected use
+[streams](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IWritableStream.html), most of the expected use
 cases imply sending an envelope that is synchronously built (text, JSON, XML...). Also, JavaScript (in general) is not
 good at handling binary data, hence a simple string is expected as a request body.
 
 This leads to the definition of the
-[httpRequestSettings](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.typedef.html#.httpRequestSettings) type.
+[httpRequestSettings](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.httpRequestSettings) type.
 
 ### Output
 
@@ -162,11 +162,11 @@ through headers).
 
 * The response body: depending on what has been requested, it will contain the server answer.
 This response could be deserialized using a
-[readable stream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IReadableStream.html). But, for the same
+[readable stream](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IReadableStream.html). But, for the same
 reasons, a simple string containing the whole response text will be returned.
 
 This leads to the definition of the
-[httpRequestResponse](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.typedef.html#.httpRequestResponse) type.
+[httpRequestResponse](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.httpRequestResponse) type.
 
 (...) If needed, the API may evolve later to introduce the possibility to use streams.
 
@@ -178,7 +178,7 @@ To avoid the [callback hell](http://callbackhell.com/), a
 represent the eventual completion of the request.
 
 This leads to the definition of the
-[gpf.http.request](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.request) API.
+[gpf.http.request](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.request) API.
 
 The promise is
 [resolved](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve) when the
@@ -197,7 +197,7 @@ gpf.http.get(baseUrl).then(function (response) {
 }, handleError);
 `
 
-See the [documentation](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html).
+See the [documentation](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html).
 
 ## Handling different environments
 
@@ -330,7 +330,7 @@ It comes in two flavors:
 
 This host has a rather old and weird support of the JavaScript features. It does not supports
 [timers](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout) but GPF-JS provides
-all the necessary [polyfills](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/tutorial-COMPATIBILITY.html) to compensate
+all the necessary [polyfills](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) to compensate
 for the missing APIs.
 
 Despite all these troubles, it has one unique advantage over the other hosts: it offers the possibility to
