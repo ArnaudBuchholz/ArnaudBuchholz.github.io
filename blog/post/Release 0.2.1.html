@@ -20,7 +20,7 @@
 Here comes the new version:
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/9?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.1)
-* [Documentation](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/index.html)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
 * [NPM package](https://www.npmjs.com/package/gpf-js)
 
 ### NPM Publishing
@@ -45,7 +45,7 @@ about [the hidden costs of templating languages](https://www.youtube.com/watch?v
 showed some HTML generation helpers which syntax amazed me.
 
 Hence, to support my side project, I decided to create my own
-[HTML generation helpers](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.web.html#.createTagFunction__anchor) based
+[HTML generation helpers](https://arnaudbuchholz.github.io/gpf/doc/gpf.web.html#.createTagFunction__anchor) based
 on this syntax.
 
 For instance:
@@ -65,7 +65,7 @@ Sadly, I realize that I completely forgot to
 ### HTTP Requests
 
 The prominent feature of this version is the
-[gpf.http.request](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.request__anchor) helper.
+[gpf.http.request](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.request__anchor) helper.
 With it, you can trigger [HTTP requests](https://developer.mozilla.org/en-US/docs/Web/HTTP) from any supported host
 using only one API. The response is given back to the script asynchronously through
 [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
@@ -87,7 +87,7 @@ gpf.http.get(requestUrl).then(function (response) {
 `
 
 The supported (and tested) features are:
-* Most common [HTTP verbs](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.http.html#.methods__anchor)
+* Most common [HTTP verbs](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.methods__anchor)
 * Possibility to provide request headers
 * Possibility to access response headers
 * Possibility to submit textual payload (on POST and PUT)
@@ -113,7 +113,7 @@ run the instrumented code on all hosts. A new
 into the global one.
 
 In the end, there are still some branches / instructions that are ignored but they are all
-[documented](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/tutorial-COVERAGE.html).
+[documented](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COVERAGE.html).
 
 * Statements ignored: 0.74%
 * Branches ignored: 1.77%
@@ -143,16 +143,16 @@ This leaded to some simplifications (boot for instance) but also to new tests.
 ### Incomplete design for ending a stream
 
 In order to prepare the CSV reader, I created a
-[line adapter stream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.stream.LineAdapter.html).
+[line adapter stream](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.LineAdapter.html).
 It implements both the
-[IReadableStream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IReadableStream.html) and
-[IWritableStream](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.interfaces.IWritableStream.html) interfaces.
+[IReadableStream](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IReadableStream.html) and
+[IWritableStream](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IWritableStream.html) interfaces.
 It caches the data being received with write until some line separator is detected.
 
 However, because of caching, it requires a method to flush the buffered data.
 
 As of now, I decided to create a
-[method](https://arnaudbuchholz.github.io/gpf/0.2.1/doc/gpf.stream.LineAdapter.html#.endOfStream__anchor) to explicitly
+[method](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.LineAdapter.html#.endOfStream__anchor) to explicitly
 flush the stream.
 
 However, I am still wondering if it may change in the future: if you pipe several streams together, it could be
