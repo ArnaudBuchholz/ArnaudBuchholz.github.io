@@ -59,7 +59,7 @@ We will assume that they all work simultaneously and a version control system is
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="0" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/albert.png" x="0" y="0" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="16" width="32px" height="32px"/>
-    <text x="106" y="34" text-anchor="middle">A</text>
+    <text x="106" y="34" text-anchor="middle">Z</text>
     <path
         marker-end="url(#head)"
         stroke-width="5" fill="none" stroke="red"
@@ -69,7 +69,7 @@ We will assume that they all work simultaneously and a version control system is
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="64" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/britney.png" x="0" y="64" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="80" width="32px" height="32px"/>
-    <text x="106" y="98" text-anchor="middle">A</text>
+    <text x="106" y="98" text-anchor="middle">Z</text>
     <path
             marker-end="url(#head)"
             stroke-width="5" fill="none" stroke="red"
@@ -79,7 +79,7 @@ We will assume that they all work simultaneously and a version control system is
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="128" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/charles.png" x="0" y="128" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="144" width="32px" height="32px"/>
-    <text x="106" y="162" text-anchor="middle">A</text>
+    <text x="106" y="162" text-anchor="middle">Z</text>
     <path
             marker-end="url(#head)"
             stroke-width="5" fill="none" stroke="red"
@@ -89,7 +89,7 @@ We will assume that they all work simultaneously and a version control system is
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/coding.png" x="32" y="192" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/denise.png" x="0" y="192" width="64px" height="64px"/>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document edit.png" x="96" y="208" width="32px" height="32px"/>
-    <text x="106" y="226" text-anchor="middle">A</text>
+    <text x="106" y="226" text-anchor="middle">Z</text>
     <path
             marker-end="url(#head)"
             stroke-width="5" fill="none" stroke="red"
@@ -106,7 +106,7 @@ We will assume that they all work simultaneously and a version control system is
     />
 
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="512" y="96" width="64px" height="64px"/>
-    <text x="534" y="116" text-anchor="middle">A</text>
+    <text x="534" y="116" text-anchor="middle">Z</text>
 
 </svg>
 
@@ -175,7 +175,8 @@ My%20own%20require%20implementation/plato%20average%20lines.png)
 
 ### Divide and rule
 
-Now let consider that the project is split into several files
+So it looks like to avoid all the troubles described in the previous part, the project must be split into several source
+files.
 
 <svg width="100%" height="256"
      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -227,42 +228,22 @@ Now let consider that the project is split into several files
     <rect x="256" y="64" width="128px" height="128px" strike="black" fill="silver"></rect>
     <image xlink:href="http://ArnaudBuchholz.github.io/blog/cloud database.png" x="256" y="64" width="128px" height="128px"/>
 
-    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="16" width="32px" height="32px"/>
-    <text x="436" y="34" text-anchor="middle">A</text>
-    <path
-            marker-end="url(#head)"
-            stroke-width="5" fill="none" stroke="red"
-            d="M460,32 L512,104"
-    />
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="48" width="64px" height="64px"/>
+    <text x="444" y="68" text-anchor="middle">A</text>
 
-    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="80" width="32px" height="32px"/>
-    <text x="436" y="98" text-anchor="middle">B</text>
-    <path
-            marker-end="url(#head)"
-            stroke-width="5" fill="none" stroke="red"
-            d="M460,96 L512,120"
-    />
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="512" y="48" width="64px" height="64px"/>
+    <text x="534" y="68" text-anchor="middle">B</text>
 
-    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="144" width="32px" height="32px"/>
-    <text x="436" y="162" text-anchor="middle">C</text>
-    <path
-            marker-end="url(#head)"
-            stroke-width="5" fill="none" stroke="red"
-            d="M460,160 L512,136"
-    />
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="144" width="64px" height="64px"/>
+    <text x="444" y="164" text-anchor="middle">C</text>
 
-    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="422" y="208" width="32px" height="32px"/>
-    <text x="436" y="226" text-anchor="middle">D</text>
-    <path
-            marker-end="url(#head)"
-            stroke-width="5" fill="none" stroke="red"
-            d="M460,224 L512,152"
-    />
-
-    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="512" y="96" width="64px" height="64px"/>
-    <text x="534" y="116" text-anchor="middle">Z</text>
+    <image xlink:href="http://ArnaudBuchholz.github.io/blog/document locked.png" x="512" y="144" width="64px" height="64px"/>
+    <text x="534" y="164" text-anchor="middle">D</text>
 
 </svg>
+
+(*Each developer works on separate source files*)
+
 
 Now that we understood the impact of big files
 
@@ -280,9 +261,13 @@ Back to the [SOLID](https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)
     [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
 
 
+On which criteria do you decide to split the source code into several files
+How do you load the source files (i.e. how do you expose the interface)
 
 ### Maintainability
 
+Having smaller source files make them easier to maintain.
+In terms of coverage it is also a good way to 'increase' the overall coverage of
 
 ### Mocking
 
@@ -308,16 +293,26 @@ It gives you a total control on t
 
 ### Browser includes
 
+You must load them in the proper order
+Interface exposure is done through global variables
 
-### NodeJs1
+You can create private scopes using IIFE
 
 
+### NodeJs
+
+require / module.exports
+Synchronous loading
+Scope is private
 
 ### RequireJS
 
 The [RequireJS](http://requirejs.org/) library is widely used
 
 https://www.sitepoint.com/understanding-requirejs-for-effective-javascript-module-loading/
+
+asynchronous loading
+Scope is private
 
 ### Browserify
 
@@ -328,7 +323,6 @@ The [Browserify](http://browserify.org/) tool is capable of take
 [WebPack](https://webpack.js.org/) is like browserify on steroids.
 
 http://blog.namangoel.com/browserify-vs-webpack-js-drama
-
 
 
 ## NodeJS implementation of CommonJS
