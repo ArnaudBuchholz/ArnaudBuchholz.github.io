@@ -45,9 +45,9 @@ My%20own%20require%20implementation/ring.png)
 [In the Land of Mordor where the Shadows lie.](https://en.wikipedia.org/wiki/One_Ring)
 
 To demonstrate the value of modularity, we will start with an extreme
-[edge case](https://en.wikipedia.org/wiki/Edge_case): an application which source code stands in one single file and a
-development team composed of several developers.
-We will assume that they all work simultaneously and a version control system is used to store the file.
+[edge case](https://en.wikipedia.org/wiki/Edge_case): an application which source code stands in **one single file** and
+a development team composed of **several developers**.
+We will assume that **they all work simultaneously** and a version control system is used to store the file.
 
 <svg width="100%" height="256"
      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -114,11 +114,11 @@ We will assume that they all work simultaneously and a version control system is
 
 
 The first obvious concern is the resulting file size. Depending on the application complexity, and assuming no library
-is used, the source file will be big.
+is used, **the source file will be big**.
 
 And with size comes additional problems, leading to [maintainability](https://en.wikipedia.org/wiki/Maintainability)
-issues. Even if guidelines are well established between the team members and comments are used, it will be hard to
-navigate through the lines of code.
+issues. Even if guidelines are well established between the team members and comments are used, **it will be hard to
+navigate through the lines of code**.
 
 JavaScript offer [hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting) that basically allows you
 to use a function before it is being declared.
@@ -134,16 +134,16 @@ function catName(name) {
 But most linters will raise [an error](https://eslint.org/docs/rules/no-use-before-define) for the above code.
 Indeed, it is a best practice to declare functions and variables before using them.
 
-So the team will end up cluttering the source file to ensure declarations are made before use.
+So the team will end up **cluttering the source file** to ensure declarations are made before use.
 
-Not being able to navigate easily in the code also generates a more subtle problem: some logic might be repeated because
-it was hard to locate.
+Not being able to navigate easily in the code also generates a more subtle problem:
+**some logic might be repeated because it was hard to locate**.
 
 Finally, having all developers work on a single file will generate
 [conflicts](https://betterexplained.com/articles/a-visual-guide-to-version-control/) when pushing it to the
 [version control system](https://en.wikipedia.org/wiki/Version_control).
 Fortunately, most of those systems have mechanism to solve the conflicts either automatically or with the help of the
-developer. But this takes developer time and it is not risk free.
+developer. But **this takes developer time and it is not risk free**.
 
 Obviously, all these problems may appear on smaller files too but, in general, the larger the file the more problems.
 
@@ -174,7 +174,7 @@ My%20own%20require%20implementation/plato%20average%20lines.png)
 
 ### Divide and rule
 
-![Divide and conquer](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![Or divide and conquer](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/divide-and-conquer1.jpg)
 
 Code splitting is a good illustration of the [divide and rule](https://en.wikipedia.org/wiki/Divide_and_rule)
@@ -249,9 +249,11 @@ changes.
 
 It sounds easy but it is not.
 
-When it comes to deciding how to split the code and organize your sources, there must be rules and discipline.
+When it comes to deciding how to split the code and organize your sources, there must be **rules and discipline**.
 
-For instance, setting the level of granularity to functions will lead to thousand files.
+For instance, setting the level of granularity to one function per source will lead an overwhelming amount of files.
+On the other hand, not having clear criteria will make the file structure obscure and will slow down
+
 
 * File organization should reflect project structure: it forces the team to agree on
 
