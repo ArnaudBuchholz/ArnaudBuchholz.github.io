@@ -120,8 +120,8 @@ And with size comes additional problems, leading to [maintainability](https://en
 issues. Even if guidelines are well established between the team members and comments are used, **it will be hard to
 navigate through the lines of code**.
 
-JavaScript offer [hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting) that basically allows you
-to use a function before it is being declared.
+JavaScript offer [hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting) that basically allows the
+developer to use a function before it is being declared.
 
 `catName("Chloe");
 
@@ -140,7 +140,7 @@ Not being able to navigate easily in the code also generates a more subtle probl
 **some logic might be repeated because it was hard to locate**.
 
 Finally, having all developers work on a single file will generate
-[conflicts](https://betterexplained.com/articles/a-visual-guide-to-version-control/) when pushing it to the
+**[conflicts](https://betterexplained.com/articles/a-visual-guide-to-version-control/)** when pushing it to the
 [version control system](https://en.wikipedia.org/wiki/Version_control).
 Fortunately, most of those systems have mechanism to solve the conflicts either automatically or with the help of the
 developer. But **this takes developer time and it is not risk free**.
@@ -152,7 +152,7 @@ Two questions are remaining:
 * What is the maximum file size?
 
 In the context of web applications, a single source file makes the application load faster as it reduces the number
-of requests. It does not mean that you have to write this file yourself, there are many tools capable of building it.
+of requests. It does not mean that it must be written manually, there are many tools capable of building it.
 
 For instance:
 * [UglifyJS](https://github.com/mishoo/UglifyJS2) is a command line tool that concatenates and
@@ -162,11 +162,11 @@ For instance:
 [transpiling](https://www.stevefenton.co.uk/2012/11/compiling-vs-transpiling/) ES6 code.
 
 Answering the second question is way more difficult.
-From my experience, a JavaScript source file bigger than 1000 lines starts to be problematic. There might be good
-reasons to have a such a big file but it always comes with a cost.
+From my experience, **any JavaScript source file bigger than 1000 lines is a problem**.
+There might be good reasons to have a such a big file but it always comes with a cost.
 
 In [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js#metrics), the average number of lines per source file
-is a little under 100 lines. But it has not
+is a little under 100. But it has not
 [always been like this !](https://arnaudbuchholz.github.io/gpf/plato/index.html)
 
 ![Plato report on GPF-JS](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
@@ -178,8 +178,8 @@ My%20own%20require%20implementation/plato%20average%20lines.png)
 My%20own%20require%20implementation/divide-and-conquer1.jpg)
 
 Code splitting is a good illustration of the [divide and rule](https://en.wikipedia.org/wiki/Divide_and_rule)
-principle. Indeed, by slicing the application into smaller chunks, the developers have a better control over the
-changes.
+principle. Indeed, **by slicing the application into smaller chunks, the developers have a better control over the
+changes**.
 
 <svg width="100%" height="256"
      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -249,25 +249,46 @@ changes.
 
 It sounds easy but it is not.
 
-When it comes to deciding how to split the code and organize your sources, there must be **rules and discipline**.
+When it comes to deciding how to slice the application and organize the sources,
+there must be **rules and discipline**.
 
-For instance, setting the level of granularity to one function per source will lead an overwhelming amount of files.
-On the other hand, not having clear criteria will make the file structure obscure and will slow down
+For instance, setting the level of granularity to one function per source will generate an overwhelming amount of files.
+Or, **not having a clear file structure will make the architecture obscure** and will slow down the
+developers.
 
+There are many guidelines and howtos on the web depending on the type of project or technology.
 
-* File organization should reflect project structure: it forces the team to agree on
+For instance:
+* [Best practices for Express app structure](https://www.terlici.com/2014/08/25/best-practices-express-structure.html)
+* [AngularJS Best Practices: Directory Structure](https://scotch.io/tutorials/
+angularjs-best-practices-directory-structure)
+* [SAPUI5 application project structuring](http://www.sapui5tutors.com/2016/03/
+sapui5-application-project-structuring.html)
+* [Introduction to ExtJS Application Architecture](https://docs.sencha.com/extjs/6.0.0/guides/application_architecture/
+application_architecture.html)
+* [How to Structure Your React Project](https://daveceddia.com/react-project-structure/)
 
+...
 
-There are easy rule that can be applied to organize your code: usually, encapsulating ...
-For instance,     Services in Angular
-    Code segregation & encapsulation /
+One may also check [Yeoman](http://yeoman.io/), a scaffolding tool for applications, that contains [thousands of
+project generators](http://yeoman.io/generators/).
 
-Back to the [SOLID](https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)) principles,
+Yet, once the basic structure is in place, you are still confronted with choices when new files must be created.
+
+Here are some basic principles:
+* Folders are used to qualify the sources they contain. For instance, if a folder is named controller, you expect
+to find only controllers
+* Avoid folder names that are too generic: misc, util, helpers
+
+Try to encapsulate features in files.  Back to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29) principles,
     [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
 
 
-On which criteria do you decide to split the source code into several files
 How do you load the source files (i.e. how do you expose the interface)
+
+
+### Module loading
+
 
 ### Maintainability
 
