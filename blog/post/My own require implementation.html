@@ -128,9 +128,8 @@ to use a function before it is being declared.
 function catName(name) {
   console.log("My cat's name is " + name);
 }
-/*
-The result of the code above is: "My cat's name is Chloe"
-*/`
+
+// The result of the code above is: "My cat's name is Chloe"`
 
 But most linters will raise [an error](https://eslint.org/docs/rules/no-use-before-define) for the above code.
 Indeed, it is a best practice to declare functions and variables before using them.
@@ -175,8 +174,12 @@ My%20own%20require%20implementation/plato%20average%20lines.png)
 
 ### Divide and rule
 
-To avoid the troubles described in the previous part, another approach could be to split the project into several
-source files.
+![Divide and conquer](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+My%20own%20require%20implementation/divide-and-conquer1.jpg)
+
+Code splitting is a good illustration of the [divide and rule](https://en.wikipedia.org/wiki/Divide_and_rule)
+principle. Indeed, by slicing the application into smaller chunks, the developers have a better control over the
+changes.
 
 <svg width="100%" height="256"
      xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -242,13 +245,13 @@ source files.
 
 </svg>
 
-(*Each developer works on separate source files*)
+(*Each developer works on separate - smaller - source files*)
 
-Code modularity is a good illustration of the [divide and rule](https://en.wikipedia.org/wiki/Divide_and_rule)
-principle. Indeed, by splitting you application into smaller chunks, you have better control over your
-changes.
+It sounds easy but it is not.
 
-However, there must be rules and discipline when it comes to deciding where to draw the line between sources.
+When it comes to deciding how to split the code and organize your sources, there must be rules and discipline.
+
+For instance, setting the level of granularity to functions will lead to thousand files.
 
 * File organization should reflect project structure: it forces the team to agree on
 
