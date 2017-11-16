@@ -252,9 +252,8 @@ It sounds easy but it is not.
 When it comes to deciding how to slice the application and organize the sources,
 there must be **rules and discipline**.
 
-For instance, setting the level of granularity to one function per source will generate an overwhelming amount of files.
-Or, **not having a clear file structure will make the architecture obscure** and will slow down the
-developers.
+For example, setting the level of granularity to one function per source will generate an overwhelming amount of files.
+Or, **not having a clear file structure will make the architecture obscure** and will slow down the team.
 
 There are many guidelines and howtos on the web depending on the type of project or technology.
 
@@ -270,15 +269,16 @@ application_architecture.html)
 
 ...
 
-One may also check [Yeoman](http://yeoman.io/), a scaffolding tool for applications, that contains [thousands of
-project generators](http://yeoman.io/generators/).
+[Yeoman](http://yeoman.io/), a scaffolding tool for applications, contains
+[thousands of project generators](http://yeoman.io/generators/).
 
-Yet, once the basic structure is in place, you are still confronted with choices when new files must be created.
+Yet, once the basic structure is in place, developers are still confronted with choices when a new file must be created.
 
 Here are some basic principles:
-* Folders are used to qualify the sources they contain. For instance, if a folder is named controller, you expect
-to find only controllers
+* Folders are used to qualify the sources they contain. Indeed, if a folder is named "controller", it is more than
+expected to find only controllers inside it.
 * Avoid folder names that are too generic: misc, util, helpers
+
 
 Try to encapsulate features in files.  Back to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29) principles,
     [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
