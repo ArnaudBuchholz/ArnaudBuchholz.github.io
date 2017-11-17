@@ -8,6 +8,7 @@
     <div class="post-header-line-1"></div>
 </div>
 <div class="post-body">
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
@@ -267,17 +268,19 @@ sapui5-application-project-structuring.html)
 application_architecture.html)
 * [How to Structure Your React Project](https://daveceddia.com/react-project-structure/)
 
-...
-
-[Yeoman](http://yeoman.io/), a scaffolding tool for applications, contains
-[thousands of project generators](http://yeoman.io/generators/).
+On the other hands, some tools offers the possibility to instantiate new projects with a predefined structure.
+Such as [Yeoman](http://yeoman.io/) which contains [thousands of project generators](http://yeoman.io/generators/).
 
 Yet, once the basic structure is in place, developers are still confronted with choices when a new file must be created.
 
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
 Here are some basic principles:
 * Folders are used to qualify the sources they contain. Indeed, if a folder is named "controller", it is more than
-expected to find only controllers inside it.
-* Avoid folder names that are too generic: misc, util, helpers
+expected to find only [controllers](https://en.wikipedia.org/wiki/Model–view–controller) inside it.
+* Qualification can be technical ("controllers", "views") or functional ("public", "sources", "tests", "dialogs") but
+mixing should be avoided at the same level.
+* Avoid names that are too generic: folder *(true story)*, misc, util, helpers, data
 
 
 Try to encapsulate features in files.  Back to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29) principles,
@@ -289,8 +292,14 @@ How do you load the source files (i.e. how do you expose the interface)
 
 ### Module loading
 
+Dependency injection
 
-### Maintainability
+    [Dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle)
+
+
+
+
+    ### Maintainability
 
 Having smaller source files make them easier to maintain.
 In terms of coverage it is also a good way to 'increase' the overall coverage of
@@ -309,11 +318,6 @@ module by another one, you can then
 well defined interface, and provided that you can then replace it with a similar one mocking the functionality.
 
 It gives you a total control on t
-
-## Dependency injection
-
-[Dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle)
-
 
 ## Existing implementations
 
