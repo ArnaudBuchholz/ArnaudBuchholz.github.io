@@ -8,7 +8,7 @@
     <div class="post-header-line-1"></div>
 </div>
 <div class="post-body">
-<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
@@ -256,6 +256,8 @@ there must be **rules and discipline**.
 For example, setting the level of granularity to one function per source will generate an overwhelming amount of files.
 Or, **not having a clear file structure will make the architecture obscure** and will slow down the team.
 
+#### File organization
+
 There are many guidelines and howtos on the web depending on the type of project or technology.
 
 For instance:
@@ -273,15 +275,23 @@ Such as [Yeoman](http://yeoman.io/) which contains [thousands of project generat
 
 Yet, once the basic structure is in place, developers are still confronted with choices when a new file must be created.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 Here are some basic principles:
-* Folders are used to qualify the sources they contain. Indeed, if a folder is named "controller", it is more than
-expected to find only [controllers](https://en.wikipedia.org/wiki/Model–view–controller) inside it.
-* Qualification can be technical ("controllers", "views") or functional ("public", "sources", "tests", "dialogs") but
-mixing should be avoided at the same level.
-* Avoid names that are too generic: folder *(true story)*, misc, util, helpers, data
 
+* Document the structure and make it known: ask people to [Read The Fabulous Manual](https://en.wikipedia.org/wiki/RTFM)
+
+* Folder names are used to qualify the sources they contain. Indeed, if a folder is named "controller", it is more than
+expected to find only [controllers](https://en.wikipedia.org/wiki/Model–view–controller) in it.
+
+* The qualification can be technical ("controllers", "views") or functional ("public", "sources", "tests", "dialogs")
+but mixing should be avoided at the same level.
+
+* Avoid names that are too generic: "folder" *(true story)*, "misc", "util", "helpers", "data"...
+
+#### File content
+
+Talking about the file content
 
 Try to encapsulate features in files.  Back to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29) principles,
     [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
