@@ -345,22 +345,27 @@ Hence, it will be referred as a **module**.
 
 The advantages of modules are multiple:
 
-Here are the advantages of thinking in terms of modules rather than source files:
+* Testability: the feature being isolated in one file, and ideally with a limited number of dependencies, it shall be
+easier to test.
 
-* Testability: the feature being isolated in one file, it shall be easier to test.
+* Maintainability: if you sum the file size and its testability, the module becomes highly maintainable.
 
-* Maintainability: if you add the file size to its testability, the module becomes
-
-* Reusability:
+* Reusability: the main advantage here. Reusability
 
 
 https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc
 
 ### Loading
 
+(...) Disclaimer: module loading mechanism is dependant on the host. This is where GPF-JS brings value by trying to
+uniformize the loading.
+
 Loading of all the application can be seen from different angles.
 
 #### Loads everything in one block
+
+Loading a script in an HTML page starts with an include tag.
+You may have one file (built upon a build process).
 
 #### Lazy loading
 
