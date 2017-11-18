@@ -253,10 +253,11 @@ It sounds easy but it is not.
 When it comes to deciding how to slice the application and organize the sources,
 there must be **rules and discipline**.
 
-For example, setting the level of granularity to one function per source will generate an overwhelming amount of files.
-Or, **not having a clear file structure will make the architecture obscure** and will slow down the team.
+For example, maximizing the **level of granularity** by having one function per source will generate an overwhelming
+amount of files. Or, **not having a clear file structure will make the architecture obscure** and will slow down the
+team.
 
-#### File organization
+#### Files organization
 
 There are many guidelines and howtos on the web depending on the type of project or technology.
 
@@ -273,46 +274,76 @@ application_architecture.html)
 On the other hands, some tools offers the possibility to instantiate new projects with a predefined structure.
 Such as [Yeoman](http://yeoman.io/) which contains [thousands of project generators](http://yeoman.io/generators/).
 
-Yet, once the basic structure is in place, developers are still confronted with choices when a new file must be created.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zBt2g9ekiug" frameborder="0" allowfullscreen></iframe>
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+Yet, once the basic structure is in place, developers are still **confronted with choices when new files must be
+created.**
 
-Here are some basic principles:
+So, regarding files organization, here are some basic principles (in no particular order):
 
 * Document the structure and make it known: ask people to [Read The Fabulous Manual](https://en.wikipedia.org/wiki/RTFM)
 
-* Folder names are used to qualify the sources they contain. Indeed, if a folder is named "controller", it is more than
-expected to find only [controllers](https://en.wikipedia.org/wiki/Model–view–controller) in it.
+* Folder names are used to qualify the files they contain.
+Indeed, if a folder is named "controller", it is more than expected to find only
+[controllers](https://en.wikipedia.org/wiki/Model–view–controller) in it.
+The same way, for a web application, a "public" folder usually indicates that its content is exposed
 
-* The qualification can be technical ("controllers", "views") or functional ("public", "sources", "tests", "dialogs")
-but mixing should be avoided at the same level.
+* The folder qualification can be technical ("sources", "tests", "public") or functional ("controllers", "views",
+"dialogs", "stream") but mixing at the same level should be avoided. For one technology stack, if dialogs are
+implemented with controllers:
+it makes sense to see "dialogs" below "controllers" but having both in the same folder will be confusing
 
-* Avoid names that are too generic: "folder" *(true story)*, "misc", "util", "helpers", "data"...
+* Try to stick to widely accepted (and understood) names: use "public" instead "www", use "dist" or "release" instead
+of "shipping"...
 
-#### File content
+* Try to avoid names that are too generic: "folder" *(true story)*, "misc", "util", "helpers", "data"...
 
-Talking about the file content
-
-Try to encapsulate features in files.  Back to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29) principles,
-    [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-
-
-How do you load the source files (i.e. how do you expose the interface)
+* Stick to one language *(don't mix French and English)*
 
 
-### Module loading
+* Select and stick to a naming formalism, such as [Camel Case](https://en.wikipedia.org/wiki/Camel_case)
+
+* Forget about the [8.3 limitation](https://en.wikipedia.org/wiki/8.3_filename), names can be as long as necessary
+
+Last but not least, Files name must be self explanatory about their purpose and content.
+If someone struggles to decide of the file name, it may be due to the fact that it does more than necessary:
+splitting the file may help.
+
+#### Level of granularity
+
+In case of doubts, just compare:
+* folders to [namespaces](https://en.wikipedia.org/wiki/Namespace)
+* files to [classes](https://en.wikipedia.org/wiki/Class_%28computer_programming%29)
+
+Then, try to stick to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29)
+![principles](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+My%20own%20require%20implementation/SOLID.jpg)
+
+In particular, the [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
+should drive your choices when creating a new file.
+
+Here is a shamelessly modified copy of the wikipedia definition as it summarizes the idea:*
+
+The single responsibility principle is a computer programming principle that states that every module should have
+responsibility over a single part of the functionality provided by the software, and that responsibility should be
+entirely encapsulated by the module. All its services should be narrowly aligned with that responsibility.*
+
+
+Referring to the [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
+and the [Dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) may look weird
+when considering source files but the following two sections (loading and mocking) will shed some light on the analysis
+behind this statement.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+### Loading
 
 Dependency injection
 
-    [Dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle)
+    [Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection)
 
 
 
-
-    ### Maintainability
-
-Having smaller source files make them easier to maintain.
-In terms of coverage it is also a good way to 'increase' the overall coverage of
 
 ### Mocking
 
@@ -329,7 +360,14 @@ well defined interface, and provided that you can then replace it with a similar
 
 It gives you a total control on t
 
-## Existing implementations
+### A small digression on maintainability
+
+    Having smaller source files make them easier to maintain.
+    In terms of coverage it is also a good way to 'increase' the overall coverage of
+
+
+
+    ## Existing implementations
 
 ### Browser includes
 
