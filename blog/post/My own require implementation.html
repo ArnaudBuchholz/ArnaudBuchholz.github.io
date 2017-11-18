@@ -303,15 +303,17 @@ of "shipping"...
 
 * Select and stick to a naming formalism, such as [Camel Case](https://en.wikipedia.org/wiki/Camel_case)
 
-* Forget about the [8.3 limitation](https://en.wikipedia.org/wiki/8.3_filename), names can be as long as necessary
+* Forget about the [8.3](https://en.wikipedia.org/wiki/8.3_filename) or
+[MAX_PATH](https://support.microsoft.com/fr-ca/help/177665/path-too-long-error-message-when-exceeding-max-path)
+limitations, names can be as long as necessary
 
 Last but not least, Files name must be self explanatory about their purpose and content.
-If someone struggles to decide of the file name, it may be due to the fact that it does more than necessary:
+If someone struggles to decide of the file name, it may be due to the fact that it contains more than necessary:
 splitting the file may help.
 
 #### Level of granularity
 
-In case of doubts, just compare:
+In case of doubts, just associate:
 * folders to [namespaces](https://en.wikipedia.org/wiki/Namespace)
 * files to [classes](https://en.wikipedia.org/wiki/Class_%28computer_programming%29)
 
@@ -320,13 +322,13 @@ Then, try to stick to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-
 My%20own%20require%20implementation/SOLID.jpg)
 
 In particular, the [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-should drive your choices when creating a new file.
+should drive the choices when creating a new file.
 
 Here is a shamelessly modified copy of the wikipedia definition as it summarizes the idea:*
 
-The single responsibility principle is a computer programming principle that states that every module should have
+"The single responsibility principle is a computer programming principle that states that every module should have
 responsibility over a single part of the functionality provided by the software, and that responsibility should be
-entirely encapsulated by the module. All its services should be narrowly aligned with that responsibility.*
+entirely encapsulated by the module. All its services should be narrowly aligned with that responsibility."*
 
 
 Referring to the [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
@@ -336,7 +338,37 @@ behind this statement.
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
+So, from now, a source file is no more a bunch of lines of codes but rather an encapsulated feature.
+it will be referred as module.
+
+#### Modules
+
+Here are the advantages of thinking in terms of modules rather than source files:
+
+* Maintainability: by decoupling the features and isolating them,
+
+* Testability:
+
+* Reusability:
+
+
+https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc
+
 ### Loading
+
+Loading of all the application can be seen from different angles.
+
+#### Loads everything in one block
+
+#### Lazy loading
+
+To make it work, dependencies bet
+
+list of dependencies
+
+![The lazy me is happy](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+My%20own%20require%20implementation/nolist.jpg)
+
 
 Dependency injection
 
@@ -365,16 +397,21 @@ It gives you a total control on t
     Having smaller source files make them easier to maintain.
     In terms of coverage it is also a good way to 'increase' the overall coverage of
 
+    Variables scoping
+
+    Whatever the host you run your JavaScript with
 
 
-    ## Existing implementations
+## Existing implementations
 
 ### Browser includes
 
-You must load them in the proper order
+
+You must load them in the proper order: this
 Interface exposure is done through global variables
 
-You can create private scopes using IIFE
+You can create private scopes using IIFE but exposing the module interface has to be done either through globals or
+    using a global methods
 
 
 ### NodeJs
