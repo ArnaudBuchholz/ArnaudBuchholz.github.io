@@ -309,8 +309,6 @@ limitations, names can be as long as necessary
 
 #### Level of granularity
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 Once the structure is clearly defined, the only difficulty remaining is to figure out what to put inside the files.
 Obviously, their names must be self explanatory about purpose and content.
 
@@ -324,8 +322,8 @@ Then, try to stick to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-
 ![principles](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/SOLID.jpg)
 
-In particular, the [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
-should drive the choices when creating a new file.
+In particular, **the [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
+should drive the choices when creating a new file**.
 
 Here is a shamelessly modified copy of the wikipedia definition as it summarizes the idea:*
 
@@ -346,22 +344,19 @@ Basically, because of this definition, a source file is no more a senseless bunc
 
 The advantages of modules are multiple:
 
-* Testability: it is sometimes difficult to draw the line between
+* **Testability**: it is sometimes difficult to draw the line between
 [unit testing](https://en.wikipedia.org/wiki/Unit_testing) and
 [integration testing](https://en.wikipedia.org/wiki/Integration_testing). Long story short, if you need several modules
-to run a test, it looks like integration. On the other hand, if the module can be tested with very few dependencies
-(maybe through mocking), this is unit testing. Having a good sense of
+to run a test, it sounds like integration. On the other hand, if the module can be tested with no or very few
+dependencies (maybe through mocking), this is unit testing.
 
-    the functionality being isolated in one file, and ideally with a limited number of dependencies, it is
-easier to test. Indeed, it is not necessary to load thousands of files and maximizing the file coverage will ensure
-that the feature is stable.
+* **Maintainability**: combining the file size and the testability increases the module's
+[maintainability](https://en.wikipedia.org/wiki/Maintainability). This means that it is easier (in terms of complexity
+and effort) to improve or fix.
 
-* Maintainability:
-    if you combine the file size and its testability, the module becomes highly maintainable.
+* **Reusability**: modules are an indisputable alternative to copy & paste.
 
-* Reusability: the main advantage here.
-
-https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ### Loading
 
