@@ -312,7 +312,7 @@ limitations, names can be as long as necessary
 Once the structure is clearly defined, the only difficulty remaining is to figure out what to put inside the files.
 Obviously, their names must be self explanatory about purpose and content.
 
-**Struggling to choose the right file name is usually a good sign that it may contain more than necessary**: splitting may help.
+**Struggling to choose the right file name is usually a good sign that it contains more than necessary**: splitting may help.
 
 In case of doubts, just associate:
 * folders to [namespaces](https://en.wikipedia.org/wiki/Namespace)
@@ -360,21 +360,47 @@ and effort) to improve or fix.
 
 ### Loading
 
-(...) Disclaimer: module loading is dependant on the host. This is where GPF-JS brings value by offering an
-uniform solution
+(...) The way modules are loaded depends on the host. This is where GPF-JS brings value by offering an uniform solution.
+The purpose of this part is not to explain each mechanism but rather describe the overall philosophy when it comes
+to loading all sources.
 
 Loading of all the application can be seen from different angles.
 
 #### Loads everything in one block
+
+As already mentioned before, there are tools designed to concatenate and minify all sources in order to generate
+a single application file.
+Another alternative is to maintain the list of sources to load... in the correct order so that dependencies are loaded
+before their dependant modules.
+For instance,
+
+CON:
+    Everytime a new file is created, it must be added to the list
+    Risk of loading a file that is not used anymore
+
+PRO:
+    Loading works
+    speed?
+
 
 Loading a script in an HTML page starts with an include tag.
 You may have one file (built upon a build process).
 
 #### Lazy loading
 
+If a module declare its dependencies
+
 To make it work, dependencies bet
 
-list of dependencies
+CON:
+    Detecting missing dependencies
+    speed? ==> caching
+
+PRO:
+    No big list to maintain
+    speed?
+
+    list of dependencies
 
 ![The lazy me is happy](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/nolist.jpg)
@@ -383,8 +409,9 @@ My%20own%20require%20implementation/nolist.jpg)
 Dependency injection
 
     [Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection)
+    alias between module and its path
 
-
+    Angular uses pre-loading then injection
 
 
 ### Mocking
@@ -401,16 +428,6 @@ module by another one, you can then
 well defined interface, and provided that you can then replace it with a similar one mocking the functionality.
 
 It gives you a total control on t
-
-### A small digression on maintainability
-
-    Having smaller source files make them easier to maintain.
-    In terms of coverage it is also a good way to 'increase' the overall coverage of
-
-    Variables scoping
-
-    Whatever the host you run your JavaScript with
-
 
 ## Existing implementations
 
