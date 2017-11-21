@@ -307,11 +307,14 @@ of "shipping"...
 [MAX_PATH](https://support.microsoft.com/fr-ca/help/177665/path-too-long-error-message-when-exceeding-max-path)
 limitations, names can be as long as necessary
 
-Last but not least, Files name must be self explanatory about their purpose and content.
-If someone struggles to decide of the file name, it may be due to the fact that it contains more than necessary:
-splitting the file may help.
-
 #### Level of granularity
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+Once the structure is clearly defined, the only difficulty remaining is to figure out what to put inside the files.
+Obviously, their names must be self explanatory about purpose and content.
+
+**Struggling to choose the right file name is usually a good sign that it may contain more than necessary**: splitting may help.
 
 In case of doubts, just associate:
 * folders to [namespaces](https://en.wikipedia.org/wiki/Namespace)
@@ -331,24 +334,30 @@ responsibility over a single part of the functionality provided by the software,
 entirely encapsulated by the module. All its services should be narrowly aligned with that responsibility."*
 
 
-Referring to the [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
+(...) Referring to the [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
 and the [Dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) may look weird
 when considering source files but the following two sections (loading and mocking) will shed some light on the analysis
 behind this statement.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
-So, from now, a source file is no more a bunch of lines of codes but rather a *self-contained feature*.
-Hence, it will be referred as a **module**.
+Basically, because of this definition, a source file is no more a senseless bunch of lines of codes but rather a
+**self-contained feature**. Hence, it will be referred as a **module**.
 
 #### Modules
 
 The advantages of modules are multiple:
 
-* Testability: the feature being isolated in one file, and ideally with a limited number of dependencies, it is
-easier to test.
+* Testability: it is sometimes difficult to draw the line between
+[unit testing](https://en.wikipedia.org/wiki/Unit_testing) and
+[integration testing](https://en.wikipedia.org/wiki/Integration_testing). Long story short, if you need several modules
+to run a test, it looks like integration. On the other hand, if the module can be tested with very few dependencies
+(maybe through mocking), this is unit testing. Having a good sense of
 
-* Maintainability: if you combine the file size and its testability, the module becomes highly maintainable.
+    the functionality being isolated in one file, and ideally with a limited number of dependencies, it is
+easier to test. Indeed, it is not necessary to load thousands of files and maximizing the file coverage will ensure
+that the feature is stable.
+
+* Maintainability:
+    if you combine the file size and its testability, the module becomes highly maintainable.
 
 * Reusability: the main advantage here.
 
