@@ -368,7 +368,7 @@ comes to loading the sources of an application.
 
 #### Everything at once
 
-![Load all the files](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![Load all the files !](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/X-All-The-Y.jpg)
 
 As already mentioned before, there are tools designed to concatenate and minify all sources in order to generate
@@ -393,11 +393,23 @@ to maintain this list in the dashboard.
 
 #### Lazy loading
 
-If a module declare its dependencies
+Instead of loading all the files at once, another principle consists in loading what is needed to **boot the
+application** and then load **additional files when required**.
+This is known as [lazy loading](https://en.wikipedia.org/wiki/Lazy_loading).
 
-To make it work, dependencies bet
+Here again, what needs to be loaded has to be defined somehow.
+in not one list but several ones. One for the bootstrap and then
+as many as you have
 
-CON:
+Advantages are:
+* Faster startup of the application
+
+Disadvantages are:
+* Once the application started, accessing a part that has not been previously loaded will generate delay
+
+#### Dependency management
+
+    CON:
     Detecting missing dependencies
     speed? ==> caching
 
@@ -410,7 +422,10 @@ PRO:
 ![The lazy me is happy](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/nolist.jpg)
 
-#### Dependency handling
+    If a module declare its dependencies
+
+    To make it work, dependencies bet
+
 
     Dependency injection
 
