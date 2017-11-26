@@ -393,17 +393,14 @@ Disadvantages are:
 [handled](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json). The lazy me has created some tools
 to maintain this list in the dashboard.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 #### Lazy loading
 
 Instead of loading all the files at once, another method consists in loading what is needed to **boot the
 application** and then load **additional files when required**.
 This is known as [lazy loading](https://en.wikipedia.org/wiki/Lazy_loading).
 
-Here again, what needs to be loaded has to be defined somehow.
-in not one list but several ones. One for the bootstrap and then
-as many as you have
+For each part of the loading process, the list of files to load must be maintained.
+Hence the benefits are mostly focused on the time needed to start the application.
 
 Advantages are:
 * Faster startup of the application
@@ -412,6 +409,16 @@ Disadvantages are:
 * Once the application started, accessing a part that has not been previously loaded will generate delay
 
 #### Dependency management
+
+Whether you go with static or lazy loading, both mechanism require a list of files to load.
+However, **maintaining these lists are time consuming and error prone**.
+
+![Is there any way to get rid of these lists?](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+My%20own%20require%20implementation/nolist.jpg)
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+
 
     CON:
     Detecting missing dependencies
@@ -423,8 +430,6 @@ PRO:
 
     list of dependencies
 
-![The lazy me is happy](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
-My%20own%20require%20implementation/nolist.jpg)
 
     If a module declare its dependencies
 
