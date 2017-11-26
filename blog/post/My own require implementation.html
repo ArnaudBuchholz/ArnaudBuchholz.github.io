@@ -356,8 +356,6 @@ and effort) to improve or fix.
 
 * **Reusability**: modules are an indisputable alternative to copy & paste.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ### Loading
 
 The way modules are loaded **varies for each host** and some examples will be shown in the 'Existing implementations'
@@ -372,10 +370,14 @@ comes to loading the sources of an application.
 My%20own%20require%20implementation/X-All-The-Y.jpg)
 
 As already mentioned before, there are tools designed to concatenate and minify all sources in order to generate
-a single application file. This file is consequently **self-sufficient**.
+a single application file. The resulting file is consequently **self-sufficient** and can be easily loaded.
 
-Another alternative is to maintain a **list of sources to load**... in the correct order so that **dependencies are
-loaded before their dependant modules**.
+Dependencies will be addressed below but, to generate this file, the tool must start with a list of files to
+concatenate (or, usually, a folder where to find the files).
+
+An alternative to load the application is to maintain a **list of sources to load**... in the correct order so that
+**dependencies are loaded before their dependant modules**.
+
 For instance, in an HTML page, you may have a big list of script tags to include all sources.
 
 Advantages are:
@@ -391,9 +393,11 @@ Disadvantages are:
 [handled](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json). The lazy me has created some tools
 to maintain this list in the dashboard.
 
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
 #### Lazy loading
 
-Instead of loading all the files at once, another principle consists in loading what is needed to **boot the
+Instead of loading all the files at once, another method consists in loading what is needed to **boot the
 application** and then load **additional files when required**.
 This is known as [lazy loading](https://en.wikipedia.org/wiki/Lazy_loading).
 
