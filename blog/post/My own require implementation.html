@@ -381,13 +381,25 @@ My%20own%20require%20implementation/X-All-The-Y.jpg)
 As already mentioned before, there are tools designed to concatenate and minify all sources in order to generate
 a single application file. The resulting file is consequently **self-sufficient** and can be easily loaded.
 
-Dependencies will be addressed below but, to generate this file, the tool must start with a list of files to
+Dependencies will be addressed later but, to generate this file, the tool must start with a list of files to
 concatenate (or, usually, a folder where to find the files).
 
 An alternative to load the application is to maintain a **list of sources to load**... in the correct order so that
 **dependencies are loaded before their dependant modules**.
 
-For instance, in an HTML page, you may have a big list of script tags to include all sources.
+As a result, in an HTML page, you may have a big list of script tags to include all sources.
+
+Let consider the following modules: A, B, C, D and E
+* A requires B and C to be loaded first
+* B requires D to be loaded
+* E can be loaded separately
+
+The resulting ordered lists can be:
+* D, B, C, A, E
+* C, D, B, A, E
+* D, C, B, A, E
+* E, D, B, C, A
+* ...
 
 Advantages are:
 * Sequence is managed by a list, this gives a clear understanding of the loading process and allows the developers to
@@ -395,7 +407,7 @@ fully control it
 
 Disadvantages are:
 * Every time a new source is created, it must be added to the list in the correct order
-* The more files, the bigger the list
+* The more files, the bigger the list (and the more complex to maintain)
 * Some files may be loaded even if they are not used anymore
 
 (...) This is not the preferred solution but this is how the source version of GPF-JS is
