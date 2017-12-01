@@ -12,8 +12,8 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
-    The release 0.2.2 of GPF-JS delivers a polymorphic modularization mechanism that mimics RequireJS or CommonJS
-    implementation inside NodeJS. It was surprisingly easy to make it happen now that the library offers all the
+    The release 0.2.2 of GPF-JS delivers a polymorphic modularization mechanism that mimics RequireJS and CommonJS
+    implementation of NodeJS. It was surprisingly easy to make it happen now that the library offers all the
     basic services and it combines lots of technologies. Here are the implementation details.
 </div>
 <code class="markdown">
@@ -146,14 +146,15 @@ Finally, having all developers work on a single file will generate
 Fortunately, most of those systems have mechanism to solve the conflicts either automatically or with the help of the
 developer. But **this takes developer time and it is not risk free**.
 
-Obviously, all these problems may appear on smaller files too but, in general, the larger the file the more problems.
+Obviously, all these problems may appear on smaller files too but, in general,
+**the larger the file the more problems**.
 
 Two questions are remaining:
 * What could be the advantages of having a single source file?
 * What is the maximum file size?
 
-In the context of web applications, a single source file makes the application load faster as it reduces the number
-of requests. It does not mean that it must be written manually, there are many tools capable of building it.
+In the context of web applications, **a single source file makes the application load faster** as it reduces the number
+of requests. It does not mean that it must be written manually, there are many tools capable of **building** it.
 
 For instance:
 * [UglifyJS](https://github.com/mishoo/UglifyJS2) is a command line tool that concatenates and
@@ -254,7 +255,7 @@ When it comes to deciding how to slice the application and organize the sources,
 there must be **rules and discipline**.
 
 For example, maximizing the **level of granularity** by having one function per source will generate an overwhelming
-amount of files. Or, **not having a clear file structure will make the architecture obscure** and will slow down the
+amount of files. Also, **not having a clear file structure will make the architecture obscure** and will slow down the
 team.
 
 #### Files organization
@@ -300,12 +301,14 @@ of "shipping"...
 
 * Stick to one language *(don't mix French and English)*
 
-
 * Select and stick to a naming formalism, such as [Camel Case](https://en.wikipedia.org/wiki/Camel_case)
 
 * Forget about the [8.3](https://en.wikipedia.org/wiki/8.3_filename) or
 [MAX_PATH](https://support.microsoft.com/fr-ca/help/177665/path-too-long-error-message-when-exceeding-max-path)
 limitations, names can be as long as necessary
+
+![... and 640K is enough for everyone](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+My%20own%20require%20implementation/back-in-my-day-funny-5.jpg)
 
 #### Level of granularity
 
@@ -348,13 +351,18 @@ The advantages of modules are multiple:
 [unit testing](https://en.wikipedia.org/wiki/Unit_testing) and
 [integration testing](https://en.wikipedia.org/wiki/Integration_testing). Long story short, if you need several modules
 to run a test, it sounds like integration. On the other hand, if the module can be tested with no or very few
-dependencies (maybe through mocking), this is unit testing.
+dependencies (maybe through mocking), this is unit testing. So, ideally, **a module can be easily isolated to achieve
+unit testing**
 
-* **Maintainability**: combining the file size and the testability increases the module's
-[maintainability](https://en.wikipedia.org/wiki/Maintainability). This means that it is easier (in terms of complexity
-and effort) to improve or fix.
+* **Maintainability**: on top of the testability, the file size should be relatively small. Both facts greatly increase
+the module's [maintainability](https://en.wikipedia.org/wiki/Maintainability).
+This means that **it is easier (in terms of complexity and effort) to improve or fix** the module.
 
-* **Reusability**: modules are an indisputable alternative to copy & paste.
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+* **Reusability**: no finger pointing here. Every developer start their career by learning the virtues of copy & paste.
+It takes time and experience to realize that the more the code is copied, the harder it is to maintain it.
+Modules are an indisputable alternative to copy & paste because they are designed to be reusable.
 
 ### Loading
 
@@ -415,8 +423,6 @@ However, **maintaining these lists is time consuming and error prone**.
 
 ![Is there any way to get rid of these lists?](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/nolist.jpg)
-
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 It's almost impossible to get rid of the lists but changing the point of view may simplify the problem.
 Instead of having global lists of files to load, **each module can declare which subsequent modules it depends on**.
