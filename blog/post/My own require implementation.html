@@ -418,7 +418,11 @@ My%20own%20require%20implementation/nolist.jpg)
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
+It's almost impossible to get rid of the list **but** changing its scope will simplify source management. Instead of
+having one big list of files to load, each module can tell which modules it depends on. This way, when loading modules,
+the loader can check dependencies and load them recursively.
 
+Advantages are:
 
     CON:
     Detecting missing dependencies
