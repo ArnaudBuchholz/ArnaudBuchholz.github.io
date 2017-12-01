@@ -418,27 +418,19 @@ My%20own%20require%20implementation/nolist.jpg)
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
-It's almost impossible to get rid of the list **but** changing its scope will simplify source management. Instead of
-having one big list of files to load, each module can tell which modules it depends on. This way, when loading modules,
-the loader can check dependencies and load them recursively.
+It's almost impossible to get rid of the lists but changing the point of view may simplify the problem.
+Instead of having global lists of files to load, **each module can declare which subsequent modules it depends on**.
+This way, when loading modules, the loader can check dependencies and load them recursively.
 
 Advantages are:
+* No big list to maintain
+* Better visibility on module dependencies
+* New files are loaded if declared as dependencies
+* Only used files are loaded
 
-    CON:
-    Detecting missing dependencies
-    speed? ==> caching
-
-PRO:
-    No big list to maintain
-    speed?
-
-    list of dependencies
-
-
-    If a module declare its dependencies
-
-    To make it work, dependencies bet
-
+Disadvantages are:
+* Risk of deadlock if module A depends on B which itselfs depend on A
+* Loading speed due to multiple loading of the same module
 
     Dependency injection
 
