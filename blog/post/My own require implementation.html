@@ -301,13 +301,14 @@ of "shipping"...
 
 * Stick to one language *(don't mix French and English)*
 
+
 * Select and stick to a naming formalism, such as [Camel Case](https://en.wikipedia.org/wiki/Camel_case)
 
 * Forget about the [8.3](https://en.wikipedia.org/wiki/8.3_filename) or
 [MAX_PATH](https://support.microsoft.com/fr-ca/help/177665/path-too-long-error-message-when-exceeding-max-path)
 limitations, names can be as long as necessary
 
-![... and 640K is enough for everyone](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![... and 640K is enough for everyone :-)](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/back-in-my-day-funny-5.jpg)
 
 #### Level of granularity
@@ -337,8 +338,8 @@ entirely encapsulated by the module. All its services should be narrowly aligned
 
 (...) Referring to the [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
 and the [Dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) may look weird
-when considering source files but the following two sections (loading and mocking) will shed some light on the analysis
-behind this statement.
+when considering source files but the following two sections (interface and mocking) will shed some light on the
+analysis behind this statement.
 
 Basically, because of this definition, a source file is no more a senseless bunch of lines of codes but rather a
 **self-contained feature**. Hence, it will be referred as a **module**.
@@ -371,15 +372,13 @@ section. This is where **GPF-JS brings value by offering one uniform solution** 
 The purpose of this part is not to explain each mechanism but rather describe the overall philosophy when it
 comes to loading the sources of an application.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 #### Everything at once
 
 ![Load all the files !](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/X-All-The-Y.jpg)
 
 As already mentioned before, there are tools designed to concatenate and minify all sources in order to generate
-a single application file. The resulting file is consequently **self-sufficient** and can be easily loaded.
+**a single application file**. The resulting file is consequently **self-sufficient** and can be easily loaded.
 
 Dependencies will be addressed later but, to generate this file, the tool must know the list of files to
 concatenate (or, usually, the folder where to find the files).
@@ -389,7 +388,7 @@ An alternative to load the application is to maintain a **list of sources to loa
 
 As a result, in an HTML page, you may have a big list of script tags to include all sources.
 
-Let consider the following modules: A, B, C, D, E and F
+For example, let consider the following modules: A, B, C, D, E and F
 * A requires B and C to be loaded
 * B requires D to be loaded
 * E requires F to be loaded
@@ -406,7 +405,7 @@ Advantages are:
 * Sequence being managed by a list, it gives a **clear understanding of the loading process** and allows the developers
 to fully control it
 * Unlike the unique concatenated file that is regenerated for each release, some files might not even change between
-versions. Consequently, **the loading process can benefit from caching mechanism** to start the application faster.
+versions. Consequently, **the loading process can benefit from caching mechanism** and the application starts faster.
 
 Disadvantages are:
 * Every time a new source is created, **it must be added to the list in the correct order** to be loaded
@@ -425,21 +424,24 @@ Instead of loading all the files at once, another method consists in loading wha
 application** and then load **additional files when required**.
 This is known as [lazy loading](https://en.wikipedia.org/wiki/Lazy_loading).
 
+![Or the energy saving mode...](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+My%20own%20require%20implementation/lazy.jpg)
+
 For each part of the loading process, the list of files to load must be maintained.
 Hence the benefits are mostly focused on the **time needed to start the application**.
 
 Back to the previous example, E and F are big files requiring lot of time to load and evaluate.
-* Loading the application is done with this booting list: D, B, C, A
+* Loading the application is done with the booting list: D, B, C, A
 * And, when required, the feature implemented by E is loaded with: F, E
 
 Advantages are:
 * Faster startup of the application, it also implies **smaller initial
 [application footprint](https://en.wikipedia.org/wiki/Application_footprint)**
-* Smaller lists to maintain which are consequently **easier to maintain**
+* Loading instructions are split into smaller lists which are consequently **easier to maintain**
 
 Disadvantages are:
 * Once the application started, accessing a part that has not been previously loaded will **generate delay**
-* If any trouble occurs during this additional loading phase (no network?) **the application breaks**
+* If any trouble occurs during the additional loading phase (such as no network) **the application breaks**
 
 #### Dependency management
 
@@ -449,21 +451,62 @@ However, **maintaining these lists is time consuming and error prone**.
 ![Is there any way to get rid of these lists?](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
 My%20own%20require%20implementation/nolist.jpg)
 
-It's almost impossible to get rid of the lists but changing the point of view may simplify the problem.
-Instead of having global lists of files to load, **each module can declare which subsequent modules it depends on**.
-This way, when loading modules, the loader can check dependencies and load them recursively.
+It's almost impossible to get rid of the lists but **changing the scope** simplifies their management.
+Instead of maintaining global lists of files to load, **each module can declare which subsequent modules it depends
+on**. This way, when loading modules, **the loader must check dependencies and process them recursively**.
+
+Hence, the whole application can be started by loading one module which depends on everything else. Also, it means that,
+on top of implementing a feature, a module contains information about the way it should be loaded.
+
+Back to the previous example:
+* A contains information that B and C must be loaded
+* B contains information that D must be loaded
+* E contains information that F must be loaded
+Then:
+* Loading the application is done by loading A
+* And, when required, the feature implemented by E is loaded with E
 
 Advantages are:
-* No big list to maintain
-* Better visibility on module dependencies
-* New files are loaded if declared as dependencies
-* Only used files are loaded
+* No big lists to maintain, **each module declare its dependencies** separately
+* Better **visibility on module dependencies**
+* Simplified **reusability** of modules
+* **New files** are loaded if declared as dependencies
+* Only **required files** are loaded
 
 Disadvantages are:
-* Risk of deadlock if module A depends on B which itselfs depend on A
-* Loading speed due to multiple loading of the same module
+* **Loading a module is more complex**: dependencies must be extracted and resolved recursively
+* Having such a fine level of granularity increases the **risk of tangled dependencies** and, in the worst case,
+deadlocks. For instance, three modules: A, B and C. If A depends on B, B depends on C and C depends on A, it is impossible to load
+any of them.
+* If one module is a common dependency to several other modules, **it has to be loaded only once**. If not, the loading
+performances will be decreased because of multiple loading of the same module
 
-    Dependency injection
+(...) Obviously, for the last part, the loading mechanism must handle some kind of caching.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+### Interface
+
+Assuming modules have information about their dependencies, how do they access the features being exposed by those
+dependant modules?
+
+#### Global variables
+
+Each module can just declares the function and variables that it requires and because this is done in the global scope
+    any other module requiring it will access it easily
+
+    Drawbacks: naming collisions, not everything should be exposed, versionniong (two different version of the same feature)
+
+#### Module interface
+
+Let now decide that a module will expose a known interface by deciding which functions / variables are being exposed
+
+### Dependency injection
+
+So the ultimate module loader would be a dependency injector by:
+- resolving dependencies
+- Giving to the module the interface exposed by its dependencies
+
 
     [Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection)
     alias between module and its path
