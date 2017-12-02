@@ -381,34 +381,39 @@ My%20own%20require%20implementation/X-All-The-Y.jpg)
 As already mentioned before, there are tools designed to concatenate and minify all sources in order to generate
 a single application file. The resulting file is consequently **self-sufficient** and can be easily loaded.
 
-Dependencies will be addressed later but, to generate this file, the tool must start with a list of files to
-concatenate (or, usually, a folder where to find the files).
+Dependencies will be addressed later but, to generate this file, the tool must know the list of files to
+concatenate (or, usually, the folder where to find the files).
 
 An alternative to load the application is to maintain a **list of sources to load**... in the correct order so that
 **dependencies are loaded before their dependant modules**.
 
 As a result, in an HTML page, you may have a big list of script tags to include all sources.
 
-Let consider the following modules: A, B, C, D and E
-* A requires B and C to be loaded first
+Let consider the following modules: A, B, C, D, E and F
+* A requires B and C to be loaded
 * B requires D to be loaded
-* E can be loaded separately
+* E requires F to be loaded
+* F can be loaded separately
 
 The resulting ordered lists can be:
-* D, B, C, A, E
-* C, D, B, A, E
-* D, C, B, A, E
-* E, D, B, C, A
+* D, B, C, A, F, E
+* C, D, F, B, A, E
+* F, D, C, B, A, E
+* F, E, D, B, C, A
 * ...
 
 Advantages are:
-* Sequence is managed by a list, this gives a clear understanding of the loading process and allows the developers to
-fully control it
+* Sequence being managed by a list, it gives a **clear understanding of the loading process** and allows the developers
+to fully control it
+* Unlike the unique concatenated file that is regenerated for each release, some files might not even change between
+versions. Consequently, **the loading process can benefit from caching mechanism** to start the application faster.
 
 Disadvantages are:
-* Every time a new source is created, it must be added to the list in the correct order
-* The more files, the bigger the list (and the more complex to maintain)
-* Some files may be loaded even if they are not used anymore
+* Every time a new source is created, **it must be added to the list in the correct order** to be loaded
+* **The more files, the bigger the list** (and the more complex to maintain)
+* When the list becomes too big, one may loose track of which files are really required. In the worst situation, **some
+may be loaded even if they are not used anymore**
+* **Any change in dependencies implies a re-ordering of the list**
 
 (...) This is not the preferred solution but this is how the source version of GPF-JS is
 [handled](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json). The lazy me has created some tools
@@ -421,17 +426,24 @@ application** and then load **additional files when required**.
 This is known as [lazy loading](https://en.wikipedia.org/wiki/Lazy_loading).
 
 For each part of the loading process, the list of files to load must be maintained.
-Hence the benefits are mostly focused on the time needed to start the application.
+Hence the benefits are mostly focused on the **time needed to start the application**.
+
+Back to the previous example, E and F are big files requiring lot of time to load and evaluate.
+* Loading the application is done with this booting list: D, B, C, A
+* And, when required, the feature implemented by E is loaded with: F, E
 
 Advantages are:
-* Faster startup of the application
+* Faster startup of the application, it also implies **smaller initial
+[application footprint](https://en.wikipedia.org/wiki/Application_footprint)**
+* Smaller lists to maintain which are consequently **easier to maintain**
 
 Disadvantages are:
-* Once the application started, accessing a part that has not been previously loaded will generate delay
+* Once the application started, accessing a part that has not been previously loaded will **generate delay**
+* If any trouble occurs during this additional loading phase (no network?) **the application breaks**
 
 #### Dependency management
 
-Whether you go with static or lazy loading, both mechanism require lists of files to load.
+Whether the application is based on static or lazy loading, both mechanism require lists of files to load.
 However, **maintaining these lists is time consuming and error prone**.
 
 ![Is there any way to get rid of these lists?](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
