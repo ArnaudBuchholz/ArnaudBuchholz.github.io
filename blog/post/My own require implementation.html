@@ -338,8 +338,8 @@ entirely encapsulated by the module. All its services should be narrowly aligned
 
 (...) Referring to the [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
 and the [Dependency inversion principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) may look weird
-when considering source files but the following two sections (interface and mocking) will shed some light on the
-analysis behind this statement.
+when considering source files but the following sections (in particular interface and mocking) will shed some light on
+the analysis behind this statement.
 
 Basically, because of this definition, a source file is no more a senseless bunch of lines of codes but rather a
 **self-contained feature**. Hence, it will be referred as a **module**.
@@ -483,8 +483,6 @@ performances will be decreased because of multiple loading of the same module
 
 (...) Obviously, for the last part, the loading mechanism must handle some kind of caching.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ### Interface
 
 Assuming modules have information about their dependencies, how do they access the features being exposed by those
@@ -492,16 +490,113 @@ dependant modules?
 
 #### Global variables
 
-Each module can just declares the function and variables that it requires and because this is done in the global scope
-    any other module requiring it will access it easily
+There are many mechanism but the simplest one is to alter the
+[global scope](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#Variable_scope) to export
+functions and variables.
 
-    Drawbacks: naming collisions, not everything should be exposed, versionniong (two different version of the same feature)
+Indeed, in a flat module, declaring functions and variables is enough to make them **available globally** in the
+application.
+
+`// No dependencies
+var ANY_CONSTANT = "value";
+
+function myExportedFunction () {
+    /* ...implementation... */
+}`
+
+(...) To be precise, this depends on the host and how the module is loaded. Let's stay simple for now.
+
+The main advantage is **simplicity**.
+
+However, problems occur as soon as the complexity of the module grows.
+
+In fact, the module may also declare functions and variables that are used internally and those **implementation details
+should not be exposed**. With the above mechanism, it is almost impossible to guarantee that they won't be accessed *(or,
+worst, altered)* and, consequently, it creates
+**tight [coupling](https://en.wikipedia.org/wiki/Loose_coupling#In_programming)** with the rest of the application.
+
+This means that it gives less flexibility when it comes to maintain the module.
+
+One easy solution to this situation is to encapsulate these implementation details inside a **private scope** using an
+[Immediately Invoked Function Expression](https://en.wikipedia.org/wiki/Immediately-invoked_function_expression).
+
+`// No dependencies
+var ANY_CONSTANT = "value",
+    myExportedFunction;
+
+// IIFE
+(function () {
+    // Begin of private scope
+
+    // Any functions or variables declared here are 'private'
+
+    // Reveal function
+    myExportedFunction = function () {
+       /* ...implementation... */
+    }
+
+    // End of private scope
+}());`
+
+Another aspect that should be considered when dealing with globals is
+**[name collisions](https://en.wikipedia.org/wiki/Name_collision)**. This can be quickly adressed with
+**[namespaces](https://en.wikipedia.org/wiki/Namespace)** but here comes a challenging example.
 
 #### Module interface
 
-Let now decide that a module will expose a known interface by deciding which functions / variables are being exposed
+Let's consider an application capable of loading and saving documents.
+Developers were smart enough to isolate the serialization part inside a module which exposes two methods: save and load.
+The application grows in functionality and, for some reasons, saving and loading evolve to a new format.
+Still, for backward compatibility reasons, the application should be able to load older documents.
+
+At that point, there are several possibilities:
+
+* Changing the code to support both formats in one function is not an option: for the sake of **maintainability**, there
+must be a wrapper function to detect the format and then switch to the proper implementation.
+
+* **Rename** the save and load methods to include a version number (for instance: saveV1, loadV1, saveV2 and loadV2).
+Then the code *(production and test)* must be modified to use the proper method depending on the format that needs to be
+serialized.
+
+* **Create a namespace** for each version and have the methods being set inside the proper namespace: app.io.v1.save,
+app.io.v1.load, app.io.v2.save and app.io.v2.load. Again, the code must be adapted but provided the **namespace can be a
+parameter** (thanks to JavaScript
+where [namespaces are objects](https://javascriptweblog.wordpress.com/2010/12/07/namespacing-in-javascript/)), this
+reduces the cost.
+
+* **Define an interface** and have one module per version that exposes this interface. It's almost like with
+namespacing but accessing the proper object does not depend on global naming but rather on **loading the right module**.
+
+For instance:
+`var currentVersion = 2,
+    io = loadModule("app/io/v" + currentVersion);
+
+// io exposes save and load methods
+
+function save (fileName) {
+    // Always save with the lastest version
+    return io.save(fileName);
+}
+
+function load (fileName) {
+    var version = detect(fileName);
+    if (version !== currentVersion) {
+        return loadModule("app/io/v" + version).load(fileName);
+    }
+    return io.load(fileName);
+}`
+
+The impact of the next version is limited to changing the name of the module.
+Remember lazy loading? the oldest versions are loaded only if needed (reducing application footprint).
+
+Ideally, on top of providing dependency information, the module also **exposes a known
+[interface](https://en.wikipedia.org/wiki/Application_programming_interface)**. It defines the expectations regarding
+the methods and variables that will be available and simplifies its reusability.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ### Dependency injection
+
 
 So the ultimate module loader would be a dependency injector by:
 - resolving dependencies
