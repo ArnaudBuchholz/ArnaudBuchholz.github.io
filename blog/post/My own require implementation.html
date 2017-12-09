@@ -485,8 +485,7 @@ performances will be decreased because of multiple loading of the same module
 
 ### Interface
 
-Assuming modules have information about their dependencies, how do they access the features being exposed by those
-dependant modules?
+Assuming modules have information about their dependencies, how do they access the features being exposed?
 
 #### Global variables
 
@@ -515,9 +514,10 @@ should not be exposed**. With the above mechanism, it is almost impossible to gu
 worst, altered)* and, consequently, it creates
 **tight [coupling](https://en.wikipedia.org/wiki/Loose_coupling#In_programming)** with the rest of the application.
 
-This means that it gives less flexibility when it comes to maintain the module.
+This means that it gives less flexibility when it comes to maintaining the module.
 
-One easy solution to this situation is to encapsulate these implementation details inside a **private scope** using an
+One easy [workaround](https://en.wikipedia.org/wiki/Workaround) consists in encapsulating these implementation details
+inside a **private scope** using an
 [Immediately Invoked Function Expression](https://en.wikipedia.org/wiki/Immediately-invoked_function_expression).
 
 `// No dependencies
@@ -589,9 +589,9 @@ function load (fileName) {
 The impact of the next version is limited to changing the name of the module.
 Remember lazy loading? the oldest versions are loaded only if needed (reducing application footprint).
 
-Ideally, on top of providing dependency information, the module also **exposes a known
+So, ideally, on top of providing dependency information, the module also **exposes a known
 [interface](https://en.wikipedia.org/wiki/Application_programming_interface)**. It defines the expectations regarding
-the methods and variables that will be available and simplifies its reusability.
+the methods and variables that will be available and simplifies its integration and reusability.
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
