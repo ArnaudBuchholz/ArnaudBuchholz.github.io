@@ -349,8 +349,8 @@ The advantages of modules are multiple:
 
 * **Testability**: it is sometimes difficult to draw the line between
 [unit testing](https://en.wikipedia.org/wiki/Unit_testing) and
-[integration testing](https://en.wikipedia.org/wiki/Integration_testing). Long story short, if you need several modules
-to run a test, it sounds like integration. On the other hand, if the module can be tested with no or very few
+[integration testing](https://en.wikipedia.org/wiki/Integration_testing). Long story short, if several modules are
+needed to run a test, it sounds like integration. On the other hand, if the module can be tested with no or very few
 dependencies (maybe through mocking), this is unit testing. So, ideally, **a module can be easily isolated to achieve
 unit testing**
 
@@ -385,7 +385,8 @@ concatenate (or, usually, the folder where to find the files).
 An alternative to load the application is to maintain a **list of sources to load**... in the correct order so that
 **dependencies are loaded before their dependant modules**.
 
-As a result, in an HTML page, you may have a big list of script tags to include all sources.
+As a result, in an HTML page, a big list of [script](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
+tags is required to include all sources.
 
 For example, let consider the following modules: A, B, C, D, E and F
 * A requires B and C to be loaded
@@ -604,22 +605,21 @@ Consequently, the ultimate module loader is capable of extracting and resolving 
 [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to give access to the interfaces exposed by
 its dependencies.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ### Mocking
 
-Another subtle benefit of modularity is related to testing.
+Another subtle benefit of modularity is related to unit testing.
 
-Let say that you have a module B depending on a module A. The last one is hard to test because it accesses critical
-resources. Because of that, you can't really test B.
+Coming back to the example of module B requiring module D to be loaded: what if module D can't be loaded or used in a
+test environment? This module might require critical resources. For instance it could access a database and alter its
+content: nobody wants the tests to mess with real data.
 
-However, if your A has a well defined interface and if the modularization system offers you a way to substitute this
-module by another one, you can then
+Does this mean that module B can't be tested because module D is not testable?
 
-    By isolating a critical feature in a module that has a
-well defined interface, and provided that you can then replace it with a similar one mocking the functionality.
+Well, assuming that module D is exposing a well defined interface and provided that the modularization system offers a
+way to substitute a module by another one, it is possible to create a **fake module that exposes the same interface**
+but **mocking the functionalities**.
 
-It gives you a total control on t
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ## Existing implementations
 
