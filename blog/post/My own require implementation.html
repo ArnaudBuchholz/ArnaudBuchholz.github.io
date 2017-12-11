@@ -29,18 +29,15 @@ several improvements:
 But the exciting part of it is the new [gpf.require](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html)
 namespace that exposes a [modularization helper](https://arnaudbuchholz.github.io/gpf/doc/tutorial-REQUIRE.html).
 
-To give a bit of context, the following topics will be explained:
-* How modularity helps developers create better code
-* What is dependency injection
-* An overview of some existing modularization solutions
-
+To give a bit of context, the article will start by explaining how modularity helps developers create better code.
+Then, a rapid overview of some existing modularization solutions will be covered.
 Finally, the implementation as well as the future of gpf.require will be explored.
 
 ## Modularity
 
 ### One file to rule them all
 
-![One File to bring them all and in the darkness bind them](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![One File to bring them all and in the darkness bind them](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/ring.png)
 
 [In the Land of Mordor where the Shadows lie.](https://en.wikipedia.org/wiki/One_Ring)
@@ -171,12 +168,12 @@ In [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js#metrics), the average numbe
 is a little under 100. But it has not
 [always been like this !](https://arnaudbuchholz.github.io/gpf/plato/index.html)
 
-![Plato report on GPF-JS](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![Plato report on GPF-JS](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/plato%20average%20lines.png)
 
 ### Divide and rule
 
-![Or divide and conquer](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![Or divide and conquer](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/divide-and-conquer1.jpg)
 
 Code splitting is a good illustration of the [divide and rule](https://en.wikipedia.org/wiki/Divide_and_rule)
@@ -275,7 +272,8 @@ application_architecture.html)
 On the other hands, some tools offers the possibility to instantiate new projects with a predefined structure.
 Such as [Yeoman](http://yeoman.io/) which contains [thousands of project generators](http://yeoman.io/generators/).
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/zBt2g9ekiug" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zBt2g9ekiug" frameborder="0" allowfullscreen>
+</iframe>
 
 Yet, once the basic structure is in place, developers are still **confronted with choices when new files must be
 created.**
@@ -308,7 +306,7 @@ of "shipping"...
 [MAX_PATH](https://support.microsoft.com/fr-ca/help/177665/path-too-long-error-message-when-exceeding-max-path)
 limitations, names can be as long as necessary
 
-![... and 640K is enough for everyone :-)](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![... and 640K is enough for everyone :-)](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/back-in-my-day-funny-5.jpg)
 
 #### Level of granularity
@@ -316,14 +314,15 @@ My%20own%20require%20implementation/back-in-my-day-funny-5.jpg)
 Once the structure is clearly defined, the only difficulty remaining is to figure out what to put inside the files.
 Obviously, their names must be self explanatory about purpose and content.
 
-**Struggling to choose the right file name is usually a good sign that it contains more than necessary**: splitting may help.
+**Struggling to choose the right file name is usually a good sign that it contains more than necessary**: splitting may
+help.
 
 In case of doubts, just associate:
 * folders to [namespaces](https://en.wikipedia.org/wiki/Namespace)
 * files to [classes](https://en.wikipedia.org/wiki/Class_%28computer_programming%29)
 
 Then, try to stick to the [SOLID](https://en.wikipedia.org/wiki/SOLID_%28object-oriented_design%29)
-![principles](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![principles](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/SOLID.jpg)
 
 In particular, **the [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
@@ -374,7 +373,7 @@ comes to loading the sources of an application.
 
 #### Everything at once
 
-![Load all the files !](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![Load all the files !](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/X-All-The-Y.jpg)
 
 As already mentioned before, there are tools designed to concatenate and minify all sources in order to generate
@@ -424,7 +423,7 @@ Instead of loading all the files at once, another method consists in loading wha
 application** and then load **additional files when required**.
 This is known as [lazy loading](https://en.wikipedia.org/wiki/Lazy_loading).
 
-![Or the energy saving mode...](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![Or the energy saving mode...](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/lazy.jpg)
 
 For each part of the loading process, the list of files to load must be maintained.
@@ -448,7 +447,7 @@ Disadvantages are:
 Whether the application is based on static or lazy loading, both mechanism require lists of files to load.
 However, **maintaining these lists is time consuming and error prone**.
 
-![Is there any way to get rid of these lists?](http://localhost:63342/ArnaudBuchholz.github.io/blog/post/
+![Is there any way to get rid of these lists?](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/nolist.jpg)
 
 It's almost impossible to get rid of the lists but **changing the scope** simplifies their management.
@@ -476,8 +475,8 @@ Advantages are:
 Disadvantages are:
 * **Loading a module is more complex**: dependencies must be extracted and resolved recursively
 * Having such a fine level of granularity increases the **risk of tangled dependencies** and, in the worst case,
-deadlocks. For instance, three modules: A, B and C. If A depends on B, B depends on C and C depends on A, it is impossible to load
-any of them.
+deadlocks. For instance, three modules: A, B and C. If A depends on B, B depends on C and C depends on A, it is
+impossible to load any of them.
 * If one module is a common dependency to several other modules, **it has to be loaded only once**. If not, the loading
 performances will be decreased because of multiple loading of the same module
 
@@ -510,8 +509,8 @@ The main advantage is **simplicity**.
 However, problems occur as soon as the complexity of the module grows.
 
 In fact, the module may also declare functions and variables that are used internally and those **implementation details
-should not be exposed**. With the above mechanism, it is almost impossible to guarantee that they won't be accessed *(or,
-worst, altered)* and, consequently, it creates
+should not be exposed**. With the above mechanism, it is almost impossible to guarantee that they won't be accessed
+*(or, worst, altered)* and, consequently, it creates
 **tight [coupling](https://en.wikipedia.org/wiki/Loose_coupling#In_programming)** with the rest of the application.
 
 This means that it gives less flexibility when it comes to maintaining the module.
@@ -587,27 +586,25 @@ function load (fileName) {
 }`
 
 The impact of the next version is limited to changing the name of the module.
-Remember lazy loading? the oldest versions are loaded only if needed (reducing application footprint).
+Remember lazy loading? This is an example where the oldest versions are loaded only when needed (reducing the
+application footprint on startup).
 
 So, ideally, on top of providing dependency information, the module also **exposes a known
 [interface](https://en.wikipedia.org/wiki/Application_programming_interface)**. It defines the expectations regarding
 the methods and variables that will be available and simplifies its integration and reusability.
 
+### Module loader
+
+To summarize what has been presented so far:
+* An application is composed of modules, they are **smaller parts encapsulating single functionalities**
+* To simplify the loading of the application, **modules declares their list of dependencies**
+* Loading the module gives access to a **given set of API a.k.a. interface**
+
+Consequently, the ultimate module loader is capable of extracting and resolving dependencies. Then it uses
+[dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) to give access to the interfaces exposed by
+its dependencies.
+
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
-### Dependency injection
-
-
-So the ultimate module loader would be a dependency injector by:
-- resolving dependencies
-- Giving to the module the interface exposed by its dependencies
-
-
-    [Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection)
-    alias between module and its path
-
-    Angular uses pre-loading then injection
-
 
 ### Mocking
 
