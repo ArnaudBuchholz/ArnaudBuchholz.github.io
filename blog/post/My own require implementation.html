@@ -526,6 +526,8 @@ var ANY_CONSTANT = "value",
 
 // IIFE
 (function () {
+    "use strict";
+
     // Begin of private scope
 
     // Any functions or variables declared here are 'private'
@@ -639,13 +641,15 @@ done through **assigning new members to the window object** or using *this* in t
 
 Here is a small variation to make the exported API more explicit:
 
-`(function (export) {
+`(function (exports) {
+    "use strict";
+
     // Begin of private scope
 
     // Any functions or variables declared here are 'private'
 
     // Reveal function
-    export.myExportedFunction = function () {
+    exports.myExportedFunction = function () {
        /* ...implementation... */
     }
 
@@ -660,14 +664,28 @@ Here is a small variation to make the exported API more explicit:
 Including a module is done using the [require](https://nodejs.org/api/modules.html#modules_require) function:
 **loading is synchronous.**
 
+The scope of the module is private. If one wants to alter the global scope, the global symbol is also available.
+ API exposure is done through the module.exports object (the shortcut exports can
+also be used).
 
-require / module.exports
-Synchronous loading
-Scope is private
+Modules can be published in the NPM repository and downloaded / updated from the NPM command line.
+When creating a project, the package.json file describe all dependencies.
+
+A typical module would contain:
+
+`"use strict";
+
+var dependency = require("dependency");
+
+module.exports = {
+    myExportedFunction = function () {
+        /* ...implementation... */
+    }
+};`
 
 ### RequireJS
 
-The [RequireJS](http://requirejs.org/) library is widely used
+The [RequireJS](http://requirejs.org/) library was initially created for browsers to solve module dependency and...
 
 https://www.sitepoint.com/understanding-requirejs-for-effective-javascript-module-loading/
 
