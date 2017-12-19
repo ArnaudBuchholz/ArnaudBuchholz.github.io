@@ -625,15 +625,41 @@ but **mocking the functionalities**.
 
 ### Browser includes
 
+The simples way to include a JavaScript source in an HTML page is to add a
+[script tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script).
 
-You must load them in the proper order: this
-Interface exposure is done through global variables
+Even though loading is asynchronous, and unless the attributes *async* or *defer* are specified, **scripts are
+evaluated in the same order as they are declared** in the page.
 
-You can create private scopes using IIFE but exposing the module interface has to be done either through globals or
-    using a global methods
+By default, the scope of evaluation is global. Consequently, **any variable declaration is globally available** as if it
+was a member of the [window object](https://developer.mozilla.org/en-US/docs/Web/API/Window).
 
+As explained before, it is possible to create a **private scope using an IIFE**. Exposing the module interface can be
+done through **assigning new members to the window object** or using *this* in the IIFE.
+
+Here is a small variation to make the exported API more explicit:
+
+`(function (export) {
+    // Begin of private scope
+
+    // Any functions or variables declared here are 'private'
+
+    // Reveal function
+    export.myExportedFunction = function () {
+       /* ...implementation... */
+    }
+
+    // End of private scope
+}(this));`
 
 ### NodeJs
+
+[NodeJS](https://en.wikipedia.org/wiki/Node.js) offers a module functionality inspired from
+[CommonJS](https://en.wikipedia.org/wiki/CommonJS).
+
+Including a module is done using the [require](https://nodejs.org/api/modules.html#modules_require) function:
+**loading is synchronous.**
+
 
 require / module.exports
 Synchronous loading
