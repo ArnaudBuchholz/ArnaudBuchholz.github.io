@@ -1,0 +1,104 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.2.3: Streams and Pipes
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This new release focuses on streams by offering two new tools: a way to pipe streams together (and simplify their
+    use) and a CSV parser.
+</div>
+<code class="markdown">
+## New version
+
+Just before Christmas vacations, here comes the new version:
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/11?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.3)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
+* [NPM package](https://www.npmjs.com/package/gpf-js)
+
+## Release content
+
+### Cleaning
+
+A significant effort was put in cleaning the content of the
+[publication repository](https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/tree/master/gpf) as it previously
+contained [one plato report folder](https://arnaudbuchholz.github.io/gpf/plato/index.html) as well as
+[one documentation folder](https://arnaudbuchholz.github.io/gpf/doc/index.html) for each version.
+
+Now everything is consolidated in a single folder and the plato report also includes file history (for instance:
+[regexp.js](https://arnaudbuchholz.github.io/gpf/plato/files/src_regexp_js/index.html)).
+
+All existing links are adjusted.
+
+### gpf.stream.pipe
+
+Combining streams can become tedious when more than two streams must be plugged together. This is greatly simplified
+using the [gpf.stream.pipe](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.html#.pipe__anchor) helper.
+
+It takes care of chaining the [read](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IReadableStream.html) /
+[write](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IWritableStream.html) methods and returns a
+[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that is resolved
+when all the data has been processed (including
+[flushable](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IFlushableStream.html) streams).
+
+For example:
+
+`// Reading a CSV file
+var csvFile = gpf.fs.getFileStorage()
+        .openTextStream("file.csv", gpf.fs.openFor.reading),
+    lineAdapter = new gpf.stream.LineAdapter(),
+    csvParser = new gpf.stream.csv.Parser(),
+    output = new gpf.stream.WritableArray();
+
+// csvFile -> lineAdapter -> csvParser -> output
+gpf.stream.pipe(csvFile, lineAdapter, csvParser, output)
+    .then(function () {
+        return output.toArray();
+    })
+    .then(function (records) {
+        // process records
+    });`
+
+### gpf.stream.csv.Parser
+
+As demonstrated in the previous example, CSV parsing is now possible using the
+[gpf.stream.csv.Parser](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.csv.Parser.html) class.
+
+## Lessons learned
+
+There are still some doubts regarding the mechanics of the
+[gpf.stream.pipe](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.3/src/stream/pipe.js) implementation.
+
+In particular, if an intermediate read completes before the whole stream has been processed, a new read must be
+triggered. Also, error handling is unclear even if
+[fully tested](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.3/test/stream/pipe.js).
+Finally, flushing a stream does not necessarily means its end. Hence it should be possible to continue writing after a
+flush.
+
+As these behaviors are not yet clearly defined, **the code might require adjustments in the future**.
+
+In any case, it demonstrates that some 'real life' examples are required to see how this could simplify (or not) the
+development.
+
+## Next release
+
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/12) will mostly focus on:
+* Finishing the release process improvements
+* Introducing attributes that will be later used to simplify CSV generation
+* Adding new stream helpers to filter / page batch of records
+
+In parallel, the article on
+[gpf.require.define](https://gpf-js.blogspot.ca/2017/11/release-022-gpfrequire.html) implementation is still in progress
+and some additional side projects are popping up.
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
