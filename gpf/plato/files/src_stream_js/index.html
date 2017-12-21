@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">78.47</p>
+      <p class="stat">82.15</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">177</p>
+      <p class="stat">230</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">14.38</p>
+      <p class="stat">16.23</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.49</p>
+      <p class="stat">0.63</p>
     </div>
   </div>
 </div>
@@ -156,6 +156,25 @@ _gpfErrorDeclare(&quot;stream&quot;, {
  */
 gpf.stream = {};
 
+function _gpfStreamQuery (queriedObject, interfaceSpecifier, interfaceName) {
+    var iStream = _gpfInterfaceQuery(interfaceSpecifier, queriedObject);
+    if (!iStream) {
+        gpf.Error.interfaceExpected({
+            name: interfaceName
+        });
+    }
+    return iStream;
+}
+
+function _gpfStreamQueryCommon (queriedObject, interfaceSpecifier, interfaceName) {
+    if (!queriedObject) {
+        gpf.Error.interfaceExpected({
+            name: interfaceName
+        });
+    }
+    return _gpfStreamQuery(queriedObject, interfaceSpecifier, interfaceName);
+}
+
 /**
  * Get an IReadableStream or fail if not implemented
  *
@@ -165,13 +184,7 @@ gpf.stream = {};
  * @since 0.1.9
  */
 function _gpfStreamQueryReadable (queriedObject) {
-    var iReadableStream = _gpfInterfaceQuery(_gpfIReadableStream, queriedObject);
-    if (!iReadableStream) {
-        gpf.Error.interfaceExpected({
-            name: &quot;gpf.interfaces.IReadableStream&quot;
-        });
-    }
-    return iReadableStream;
+    return _gpfStreamQueryCommon(queriedObject, _gpfIReadableStream, &quot;gpf.interfaces.IReadableStream&quot;);
 }
 
 /**
@@ -183,16 +196,13 @@ function _gpfStreamQueryReadable (queriedObject) {
  * @since 0.1.9
  */
 function _gpfStreamQueryWritable (queriedObject) {
-    var iWritableStream = _gpfInterfaceQuery(_gpfIWritableStream, queriedObject);
-    if (!iWritableStream) {
-        gpf.Error.interfaceExpected({
-            name: &quot;gpf.interfaces.IWritableStream&quot;
-        });
-    }
-    return iWritableStream;
+    return _gpfStreamQueryCommon(queriedObject, _gpfIWritableStream, &quot;gpf.interfaces.IWritableStream&quot;);
 }
 
-var _gpfStreamInProgressPropertyName = &quot;gpf.stream#inProgress&quot;;
+/* &#039;Hidden&#039; properties used to secure Read / Write operations */
+var _gpfStreamProgressPropertyNamePrefix = &quot;gpf.stream#progress&quot;,
+    _gpfStreamProgressRead = _gpfStreamProgressPropertyNamePrefix + &quot;/read&quot;,
+    _gpfStreamProgressWrite = _gpfStreamProgressPropertyNamePrefix + &quot;/write&quot;;
 
 /**
  * Install the progress flag used by _gpfStreamSecureRead and Write
@@ -201,7 +211,56 @@ var _gpfStreamInProgressPropertyName = &quot;gpf.stream#inProgress&quot;;
  * @since 0.1.9
  */
 function _gpfStreamSecureInstallProgressFlag (constructor) {
-    constructor.prototype[_gpfStreamInProgressPropertyName] = false;
+    constructor.prototype[_gpfStreamProgressRead] = false;
+    constructor.prototype[_gpfStreamProgressWrite] = false;
+}
+
+/**
+ * Starts a secured read operation (if possible)
+ *
+ * @param {Object} stream configured with {@see _gpfStreamSecureInstallProgressFlag}
+ * @throws {gpf.Error.ReadInProgress}
+ * @since 0.2.3
+ */
+function _gpfStreamProgressStartRead (stream) {
+    if (stream[_gpfStreamProgressRead]) {
+        gpf.Error.readInProgress();
+    }
+    stream[_gpfStreamProgressRead] = true;
+}
+
+/**
+ * Ends a read operation
+ *
+ * @param {Object} stream configured with {@see _gpfStreamSecureInstallProgressFlag}
+ * @since 0.2.3
+ */
+function _gpfStreamProgressEndRead (stream) {
+    stream[_gpfStreamProgressRead] = false;
+}
+
+/**
+ * Starts a secured write operation (if possible)
+ *
+ * @param {Object} stream configured with {@see _gpfStreamSecureInstallProgressFlag}
+ * @throws {gpf.Error.WriteInProgress}
+ * @since 0.2.3
+ */
+function _gpfStreamProgressStartWrite (stream) {
+    if (stream[_gpfStreamProgressWrite]) {
+        gpf.Error.writeInProgress();
+    }
+    stream[_gpfStreamProgressWrite] = true;
+}
+
+/**
+ * Ends a write operation
+ *
+ * @param {Object} stream configured with {@see _gpfStreamSecureInstallProgressFlag}
+ * @since 0.2.3
+ */
+function _gpfStreamProgressEndWrite (stream) {
+    stream[_gpfStreamProgressWrite] = false;
 }
 
 /**
@@ -214,18 +273,15 @@ function _gpfStreamSecureInstallProgressFlag (constructor) {
  */
 function _gpfStreamSecureRead (read) {
     return function (output) {
-        var me = this; //eslint-disable-line no-invalid-this
-        if (me[_gpfStreamInProgressPropertyName]) {
-            gpf.Error.readInProgress();
-        }
-        var iWritableStream = _gpfStreamQueryWritable(output);
-        me[_gpfStreamInProgressPropertyName] = true;
+        var me = this,  //eslint-disable-line no-invalid-this
+            iWritableStream = _gpfStreamQueryWritable(output);
+        _gpfStreamProgressStartRead(me);
         return read.call(me, iWritableStream)
             .then(function (result) {
-                me[_gpfStreamInProgressPropertyName] = false;
+                _gpfStreamProgressEndRead(me);
                 return Promise.resolve(result);
             }, function (reason) {
-                me[_gpfStreamInProgressPropertyName] = false;
+                _gpfStreamProgressEndRead(me);
                 return Promise.reject(reason);
             });
     };
@@ -242,16 +298,13 @@ function _gpfStreamSecureRead (read) {
 function _gpfStreamSecureWrite (write) {
     return function (buffer) {
         var me = this; //eslint-disable-line no-invalid-this
-        if (me[_gpfStreamInProgressPropertyName]) {
-            gpf.Error.writeInProgress();
-        }
-        me[_gpfStreamInProgressPropertyName] = true;
+        _gpfStreamProgressStartWrite(me);
         return write.call(me, buffer) //eslint-disable-line no-invalid-this
             .then(function (result) {
-                me[_gpfStreamInProgressPropertyName] = false;
+                _gpfStreamProgressEndWrite(me);
                 return Promise.resolve(result);
             }, function (reason) {
-                me[_gpfStreamInProgressPropertyName] = false;
+                _gpfStreamProgressEndWrite(me);
                 return Promise.reject(reason);
             });
     };
