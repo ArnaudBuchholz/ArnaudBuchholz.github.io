@@ -621,8 +621,6 @@ Well, assuming that module D is exposing a well defined interface and provided t
 way to substitute a module by another one, it is possible to create a **fake module that exposes the same interface**
 but **mocking the functionalities**.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ## Existing implementations
 
 ### Browser includes
@@ -630,7 +628,7 @@ but **mocking the functionalities**.
 The simples way to include a JavaScript source in an HTML page is to add a
 [script tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script).
 
-Even though loading is asynchronous, and unless the attributes *async* or *defer* are specified, **scripts are
+Even though **loading is asynchronous**, and unless the attributes *async* or *defer* are specified, **scripts are
 evaluated in the same order as they are declared** in the page.
 
 By default, the scope of evaluation is global. Consequently, **any variable declaration is globally available** as if it
@@ -656,20 +654,20 @@ Here is a small variation to make the exported API more explicit:
     // End of private scope
 }(this));`
 
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
 ### NodeJs
 
-[NodeJS](https://en.wikipedia.org/wiki/Node.js) offers a module functionality inspired from
+[NodeJS](https://en.wikipedia.org/wiki/Node.js) offers a module functionality initially inspired from
 [CommonJS](https://en.wikipedia.org/wiki/CommonJS).
 
-Including a module is done using the [require](https://nodejs.org/api/modules.html#modules_require) function:
+Loading a module is as easy as calling the [require](https://nodejs.org/api/modules.html#modules_require) function:
 **loading is synchronous.**
 
-The scope of the module is private. If one wants to alter the global scope, the global symbol is also available.
- API exposure is done through the module.exports object (the shortcut exports can
+**Modules have a private scope**. If the global scope must be altered *(which is not recommended)*, the **global
+symbol** is available.
+The normal way to expose the module API is to assign members to the **module.exports** object (the shortcut exports can
 also be used).
-
-Modules can be published in the NPM repository and downloaded / updated from the NPM command line.
-When creating a project, the package.json file describe all dependencies.
 
 A typical module would contain:
 
@@ -683,30 +681,60 @@ module.exports = {
     }
 };`
 
+Actually, there are two types of modules.
+
+#### NPM modules
+
+The [NPM repository](https://www.npmjs.com/) stores a huge collection of modules which can be **downloaded and updated**
+using the [NPM](https://en.wikipedia.org/wiki/Npm_%28software%29) command line (installed with NodeJS).
+These modules are usually defined as **project dependencies** through the
+[package.json](https://docs.npmjs.com/files/package.json) file or they can be globally installed.
+
+When loading these modules, they are referenced by an absolute name.
+
+For instance, the [GPF-JS NPM module](https://www.npmjs.com/package/gpf-js), once installed, can be loaded with:
+`var gpf = require("gpf-js");`
+
+You may [experiment it](https://runkit.com/npm/gpf-js) yourself.
+
+#### Local modules
+
+On the other hand, the project may contain its own set of modules: they don't need to be published to be required.
+In order to load a local modules, **the path to the source file must be provided**,
+it is relative to the current module.
+
+`var const = require("./const.js");`
+
 ### RequireJS
 
-The [RequireJS](http://requirejs.org/) library was initially created for browsers to solve module dependency and...
+The [RequireJS](http://requirejs.org/) library was initially created for browsers
 
-https://www.sitepoint.com/understanding-requirejs-for-effective-javascript-module-loading/
+This article ["Understanding RequireJS for Effective JavaScript Module Loading"](https://www.sitepoint.com/understanding-requirejs-for-effective-javascript-module-loading/)
 
+Dependency listing, factory function receiving dependencies (dependency injection)
 asynchronous loading
-Scope is private
+Scope is private because of factory function
 
 ### Browserify
 
-The [Browserify](http://browserify.org/) tool is capable of take
+The [Browserify](http://browserify.org/) tool is a bundler understanding the require syntax and capable of collecting
+all dependencies to generate one single loadable JavaScript file
 
 ### WebPack
 
-[WebPack](https://webpack.js.org/) is like browserify on steroids.
+[WebPack](https://webpack.js.org/) is like browserify on steroids as it does more than just collecting and packing
+JavaScript dependencies. It is also capable of embedding resource files such as images, sounds....
 
 http://blog.namangoel.com/browserify-vs-webpack-js-drama
 
+### Javascript import
 
-## NodeJS implementation of CommonJS
+There is no way this article could talk about JavaScript modularization without referring to the latest EcmaScript
+[import feature](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
 
-Find the presentation that allowed me to understand the whole thing
->> Simplification using Promises
+It is fully supported by transpilers and bundlers (such as TypeScript, Babel, Webpack...) and native implementation
+
+NodeJS also supports the [import feature](https://nodejs.org/api/esm.html#esm_notable_differences_between_import_and_require).
 
 ## GPF-JS Implementation
 
