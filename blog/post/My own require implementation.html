@@ -749,6 +749,17 @@ it is **relative to the current module**.
 A [JavaScript bundler](https://medium.com/@gimenete/how-javascript-bundlers-work-1fc0d0caf2da) is a tool designed to
 concatenate an application composed of modules (and resources) into a single easy-to-load file.
 
+The good parts are:
+* it enforces good design by enabling modularization when developping
+* it speeds up the application loading by limiting the number of files to be loaded
+* by exploring the dependence tree, it also naturally ignore files which are not loaded
+
+The bad parts are:
+* The generated code is usually obfuscated, debugging might be complicated
+* The application file must be consolidated before testing the application. Depending on the number of files it might
+take a while
+
+
 #### Browserify
 
 The [Browserify](http://browserify.org/) tool is a bundler understanding the require syntax and capable of collecting
@@ -759,8 +770,11 @@ all dependencies to generate one single loadable JavaScript file
 [WebPack](https://webpack.js.org/) is like browserify on steroids as it does more than just collecting and packing
 JavaScript dependencies. It is also capable of embedding resource files such as images, sounds....
 
+The [bubu-timer project](https://github.com/ArnaudBuchholz/bubu-timer) is based on WebPack.
+
 http://blog.namangoel.com/browserify-vs-webpack-js-drama
 
+Opinions on the web...
 
 https://www.sitepoint.com/javascript-modules-bundling-transpiling/
 
