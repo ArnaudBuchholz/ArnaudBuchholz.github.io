@@ -654,8 +654,9 @@ Here is a small variation to make the exported API more explicit:
     // End of private scope
 }(this));`
 
-Loading dependencies inside a module becomes quite complex. Indeed, the module must first generate a script tag and then
-wait for the subsequent script to be loaded.
+In this context, declaring or loading dependencies inside a module becomes quite complex.
+Indeed, it is possible to generate script tags using JavaScript (or use AJAX requests) but the code
+must wait for the subsequent script to be loaded.
 
 ### RequireJS
 
@@ -691,24 +692,31 @@ understanding-requirejs-for-effective-javascript-module-loading/) covers all the
 [CommonJS](https://en.wikipedia.org/wiki/CommonJS).
 
 Loading a module is as easy as calling the [require](https://nodejs.org/api/modules.html#modules_require) function:
-**loading is synchronous.** The same way, the module can load its dependencies using require.
+**loading is synchronous**. The same way, the module can load its dependencies using require.
 
 **Modules have a private scope**. If the global scope must be altered *(which is not recommended)*, the **global
 symbol** is available.
 But the normal way to expose the module API is to assign members to the **module.exports** object (the shortcut exports
 can also be used).
 
-A typical module would contain:
+A typical module would look like:
 
 `"use strict";
 
+// Begin of private scope
+
+// Any functions or variables declared here are 'private'
+
 var dependency = require("dependency");
 
+// Reveal function
 module.exports = {
     myExportedFunction = function () {
         /* ...implementation... */
     }
-};`
+};
+
+// End of private scope`
 
 Actually, there are two types of modules.
 
@@ -724,29 +732,37 @@ When loading these modules, **they are referenced by an absolute name**.
 For instance, the [GPF-JS NPM module](https://www.npmjs.com/package/gpf-js), once installed, can be loaded with:
 `var gpf = require("gpf-js");`
 
-You may [experiment it](https://runkit.com/npm/gpf-js) yourself.
+You can [experiment it](https://runkit.com/npm/gpf-js) yourself.
 
 #### Local modules
 
-On the other hand, the project may contain its own set of modules: they don't need to be published to be required.
+On the other hand, the project may contain its own set of modules: they don't need to be published to be located.
 In order to load a local modules, **the path to the source file must be provided**,
-it is relative to the current module.
+it is **relative to the current module**.
 
 `var CONST = require("./const.js");`
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
-### Browserify
+### Bundlers
+
+A [JavaScript bundler](https://medium.com/@gimenete/how-javascript-bundlers-work-1fc0d0caf2da) is a tool designed to
+concatenate an application composed of modules (and resources) into a single easy-to-load file.
+
+#### Browserify
 
 The [Browserify](http://browserify.org/) tool is a bundler understanding the require syntax and capable of collecting
 all dependencies to generate one single loadable JavaScript file
 
-### WebPack
+#### WebPack
 
 [WebPack](https://webpack.js.org/) is like browserify on steroids as it does more than just collecting and packing
 JavaScript dependencies. It is also capable of embedding resource files such as images, sounds....
 
 http://blog.namangoel.com/browserify-vs-webpack-js-drama
+
+
+https://www.sitepoint.com/javascript-modules-bundling-transpiling/
 
 ### Javascript import
 
