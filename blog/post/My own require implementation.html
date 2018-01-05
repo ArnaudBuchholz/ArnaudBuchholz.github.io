@@ -747,18 +747,22 @@ it is **relative to the current module**.
 ### Bundlers
 
 A [JavaScript bundler](https://medium.com/@gimenete/how-javascript-bundlers-work-1fc0d0caf2da) is a tool designed to
-concatenate an application composed of modules (and resources) into a single easy-to-load file.
+concatenate an application composed of modules (and resources) into a single self-sufficient and easy-to-load file.
 
 The good parts are:
-* it enforces good design by enabling modularization when developping
-* it speeds up the application loading by limiting the number of files to be loaded
-* by exploring the dependence tree, it also naturally ignore files which are not loaded
+* it enforces code reuse by enabling modularization when developping
+* it speeds up the application loading by limiting the number of files
+* by relying on the dependence tree, it also trims files which are never loaded
 
 The bad parts are:
 * The generated code is usually obfuscated, debugging might be complicated
-* The application file must be consolidated before testing the application. Depending on the number of files it might
-take a while
 
+(...) Some bundlers are capable of generating the
+[source map](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_a_source_map) information. This helps
+a lot when debugging (but the source code must be exposed).
+
+* The application file must be generated before testing the application. Depending on the number of files it might
+take some time
 
 #### Browserify
 
