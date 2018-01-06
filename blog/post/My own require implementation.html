@@ -746,6 +746,16 @@ it is **relative to the current module**.
 
 `var CONST = require("./const.js");`
 
+### PhantomJS
+
+[PhantomJS](http://phantomjs.org/) proposes a similar approach to NodeJS when it comes to loading modules:
+a require function. However, it is a custom and limited implementation.
+See the following [question thread](https://stackoverflow.com/questions/11873853/phantomjs-require-a-relative-path) for
+details.
+
+Furthermore, this host is an hybrid between a command line and a browser. Hence, for most of the needs, it might be
+simpler to **consider the browser approach**.
+
 ### Bundlers
 
 A [JavaScript bundler](https://medium.com/@gimenete/how-javascript-bundlers-work-1fc0d0caf2da) is a tool designed to
@@ -780,11 +790,12 @@ The [bubu-timer project](https://github.com/ArnaudBuchholz/bubu-timer) is based 
 
 #### Others
 
-Some [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) are also bundlers:
+Most [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) are also bundlers:
 * [Babel](https://babeljs.io/) which understands [ES6](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
 New_in_JavaScript/ECMAScript_2015_support_in_Mozilla)
 * [CoffeeScript](http://coffeescript.org/), a sort of intermediate language compiled into JavaScript
-* [Typescript](http://www.typescriptlang.org/), which can be *extremely summarized* by JavaScript with type checking
+* [Typescript](http://www.typescriptlang.org/), which can be *extremely summarized* by a JavaScript superset with type
+checking
 
 If you plan to use one or the other, the following reading are recommended:
 * [Browserify VS Webpack - JS Drama](http://blog.namangoel.com/browserify-vs-webpack-js-drama)
@@ -795,9 +806,47 @@ javascript-modules-bundling-transpiling/)
 
 ### Windows Scripting File
 
-Cscript / WScript offers mechanism to refer external files when defining a job
+Microsoft's [cscript](https://technet.microsoft.com/en-us/library/bb490887.aspx) and wscript command lines offer a
+simple - and a bit obsolete - but yet interesting scripting host enabling the use of
+[ActiveX objects](https://msdn.microsoft.com/fr-fr/library/7sw4ddf8%28v=vs.94%29.aspx).
 
-Scope is public
+(...) I plan to document some interesting examples coming from past experiences demonstrating how one can send an
+outlook meeting request or extract host information using
+[Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582%28v=vs.85%29.aspx)
+
+It can run any JavaScript file (extension .js) provided the system is properly configured or by setting the engine with
+the [engine selector option /E](https://technet.microsoft.com/en-us/library/bb490816.aspx).
+In [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js/), this host testing is [configured that way](https://github.com/
+ArnaudBuchholz/gpf-js/blob/bd25aadb73e83c0dd62940dbe7caae8138ca0a2f/grunt/exec.js#L94).
+
+#### Manual loading
+
+This host does not provide any modularization helper inside JavaScript files.
+
+One trick consists in loading and evaluating a file with the help of the
+[FileSystem object](https://msdn.microsoft.com/en-us/library/aa242706%28v=vs.60%29.aspx) and
+eval (which is [evil](https://javascriptweblog.wordpress.com/2010/04/19/how-evil-is-eval/)):
+
+`var fso = new ActiveXObject("Scripting.FileSystemObject"),
+    srcFile = OpenTextFile("dependency.js",1),
+    srcContent = srcFile.ReadAll();
+srcFile.Close();
+eval(srcContent);`
+
+Which can be put in a function or summarized in one ugly line:
+`eval((new ActiveXObject("Scripting.FileSystemObject")).OpenTextFile("dependency.js",1).ReadAll());`
+
+With this pattern, **loading is synchronous and scope is global**.
+
+#### Windows Scripting File
+
+Actually, Microsoft designed the [Windows Scripting File](https://en.wikipedia.org/wiki/Windows_Script_File) format that
+allows:
+* Language mixing *(but we are only interested by JavaScript, aren't we?)*
+* References
+
+This is also documented in [Loading GPF Library](https://arnaudbuchholz.github.io/gpf/doc/tutorial-LOADING.html)
+tutorial.
 
 ### Rhino
 
