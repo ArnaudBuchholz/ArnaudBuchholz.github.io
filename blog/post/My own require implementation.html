@@ -855,16 +855,56 @@ not provide any modularization helper. However, the shell offers the
 [load method](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino/Shell) which **loads and evaluates**
 JavaScript files. In that context too, **loading is synchronous and scope is global**.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+### Javascript's native import
 
-### Javascript import
-
-There is no way this article could talk about JavaScript modularization without referring to the latest EcmaScript
+There is no way this article could talk about JavaScript modularization without mentionning the latest EcmaScript's
 [import feature](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
 
-It is fully supported by transpilers and bundlers (such as TypeScript, Babel, Webpack...) and native implementation
+#### Static import
 
-NodeJS also supports the [import feature](https://nodejs.org/api/esm.html#esm_notable_differences_between_import_and_require).
+When the name of the imported module is static (i.e. a string), the mechanism is called **static import**.
+It is **synchronous** and the developer decides what is imported. It also means that the module **exposes
+an interface** from a **private scope**.
+
+For instance:
+`import { myExportedFunction } from "dependency";`
+
+When the file *dependency.js* contains:
+`"use strict";
+
+// Begin of private scope
+
+// Any functions or variables declared here are 'private'
+
+// Reveal function
+export function myExportedFunction () {
+    /* ...implementation... */
+}
+
+// End of private scope`
+
+On one hand, **static import is fully supported by
+[NodeJS](https://nodejs.org/api/esm.html#esm_notable_differences_between_import_and_require),
+transpilers and bundlers**.
+Regarding browsers, **native implementation** are on
+[their way](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#AutoCompatibilityTable).
+
+On the other hand, Rhino and WScript do not support it.
+PhantomJS may support it in [version 2.5](https://github.com/ariya/phantomjs/issues/14506).
+
+#### Dynamic import
+
+When the name of the imported module is built from variables or function calls, the mechanism is called **dynamic
+import**. As the name of the module to import is **known at execution time**, this generates some interesting challenges
+for the hosts and tools.
+
+There are several proposal for implementation:
+* [ES proposal: import() – dynamically importing ES modules](http://2ality.com/2017/01/import-operator.html)
+* [tc39/proposal-dynamic-import](https://github.com/tc39/proposal-dynamic-import)
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+**Find current state of implementation**
 
 ## GPF-JS Implementation
 
