@@ -788,16 +788,17 @@ JavaScript dependencies. It is also capable of embedding **resource files** such
 
 The [bubu-timer project](https://github.com/ArnaudBuchholz/bubu-timer) is based on WebPack.
 
-#### Others
+#### Transpilers
 
-Most [transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) are also bundlers:
+Most **[transpilers](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) are also
+bundlers**:
 * [Babel](https://babeljs.io/) which understands [ES6](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
 New_in_JavaScript/ECMAScript_2015_support_in_Mozilla)
 * [CoffeeScript](http://coffeescript.org/), a sort of intermediate language compiled into JavaScript
 * [Typescript](http://www.typescriptlang.org/), which can be *extremely summarized* by a JavaScript superset with type
 checking
 
-If you plan to use one or the other, the following reading are recommended:
+If one plan to use one or the other, the following articles might help:
 * [Browserify VS Webpack - JS Drama](http://blog.namangoel.com/browserify-vs-webpack-js-drama)
 * [Understanding JavaScript Modules: Bundling & Transpiling](https://www.sitepoint.com/
 javascript-modules-bundling-transpiling/)
@@ -805,23 +806,23 @@ javascript-modules-bundling-transpiling/)
 ### Windows Scripting File
 
 Microsoft's [cscript](https://technet.microsoft.com/en-us/library/bb490887.aspx) and wscript command lines offer a
-simple - and a bit obsolete - but yet interesting scripting host enabling the use of
+simple and a bit obsolete but yet interesting scripting host enabling the use of
 [ActiveX objects](https://msdn.microsoft.com/fr-fr/library/7sw4ddf8%28v=vs.94%29.aspx).
 
-(...) I plan to document some interesting examples coming from past experiences demonstrating how one can send an
+(...) I plan to document some valuable examples coming from past experiences demonstrating how one can send an
 outlook meeting request or extract host information using
 [Windows Management Instrumentation](https://msdn.microsoft.com/en-us/library/aa394582%28v=vs.85%29.aspx)
 
 It can run any JavaScript file (extension .js) provided the system is properly configured or by setting the engine with
 the [engine selector option /E](https://technet.microsoft.com/en-us/library/bb490816.aspx).
-In [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js/), this host testing is [configured that way](https://github.com/
+In [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js/),
+[wscript](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.hosts) testing is [configured that way](https://github.com/
 ArnaudBuchholz/gpf-js/blob/bd25aadb73e83c0dd62940dbe7caae8138ca0a2f/grunt/exec.js#L94).
 
 #### Manual loading
 
-This host does not provide any modularization helper inside JavaScript files.
-
-One trick consists in loading and evaluating a file with the help of the
+This **host does not provide any standardized modularization helper for JavaScript files**. One common workaround
+consists in **loading and evaluating** a file with the help of the
 [FileSystem object](https://msdn.microsoft.com/en-us/library/aa242706%28v=vs.60%29.aspx) and
 eval (which is [evil](https://javascriptweblog.wordpress.com/2010/04/19/how-evil-is-eval/)):
 
@@ -834,24 +835,27 @@ eval(srcContent);`
 Which can be put in a function or summarized in one ugly line:
 `eval((new ActiveXObject("Scripting.FileSystemObject")).OpenTextFile("dependency.js",1).ReadAll());`
 
-With this pattern, **loading is synchronous and scope is global**.
+With this pattern, **loading is synchronous and scope is global** *(because of eval)*.
 
 #### Windows Scripting File
 
 Microsoft designed the [Windows Scripting File](https://en.wikipedia.org/wiki/Windows_Script_File) format that
 allows:
-* Language mixing *(but we are only interested by JavaScript, aren't we?)*
+* Language mixing, for instance VBA with JavaScript *(but we are only interested by JavaScript, aren't we?)*
 
 * References to component or external files
 
 This is illustrated in [Loading GPF Library](https://arnaudbuchholz.github.io/gpf/doc/tutorial-LOADING.html) tutorial.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ### Rhino
 
-Rhino offers a method to load JavaScript files and evaluate them.
-Scope is public
+Almost like Microsoft's scripting hosts,
+[Rhino (Java's JavaScript host)](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino) does
+not provide any modularization helper. However, the shell offers the
+[load method](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino/Shell) which **loads and evaluates**
+JavaScript files. In that context too, **loading is synchronous and scope is global**.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ### Javascript import
 
