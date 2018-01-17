@@ -28,7 +28,7 @@ several improvements:
 
 (...) Actually, the GPF-JS is already in [version 0.2.3](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.3) and
 it [introduces stream piping](http://gpf-js.blogspot.ca/2017/12/release-023-streams-and-pipes.html).
-But this article took me a very long time to finalize !
+But this article took me a very long time to finalize!
 
 But the exciting part of it is the new [gpf.require](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html)
 namespace that exposes a [modularization helper](https://arnaudbuchholz.github.io/gpf/doc/tutorial-REQUIRE.html).
@@ -136,9 +136,9 @@ function catName(name) {
 But most linters will raise [an error](https://eslint.org/docs/rules/no-use-before-define) for the above code.
 Indeed, it is a best practice to declare functions and variables before using them.
 
-So the team will end up **cluttering the source file** to ensure declarations are made before use.
+So, the team will end up **cluttering the source file** to ensure declarations are made before use.
 
-Not being able to navigate easily in the code also generates a more subtle problem:
+Not being able to navigate easily in the code also generates a subtler problem:
 **some logic might be repeated because it was hard to locate**.
 
 Finally, having all developers work on a single file will generate
@@ -170,7 +170,7 @@ There might be good reasons to have a such a big file but it always comes with a
 
 In [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js#metrics), the average number of lines per source file
 is a little under 100. But it has not
-[always been like this !](https://arnaudbuchholz.github.io/gpf/plato/index.html)
+[always been like this!](https://arnaudbuchholz.github.io/gpf/plato/index.html)
 
 ![Plato report on GPF-JS](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/plato%20average%20lines.png)
@@ -256,12 +256,12 @@ When it comes to deciding how to slice the application and organize the sources,
 there must be **rules and discipline**.
 
 For example, maximizing the **level of granularity** by having one function per source will generate an overwhelming
-amount of files. Also, **not having a clear file structure will make the architecture obscure** and will slow down the
+number of files. Also, **not having a clear file structure will make the architecture obscure** and will slow down the
 team.
 
 #### Files organization
 
-There are many guidelines and howtos on the web depending on the type of project or technology.
+There are many guidelines and how-to on the web depending on the type of project or technology.
 
 For instance:
 * [Best practices for Express app structure](https://www.terlici.com/2014/08/25/best-practices-express-structure.html)
@@ -273,7 +273,7 @@ sapui5-application-project-structuring.html)
 application_architecture.html)
 * [How to Structure Your React Project](https://daveceddia.com/react-project-structure/)
 
-On the other hands, some tools offers the possibility to instantiate new projects with a predefined structure.
+On the other hands, some tools offer the possibility to instantiate new projects with a predefined structure.
 Such as [Yeoman](http://yeoman.io/) which contains [thousands of project generators](http://yeoman.io/generators/).
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/zBt2g9ekiug" frameborder="0" allowfullscreen>
@@ -316,7 +316,7 @@ My%20own%20require%20implementation/back-in-my-day-funny-5.jpg)
 #### Level of granularity
 
 Once the structure is clearly defined, the only difficulty remaining is to figure out what to put inside the files.
-Obviously, their names must be self explanatory about purpose and content.
+Obviously, their names must be self-explanatory about purpose and content.
 
 **Struggling to choose the right file name is usually a good sign that it contains more than necessary**: splitting may
 help.
@@ -332,7 +332,7 @@ My%20own%20require%20implementation/SOLID.jpg)
 In particular, **the [Single Responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)
 should drive the choices when creating a new file**.
 
-Here is a shamelessly modified copy of the wikipedia definition as it summarizes the idea:*
+Here is a shamelessly modified copy of the Wikipedia definition as it summarizes the idea:*
 
 "The single responsibility principle is a computer programming principle that states that every module should have
 responsibility over a single part of the functionality provided by the software, and that responsibility should be
@@ -377,17 +377,17 @@ comes to loading the sources of an application.
 
 #### Everything at once
 
-![Load all the files !](https://arnaudbuchholz.github.io/blog/post/
+![Load all the files!](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/X-All-The-Y.jpg)
 
-As already mentioned before, there are tools designed to concatenate and minify all sources in order to generate
+As already mentioned before, there are tools designed to concatenate and minify all sources to generate
 **a single application file**. The resulting file is consequently **self-sufficient** and can be easily loaded.
 
 Dependencies will be addressed later but, to generate this file, the tool must know the list of files to
 concatenate (or, usually, the folder where to find the files).
 
 An alternative to load the application is to maintain a **list of sources to load**... in the correct order so that
-**dependencies are loaded before their dependant modules**.
+**dependencies are loaded before their dependent modules**.
 
 As a result, in an HTML page, a big list of [script](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
 tags is required to include all sources.
@@ -414,7 +414,7 @@ versions. Consequently, **the loading process can benefit from caching mechanism
 Disadvantages are:
 * Every time a new source is created, **it must be added to the list in the correct order** to be loaded
 * **The more files, the bigger the list** (and the more complex to maintain)
-* When the list becomes too big, one may loose track of which files are really required. In the worst situation, **some
+* When the list becomes too big, one may lose track of which files are really required. In the worst situation, **some
 may be loaded even if they are not used anymore**
 * **Any change in dependencies implies a re-ordering of the list**
 
@@ -482,7 +482,7 @@ Disadvantages are:
 * Having such a fine level of granularity increases the **risk of tangled dependencies** and, in the worst case,
 deadlocks. For instance, three modules: A, B and C. If A depends on B, B depends on C and C depends on A, it is
 impossible to load any of them.
-* If one module is a common dependency to several other modules, **it has to be loaded only once**. If not, the loading
+* If one module is a common dependency to several other modules, **it should be loaded only once**. If not, the loading
 performances will be decreased because of multiple loading of the same module
 
 (...) Obviously, for the last part, the loading mechanism must handle some kind of caching.
@@ -547,8 +547,8 @@ var ANY_CONSTANT = "value",
     // End of private scope
 }());`
 
-Another aspect that should be considered when dealing with globals is
-**[name collisions](https://en.wikipedia.org/wiki/Name_collision)**. This can be quickly adressed with
+Another aspect that should be considered when dealing with global symbols is
+**[name collisions](https://en.wikipedia.org/wiki/Name_collision)**. This can be quickly addressed with
 **[namespaces](https://en.wikipedia.org/wiki/Namespace)** but here comes a challenging example.
 
 #### Module interface
@@ -625,12 +625,12 @@ My%20own%20require%20implementation/mocking.png)
 Another subtle benefit of modularity is related to unit testing.
 
 Coming back to the example of module B requiring module D to be loaded: what if module D can't be loaded or used in a
-test environment? This module might require critical resources. For instance it could access a database and alter its
+test environment? This module might require critical resources. For instance, it could access a database and alter its
 content: nobody wants the tests to mess with real data.
 
 Does this mean that module B can't be tested because module D is not testable?
 
-Well, assuming that module D is exposing a well defined interface and provided that the modularization system offers a
+Well, if module D is exposing a well-defined interface and if the modularization system offers a
 way to substitute a module by another one, it is possible to create a **fake module that exposes the same interface**
 but **mocking the functionalities**.
 
@@ -641,7 +641,7 @@ but **mocking the functionalities**.
 ![We are... browsers!](https://arnaudbuchholz.github.io/blog/post/
 My%20own%20require%20implementation/browsers.jpg)
 
-The simples way to include a JavaScript source in an HTML page is to add a
+The simplest way to include a JavaScript source in an HTML page is to add a
 [script tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script).
 
 Even though **loading is asynchronous**, and unless the attributes *async* or *defer* are specified, **scripts are
@@ -676,8 +676,8 @@ must wait for the subsequent script to be loaded.
 
 ### RequireJS
 
-The [RequireJS](http://requirejs.org/) library was originally created for browsers but also works with other hosts (in
-particular Rhino).
+The [RequireJS](http://requirejs.org/) library was originally created for browsers but also works with other hosts
+(Rhino).
 
 By offering a unique mechanism to **load and inject modules**, this helper solves all the problems of modularization.
 The **factory function** generates a private scope and receives the injected dependencies as parameters.
@@ -756,7 +756,7 @@ You can [experiment it](https://runkit.com/npm/gpf-js) yourself.
 #### Local modules
 
 On the other hand, the project may contain its own set of modules: they don't need to be published to be located.
-In order to load a local modules, **the path to the source file must be provided**,
+To load a local module, **the path to the source file must be provided**,
 it is **relative to the current module**.
 
 `var CONST = require("./const.js");`
@@ -768,7 +768,7 @@ a require function. However, it is a custom and limited implementation.
 See the following [question thread](https://stackoverflow.com/questions/11873853/phantomjs-require-a-relative-path) for
 details.
 
-Furthermore, this host is an hybrid between a command line and a browser. Hence, for most of the needs, it might be
+Furthermore, this host is a hybrid between a command line and a browser. Hence, for most of the needs, it might be
 simpler to **consider the browser approach**.
 
 ### Bundlers
@@ -777,7 +777,7 @@ A [JavaScript bundler](https://medium.com/@gimenete/how-javascript-bundlers-work
 concatenate an application composed of modules (and resources) into a single self-sufficient and easy-to-load file.
 
 The good parts are:
-* it enforces code reuse by **enabling modularization when developping**
+* it enforces code reuse by **enabling modularization when developing**
 * it **speeds up the application loading** by limiting the number of files
 * by relying on the dependence tree, it also **trims files which are never loaded**
 
@@ -790,6 +790,10 @@ a lot when debugging but the source code must be exposed.
 
 * The application file must be **generated before running the application**.
 Depending on the number of files it might take some time
+
+![The lack of humility before vanilla JavaScript that's being displayed here, uh... staggers me.](https://
+arnaudbuchholz.github.io/blog/post/My%20own%20require%20implementation/
+you-were-so-busy-wondering-if-you-could-do-it-you-never-stopped-to-ask-if-you-should.jpg)
 
 #### Browserify
 
@@ -872,7 +876,11 @@ JavaScript files. In that context too, **loading is synchronous and scope is glo
 
 ### Javascript's native import
 
-There is no way this article could talk about JavaScript modularization without mentionning the latest EcmaScript's
+![Here comes a new keyword](https://
+arnaudbuchholz.github.io/blog/post/My%20own%20require%20implementation/
+if-the-javascript-language-could-stop-inventing-new-keywords-thatd-be-great.jpg)
+
+There is no way this article could talk about JavaScript modularization without mentioning the latest EcmaScript's
 [import feature](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
 
 #### Static import
@@ -913,13 +921,13 @@ When the name of the imported module is built from variables or function calls, 
 import**. As the name of the module to import is **known at execution time**, this generates some interesting challenges
 for the hosts and tools.
 
-There are several proposal for implementation:
+There are several proposals for implementation:
 * [ES proposal: import() – dynamically importing ES modules](http://2ality.com/2017/01/import-operator.html)
 * [tc39/proposal-dynamic-import](https://github.com/tc39/proposal-dynamic-import)
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+And it has recently become a [reality in Chrome and Safari](https://developers.google.com/web/updates/2017/11/dynamic-import).
 
-**Find current state of implementation**
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ## GPF-JS Implementation
 
