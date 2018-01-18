@@ -931,6 +931,53 @@ And it has recently become a [reality in Chrome and Safari](https://developers.g
 
 ## GPF-JS Implementation
 
+![My own implementation](https://arnaudbuchholz.github.io/blog/post/My%20own%20require%20implementation/mine%20mine.jpg)
+
+### API
+
+The new namespace [gpf.require](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html)
+exposes a [modularization helper](https://arnaudbuchholz.github.io/gpf/doc/tutorial-REQUIRE.html) which entry point
+is [gpf.require.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html#.define__anchor).
+
+The main characteristics are:
+* It is working the same way on **[all hosts](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.hosts)**
+* Loading is **asynchronous**
+* Module scope is **private** (because of the pattern leveraging factory functions)
+* **API exposure** is done by **returning an object**
+
+But the API also offers:
+* **caching** of loaded modules
+* **cache manipulation** to simplify testing by injecting mocked dependencies
+* **synchronization** through a
+[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) resolved when all
+dependencies are loaded and the module is evaluated (or rejected if any issue occurred)
+* **module types**, dependencies may be
+[JSON files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
+
+For instance:
+
+`gpf.require.define({
+    dependency: "dependency.js"
+
+}, function (require) {
+    "use strict";
+
+    // Begin of private scope
+
+    // Any functions or variables declared here are 'private'
+    // Dependency is available through require.dependency
+
+    // Reveal function
+    return {
+        myExportedFunction: function () {
+            /* ...implementation... */
+        }
+    };
+
+    // End of private scope
+});`
+
+
 ### Context switching
 
 require.define is redefined
