@@ -927,8 +927,6 @@ There are several proposals for implementation:
 
 And it has recently become a [reality in Chrome and Safari](https://developers.google.com/web/updates/2017/11/dynamic-import).
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ## GPF-JS Implementation
 
 ![My own implementation](https://arnaudbuchholz.github.io/blog/post/My%20own%20require%20implementation/mine%20mine.jpg)
@@ -951,14 +949,16 @@ But the API also offers:
 * **synchronization** through a
 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) resolved when all
 dependencies are loaded and the module is evaluated (or rejected if any issue occurred)
-* **module types**, dependencies may be
+* **module types**, dependent resources may also be
 [JSON files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
 
-When writing a JavaScript module, several syntaxes are offered:
+When writing a JavaScript module, several syntaxes are supported:
+
 * The 'GPF' way:
+
 `gpf.require.define({
     name1: "dependency1.js",
-    name2: "dependency2.js",
+    name2: "dependency2.json",
     // ...
     nameN: "dependencyN.js"
 
@@ -988,9 +988,10 @@ When writing a JavaScript module, several syntaxes are offered:
 });`
 
 * Using [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) format:
+
 `define([
     "dependency1.js",
-    "dependency2.js",
+    "dependency2.json",
     /*...*/,
     "dependencyN.js"
 ], function (name1, name2, /*...*/ nameN) {
@@ -1019,11 +1020,12 @@ When writing a JavaScript module, several syntaxes are offered:
 });`
 
 * Using [CommonJS](https://en.wikipedia.org/wiki/CommonJS) format:
+
 `"use strict";
 // Private scope
 
 var name1 = require("dependency1.js"),
-    name2 = require("dependency2.js"),
+    name2 = require("dependency2.json"),
     // ...
     nameN = require("dependencyN.js");
 
@@ -1046,7 +1048,9 @@ module.exports = {
 
 };`
 
-Note that for this last format, the module names must be static and modules are always evaluated.
+Note that for this last format, the module names must be static and modules are always evaluated (reasons below).
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ### Implementation details
 
@@ -1066,11 +1070,67 @@ gpf.require.define when loading a module
 * [require/javascript.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js): JavaScript
 handling
 
-#### Starting with a simple example
+But instead of going through each file one by one, the algorithm will be explained with examples.
+
+#### A simple example
+
+Let consider the following pair of files:
+
+* sample1.js
+
+`gpf.require.define({
+    dep1: "dependency1.json"
+}, function (require) {
+    alert(dep1.value);
+});`
+
+* dependency1.json
+
+`{
+    "value": "Hello World!"
+}`
+
+During the library startup, the
+[gpf.require.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html#.define__anchor) function is
+**[allocated](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L199)** by the
+[_gpfRequireAllocate](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L187) internal method.
+
+Indeed, the three methods (define, resolve and configure) are internally **bound to an hidden context** storing
+the [current configuration](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.requireOptions).
+
+When calling gpf.require.define,
+the [_gpfRequireDefine](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L155) implementation starts
+by enumerating the dependencies and building **an array of promises** by:
+
+* Resolving each resource dependency absolute path with
+[_gpfRequireResolve](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L118). This methods simply
+[concatenate](https://arnaudbuchholz.github.io/gpf/doc/gpf.path.html#.join__anchor) the **name with the contextual
+base**.
+
+* Getting / associating a promise to the resource using
+[_gpfRequireGet](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L129). If the resource's promise
+is already in the cache, **indexing is done by absolute path**, it is returned. Otherwise, the method
+[_gpfRequireLoad](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L135) is being triggered. *This
+will be detailled after*.
+
+Each promise is **resolved to the resource's content**:
+* The exposed API for a JavaScript module
+* The JavaScript object for a JSON file
+
+Once all the **promises are resolved**, the factory function *(second parameter of gpf.require.define)* is called with
+a dictionary indexing **all dependencies by their name**.
+
+(...) [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) format passes all dependencies as separate
+parameters. As a consequence, the factory function often bypass the maximum number of parameters that is specified in
+the linter. A dictionary has two advantages: it needs only one parameter and the API remains open for future additional
+parameters.
 
 
 
 #### More complex one
+
+
+
 
 
 #### Context switching
