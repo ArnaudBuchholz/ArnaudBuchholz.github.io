@@ -954,50 +954,145 @@ dependencies are loaded and the module is evaluated (or rejected if any issue oc
 * **module types**, dependencies may be
 [JSON files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
 
-For instance:
-
+When writing a JavaScript module, several syntaxes are offered:
+* The 'GPF' way:
 `gpf.require.define({
-    dependency: "dependency.js"
+    name1: "dependency1.js",
+    name2: "dependency2.js",
+    // ...
+    nameN: "dependencyN.js"
 
 }, function (require) {
     "use strict";
+    // Private scope
 
-    // Begin of private scope
+    require.name1.api1();
 
-    // Any functions or variables declared here are 'private'
-    // Dependency is available through require.dependency
+    // Implementation
 
-    // Reveal function
+    // Interface
     return {
-        myExportedFunction: function () {
-            /* ...implementation... */
+
+        api1: function (/*...*/) {
+            /*...*/
+        },
+
+        // ...
+
+        apiN: function (/*...*/) {
+            /*...*/
         }
+
     };
 
-    // End of private scope
 });`
 
+* Using [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) format:
+`define([
+    "dependency1.js",
+    "dependency2.js",
+    /*...*/,
+    "dependencyN.js"
+], function (name1, name2, /*...*/ nameN) {
+    "use strict";
+    // Private scope
 
-### Context switching
+    name1.api1();
+
+    // Implementation
+
+    // Interface
+    return {
+
+        api1: function (/*...*/) {
+            /*...*/
+        },
+
+        // ...
+
+        apiN: function (/*...*/) {
+            /*...*/
+        }
+
+    };
+
+});`
+
+* Using [CommonJS](https://en.wikipedia.org/wiki/CommonJS) format:
+`"use strict";
+// Private scope
+
+var name1 = require("dependency1.js"),
+    name2 = require("dependency2.js"),
+    // ...
+    nameN = require("dependencyN.js");
+
+name1.api1();
+
+// Implementation
+
+// Interface
+module.exports = {
+
+    api1: function (/*...*/) {
+        /*...*/
+    },
+
+    // ...
+
+    apiN: function (/*...*/) {
+        /*...*/
+    }
+
+};`
+
+Note that for this last format, the module names must be static and modules are always evaluated.
+
+### Implementation details
+
+The implementation stands in several files:
+
+* [require.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js): The main entry point as well as
+the cache handling
+
+* [require/load.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/load.js): The file loading
+management
+
+* [require/wrap.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/wrap.js): A mechanism to redefine
+gpf.require.define when loading a module
+
+* [require/json.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/json.js): JSON handling
+
+* [require/javascript.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js): JavaScript
+handling
+
+#### Starting with a simple example
+
+
+
+#### More complex one
+
+
+#### Context switching
 
 require.define is redefined
 
-### File loading
+#### File loading
 
 Switch between web and non web
     gpf.http.get / gpf.fs.load
 
 
-### Caching
+#### Caching
 
 Caching the promises
 Cache modification handler
 
-### Detecting resource type
+#### Detecting resource type
 
 By file extension
 
-### JavaScript module execution
+#### JavaScript module execution
 
 Detecting module type
     Based on a regular expression to detect the use of require
