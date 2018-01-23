@@ -949,8 +949,9 @@ But the API also offers:
 * **synchronization** through a
 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) resolved when all
 dependencies are loaded and the module is evaluated (or rejected if any issue occurred)
-* **module types**, dependent resources may also be
-[JSON files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
+* **resource types**, dependent files may be
+[JSON files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON) or JavaScript
+modules
 
 When writing a JavaScript module, several syntaxes are supported:
 
@@ -1048,33 +1049,35 @@ module.exports = {
 
 };`
 
-Note that for this last format, the module names must be static and modules are always evaluated (reasons below).
+For this last format, the module names must be static and modules are always evaluated *(reasons below)*.
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ### Implementation details
 
-The implementation stands in several files:
+The implementation is composed of several files:
 
-* [require.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js): The main entry point as well as
-the cache handling
+* [src/require.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js): it contains the namespace
+declaration, the main entry points as well as the cache handling
 
-* [require/load.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/load.js): The file loading
-management
+* [src/require/load.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/load.js): it manages resource
+loading
 
-* [require/wrap.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/wrap.js): A mechanism to redefine
-gpf.require.define when loading a module
+* [src/require/json.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/json.js): it handles JSON
+resources
 
-* [require/json.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/json.js): JSON handling
+* [src/require/javascript.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js): it
+handles JavaScript resources
 
-* [require/javascript.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js): JavaScript
-handling
+* [src/require/wrap.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/wrap.js): it contains a special
+mechanism that was required to synchronize loading of subsequent JavaScript modules *(will be detailed below)*
+
 
 But instead of going through each file one by one, the algorithm will be explained with examples.
 
 #### A simple example
 
-Let consider the following pair of files:
+Let consider the following pair of files (in the same folder):
 
 * sample1.js
 
@@ -1092,40 +1095,55 @@ Let consider the following pair of files:
 
 During the library startup, the
 [gpf.require.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html#.define__anchor) function is
-**[allocated](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L199)** by the
+**[allocated](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L199)** using the
 [_gpfRequireAllocate](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L187) internal method.
 
-Indeed, the three methods (define, resolve and configure) are internally **bound to an hidden context** storing
-the [current configuration](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.requireOptions).
+Indeed, the three main entry point (define, resolve and configure) are internally **bound to an hidden context** object
+storing the [current configuration](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.requireOptions).
 
 When calling gpf.require.define,
 the [_gpfRequireDefine](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L155) implementation starts
-by enumerating the dependencies and building **an array of promises** by:
+by enumerating the dependencies and it builds **an array of promises**:
 
-* Resolving each resource dependency absolute path with
+* It resolves each dependency absolute path with
 [_gpfRequireResolve](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L118). This methods simply
-[concatenate](https://arnaudbuchholz.github.io/gpf/doc/gpf.path.html#.join__anchor) the **name with the contextual
-base**.
+[concatenates](https://arnaudbuchholz.github.io/gpf/doc/gpf.path.html#.join__anchor) the **resource name with the
+contextual base**.
 
-* Getting / associating a promise to the resource using
-[_gpfRequireGet](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L129). If the resource's promise
-is already in the cache, **indexing is done by absolute path**, it is returned. Otherwise, the method
-[_gpfRequireLoad](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L135) is being triggered. *This
-will be detailled after*.
+* It gets or associates a promise to the resource using
+[_gpfRequireGet](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L129). Using the **absolute
+resource path as a key**, this method checks if the resource's promise is already in the cache. If not,
+[_gpfRequireLoad](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L135) is called to load
+the resource. *This will be detailed after*.
 
 Each promise is **resolved to the resource's content**:
 * The exposed API for a JavaScript module
 * The JavaScript object for a JSON file
 
-Once all the **promises are resolved**, the factory function *(second parameter of gpf.require.define)* is called with
-a dictionary indexing **all dependencies by their name**.
+Then it waits for **all promises to be resolved**.
+
+Finally, if the second parameter of gpf.require.define is a function (also known as **factory function**), it is
+**[called](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L171)** with a dictionary indexing **all
+dependencies by their name**.
 
 (...) [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) format passes all dependencies as separate
 parameters. As a consequence, the factory function often bypass the maximum number of parameters that is specified in
 the linter. A dictionary has two advantages: it needs only one parameter and the API remains open for future additional
 parameters.
 
+#### Loading resources
 
+Whatever its type, loading a resources **always starts by getting the file content**. To make it **host independant**,
+the file [src/require/load.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/load.js#L38) switches
+between:
+* an HTTP load based on gpf.http.request's internal implementation for browsers host
+* an host-independent internal method _gpfFsRead which loads a file
+
+Then, based on the extension, the content processor is triggered.
+
+For the above example, the JSON file is parsed and the promise is resolved to the resulting object.
+This is all done inside the
+[src/require/json.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/json.js) file.
 
 #### More complex one
 
