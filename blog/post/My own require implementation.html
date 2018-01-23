@@ -1125,6 +1125,8 @@ resource path as a key**, this function checks if the resource's promise is alre
 [_gpfRequireLoad](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require.js#L135) is called to load
 the resource. *This will be detailed after*.
 
+In the above example, the array will contain only one promise corresponding to the resource "dependency1.json".
+
 Then it waits for **all promises to be resolved**.
 
 Finally, if the second parameter of gpf.require.define is a function (also called **factory function**), it is
@@ -1159,18 +1161,26 @@ For the above example, the
 [JSON file is parsed](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/json.js#L10) and the promise is
 resolved to the resulting object.
 
-(...) Note how error processing is simplified by having this code encapsulated in promises
+(...) Note how error processing is simplified by having this code encapsulated in promises.
 
 #### Subsequent dependencies
 
-Now let consider the following pair of files *(in the same folder)*:
+Now let consider the following files *(in the same folder)*:
 
-* sample1.js
+* sample2.js
+
+`gpf.require.define({
+    dep2: "dependency2.js"
+}, function (require) {
+    alert(dep2.value);
+});`
+
+* dependency2.js
 
 `gpf.require.define({
     dep1: "dependency1.json"
 }, function (require) {
-    alert(dep1.value);
+    return dep1.value;
 });`
 
 * dependency1.json
@@ -1179,8 +1189,19 @@ Now let consider the following pair of files *(in the same folder)*:
     "value": "Hello World!"
 }`
 
+This is not the simplest module example but it's because simple modules are not yet handled... incident created.
 
+In that case, the challenge is double:
+* How are JavaScript modules loaded ?
+* How do we ensure all subsequent dependencies are loaded before resolving the promise associated to the dependency2
 
+First of all, how does JAvaScript modules are being loaded.
+
+Actually, because of the use of gpf.require.define, the module dependency2 will be ready to be used only when all its
+dependencies are resolved.
+
+That's why, the wrap.js offers a mechanism to intercept the promise being created by the JavaScript module to allow
+parent module to synchronize on it.
 
 
 #### Context switching
