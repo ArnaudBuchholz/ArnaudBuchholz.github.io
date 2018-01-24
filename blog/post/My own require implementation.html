@@ -1163,37 +1163,46 @@ resolved to the resulting object.
 
 #### Subsequent dependencies
 
-Now let consider the following files *(in the same folder)*:
+Now let consider the following files *(sharing the same base folder)*:
 
 * sample2.js
 
 `gpf.require.define({
-    dep2: "dependency2.js"
+    dep2: "sub/dependency2.js"
 }, function (require) {
     alert(dep2.value);
 });`
 
-* dependency2.js
+* sub/dependency2.js
 
 `gpf.require.define({
-    dep1: "dependency1.json"
+    dep2: "dependency2.json"
 }, function (require) {
-    return dep1.value;
+    return {
+        value: dep2.value;
+    };
 });`
 
-* dependency1.json
+* sub/dependency2.json
 
 `{
     "value": "Hello World!"
 }`
 
-This is not the simplest module example but it's because simple modules are not yet handled... incident created.
+(...) When writing this article, I realized that 'simple' JavaScript modules exposing APIs (i.e. CommonJS syntax
+with no require but module.exports) are not handled.
+An [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/219) was created in the next
+[release](https://github.com/ArnaudBuchholz/gpf-js/milestone/12).
 
-In that case, the challenge is double:
-* How are JavaScript modules loaded ?
-* How do we ensure all subsequent dependencies are loaded before resolving the promise associated to the dependency2
+This examples illustrates several challenges:
+* How JavaScript modules are loaded
+* How relative path are handled
+* How the API ensures that subsequent dependencies are loaded before resolving the promise associated to the module
 
-First of all, how does JAvaScript modules are being loaded.
+Let consider the first point: how does the API handles JavaScript modules.
+
+
+First of all, how does JavaScript modules are being loaded.
 
 Actually, because of the use of gpf.require.define, the module dependency2 will be ready to be used only when all its
 dependencies are resolved.
