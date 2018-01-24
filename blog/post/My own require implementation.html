@@ -1201,8 +1201,16 @@ This examples illustrates several challenges:
 
 Let consider the first point: how does the API handles JavaScript modules.
 
+According to the previous explanation, the resource extension is used to determine which content processor is applied.
+In that case, the [JavaScript processor](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js)
+is selected and executed.
 
-First of all, how does JavaScript modules are being loaded.
+To distinguish which syntax is being used in the module, the current * - i.e. v0.2.2 - * algorithm [looks for the
+CommonJS's require keyword](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L114-L115).
+Indeed, CommongJS modules are synchronous and, because of that, the dependencies must be **preloaded before evaluating
+the module**.
+
+
 
 Actually, because of the use of gpf.require.define, the module dependency2 will be ready to be used only when all its
 dependencies are resolved.
