@@ -1201,14 +1201,38 @@ This examples illustrates several challenges:
 
 Let consider the first point: how does the API handles JavaScript modules.
 
-According to the previous explanation, the resource extension is used to determine which content processor is applied.
-In that case, the [JavaScript processor](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js)
-is selected and executed.
+Ax explained previously, the resource extension is used to determine which content processor is applied.
+In that case, the **[JavaScript
+processor](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js)** is selected and executed.
 
 To distinguish which syntax is being used in the module, the current * - i.e. v0.2.2 - * algorithm [looks for the
 CommonJS's require keyword](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L114-L115).
 Indeed, CommongJS modules are synchronous and, because of that, the dependencies must be **preloaded before evaluating
 the module**.
+
+In that case, no require keyword is found, hence the generic JavaScript processor applies.
+
+Before evaluating the loaded JavaScript module, the content is
+**[wrapped](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L106) in a new function**
+taking two parameters:
+
+`function (gpf, define) {
+
+gpf.require.define({
+    dep2: "dependency2.json"
+}, function (require) {
+    return {
+        value: dep2.value;
+    };
+});
+
+}`
+
+* **gpf** is a modified version of the gpf namespace where the require object has been re-allocated
+
+* **define** is an [encapsulation of the
+gpf.require.define](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L94-L103) accepting
+the AMD syntax
 
 
 
