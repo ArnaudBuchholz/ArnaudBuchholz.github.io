@@ -1190,29 +1190,32 @@ Now let consider the following files *(sharing the same base folder)*:
 }`
 
 (...) When writing this article, I realized that 'simple' JavaScript modules exposing APIs (i.e. CommonJS syntax
-with no require but module.exports) are not handled.
+with no require but module.exports) are not properly handled.
 An [incident](https://github.com/ArnaudBuchholz/gpf-js/issues/219) was created in the next
 [release](https://github.com/ArnaudBuchholz/gpf-js/milestone/12).
 
-This examples illustrates several challenges:
-* How JavaScript modules are loaded
-* How relative path are handled
-* How the API ensures that subsequent dependencies are loaded before resolving the promise associated to the module
+This last example illustrates several challenges:
+* JavaScript modules loading
+* Relative path management
+* Subsequent dependencies must be loaded before resolving the promise associated to the module
 
-Let consider the first point: how does the API handles JavaScript modules.
+Let consider the first point: how does the API loads JavaScript modules?
 
-Ax explained previously, the resource extension is used to determine which content processor is applied.
+As explained previously, the resource extension is used to determine which content processor is applied.
 In that case, the **[JavaScript
 processor](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js)** is selected and executed.
 
-To distinguish which syntax is being used in the module, the current * - i.e. v0.2.2 - * algorithm [looks for the
+To distinguish which syntax is being used in the module, the *v0.2.2* algorithm [looks for the
 CommonJS's require keyword](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L114-L115).
-Indeed, CommongJS modules are synchronous and, because of that, the dependencies must be **preloaded before evaluating
+Indeed, CommonJS modules are synchronous and, because of that, the dependencies must be **preloaded before evaluating
 the module**.
 
-In that case, no require keyword is found, hence the generic JavaScript processor applies.
+(...) Back to the previous comment, this distinction might not be necessary anymore, the code will probably evolve in a
+future version. That's why no additional explanation will be given in this article.
 
-Before evaluating the loaded JavaScript module, the content is
+In the above example, no require keyword can be found, hence the generic JavaScript processor applies.
+
+Before **evaluating** the loaded JavaScript module, the content is
 **[wrapped](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L106) in a new function**
 taking two parameters:
 
@@ -1228,37 +1231,49 @@ gpf.require.define({
 
 }`
 
-* **gpf** is a modified version of the gpf namespace where the require object has been re-allocated
+This mechanism has several advantages:
+
+* The process of creating this function **compiles the JavaScript content**.
+This won't detect runtime errors, such as the use of unknown symbols, but it validates the syntax.
+
+* The **function wrapping pattern generates a private scope** in which the code will be evaluated. Hence, variable and
+function declarations remain **local to the module**. Indeed, unlike
+[eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) which can alter the global
+context, the **function evaluation has a limited footprint**.
+
+(...) It is still possible to declare global symbols by accessing the global context (such as the [window
+object](https://developer.mozilla.org/en-US/docs/Web/API/Window) for browsers) but a simple way to avoid this is to
+redeclare the window symbol as a parameter of the function and pass an empty object when executing it.
+
+* It allows the **definition (or override) and injection of 'global' symbols**.
+
+In our case, two of them are being defined:
 
 * **define** is an [encapsulation of the
-gpf.require.define](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L94-L103) accepting
-the AMD syntax
+gpf.require.define API](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L94-L103) adapted
+to the [AMD syntax](https://en.wikipedia.org/wiki/Asynchronous_module_definition)
 
+* **gpf** is a modified clone of the gpf namespace where the **require member is
+[re-allocated](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L112)**.
 
+This last point is important to solve the two remaining questions:
+* How does the library handles relative path?
+* How does it know when the subsequent dependencies are loaded?
 
-Actually, because of the use of gpf.require.define, the module dependency2 will be ready to be used only when all its
-dependencies are resolved.
+Everything is done inside the last [uncovered source
+file](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/wrap.js).
 
-That's why, the wrap.js offers a mechanism to intercept the promise being created by the JavaScript module to allow
-parent module to synchronize on it.
+A so-called wrapper is created to:
+* [Change](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/wrap.js#L53-L55) the settings of the require
+API by taking into account **the [current
+path](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/wrap.js#L54) of the resource being loaded**
 
+* **[Capture](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/wrap.js#L27-L35) the result promise of
+gpf.require.define** if used.
 
-#### Context switching
-
-require.define is redefined
-
-#### JavaScript module execution
-
-Detecting module type
-    Based on a regular expression to detect the use of require
-
-    => Should probably be testing module.exports too...
-
-Dealing with inner promises
-
-If the module also uses gpf.require.define OR define itself, you must wait for this function to complete before
-    completing the loading of the module (so that it can be used).
-This was quite challenging but I found using promise wrapping
+As a consequence, the API can [return a
+promise](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L126) that is either immediately
+resolved or the one **corresponding to the inner gpf.require.define use**, ensuring the module is **properly loaded**.
 
 ## Future of gpf.require
 
