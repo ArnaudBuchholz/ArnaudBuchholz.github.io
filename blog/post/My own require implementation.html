@@ -13,8 +13,8 @@
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
     The release 0.2.2 of GPF-JS delivers a polymorphic modularization mechanism that mimics RequireJS and CommonJS
-    implementation of NodeJS. It was surprisingly easy to make it happen now that the library offers all the
-    basic services and it combines lots of technologies. Here are the implementation details.
+    implementation of NodeJS. It was surprisingly easy to make it happen on all supported hosts now that the library
+    offers the basic services. This API combines lots of technologies, here are the implementation details.
 </div>
 <code class="markdown">
 ## Introduction
@@ -1159,8 +1159,6 @@ resolved to the resulting object.
 
 (...) Note how error processing is simplified by having this code encapsulated in promises.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 #### Subsequent dependencies
 
 Now let consider the following files *(sharing the same base folder)*:
@@ -1206,7 +1204,7 @@ In that case, the **[JavaScript
 processor](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js)** is selected and executed.
 
 To distinguish which syntax is being used in the module, the *v0.2.2* algorithm [looks for the
-CommonJS's require keyword](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L114-L115).
+CommonJS' require keyword](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L114-L115).
 Indeed, CommonJS modules are synchronous and, because of that, the dependencies must be **preloaded before evaluating
 the module**.
 
@@ -1243,7 +1241,7 @@ context, the **function evaluation has a limited footprint**.
 
 (...) It is still possible to declare global symbols by accessing the global context (such as the [window
 object](https://developer.mozilla.org/en-US/docs/Web/API/Window) for browsers) but a simple way to avoid this is to
-redeclare the window symbol as a parameter of the function and pass an empty object when executing it.
+redefine the window symbol as a parameter of the function and pass an empty object when executing it.
 
 * It allows the **definition (or override) and injection of 'global' symbols**.
 
@@ -1275,15 +1273,57 @@ As a consequence, the API can [return a
 promise](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L126) that is either immediately
 resolved or the one **corresponding to the inner gpf.require.define use**, ensuring the module is **properly loaded**.
 
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
 ## Future of gpf.require
+
+![A bright future](https://arnaudbuchholz.github.io/blog/post/My%20own%20require%20implementation/the%20future.jpg)
+
+I would not pretend that the implementation is perfect but, from an API standpoint, it opens the door for interesting
+evolutions.
+
+### Custom resource processor
+
+Right now, only json and js files are being handled. Everything else is considered text resources (i.e. the loaded
+content is returned without any additional processing).
+
+Offering the possibility to **map an extension to a custom resource processor** (such as yml or jsx) would add
+significant value to the library.
 
 ### Handling cross references
 
-(See how NodeJS and RequireJS handle them)
+What happens when **resources are inter-dependent**?
+It should never happens but, when building the modules, the developer may fall in the trap of cross references.
 
-Pattern by setting the dependency
-Principle of weak references: can be resolved after the module was loaded
+For instance, module A depends on module B, B depends on C, C depends on D and D depends on A!
 
+There are easy patterns to workaround this situation but, at least, the library **must detect and deliver the proper
+information to the developer to help him solve the issue**.
+
+Also, the concept of **weak references** could be implemented: these are **dependencies that are resolved later than the
+module itself**.
+
+For example *(this is just an idea)*, the dependency is flagged with weak=true. This means that it is not required
+to execute the factory function. To know when the dependency is available (and access it), the member is no more the
+module result but rather a promise resolved to the module result (once it has been loaded).
+
+`gpf.require.define({
+    dependency: {
+        path: "dependency.js",
+        weak: true
+    }
+}, function (require) {
+
+    return {
+
+        exposedApi: function () {
+            return require.dependency.then(function (resolvedDependency) {
+                return resolvedDependency.api();
+            };
+        }
+
+    }
+});`
 
 ## Conclusion
 
