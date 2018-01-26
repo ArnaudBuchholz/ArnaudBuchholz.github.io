@@ -1,0 +1,41 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Travis integration
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
+    This short article summarizes how I plugged Travis CI into the GPF-JS GitHub repository
+    to assess quality on each push.
+</div>
+<code class="markdown">
+
+## Quality control
+
+Since the beginning of the GPF-JS project, quality is a high priority topic.
+
+Over the years, a complete testing framework has been built to serve this idea:
+* Development follow **TDD** principles
+* The **code is linted** with jshint and eslint
+* The **maintainability ratio** is computed using plato and **verified through custom treshold** values
+* **Testing is done over all supported platforms**
+* The **coverage level** is controlled with custom treshold values
+* A **web dashboard** displays the metrics and gives access to the tools
+
+However, these validations are done locally and they must be run manually before pushing the code.
+In order to support collaboration and ensure all pushes would go to the same validation process,
+a Continuous Integration process is required.
+
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
