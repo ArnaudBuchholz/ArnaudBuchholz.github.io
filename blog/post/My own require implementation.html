@@ -8,7 +8,8 @@
     <div class="post-header-line-1"></div>
 </div>
 <div class="post-body">
-<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
@@ -949,6 +950,7 @@ But the API also offers:
 * **synchronization** through a
 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) resolved when all
 dependencies are loaded and the module is evaluated (or rejected if any issue occurred)
+* **lazy loading** as it may be called anytime
 * **resource types**, dependent files may be
 [JSON files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON) or JavaScript
 modules
@@ -1273,8 +1275,6 @@ As a consequence, the API can [return a
 promise](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.2/src/require/javascript.js#L126) that is either immediately
 resolved or the one **corresponding to the inner gpf.require.define use**, ensuring the module is **properly loaded**.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ## Future of gpf.require
 
 ![A bright future](https://arnaudbuchholz.github.io/blog/post/My%20own%20require%20implementation/the%20future.jpg)
@@ -1293,19 +1293,19 @@ significant value to the library.
 ### Handling cross references
 
 What happens when **resources are inter-dependent**?
-It should never happens but, when building the modules, the developer may fall in the trap of cross references.
+It should never be the case but, when building the modules, the developer may fall in the trap of cross references.
 
 For instance, module A depends on module B, B depends on C, C depends on D and D depends on A!
 
-There are easy patterns to workaround this situation but, at least, the library **must detect and deliver the proper
+There are easy patterns to work around this situation but, at least, the library **must detect and deliver the proper
 information to the developer to help him solve the issue**.
 
 Also, the concept of **weak references** could be implemented: these are **dependencies that are resolved later than the
 module itself**.
 
-For example *(this is just an idea)*, the dependency is flagged with weak=true. This means that it is not required
+For example *(and this is just an idea)*, the dependency is flagged with weak=true. This means that it is not required
 to execute the factory function. To know when the dependency is available (and access it), the member is no more the
-module result but rather a promise resolved to the module result (once it has been loaded).
+resource result but rather a promise resolved to the resource result once it has been loaded and processed.
 
 `gpf.require.define({
     dependency: {
@@ -1325,12 +1325,31 @@ module result but rather a promise resolved to the module result (once it has be
     }
 });`
 
+### Module object
+
+NodeJS proposes a lot of [additional properties](https://nodejs.org/docs/latest/api/modules.html) on the module symbol.
+Some of them could be valuable in the library too.
+
 ## Conclusion
 
-Things to improve:
-    - detect cross references
-    - implement new file types (templates?)
-    - implement module properties & hidden variables (https://nodejs.org/docs/latest/api/modules.html#modules_module_children)
+If you have reached this conclusion: congratulations and thank you for your patience!
+
+This article is probably one of the longest I ever wrote on this blog: almost two month of work was required. It clearly
+delayed the library development but, as usual, it made me realize some weaknesses of the current implementation.
+
+I highly recommend this exercise to anybody who is developing some code: write an article on how it works and why it
+works that way.
+
+It was important to illustrate how modularization helps building better applications before digging into the API
+proposition. The same way, because the GPF-JS library is compatible with several host, it was important to highlight
+existing solutions as they inspired me.
+
+I am looking for feedback so don’t hesitate to drop a comment or send me an
+[email](mailto://arnaud.buchholz@free.fr?subject=[GPF-JS]%20My%20own%20require%20implementation).
+I would be more than happy to discover your thoughts and discuss the implementation.
+
+
+
 
 </code>
 <!-- Drop those two lines -->
