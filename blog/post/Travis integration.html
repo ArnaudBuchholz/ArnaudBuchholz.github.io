@@ -20,26 +20,61 @@
 
 ## Quality control
 
-Since the beginning of the GPF-JS project, quality is a high priority topic.
+Since the beginning of the [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) project,
+[quality](https://github.com/ArnaudBuchholz/gpf-js#metrics) is a high priority topic.
 
-Over the years, a complete testing framework has been built to serve this idea:
+Over the years, a complete testing framework has been built:
 * Development follow **TDD** principles
 * The **code is linted** with jshint and eslint
-* The **maintainability ratio** is computed using plato and **verified through custom treshold** values
+* The **maintainability ratio** is computed using [plato](https://www.npmjs.com/package/plato) and
+**verified through custom threshold** values
 * **Testing is done over all supported platforms**
-* The **coverage level** is controlled with custom treshold values
+* The **coverage level** is also measured and controlled with custom threshold values
 * A **web dashboard** displays the metrics and gives access to the tools
 
 However, these validations are done locally and they must be **run manually before pushing the code**.
 
-In order to support collaboration and ensure all pull requests would go to the same validation process,
-a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) process is required.
+In order to **enable collaboration** and ensure all pull requests would go to the same **validation process**,
+a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) platform is required.
 
 ## Travis CI
 
-[Travis-CI](https://travis-ci.org/) is a free continuous integration platform which integrates with GitHub
+[Travis-CI](https://travis-ci.org/) is a free continuous integration platform which integrates smoothly with GitHub.
+
+
+[Getting started](https://docs.travis-ci.com/user/getting-started)
 
     Sign in with GitHub account
+
+![Steps](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/steps.png)
+
+![Dashboard](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/dashboard.png)
+
+### .travis.yml
+
+## Changes in GPF-JS
+
+### .travis.yml
+
+### Generation of the configuration file
+
+Default configurations, quiet mode for the setup, grunt travis
+
+### Wscript is missing
+
+Impact on coverage, add flags to coverage
+
+This part will change: the files should be tagged with host info so that coverage would know (based on detected hosts)
+    if it was possible to run
+
+### Chrome testing
+
+No selenium (but it might be possible to enable it)
+
+    Luckily, I implemented the alternative to execute a command line
+    google-chrome-stable
+    Finding the right command line options
+
 
 </code>
 <!-- Drop those two lines -->
