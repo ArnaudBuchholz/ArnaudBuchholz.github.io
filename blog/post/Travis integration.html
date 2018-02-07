@@ -14,7 +14,7 @@
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
     This short article summarizes how Travis CI was plugged into the GPF-JS GitHub repository
-    to assess quality on each push.
+    to assess quality on every push.
 </div>
 <code class="markdown">
 
@@ -28,29 +28,38 @@ Over the years, a complete testing framework has been built:
 * The **code is linted** with jshint and eslint
 * The **maintainability ratio** is computed using [plato](https://www.npmjs.com/package/plato) and
 **verified through custom threshold** values
-* **Testing is done over all supported platforms**
+* **Testing is done over all supported hosts**
 * The **coverage level** is also measured and controlled with custom threshold values
 * A **web dashboard** displays the metrics and gives access to the tools
 
-However, these validations are done locally and they must be **run manually before pushing the code**.
+However, these validations were done locally and they had to be **run manually before pushing the code**.
 
 In order to **enable collaboration** and ensure all pull requests would go to the same **validation process**,
-a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) platform is required.
+a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) platform was required.
 
 ## Travis CI
 
-[Travis-CI](https://travis-ci.org/) is a free continuous integration platform which integrates smoothly with GitHub.
+[Travis-CI](https://travis-ci.org/) is a **free solution** that integrates smoothly with
+[GitHub](https://github.com/). Actually, the **GitHub credentials are used to login** to the platform.
 
+Once authenticated, all the repositories are made available and each one can be enabled **individually**.
 
-[Getting started](https://docs.travis-ci.com/user/getting-started)
+![](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/steps.png)
 
-    Sign in with GitHub account
+The selected repositories must be [configured](https://docs.travis-ci.com/user/getting-started) to
+instruct Travis on **how the builds must be done**. To put it in a nutshell, a new file *(.travis.yml)* must be added.
 
-![Steps](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/steps.png)
+When everything is put together, the platform will **monitor pushes and trigger builds automatically**. It also offers a
+nice dashboard to monitor the enabled projects.
 
-![Dashboard](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/dashboard.png)
+![Travis dashboard](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/dashboard.png).
 
-### .travis.yml
+Finally, the [project README](https://github.com/ArnaudBuchholz/gpf-js/blob/master/README.md) can be modified to show
+the [last build result](https://github.com/ArnaudBuchholz/gpf-js#gpf-library):
+<a href="https://travis-ci.org/ArnaudBuchholz/gpf-js#">
+    <img src="https://travis-ci.org/ArnaudBuchholz/gpf-js.svg?branch=master" title="Travis-CI" />
+</a>
+
 
 ## Changes in GPF-JS
 
