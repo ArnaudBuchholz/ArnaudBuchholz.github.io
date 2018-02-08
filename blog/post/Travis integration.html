@@ -9,7 +9,6 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
@@ -34,7 +33,7 @@ Over the years, a complete testing framework has been built:
 
 However, these validations were done locally and they had to be **run manually before pushing the code**.
 
-In order to **enable collaboration** and ensure all pull requests would go to the same **validation process**,
+In order to **enable collaboration** and ensure that all pull requests would go to the same **validation process**,
 a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) platform was required.
 
 ## Travis CI
@@ -44,26 +43,58 @@ a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration)
 
 Once authenticated, all the repositories are made available and each one can be enabled **individually**.
 
-![](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/steps.png)
+![Documented steps](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/steps.png)
 
 The selected repositories must be [configured](https://docs.travis-ci.com/user/getting-started) to
 instruct Travis on **how the builds must be done**. To put it in a nutshell, a new file *(.travis.yml)* must be added.
 
 When everything is put together, the platform will **monitor pushes and trigger builds automatically**. It also offers a
-nice dashboard to monitor the enabled projects.
+nice dashboard to review the enabled repositories.
 
 ![Travis dashboard](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/dashboard.png).
 
 Finally, the [project README](https://github.com/ArnaudBuchholz/gpf-js/blob/master/README.md) can be modified to show
 the [last build result](https://github.com/ArnaudBuchholz/gpf-js#gpf-library):
-<a href="https://travis-ci.org/ArnaudBuchholz/gpf-js#">
+<a href="https://travis-ci.org/ArnaudBuchholz/gpf-js#" target="_blank">
     <img src="https://travis-ci.org/ArnaudBuchholz/gpf-js.svg?branch=master" title="Travis-CI" />
 </a>
-
+<p/>
 
 ## Changes in GPF-JS
 
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
 ### .travis.yml
+
+The *.yml* extension stands for **[YAML file](https://en.wikipedia.org/wiki/YAML)**: a format that is commonly used for
+configuration files. In the context of Travis, it describes the **requirements and steps to buid and validate** the
+project.
+
+#### Requirements
+
+One obvious requirement of the [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml) development
+environment is [NodeJS](https://nodejs.org/). This is configured by defining the [language setting](https://github.com/
+ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L1) and selecting the [Long Term Support](https://github.com/
+ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L2-L3) version.
+
+Chrome is also [requested](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L5) to enable browser
+testing.
+
+[Grunt](https://gruntjs.com/) is installed using the [proper command line](https://github.com/ArnaudBuchholz/
+gpf-js/blob/master/.travis.yml#L6).
+
+Finally, anything else is described by the [project dependencies](https://github.com/ArnaudBuchholz/gpf-js/blob/
+1fb978e9b39e095f564c194f4329dba769f48146/package.json#L24-L61) and is [installed](https://github.com/ArnaudBuchholz/
+gpf-js/blob/master/.travis.yml#L7) through [NPM](https://www.npmjs.com/).
+
+#### Steps
+
+The default script being executed by Travis is `npm test` which is specified in
+[package.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/package.json#L11).
+
+But GPF-jS requires a configuration file to be generated, in particular to detect the hosts.
+This is why, a [specific command line](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L8) will
+trigger the generation of this file.
 
 ### Generation of the configuration file
 
@@ -84,6 +115,7 @@ No selenium (but it might be possible to enable it)
     google-chrome-stable
     Finding the right command line options
 
+### Bonus: coverage with coveralls
 
 </code>
 <!-- Drop those two lines -->
