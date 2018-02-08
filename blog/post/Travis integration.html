@@ -98,7 +98,24 @@ trigger the generation of this file.
 
 ### Generation of the configuration file
 
-Default configurations, quiet mode for the setup, grunt travis
+When grunt is triggered, the gruntfile.js first checks if any configuration file exists. If not, a default configuration
+is created and executed. It triggers make\config.js, the script responsible for configuration.
+
+This step is fully interactive:
+(screenshot)
+
+To automate this part, a new mode was added: it is triggered by using grunt travis.
+
+(...) The possibility was kept to define other configuration steps by creating files under grunt\config
+
+### Chrome testing
+
+No selenium (but it might be possible to enable it)
+
+Luckily, I implemented the alternative to execute a command line
+google-chrome-stable
+
+Finding the right command line options was quite a challenge but finally got it
 
 ### Wscript is missing
 
@@ -106,14 +123,6 @@ Impact on coverage, add flags to coverage
 
 This part will change: the files should be tagged with host info so that coverage would know (based on detected hosts)
     if it was possible to run
-
-### Chrome testing
-
-No selenium (but it might be possible to enable it)
-
-    Luckily, I implemented the alternative to execute a command line
-    google-chrome-stable
-    Finding the right command line options
 
 ### Bonus: coverage with coveralls
 
