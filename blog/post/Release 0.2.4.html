@@ -1,0 +1,121 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.2.4: Attributes
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+</div>
+<code class="markdown">
+## New version
+
+Just before Christmas vacations, here comes the new version:
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/12?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.4)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
+* [NPM package](https://www.npmjs.com/package/gpf-js)
+
+## Release content
+
+### Leftover on gpf.require.define
+
+when writing the article
+[My own require implementation](http://gpf-js.blogspot.ca/2018/01/my-own-require-implementation.html), I realized that
+the handling of CommonJS modules could be merged with the other modules.
+
+### Quality focus
+
+Travis integration
+Coverage (Wscript simulation)
+Dependencies analysis
+
+### Nashorn support
+
+### Attributes
+
+Initially, the library focused on classes and interfaces but
+
+http://gpf-js.blogspot.ca/2016/01/gpf-js-presentation.html
+
+The last pillar is now available, in its simplest form: the class gpf.attributes.Attribute
+
+### Filtering stream
+
+
+Combining streams can become tedious when more than two streams must be plugged together. This is greatly simplified
+using the [gpf.stream.pipe](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.html#.pipe__anchor) helper.
+
+It takes care of chaining the [read](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IReadableStream.html) /
+[write](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IWritableStream.html) methods and returns a
+[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that is resolved
+when all the data has been processed (including
+[flushable](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IFlushableStream.html) streams).
+
+For example:
+
+If you remember [last release example](https://gpf-js.blogspot.ca/2017/12/release-023-streams-and-pipes.html)
+illustrating streams, here is a modified version that includes filtering.
+
+`// Reading a CSV file and keep only some records
+var csvFile = gpf.fs.getFileStorage()
+        .openTextStream("file.csv", gpf.fs.openFor.reading),
+    lineAdapter = new gpf.stream.LineAdapter(),
+    csvParser = new gpf.stream.csv.Parser(),
+    filter = new gpf.stream.Filter(function (record) {
+        return record.FIELD === "expected value";
+    }),
+    output = new gpf.stream.WritableArray();
+
+// csvFile -> lineAdapter -> csvParser -> filter -> output
+gpf.stream.pipe(csvFile, lineAdapter, csvParser, filter, output)
+    .then(function () {
+        return output.toArray();
+    })
+    .then(function (records) {
+        // process records
+    });`
+
+### Improved development environment
+
+GitHub authentication token for release
+(video capture of release)
+
+Release process improved to shorten development cycles
+
+## Lessons learned
+
+Working with non windows environment
+
+Build process is getting longer:
+* More hosts (Nashorn)
+* More legacy tests
+
+Thinking about reducing the legacy tests
+
+lost+found folder >> Old code that need to be purged
+
+More visual representatoin of sources:
+* dependencies
+* Evolution of the lib
+
+## Next release
+
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/12) will mostly focus on:
+* Finishing the release process improvements
+* Introducing attributes that will be later used to simplify CSV generation
+* Adding new stream helpers to filter / page batch of records
+
+In parallel, the article on
+[gpf.require.define](https://gpf-js.blogspot.ca/2017/11/release-022-gpfrequire.html) implementation is still in progress
+and some additional side projects are popping up.
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
