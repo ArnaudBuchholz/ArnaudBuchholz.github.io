@@ -22,7 +22,7 @@
 Since the beginning of the [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) project,
 [quality](https://github.com/ArnaudBuchholz/gpf-js#metrics) is a high priority topic.
 
-Over the years, a complete testing framework has been built:
+Over the years, a complete development and testing framework has been built:
 * Development follow **TDD** principles
 * The **code is linted** with jshint and eslint
 * The **maintainability ratio** is computed using [plato](https://www.npmjs.com/package/plato) and
@@ -41,7 +41,7 @@ a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration)
 [Travis-CI](https://travis-ci.org/) is a **free solution** that integrates smoothly with
 [GitHub](https://github.com/). Actually, the **GitHub credentials are used to login** to the platform.
 
-Once authenticated, all the repositories are made available and each one can be enabled **individually**.
+Once authenticated, all the repositories are made available to Travis and each one can be enabled **individually**.
 
 ![Documented steps](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/steps.png)
 
@@ -87,18 +87,28 @@ Finally, anything else is described by the [project dependencies](https://github
 1fb978e9b39e095f564c194f4329dba769f48146/package.json#L24-L61) and is [installed](https://github.com/ArnaudBuchholz/
 gpf-js/blob/master/.travis.yml#L7) through [NPM](https://www.npmjs.com/).
 
-#### Steps
+#### Configuration
 
-The default script being executed by Travis is `npm test` which is specified in
-[package.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/package.json#L11).
+The default script being executed by Travis is `npm test`
 
-But GPF-jS requires a configuration file to be generated, in particular to detect the hosts.
-This is why, a [specific command line](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L8) will
-trigger the generation of this file.
+This standard test command is specified in the
+[package.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/package.json#L11) file.
+
+But, first,  the GPF-JS development environment requires a configuration file to be generated: it contains the list of
+detected hosts, the metrics tresholds and the HTTP port to be used to serve files.
+
+Normally, this configuration file is interactively created the very first time the grunt command is being executed.
+
+![Grunt config](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/grunt%20config.png).
+
+On Travis, it has to be fully automatic.
+This is why, a [specific grunt command](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L8) was
+designed to generate the proper configuration file.
 
 ### Generation of the configuration file
 
-When grunt is triggered, the gruntfile.js first checks if any configuration file exists. If not, a default configuration
+When grunt is triggered, the [gruntfile.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.3/gruntfile.js#L17) first
+ checks if any configuration file exists. If not, a default configuration
 is created and executed. It triggers make\config.js, the script responsible for configuration.
 
 This step is fully interactive:
@@ -124,7 +134,11 @@ Impact on coverage, add flags to coverage
 This part will change: the files should be tagged with host info so that coverage would know (based on detected hosts)
     if it was possible to run
 
+    NodeJS was used to simulate WScript environment
+
 ### Bonus: coverage with coveralls
+
+https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L9
 
 </code>
 <!-- Drop those two lines -->
