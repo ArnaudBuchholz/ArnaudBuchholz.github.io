@@ -28,8 +28,8 @@ Over the years, a complete development and testing framework has been built:
 
 * The **maintainability ratio** is computed using [plato](https://www.npmjs.com/package/plato) and
 **verified through custom threshold** values
-* **Testing is done over all supported hosts**
-* The **coverage level** is also measured and controlled with custom threshold values
+* **Testing is done with all supported hosts**
+* The **coverage level** is measured and controlled with custom threshold values
 * A **web dashboard** displays the metrics and gives access to the tools
 
 However, these validations were done locally and they had to be **run manually before pushing the code**.
@@ -37,36 +37,41 @@ However, these validations were done locally and they had to be **run manually b
 In order to **enable collaboration** and ensure that all pull requests would go to the same **validation process**,
 a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) platform was required.
 
+Another approach consists in creating [git hooks](https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks) to force the
+quality assessment before pushing. However, it requires the submitting platform to be properly configured.
+Having a central place where all the tests are being run **guarantees the correct and unbiased execution of the tests**.
+
 ## Travis CI
 
 [Travis-CI](https://travis-ci.org/) is a **free solution** that integrates smoothly with
 [GitHub](https://github.com/). Actually, the **GitHub credentials are used to login** to the platform.
 
-Once authenticated, all the repositories are made available to Travis and each one can be enabled **individually**.
+After authentication, all the repositories are made available to Travis and each one can be enabled **individually**.
 
 ![Documented steps](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/steps.png)
 
-The selected repositories must be [configured](https://docs.travis-ci.com/user/getting-started) to
-instruct Travis on **how the builds must be done**. To put it in a nutshell, a new file *(.travis.yml)* must be added.
+The selected repositories must be **[configured](https://docs.travis-ci.com/user/getting-started)** to
+instruct Travis on **how the builds are done**. To put it in a nutshell, a new file *(.travis.yml)* must be added.
 
-When everything is put together, the platform will **monitor pushes and trigger builds automatically**. As a result,
-it documents the push with a flag indicating if the build succeeded.
+Once everything is put together, the platform will **monitor pushes and trigger builds automatically**. As a result,
+it documents the push in GitHub with a flag indicating if the build succeeded.
 
 ![Successful builds](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/push%20validation.png)
 
-From the Travis website, a nice **dashboard** lists the enabled repositories with their respective status.
+When opening the Travis website, the user is welcomed with a nice **dashboard listing the enabled repositories with
+their respective status**.
 
 ![Travis dashboard](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/dashboard.png).
 
-Finally, the [project README](https://github.com/ArnaudBuchholz/gpf-js/blob/master/README.md) can be modified to show
-the [last build result](https://github.com/ArnaudBuchholz/gpf-js#gpf-library):
+The [project README](https://github.com/ArnaudBuchholz/gpf-js/blob/master/README.md) can be modified to show
+the [last build result](https://github.com/ArnaudBuchholz/gpf-js#gpf-library) using an image delivered by the Travis
+infrastructure:
 <a href="https://travis-ci.org/ArnaudBuchholz/gpf-js#" target="_blank">
     <img src="https://travis-ci.org/ArnaudBuchholz/gpf-js.svg?branch=master" title="Travis-CI" />
 </a>
 <p/>
 
 ## Changes in GPF-JS
-
 
 ### .travis.yml
 
@@ -87,29 +92,34 @@ testing.
 [Grunt](https://gruntjs.com/) is installed using the [proper command line](https://github.com/ArnaudBuchholz/
 gpf-js/blob/master/.travis.yml#L6).
 
-Finally, the remaining requirements are described by the [project dependencies](https://github.com/ArnaudBuchholz/
+The remaining requirements are described by the [project dependencies](https://github.com/ArnaudBuchholz/
 gpf-js/blob/f0e1d5a5cd48820d65754f21864e2e0a642cf3be/package.json#L24-L63) and are [installed](https://github.com/
 ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L7) through [NPM](https://www.npmjs.com/).
 
 #### Steps
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 The default script being executed by Travis is `npm test`
 
-This standard test command is specified in the
-[package.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/package.json#L11) file.
-
-#### Configuration
+The resulting commmand line is specified in the
+[package.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/package.json#L11) file; it executes **grunt** with
+the following tasks:
+* **connectIf** to setup a local web server necessary for browser and [gpf.http](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html) testing
+* **concurrent:source** to execute all tests with the source version (see [library testing
+tutorial](https://arnaudbuchholz.github.io/gpf/doc/tutorial-TESTME.html))
 
 But, first,  the GPF-JS development environment requires a configuration file to be generated: it contains the list of
 detected hosts, the metrics tresholds and the HTTP port to be used to serve files.
 
-Usually, this configuration file is interactively created the very first time the grunt command is being executed.
+### Configuration
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+Usually, the configuration file is **interactively created the very first time the grunt command is being executed**.
 
 ![Grunt config](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/grunt%20config.png)
 
-On Travis, no user can answer the questions. Hence, it has to be fully automatic.
+On Travis, no user can answer the questions. Hence, the generation has to be fully automatic.
+
 This is why, a [specific grunt command](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L8) was
 designed to generate the proper configuration file.
 
