@@ -23,8 +23,9 @@ Since the beginning of the [GPF-JS](https://github.com/ArnaudBuchholz/gpf-js) pr
 [quality](https://github.com/ArnaudBuchholz/gpf-js#metrics) is a high priority topic.
 
 Over the years, a complete development and testing framework has been built:
-* Development follow **TDD** principles
-* The **code is linted** with jshint and eslint
+* Development follows **TDD** principles
+* The **code is linted** with eslint *(also with jshint, even if it is redundant)*
+
 * The **maintainability ratio** is computed using [plato](https://www.npmjs.com/package/plato) and
 **verified through custom threshold** values
 * **Testing is done over all supported hosts**
@@ -48,8 +49,12 @@ Once authenticated, all the repositories are made available to Travis and each o
 The selected repositories must be [configured](https://docs.travis-ci.com/user/getting-started) to
 instruct Travis on **how the builds must be done**. To put it in a nutshell, a new file *(.travis.yml)* must be added.
 
-When everything is put together, the platform will **monitor pushes and trigger builds automatically**. It also offers a
-nice dashboard to review the enabled repositories.
+When everything is put together, the platform will **monitor pushes and trigger builds automatically**. As a result,
+it documents the push with a flag indicating if the build succeeded.
+
+![Successful builds](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/push%20validation.png)
+
+From the Travis website, a nice **dashboard** lists the enabled repositories with their respective status.
 
 ![Travis dashboard](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/dashboard.png).
 
@@ -62,13 +67,12 @@ the [last build result](https://github.com/ArnaudBuchholz/gpf-js#gpf-library):
 
 ## Changes in GPF-JS
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ### .travis.yml
 
-The *.yml* extension stands for **[YAML file](https://en.wikipedia.org/wiki/YAML)**: a format that is commonly used for
-configuration files. In the context of Travis, it describes the **requirements and steps to buid and validate** the
-project.
+The *.yml* extension stands for **[YAML file](https://en.wikipedia.org/wiki/YAML)**: a structured format that is
+commonly used for configuration files. In the context of Travis, it describes the **requirements and steps to buid and
+validate** the project.
 
 #### Requirements
 
@@ -77,44 +81,41 @@ environment is [NodeJS](https://nodejs.org/). This is configured by defining the
 ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L1) and selecting the [Long Term Support](https://github.com/
 ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L2-L3) version.
 
-Chrome is also [requested](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L5) to enable browser
+Chrome is also [required](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L5) to enable browser
 testing.
 
 [Grunt](https://gruntjs.com/) is installed using the [proper command line](https://github.com/ArnaudBuchholz/
 gpf-js/blob/master/.travis.yml#L6).
 
-Finally, anything else is described by the [project dependencies](https://github.com/ArnaudBuchholz/gpf-js/blob/
-1fb978e9b39e095f564c194f4329dba769f48146/package.json#L24-L61) and is [installed](https://github.com/ArnaudBuchholz/
-gpf-js/blob/master/.travis.yml#L7) through [NPM](https://www.npmjs.com/).
+Finally, the remaining requirements are described by the [project dependencies](https://github.com/ArnaudBuchholz/
+gpf-js/blob/f0e1d5a5cd48820d65754f21864e2e0a642cf3be/package.json#L24-L63) and are [installed](https://github.com/
+ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L7) through [NPM](https://www.npmjs.com/).
 
-#### Configuration
+#### Steps
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 The default script being executed by Travis is `npm test`
 
 This standard test command is specified in the
 [package.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/package.json#L11) file.
 
+#### Configuration
+
 But, first,  the GPF-JS development environment requires a configuration file to be generated: it contains the list of
 detected hosts, the metrics tresholds and the HTTP port to be used to serve files.
 
-Normally, this configuration file is interactively created the very first time the grunt command is being executed.
+Usually, this configuration file is interactively created the very first time the grunt command is being executed.
 
-![Grunt config](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/grunt%20config.png).
+![Grunt config](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/grunt%20config.png)
 
-On Travis, it has to be fully automatic.
+On Travis, no user can answer the questions. Hence, it has to be fully automatic.
 This is why, a [specific grunt command](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L8) was
 designed to generate the proper configuration file.
 
-### Generation of the configuration file
-
 When grunt is triggered, the [gruntfile.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.3/gruntfile.js#L17) first
- checks if any configuration file exists. If not, a default configuration
+checks if any configuration file exists. If not, a default configuration
 is created and executed. It triggers make\config.js, the script responsible for configuration.
-
-This step is fully interactive:
-(screenshot)
-
-To automate this part, a new mode was added: it is triggered by using grunt travis.
 
 (...) The possibility was kept to define other configuration steps by creating files under grunt\config
 
