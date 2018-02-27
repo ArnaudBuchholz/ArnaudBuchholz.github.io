@@ -138,24 +138,46 @@ the testing step to ensure the existence of the configuration file.
 
 ### Challenges
 
-Once the steps were clearly defined, it took some time to fine tune all the elements and make it
+After figuring out the different steps, a long debugging session - *mostly composed of try and fail cycles* - was
+required to figure out the specificities of the platform.
 
-#### Chrome testing
+The history of pushes on the [Travis integration issue](https://github.com/ArnaudBuchholz/gpf-js/issues/218)
+illustrates all the attemps that were made.
 
+#### Non-Windows environment
 
-https://docs.travis-ci.com/user/gui-and-headless-browsers/
+The very first issue was related to the environment itself. The development being made on Windows, the library has never
+been tested with a different operating system before.
 
+Travis offers the possibility to [use different flavors](https://docs.travis-ci.com/user/multi-os/) but the
+**default one is Linux**.
 
-No selenium (but it might be possible to enable it)
+As a consequence, some scripts were adapted to handle the differences in the **path separator** (for
+[instance](https://github.com/ArnaudBuchholz/gpf-js/commit/3e6bab7b65e7606f4ef507539ad468167f643d7d)).
 
-Luckily, there is an alternate way to do browser testing.
+(...) NodeJS is capable of absorbing those differences. This is the reason why the library uses the / as a path
+separator but is capable of translating back to \ when running on Windows-specific host.
 
-I implemented the alternative to execute a command line
-google-chrome-stable
+#### Browser testing
 
-Finding the right command line options was quite a challenge but finally got it
+Another issue was related to browser testing. As a matter of fact, **the Travis environment does not provide any
+graphical user interface** by default. This being said, it means that you can't start a browser.
+
+Fortunately, this is explained in the [Travis documentation](https://docs.travis-ci.com/user/
+gui-and-headless-browsers/) where several options are proposed.
+
+And, luckily, the **GPF-JS development environment provides an [alternate way](https://github.com/ArnaudBuchholz/gpf-js/
+blob/master/doc/tutorials/TESTME.md#command-line-browser-testing) to test browsers**.
+
+Consequently, the [headless mode of chrome is used](https://github.com/ArnaudBuchholz/gpf-js/blob/
+f8771cba9b121d221983bf236840a014c98430f1/make/config.js#L161-L165).
 
 #### Wscript is missing
+
+Last but not least, the operating system being Linux, the [Microsoft Scripting Host](https://docs.microsoft.com/en-us/
+previous-versions/windows/it-pro/windows-xp/bb490887%28v=technet.10%29) is not available.
+
+
 
 Impact on coverage, add flags to coverage
 
@@ -163,9 +185,6 @@ This part will change: the files should be tagged with host info so that coverag
     if it was possible to run
 
     NodeJS was used to simulate WScript environment
-
-#### Non-windows environment
-
 
 
 ### Bonus: coverage with coveralls
