@@ -98,7 +98,7 @@ ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L7) through [NPM](https://www.npmj
 
 #### Steps
 
-The default script being executed by Travis is `npm test`
+The default step being executed by Travis is `npm test`
 
 The resulting commmand line is specified in the
 [package.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/package.json#L11) file; it executes **grunt** with
@@ -107,38 +107,55 @@ the following tasks:
 * **concurrent:source** to execute all tests with the source version (see [library testing
 tutorial](https://arnaudbuchholz.github.io/gpf/doc/tutorial-TESTME.html))
 
-But, first,  the GPF-JS development environment requires a configuration file to be generated: it contains the list of
-detected hosts, the metrics tresholds and the HTTP port to be used to serve files.
+But, first,  **the GPF-JS development environment requires a configuration file** to be generated: it contains the list
+of detected hosts, the metrics tresholds and the HTTP port to be used to serve files.
 
 ### Configuration
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
-Usually, the configuration file is **interactively created the very first time the grunt command is being executed**.
+The configuration file is **interactively created the very first time the grunt command is being executed**.
+Indeed, the user input is expected to approve or change some values (such as the HTTP port).
 
 ![Grunt config](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/grunt%20config.png)
 
-On Travis, no user can answer the questions. Hence, the generation has to be fully automatic.
+However, on Travis, no user can answer the questions. Hence, the tool has to be fully automatic.
 
-This is why, a [specific grunt command](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L8) was
-designed to generate the proper configuration file.
+When grunt is triggered, the [gruntfile.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.3/gruntfile.js#L17)
+first checks if any configuration file already exist. If not, a **default task takes place to run the
+[configuration tool](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/config.js)**.
 
-When grunt is triggered, the [gruntfile.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.3/gruntfile.js#L17) first
-checks if any configuration file exists. If not, a default configuration
-is created and executed. It triggers make\config.js, the script responsible for configuration.
+To support Travis, this default task processing was isolated in a folder of ['first-launch' configuration
+tasks](https://github.com/ArnaudBuchholz/gpf-js/tree/master/grunt/config). The name of the file is used
+to name the task.
 
-(...) The possibility was kept to define other configuration steps by creating files under grunt\config
+The configuration tool was then modified to handle a so-called **quiet mode** and the
+[Travis configuration task](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/config/travis.js) leverages this
+option. Additionally, **the task also executes the quality tasks** (linters, plato & coverage).
 
-### Chrome testing
+So, the command [grunt travis](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L8) is executed before
+the testing step to ensure the existence of the configuration file.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+### Challenges
+
+Once the steps were clearly defined, it took some time to fine tune all the elements and make it
+
+#### Chrome testing
+
+
+https://docs.travis-ci.com/user/gui-and-headless-browsers/
+
 
 No selenium (but it might be possible to enable it)
 
-Luckily, I implemented the alternative to execute a command line
+Luckily, there is an alternate way to do browser testing.
+
+I implemented the alternative to execute a command line
 google-chrome-stable
 
 Finding the right command line options was quite a challenge but finally got it
 
-### Wscript is missing
+#### Wscript is missing
 
 Impact on coverage, add flags to coverage
 
@@ -146,6 +163,10 @@ This part will change: the files should be tagged with host info so that coverag
     if it was possible to run
 
     NodeJS was used to simulate WScript environment
+
+#### Non-windows environment
+
+
 
 ### Bonus: coverage with coveralls
 
