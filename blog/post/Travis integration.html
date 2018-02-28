@@ -134,8 +134,6 @@ option. Additionally, **the task also executes the quality tasks** (linters, pla
 So, the command [grunt travis](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L8) is executed before
 the testing step to ensure the existence of the configuration file.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ### Challenges
 
 After figuring out the different steps, a long debugging session - *mostly composed of try and fail cycles* - was
@@ -172,9 +170,11 @@ blob/master/doc/tutorials/TESTME.md#command-line-browser-testing) to test browse
 Consequently, the [headless mode of chrome is used](https://github.com/ArnaudBuchholz/gpf-js/blob/
 f8771cba9b121d221983bf236840a014c98430f1/make/config.js#L161-L165).
 
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
 #### Wscript is missing
 
-Last but not least, the operating system being Linux, the [Microsoft Scripting Host](https://docs.microsoft.com/en-us/
+The operating system being Linux, the [Microsoft Scripting Host](https://docs.microsoft.com/en-us/
 previous-versions/windows/it-pro/windows-xp/bb490887%28v=technet.10%29) is not available.
 
 
@@ -184,12 +184,19 @@ Impact on coverage, add flags to coverage
 This part will change: the files should be tagged with host info so that coverage would know (based on detected hosts)
     if it was possible to run
 
+
     NodeJS was used to simulate WScript environment
 
+A [WScript simulator](https://github.com/ArnaudBuchholz/gpf-js/tree/master/test/host/wscript), implemented with node,
 
-### Bonus: coverage with coveralls
+### Coverage with coveralls
+
+https://www.npmjs.com/package/coveralls
 
 https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L9
+
+https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master
+
 
 </code>
 <!-- Drop those two lines -->
