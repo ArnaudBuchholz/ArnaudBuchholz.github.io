@@ -9,6 +9,7 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
@@ -53,7 +54,7 @@ After authentication, all the repositories are made available to Travis and each
 The selected repositories must be **[configured](https://docs.travis-ci.com/user/getting-started)** to
 instruct Travis on **how the builds are done**. To put it in a nutshell, a new file *(.travis.yml)* must be added.
 
-Once everything is put together, the platform will **monitor pushes and trigger builds automatically**. As a result,
+Once everything is put together, the platform will **monitor pushes and trigger builds automatically**. Eventually,
 it documents the push in GitHub with a flag indicating if the build succeeded.
 
 ![Successful builds](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/push%20validation.png)
@@ -108,7 +109,7 @@ the following tasks:
 tutorial](https://arnaudbuchholz.github.io/gpf/doc/tutorial-TESTME.html))
 
 But, first,  **the GPF-JS development environment requires a configuration file** to be generated: it contains the list
-of detected hosts, the metrics tresholds and the HTTP port to be used to serve files.
+of detected hosts, the metrics thresholds and the HTTP port to be used to serve files.
 
 ### Configuration
 
@@ -144,6 +145,8 @@ illustrates all the attemps that were made.
 
 #### Non-Windows environment
 
+["If it's not tested, it doesn't work"](https://yakking.branchable.com/posts/truism-4-if-it-is-not-tested/)
+
 The very first issue was related to the environment itself. The development being made on Windows, the library has never
 been tested with a different operating system before.
 
@@ -170,33 +173,41 @@ blob/master/doc/tutorials/TESTME.md#command-line-browser-testing) to test browse
 Consequently, the [headless mode of chrome is used](https://github.com/ArnaudBuchholz/gpf-js/blob/
 f8771cba9b121d221983bf236840a014c98430f1/make/config.js#L161-L165).
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
-#### Wscript is missing
+#### Wscript
 
 The operating system being Linux, the [Microsoft Scripting Host](https://docs.microsoft.com/en-us/
 previous-versions/windows/it-pro/windows-xp/bb490887%28v=technet.10%29) is not available.
 
+Unlike path separators, it is a normal situation as the **configuration file includes a flag that is set upon detection
+of this scripting host**.
 
+However, one unexpected effect is bound to the code coverage measurement: a **big part of the library is dedicated to
+bring older hosts to a [common feature set](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html)** and
+WScript was running most of it. As a result, the coverage minimum was not reached and the build was failing.
 
-Impact on coverage, add flags to coverage
+This was temporarily addressed by [disabling the coverage threshold errors](https://github.com/ArnaudBuchholz/gpf-js/
+blob/3bbbdfe177a4b96b61367cd5fd9d92292e38a84a/grunt/config/travis.js#L20).
 
-This part will change: the files should be tagged with host info so that coverage would know (based on detected hosts)
-    if it was possible to run
+Also, thanks to the [Wscript emulator project from Mischa Rodermond](https://github.com/mrpapercut/wscript), a
+**[simple simulator](https://github.com/ArnaudBuchholz/gpf-js/tree/master/test/host/wscript) implemented with node**
+validates the WScript specifics.
 
+There are still some uncovered part, but they will be fixed in a [future release](https://github.com/ArnaudBuchholz/gpf-js/issues/228).
 
-    NodeJS was used to simulate WScript environment
+## Other goodies
 
-A [WScript simulator](https://github.com/ArnaudBuchholz/gpf-js/tree/master/test/host/wscript), implemented with node,
+After digging through GitHub projects, I also discovered and integrated the
+[coveralls package](https://www.npmjs.com/package/coveralls) which can be used in conjunction with
+[Travis](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L9) so that coverage statistics are uploaded
+on a [dedicated board](https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master).
 
-### Coverage with coveralls
+I also added a [dependency checker](https://david-dm.org/) as well as a
+[code quality checker](https://deepscan.io/dashboard/#view=project&pid=1923&bid=8681)
+(which required [some cleaning](https://github.com/ArnaudBuchholz/gpf-js/issues/229)).
 
-https://www.npmjs.com/package/coveralls
+Everything is visible from the project readme.
 
-https://github.com/ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L9
-
-https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master
-
+![GPF-JS quality](https://arnaudbuchholz.github.io/blog/post/Release%200.2.4/GPF%20Quality.png)
 
 </code>
 <!-- Drop those two lines -->
