@@ -104,7 +104,7 @@
 /*#endif*/
 
 var
-    _GpfStreamReadableArray = _gpfDefine(/** @lends gpf.stream.ReadableArray.prototype */ {
+    _GpfStreamReadableArray = _gpfDefine({
         $class: &quot;gpf.stream.ReadableArray&quot;,
 
         /**
@@ -148,7 +148,7 @@ var
 
     }),
 
-    _GpfStreamWritableArray = _gpfDefine(/** @lends gpf.stream.WritableArray.prototype */ {
+    _GpfStreamWritableArray = _gpfDefine({
         $class: &quot;gpf.stream.WritableArray&quot;,
 
         /**
@@ -162,7 +162,7 @@ var
             this._buffer = [];
         },
 
-        //region gpf.interfaces.IReadableStream
+        //region gpf.interfaces.IWritableStream
 
         /**
          * @gpf:sameas gpf.interfaces.IWritableStream#write

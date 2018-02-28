@@ -4,17 +4,18 @@
 
     /*global console, setTimeout, clearTimeout*/
 
-    var context = (function () {
-        /*global global*/ // NodeJS global
-        if ("object" === typeof global) {
-            return global;
-        }
-        /*global window*/ // Browser global
-        if ("undefined" !== typeof window) {
-            return window;
-        }
-        return this; //eslint-disable-line no-invalid-this
-    }());
+    var safeFunction = Function,
+        context = (function () {
+            /*global global*/ // NodeJS global
+            if ("object" === typeof global) {
+                return global;
+            }
+            /*global window*/ // Browser global
+            if ("undefined" !== typeof window) {
+                return window;
+            }
+            return safeFunction("return this;")();
+        }());
 
     /*
      * Simple BDD implementation
@@ -241,11 +242,12 @@
         /**
          * Fails by throwing an exception if the value is falsy
          *
-         * @param {*} condition If the condition is falsy, the assertion fails
+         * @param {Boolean} condition If the condition is falsy, the assertion fails
+         * @param {String} [message] Assertion message
          */
-        assert: function (condition) {
+        assert: function (condition, message) {
             if (!condition) {
-                throw new Error("ASSERTION failed");
+                throw new Error(message || "ASSERTION failed");
             }
         },
 
@@ -273,6 +275,16 @@
 
     //region default callback (based on console.log)
 
+    function _getItLineStart (data) {
+        if (data.pending) {
+            return "-- ";
+        }
+        if (data.result) {
+            return "OK ";
+        }
+        return "KO ";
+    }
+
     var _handlers = {
 
         /**
@@ -297,20 +309,14 @@
          * - {Object} exception exception details
          */
         it: function (data) {
-            var line = new Array(data.depth + 1).join("\t");
-            if (data.pending) {
-                line += "-- ";
-            } else if (data.result) {
-                line += "OK ";
-            } else {
-                line += "KO ";
-            }
+            var line = new Array(data.depth + 1).join("\t") + _getItLineStart(data);
             line += data.label;
             _output(line);
             if (false === data.result && data.exception) {
+                _output("Exception: " + data.exception.message);
                 for (var key in data.exception) {
-                    if (data.exception.hasOwnProperty(key)) {
-                        _output(key + ": " + data.exception[key]);
+                    if ("message" !== key && data.exception.hasOwnProperty(key)) {
+                        _output("Exception." + key + ": " + data.exception[key]);
                     }
                 }
             }

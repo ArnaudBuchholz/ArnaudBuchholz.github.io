@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">117</p>
+      <p class="stat">114</p>
     </div>
   </div>
   <div class="row historical">
@@ -106,7 +106,7 @@
 /*eslint-disable new-cap*/ // FileSystem object APIs are uppercased
 
 var
-    _GpfWscriptBaseStream = _gpfDefine(/** @lends gpf.wscript.BaseStream.prototype */ {
+    _GpfWscriptBaseStream = _gpfDefine({
         $class: &quot;gpf.wscript.BaseStream&quot;,
 
         /**
@@ -114,7 +114,6 @@ var
          *
          * @constructor gpf.wscript.BaseStream
          * @param {Object} file File object
-         * @private
          * @since 0.1.9
          */
         constructor: function (file) {
@@ -142,10 +141,9 @@ var
      * @class gpf.wscript.ReadableStream
      * @extends gpf.wscript.BaseStream
      * @implements {gpf.interfaces.IReadableStream}
-     * @private
      * @since 0.1.9
      */
-    _GpfWscriptReadableStream = _gpfDefine(/** @lends gpf.wscript.ReadableStream.prototype */ {
+    _GpfWscriptReadableStream = _gpfDefine({
         $class: &quot;gpf.wscript.ReadableStream&quot;,
         $extend: &quot;gpf.wscript.BaseStream&quot;,
 
@@ -181,10 +179,9 @@ var
      * @class gpf.wscript.WritableStream
      * @extends gpf.wscript.BaseStream
      * @implements {gpf.interfaces.IWritableStream}
-     * @private
      * @since 0.1.9
      */
-    _GpfWscriptWritableStream = _gpfDefine(/** @lends gpf.wscript.WritableStream.prototype */ {
+    _GpfWscriptWritableStream = _gpfDefine({
         $class: &quot;gpf.wscript.WritableStream&quot;,
         $extend: &quot;gpf.wscript.BaseStream&quot;,
 

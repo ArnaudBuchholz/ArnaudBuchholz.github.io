@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.77</p>
+      <p class="stat">78.12</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">371</p>
+      <p class="stat">396</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">23.36</p>
+      <p class="stat">23.16</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.95</p>
+      <p class="stat">1.14</p>
     </div>
   </div>
 </div>
@@ -96,6 +96,7 @@
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
 /*exported _GPF_HOST*/ // Host types
+/*exported _GpfFunc*/ // Function
 /*exported _gpfBootImplByHost*/ // Boot host specific implementation per host
 /*exported _gpfDosPath*/ // DOS-like path
 /*exported _gpfEmptyFunc*/ // An empty function
@@ -124,7 +125,7 @@ var
      * GPF Version
      * @since 0.1.5
      */
-    _gpfVersion = &quot;0.2.3&quot;,
+    _gpfVersion = &quot;0.2.4&quot;,
 
     /**
      * Host constants
@@ -132,6 +133,7 @@ var
      */
     _GPF_HOST = {
         BROWSER:    &quot;browser&quot;,
+        NASHORN:    &quot;nashorn&quot;,
         NODEJS:     &quot;nodejs&quot;,
         PHANTOMJS:  &quot;phantomjs&quot;,
         RHINO:      &quot;rhino&quot;,
@@ -153,6 +155,9 @@ var
      */
     _gpfDosPath = false,
 
+    // https://github.com/jshint/jshint/issues/525
+    _GpfFunc = Function, // avoid JSHint error
+
     /*jshint -W040*/ // This is the common way to get the global context
     /**
      * Main context object
@@ -160,7 +165,7 @@ var
      * @type {Object}
      * @since 0.1.5
      */
-    _gpfMainContext = this, //eslint-disable-line no-invalid-this, consistent-this
+    _gpfMainContext = new _GpfFunc(&quot;return this&quot;)(), // Non-strict function returns global context
     /*jshint +W040*/
 
     /**
@@ -255,7 +260,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
     _gpfHost = _GPF_HOST.WSCRIPT;
     _gpfDosPath = true;
 
-/*#ifndef(UMD)*/
+    /*#ifndef(UMD)*/
     /*eslint-disable new-cap*/
 
     _gpfMsFSO = new ActiveXObject(&quot;Scripting.FileSystemObject&quot;);
@@ -268,17 +273,32 @@ if (&quot;undefined&quot; !== typeof WScript) {
     };
 
     /*eslint-enable new-cap*/
-/*#endif*/
+    /*#endif*/
 
 } else if (&quot;undefined&quot; !== typeof print &amp;&amp; &quot;undefined&quot; !== typeof java) {
-    _gpfHost = _GPF_HOST.RHINO;
-    _gpfDosPath = false;
+    _gpfDosPath = String(java.lang.System.getProperty(&quot;file.separator&quot;)) === &quot;\\&quot;;
 
-/*#ifndef(UMD)*/
+    if (&quot;undefined&quot; === typeof readFile) {
+        _gpfHost = _GPF_HOST.NASHORN;
 
-    _gpfSyncReadForBoot = readFile;
+        /*#ifndef(UMD)*/
 
-/*#endif*/
+        _gpfSyncReadForBoot = function (srcFileName) {
+            return [].join.call(java.nio.file.Files.readAllLines(java.nio.file.Paths.get(srcFileName)), &quot;\n&quot;);
+        };
+
+        /*#endif*/
+
+    } else {
+        _gpfHost = _GPF_HOST.RHINO;
+
+        /*#ifndef(UMD)*/
+
+        _gpfSyncReadForBoot = readFile;
+
+        /*#endif*/
+
+    }
 
 // PhantomJS - When used as a command line (otherwise considered as a browser)
 } else if (&quot;undefined&quot; !== typeof phantom &amp;&amp; phantom.version &amp;&amp; !document.currentScript) {
@@ -286,7 +306,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
     _gpfDosPath = require(&quot;fs&quot;).separator === &quot;\\&quot;;
     _gpfMainContext = window;
 
-/*#ifndef(UMD)*/
+    /*#ifndef(UMD)*/
 
     _gpfNodeFs =  require(&quot;fs&quot;);
 
@@ -294,7 +314,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
         return _gpfNodeFs.read(srcFileName);
     };
 
-/*#endif*/
+    /*#endif*/
 
 // Nodejs
 } else if (&quot;undefined&quot; !== typeof module &amp;&amp; module.exports) {
@@ -303,7 +323,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
     _gpfDosPath = _gpfNodePath.sep === &quot;\\&quot;;
     _gpfMainContext = global;
 
-/*#ifndef(UMD)*/
+    /*#ifndef(UMD)*/
     /*eslint-disable no-sync*/ // Simpler this way
 
     _gpfNodeFs =  require(&quot;fs&quot;);
@@ -312,7 +332,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
         return _gpfNodeFs.readFileSync(srcFileName).toString();
     };
 
-/*#endif*/
+    /*#endif*/
 
 // Browser
 /* istanbul ignore else */ // unknown.1
@@ -321,7 +341,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
     _gpfHost = _GPF_HOST.BROWSER;
     _gpfMainContext = window;
 
-/*#ifndef(UMD)*/
+    /*#ifndef(UMD)*/
 
     _gpfSyncReadForBoot = function (srcFileName) {
         var xhr = new XMLHttpRequest();
@@ -330,7 +350,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
         return xhr.responseText;
     };
 
-/*#endif*/
+    /*#endif*/
 
 }
 
@@ -414,6 +434,11 @@ gpf.hosts = {
      * @since 0.1.5
      */
     browser: _GPF_HOST.BROWSER,
+    /**
+     * [Nashorn](https://en.wikipedia.org/wiki/Nashorn_%28JavaScript_engine%29)
+     * @since 0.2.4
+     */
+    nashorn: _GPF_HOST.NASHORN,
     /**
      * [NodeJs](http://nodejs.org/)
      * @since 0.1.5

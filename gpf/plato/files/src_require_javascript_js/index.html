@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">80.86</p>
+      <p class="stat">79.88</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">127</p>
+      <p class="stat">133</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">14.93</p>
+      <p class="stat">15.54</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.55</p>
+      <p class="stat">0.59</p>
     </div>
   </div>
 </div>
@@ -122,30 +122,31 @@ _gpfErrorDeclare(&quot;require/javascript&quot;, {
 
 });
 
-//region CommonJS
+var _gpfRequireJsModuleRegEx = /[^.]\brequire\b\s*\(\s*(?:[&#039;|&quot;]([^&quot;&#039;]+)[&#039;|&quot;]|[^)]+)\s*\)/g;
 
-var _gpfRequireJsModuleRegEx = /[^\.]\brequire\b\s*\(\s*(?:[&#039;|&quot;]([^&quot;&#039;]+)[&#039;|&quot;]|[^\)]+)\s*\)/g;
-
-function _gpfRequireCommonJSBuildNamedDependencies (requires) {
-    return requires.reduce(function (dictionary, name) {
-        dictionary[name] = name;
-        return dictionary;
-    }, {});
-}
-
-function _gpfRequireCommonJs (myGpf, content, requires) {
-    return myGpf.require.define(_gpfRequireCommonJSBuildNamedDependencies(requires), function (require) {
-        var module = {};
-        _gpfFunc([&quot;gpf&quot;, &quot;module&quot;, &quot;require&quot;], content)(myGpf, module, function (name) {
-            return require[name] || gpf.Error.noCommonJSDynamicRequire();
+function _gpfRequireJSGetStaticDependencies (resourceName, content) {
+    /*jshint validthis:true*/
+    var requires = _gpfRegExpForEach(_gpfRequireJsModuleRegEx, content);
+    if (requires.length) {
+        return _gpfRequireWrapGpf(this, resourceName).gpf.require.define(requires  //eslint-disable-line no-invalid-this
+            .map(function (match) {
+                return match[1]; // may be undefined if dynamic
+            })
+            .filter(function (require) {
+                return require;
+            })
+            .reduce(function (dictionary, name) {
+                dictionary[name] = name;
+                return dictionary;
+            }, {}),
+        function (require) {
+            return require;
         });
-        return module.exports;
-    });
+    }
+    return Promise.resolve({}); // No static dependencies
 }
 
-//endregion
-
-//region GPF, AMD (define) and others
+//region AMD define wrapper
 
 function _gpfRequireAmdDefineParamsFactoryOnly (params) {
     return {
@@ -193,28 +194,33 @@ function _gpfRequireAmdDefine (name, dependencies, factory) {
     });
 }
 
-function _gpfRequireOtherJs (myGpf, content) {
-    _gpfFunc([&quot;gpf&quot;, &quot;define&quot;], content)(myGpf, _gpfRequireAmdDefine.bind(myGpf));
+//endregion
+
+function _gpfRequireJS (myGpf, content, staticDependencies) {
+    var module = {};
+    _gpfFunc([&quot;gpf&quot;, &quot;define&quot;, &quot;module&quot;, &quot;require&quot;], content)(
+        myGpf,
+        _gpfRequireAmdDefine.bind(myGpf),
+        module,
+        function (name) {
+            return staticDependencies[name] || gpf.Error.noCommonJSDynamicRequire();
+        }
+    );
+    return module.exports;
 }
 
 //endregion
 
-_gpfRequireProcessor[&quot;.js&quot;] = function (name, content) {
-    var wrapper = _gpfRequireWrapGpf(this, name);
-    // CommonJS ?
-    var requires = _gpfRegExpForEach(_gpfRequireJsModuleRegEx, content);
-    if (requires.length) {
-        return _gpfRequireCommonJs(wrapper.gpf, content, requires
-            .map(function (match) {
-                return match[1]; // may be undefined if dynamic
-            })
-            .filter(function (require) {
-                return require;
-            })
-        );
-    }
-    _gpfRequireOtherJs(wrapper.gpf, content);
-    return wrapper.promise;
+_gpfRequireProcessor[&quot;.js&quot;] = function (resourceName, content) {
+    var wrapper = _gpfRequireWrapGpf(this, resourceName);
+    return _gpfRequireJSGetStaticDependencies.call(this, resourceName, content)
+        .then(function (staticDependencies) {
+            var exports = _gpfRequireJS(wrapper.gpf, content, staticDependencies);
+            if (undefined === exports) {
+                return wrapper.promise;
+            }
+            return exports;
+        });
 };</textarea>
   </div>
 </div>

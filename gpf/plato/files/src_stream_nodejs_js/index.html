@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">196</p>
+      <p class="stat">195</p>
     </div>
   </div>
   <div class="row historical">
@@ -105,7 +105,7 @@
 /*#endif*/
 
 var
-    _GpfNodeBaseStream = _gpfDefine(/** @lends gpf.node.BaseStream.prototype */ {
+    _GpfNodeBaseStream = _gpfDefine({
         $class: &quot;gpf.node.BaseStream&quot;,
 
         /**
@@ -115,7 +115,6 @@ var
          * @param {Function} [close] Close handler
          *
          * @constructor gpf.node.BaseStream
-         * @private
          * @since 0.1.9
          */
         constructor: function (stream, close) {
@@ -202,7 +201,7 @@ var
      * @implements {gpf.interfaces.IReadableStream}
      * @since 0.1.9
      */
-    _GpfNodeReadableStream = _gpfDefine(/** @lends gpf.node.ReadableStream.prototype */ {
+    _GpfNodeReadableStream = _gpfDefine({
         $class: &quot;gpf.node.ReadableStream&quot;,
         $extend: &quot;gpf.node.BaseStream&quot;,
 
@@ -259,7 +258,7 @@ var
      * @implements {gpf.interfaces.IWritableStream}
      * @since 0.1.9
      */
-    _GpfNodeWritableStream = _gpfDefine(/** @lends gpf.node.WritableStream.prototype */ {
+    _GpfNodeWritableStream = _gpfDefine({
         $class: &quot;gpf.node.WritableStream&quot;,
         $extend: &quot;gpf.node.BaseStream&quot;,
 
