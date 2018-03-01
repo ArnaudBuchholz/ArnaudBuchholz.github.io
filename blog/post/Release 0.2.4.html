@@ -11,11 +11,13 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This release increases quality, it provides a new streaming tool and it introduces attributes.
+    Last but not least, a new scriping host was added to the supported list: Nashorn.
 </div>
 <code class="markdown">
 ## New version
 
-Just before Christmas vacations, here comes the new version:
+Relased right on time, here comes the new version:
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/12?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.4)
 * [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
@@ -23,44 +25,51 @@ Just before Christmas vacations, here comes the new version:
 
 ## Release content
 
-### Leftover on gpf.require.define
+### Leftovers on gpf.require.define
 
-when writing the article
-[My own require implementation](http://gpf-js.blogspot.ca/2018/01/my-own-require-implementation.html), I realized that
-the handling of CommonJS modules could be merged with the other modules.
+When writing the article
+[My own require implementation](http://gpf-js.blogspot.ca/2018/01/my-own-require-implementation.html),
+the handling of JavaScript modules was split in two distinct parts:
+* [CommonJS](https://en.wikipedia.org/wiki/CommonJS) handling *(mostly because of synchronous requires)*
+
+* [AMD](https://en.wikipedia.org/wiki/Asynchronous_module_definition) / GPF handling *(because asynchronous)*
+
+
+Furthermore, 'simple' CommonJS modules (i.e. no require with just exports) were not supported.
+
+Those problems were addressed by fixing the issue [#219](https://github.com/ArnaudBuchholz/gpf-js/issues/219).
 
 ### Quality focus
 
-Travis integration
-Coverage (Wscript simulation)
-Dependencies analysis
+A significant effort was put in quality:
+* [Travis-CI](https://travis-ci.org/), a continuous integration platform, is enabled
+* This leaded to Linux testing and [WScript simulation](https://github.com/ArnaudBuchholz/gpf-js/tree/master/test/host/
+wscript) for non-Windows environments
+* A [code coverage report](https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master) is updated on each build
+* A [code quality tool](https://deepscan.io/dashboard/#view=project&pid=1923&bid=8681) is monitoring the sources
+* Project dependencies are [verified](https://david-dm.org/)
+
+This is all explained in the article [Travis integration](http://gpf-js.blogspot.ca/2018/03/travis-integration.html).
+
+![GPF-JS quality](https://arnaudbuchholz.github.io/blog/post/Release%200.2.4/GPF%20Quality.png)
 
 ### Nashorn support
 
-### Attributes
+[Nashorn](https://en.wikipedia.org/wiki/Nashorn_%28JavaScript_engine%29) is another JavaScript engine implemented in
+Java. It's like [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino)'s little brother: it's faster
+and delivered with [Java Runtime Environment](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
 
-Initially, the library focused on classes and interfaces but
-
-http://gpf-js.blogspot.ca/2016/01/gpf-js-presentation.html
-
-The last pillar is now available, in its simplest form: the class gpf.attributes.Attribute
+This new Java host made me realize that the [gpf.rhino](https://arnaudbuchholz.github.io/gpf/doc/gpf.rhino.html)
+namespace was badly named. I deprecated it to the benefit of the
+[gpf.java](https://arnaudbuchholz.github.io/gpf/doc/gpf.java.html) namespace.
 
 ### Filtering stream
 
+[Previous release](http://gpf-js.blogspot.ca/2017/12/release-023-streams-and-pipes.html) introduced
+[gpf.stream.pipe](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.html#.pipe__anchor) to chain streams together.
 
-Combining streams can become tedious when more than two streams must be plugged together. This is greatly simplified
-using the [gpf.stream.pipe](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.html#.pipe__anchor) helper.
-
-It takes care of chaining the [read](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IReadableStream.html) /
-[write](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IWritableStream.html) methods and returns a
-[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that is resolved
-when all the data has been processed (including
-[flushable](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IFlushableStream.html) streams).
-
-For example:
-
-If you remember [last release example](https://gpf-js.blogspot.ca/2017/12/release-023-streams-and-pipes.html)
-illustrating streams, here is a modified version that includes filtering.
+This release delivers a filtering processor that forwards or blocks data based on a filtering function.
+Here is a modified version of the previous release's sample that includes filtering:
 
 `// Reading a CSV file and keep only some records
 var csvFile = gpf.fs.getFileStorage()
@@ -81,39 +90,65 @@ gpf.stream.pipe(csvFile, lineAdapter, csvParser, filter, output)
         // process records
     });`
 
+### Attributes
+
+Back to 2016, I wrote an article to [introduce GPF-JS](http://gpf-js.blogspot.ca/2016/01/gpf-js-presentation.html) and
+explain the concepts that I wanted to develop: classes, interfaces and attributes.
+
+The last pillar is introduced in this release.
+
+It all starts by its simpler aspect:
+* The [gpf.attributes.Attribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Attribute.html) class
+* The possibility to specify attributes in a class definition (not yet documented but check the
+[tests](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/attributes.js))
+* A [tool to extract attributes](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.html#.get__anchor) from a class
+definition
+
+More features will come soon but I am very excited by this rewriting as it fixes all the issues of the intial draft
+(back to 2015).
+
 ### Improved development environment
 
-GitHub authentication token for release
-(video capture of release)
+It is now possible to use an authentication token to connect to the GitHub platform (previously user and password were
+required). It opens the door for a new tile in the dashboard to speed up development.
 
-Release process improved to shorten development cycles
+This is already enabled in the release process which has also been improved to prepare the following version in its
+final step.
+Unfortunately, the command line failed when testing it on this release and I had to finish the remaining steps manually
+
+...and I realized how much value automation brings in this procedure...
 
 ## Lessons learned
 
-Working with non windows environment
+If it's not tested, it doesn't work.
+This was confirmed with Travis integration where the tools were run for the first time on a non-Windows environment.
 
-Build process is getting longer:
-* More hosts (Nashorn)
-* More legacy tests
+Also, the build process is taking longer for two reasons:
+* There is a new host to test (Nashorn)
+* The library now has 9 legacy test files
 
-Thinking about reducing the legacy tests
+A [strategy will be planned](https://github.com/ArnaudBuchholz/gpf-js/issues/238) to reduce the number of tests
+being run.
 
-lost+found folder >> Old code that need to be purged
+With the integration of [Deepscan.io](https://deepscan.io/), a lot of cleaning has been applied because there is no easy
+way to exclude specific files from the tool (other than naming them one by one).
+I decided to move all the unused files from src & test to the new lost+found folder.
+The goal is to purge this folder.
+
+
 
 More visual representatoin of sources:
 * dependencies
 * Evolution of the lib
 
+Release process
+
 ## Next release
 
-The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/12) will mostly focus on:
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/13) will mostly focus on:
 * Finishing the release process improvements
 * Introducing attributes that will be later used to simplify CSV generation
 * Adding new stream helpers to filter / page batch of records
-
-In parallel, the article on
-[gpf.require.define](https://gpf-js.blogspot.ca/2017/11/release-022-gpfrequire.html) implementation is still in progress
-and some additional side projects are popping up.
 
 </code>
 <!-- Drop those two lines -->
