@@ -13,7 +13,7 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/coding.png" align="left">
-    This short article summarizes how Travis CI was plugged into the GPF-JS GitHub repository
+    This article summarizes how Travis CI was plugged into the GPF-JS GitHub repository
     to assess quality on every push.
 </div>
 <code class="markdown">
@@ -35,8 +35,8 @@ Over the years, a complete development and testing framework has been built:
 
 However, these validations were done locally and they had to be **run manually before pushing the code**.
 
-In order to **enable collaboration** and ensure that all pull requests would go to the same **validation process**,
-a [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) platform was required.
+To **enable collaboration** and ensure that all pull requests would go to the same **validation process**,
+an [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) platform was required.
 
 Another approach consists in creating [git hooks](https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks) to force the
 quality assessment before pushing. However, it requires the submitting platform to be properly configured.
@@ -77,7 +77,7 @@ infrastructure:
 ### .travis.yml
 
 The *.yml* extension stands for **[YAML file](https://en.wikipedia.org/wiki/YAML)**: a structured format that is
-commonly used for configuration files. In the context of Travis, it describes the **requirements and steps to buid and
+commonly used for configuration files. In the context of Travis, it describes the **requirements and steps to build and
 validate** the project.
 
 #### Requirements
@@ -101,7 +101,7 @@ ArnaudBuchholz/gpf-js/blob/master/.travis.yml#L7) through [NPM](https://www.npmj
 
 The default step being executed by Travis is `npm test`
 
-The resulting commmand line is specified in the
+The resulting command line is specified in the
 [package.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/package.json#L11) file; it executes **grunt** with
 the following tasks:
 * **connectIf** to setup a local web server necessary for browser and [gpf.http](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html) testing
@@ -118,7 +118,7 @@ Indeed, the user input is expected to approve or change some values (such as the
 
 ![Grunt config](https://arnaudbuchholz.github.io/blog/post/Travis%20integration/grunt%20config.png)
 
-However, on Travis, no user can answer the questions. Hence, the tool has to be fully automatic.
+However, on Travis, no user can answer the questions. Hence, the tool must be fully automatic.
 
 When grunt is triggered, the [gruntfile.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.3/gruntfile.js#L17)
 first checks if any configuration file already exist. If not, a **default task takes place to run the
@@ -141,7 +141,7 @@ After figuring out the different steps, a long debugging session - *mostly compo
 required to figure out the specificities of the platform.
 
 The history of pushes on the [Travis integration issue](https://github.com/ArnaudBuchholz/gpf-js/issues/218)
-illustrates all the attemps that were made.
+illustrates all the attempts that were made.
 
 #### Non-Windows environment
 
@@ -156,8 +156,8 @@ Travis offers the possibility to [use different flavors](https://docs.travis-ci.
 As a consequence, some scripts were adapted to handle the differences in the **path separator** (for
 [instance](https://github.com/ArnaudBuchholz/gpf-js/commit/3e6bab7b65e7606f4ef507539ad468167f643d7d)).
 
-(...) NodeJS is capable of absorbing those differences. This is the reason why the library uses the / as a path
-separator but is capable of translating back to \ when running on Windows-specific host.
+(...) NodeJS can absorb those differences. This is the reason why the library uses the / as a path
+separator but translates back to \ when running on Windows-specific host.
 
 #### Browser testing
 
@@ -183,7 +183,7 @@ of this scripting host**.
 
 However, one unexpected effect is bound to the code coverage measurement: a **big part of the library is dedicated to
 bring older hosts to a [common feature set](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html)** and
-WScript was running most of it. As a result, the coverage minimum was not reached and the build was failing.
+WScript was running most of it. Thus, the coverage minimum was not reached and the build was failing.
 
 This was temporarily addressed by [disabling the coverage threshold errors](https://github.com/ArnaudBuchholz/gpf-js/
 blob/3bbbdfe177a4b96b61367cd5fd9d92292e38a84a/grunt/config/travis.js#L20).
