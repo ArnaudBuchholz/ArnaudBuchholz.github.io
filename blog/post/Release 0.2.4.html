@@ -17,7 +17,7 @@
 <code class="markdown">
 ## New version
 
-Relased right on time, here comes the new version:
+Released right on time, here comes the new version:
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/12?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.4)
 * [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
@@ -60,7 +60,7 @@ Java. It's like [Rhino](https://developer.mozilla.org/en-US/docs/Mozilla/Project
 and delivered with [Java Runtime Environment](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
 
 This new Java host made me realize that the [gpf.rhino](https://arnaudbuchholz.github.io/gpf/doc/gpf.rhino.html)
-namespace was badly named. I deprecated it to the benefit of the
+namespace was badly named. it has been deprecated it to the benefit of the
 [gpf.java](https://arnaudbuchholz.github.io/gpf/doc/gpf.java.html) namespace.
 
 ### Filtering stream
@@ -92,20 +92,19 @@ gpf.stream.pipe(csvFile, lineAdapter, csvParser, filter, output)
 
 ### Attributes
 
-Back to 2016, I wrote an article to [introduce GPF-JS](http://gpf-js.blogspot.ca/2016/01/gpf-js-presentation.html) and
-explain the concepts that I wanted to develop: classes, interfaces and attributes.
+Back to 2016, an article to [introduce GPF-JS](http://gpf-js.blogspot.ca/2016/01/gpf-js-presentation.html) was written
+and it explains the concepts that were expected in the library: classes, interfaces and attributes.
 
 The last pillar is introduced in this release.
 
-It all starts by its simpler aspect:
-* The [gpf.attributes.Attribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Attribute.html) class
+It all starts by its simpler aspects:
+* The [gpf.attributes.Attribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Attribute.html) base class
 * The possibility to specify attributes in a class definition (not yet documented but check the
 [tests](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/attributes.js))
-* A [tool to extract attributes](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.html#.get__anchor) from a class
-definition
+* An [API to extract attributes](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.html#.get__anchor) from a class
 
-More features will come soon but I am very excited by this rewriting as it fixes all the issues of the intial draft
-(back to 2015).
+More features will come soon but this rewriting is very exciting as it fixes all the issues of the initial
+draft *(developed in 2015)*.
 
 ### Improved development environment
 
@@ -114,41 +113,43 @@ required). It opens the door for a new tile in the dashboard to speed up develop
 
 This is already enabled in the release process which has also been improved to prepare the following version in its
 final step.
-Unfortunately, the command line failed when testing it on this release and I had to finish the remaining steps manually
+Unfortunately, the command line failed when testing it on this release and the remaining steps were finished manually
 
-...and I realized how much value automation brings in this procedure...
+...which demonstrates how much value automation brings in this procedure...
 
 ## Lessons learned
 
 If it's not tested, it doesn't work.
 This was confirmed with Travis integration where the tools were run for the first time on a non-Windows environment.
 
-Also, the build process is taking longer for two reasons:
+The build process is taking longer, for two reasons:
 * There is a new host to test (Nashorn)
 * The library now has 9 legacy test files
 
-A [strategy will be planned](https://github.com/ArnaudBuchholz/gpf-js/issues/238) to reduce the number of tests
+A [strategy will be decided](https://github.com/ArnaudBuchholz/gpf-js/issues/238) to reduce the number of tests
 being run.
 
 With the integration of [Deepscan.io](https://deepscan.io/), a lot of cleaning has been applied because there is no easy
 way to exclude specific files from the tool (other than naming them one by one).
-I decided to move all the unused files from src & test to the new lost+found folder.
-The goal is to purge this folder.
-
-
-
-More visual representatoin of sources:
-* dependencies
-* Evolution of the lib
-
-Release process
+All the unused files were moved from src & test to the new
+[lost+found](https://github.com/ArnaudBuchholz/gpf-js/tree/master/lost%2Bfound) folder.
 
 ## Next release
 
+The library becoming more complex (and bigger), it might evolve to propose several 'flavors'.
+The goal would be to provide smaller / dedicated versions that cut in the feature set.
+
+For instance, a modern browser version could see the file system management removed as well as the compatibility layer.
+
+Today, the [dependencies.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/dependencies.json)  file
+enumerates module dependencies. To be able to isolate them, a more accurate view is required and some modifications must
+be done inside the [sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json) file.
+
 The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/13) will mostly focus on:
-* Finishing the release process improvements
-* Introducing attributes that will be later used to simplify CSV generation
-* Adding new stream helpers to filter / page batch of records
+* Documenting attributes
+* Refining the WScript simulation
+* Improving the development framework (illustrate the versions)
+* Adding a new stream helper to transform records
 
 </code>
 <!-- Drop those two lines -->
