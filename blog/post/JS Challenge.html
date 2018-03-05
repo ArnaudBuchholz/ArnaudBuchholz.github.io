@@ -1,0 +1,54 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    JavaScript challenge
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
+
+</div>
+<code class="markdown">
+
+### The question
+
+`for (var i = 0; i < 10; ++i) {
+	setTimeout(function () {
+  	alert(i);
+  }, 1000);
+}`
+
+It illustrates the following concepts:
+- closures
+- asynchronous code
+- synchronous code (the alert blocks any other JS execution)
+
+How would you fix to have it to display 0..9 instead
+
+### The challenge
+
+The code you will write should work on any hosts (browser, NodeJS, Rhino, Nashorn, PhantomJS, cscript...).
+The Cyclomatic complexity should not exceed 1 (i.e. no if).
+The goal is to access the global context within this IIFE:
+
+`(function () {
+    "use strict";
+
+    var globalContext = /* your code here */ {};
+
+    /* Example of use */
+    if (!globalContext.Promise) {
+    	globalContext.Promise = /* A custom polyfill */ {};
+    }
+
+}())`
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
