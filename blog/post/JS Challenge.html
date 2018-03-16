@@ -56,6 +56,18 @@ It illustrates the following concepts:
 
 How would you fix to have it to display 0..9 instead
 
+## Other good questions
+
+`[1,2,3,undefined,4,5].forEach(function (value, index) {
+    console.log(index);
+})`
+
+What is the expected result?
+Most will answer 0,1,2,3,4,5,6
+
+But the truth is : 0,1,2,4,5
+Why? Check [].forEach: undefined values are not supposed to be displayed!
+
 ## The challenge
 
 The code you will write should work on any hosts (browser, NodeJS, Rhino, Nashorn, PhantomJS, cscript...).
