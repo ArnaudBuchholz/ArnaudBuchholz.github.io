@@ -27,16 +27,27 @@ Released right on time, here comes the new version:
 ### Finalized WScript simulation
 
 In the previous [release](http://gpf-js.blogspot.ca/2018/03/release-024-attributes.html), Travis continuous integration
-platform was [integrated](http://gpf-js.blogspot.ca/2018/03/travis-integration.html).
+platform was [added](http://gpf-js.blogspot.ca/2018/03/travis-integration.html).
 To assess that **all hosts are working fine**, WScript had to be simulated because not supported on Linux environments.
 
-The simulation was not perfect and the coverage was reaching only
-[99%](https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master) (including the documented exceptions).
+At that time, the simulation was not perfect and the coverage was reaching only
+[99%](https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master) (including the
+[documented exceptions](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COVERAGE.html)).
 
-To reach 100%, the simulator is [tweaked to disable standard
+To achieve 100%, the simulator is [tweaked to disable standard
 objects](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/wscript/WScript.js#L15-L27) and let the
-[compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) takes care of them with
+[compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) replace them with
 [polyfills](https://developer.mozilla.org/en-US/docs/Glossary/Polyfill).
+
+#### An unexpected test case
+
+This revealed an unexpected issue with the JSON emulation.
+Once the polyfill was enabled, the library [sync-request](https://www.npmjs.com/package/sync-request) used to force
+synchronous requests in NodeJS started to fail.
+
+
+
+Then, when running the
 
 After fixing the JSON polyfills (see below), one problem was remaining.
 
@@ -61,7 +72,11 @@ Adds tags to identify features
 GitHub tile
 Refactored the code to use gpf.require.define
 Documentation validation using gpf.http => Detected issue with https
+
 Sources redesigned to show dependencies
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/KRS4_lrG-kU" frameborder="0"
+allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ### Flavors
 
