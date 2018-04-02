@@ -1,0 +1,126 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.2.5: Flavors
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+
+</div>
+<code class="markdown">
+## New version
+
+Released right on time, here comes the new version:
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/13?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.5)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
+* [NPM package](https://www.npmjs.com/package/gpf-js)
+
+## Release content
+
+### Finalized WScript simulation
+
+In the previous [release](http://gpf-js.blogspot.ca/2018/03/release-024-attributes.html), Travis continuous integration
+platform was [integrated](http://gpf-js.blogspot.ca/2018/03/travis-integration.html).
+To assess that **all hosts are working fine**, WScript had to be simulated because not supported on Linux environments.
+
+The simulation was not perfect and the coverage was reaching only
+[99%](https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master) (including the documented exceptions).
+
+To reach 100%, the simulator is [tweaked to disable standard
+objects](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/wscript/WScript.js#L15-L27) and let the
+[compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) takes care of them with
+[polyfills](https://developer.mozilla.org/en-US/docs/Glossary/Polyfill).
+
+After fixing the JSON polyfills (see below), one problem was remaining.
+
+When using the debug & release versions of the library, the [Universal Module
+Loader](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/UMD.js) successfully detects NodeJS and it prevents
+the proper loading of WScript simulation. Indeed, when using NodeJS, the result is expected to be obtained through the
+module.export syntax (CommonJS link).
+In WScript (link to loading the library), the library is loaded by defining the global symbol gpf.
+A workaround takes care of simulating this behavior by mocking the AMD syntax
+(https://github.com/ArnaudBuchholz/gpf-js/commit/7b85dca0f8af8008405b1cb6c7a82deacd9b8415)
+
+### Improved JSON polyfill
+
+JSON.parse with reviver parameter
+JSON.stringify with replacer and space
+
+### Improved development environment
+
+Sources.json don't need doc=true anymore
+Adds tags to identify features
+
+GitHub tile
+Refactored the code to use gpf.require.define
+Documentation validation using gpf.http => Detected issue with https
+Sources redesigned to show dependencies
+
+### Flavors
+
+The library starts to generate interest but people complain about the fact that it handles too many hosts.
+Hence the idea of being able to build smaller version by picking only what could be built in
+
+### Mapping stream
+
+[Previous release](http://gpf-js.blogspot.ca/2017/12/release-023-streams-and-pipes.html) introduced
+[gpf.stream.pipe](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.html#.pipe__anchor) to chain streams together.
+
+This release delivers a filtering processor that forwards or blocks data based on a filtering function.
+Here is a modified version of the previous release's sample that includes filtering:
+
+`// Reading a CSV file and keep only some records
+/*global Record*/
+var csvFile = gpf.fs.getFileStorage()
+        .openTextStream("file.csv", gpf.fs.openFor.reading),
+    lineAdapter = new gpf.stream.LineAdapter(),
+    csvParser = new gpf.stream.csv.Parser(),
+    filter = new gpf.stream.Filter(function (record) {
+        return record.FIELD === "expected value";
+    }),
+    map = new gpf.stream.Map(function (record) {
+        return new Record(record);
+    })
+    output = new gpf.stream.WritableArray();
+
+// csvFile -> lineAdapter -> csvParser -> filter -> output
+gpf.stream.pipe(csvFile, lineAdapter, csvParser, filter, map, output)
+    .then(function () {
+        return output.toArray();
+    })
+    .then(function (records) {
+        // process records
+    });`
+
+## Lessons learned
+
+Since this is the first productive use of the gpf.require.define, it appears to be really helpful to build the new tiles of the dashboard.
+
+## Next release
+
+The library becoming more complex (and bigger), it might evolve to propose several 'flavors'.
+The goal would be to provide smaller / dedicated versions that cut in the feature set.
+
+For instance, a modern browser version could see the file system management removed as well as the compatibility layer.
+
+Today, the [dependencies.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/dependencies.json)  file
+enumerates module dependencies. To be able to isolate them, a more accurate view is required and some modifications must
+be done inside the [sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json) file.
+
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/13) will mostly focus on:
+* Documenting attributes
+* Refining the WScript simulation
+* Improving the development framework (illustrate the versions)
+* Adding a new stream helper to transform records
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
