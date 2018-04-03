@@ -30,39 +30,55 @@ In the previous [release](http://gpf-js.blogspot.ca/2018/03/release-024-attribut
 platform was [added](http://gpf-js.blogspot.ca/2018/03/travis-integration.html).
 To assess that **all hosts are working fine**, WScript had to be simulated because not supported on Linux environments.
 
-At that time, the simulation was not perfect and the coverage was reaching only
+At that time, the result was not perfect and the coverage was reaching only
 [99%](https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master) (including the
 [documented exceptions](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COVERAGE.html)).
 
-To achieve 100%, the simulator is [tweaked to disable standard
+To achieve 100%, the environment is [tweaked to disable standard
 objects](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/wscript/WScript.js#L15-L27) and let the
 [compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) replace them with
 [polyfills](https://developer.mozilla.org/en-US/docs/Glossary/Polyfill).
 
 #### An unexpected test case
 
-This revealed an unexpected issue with the JSON emulation.
-Once the polyfill was enabled, the library [sync-request](https://www.npmjs.com/package/sync-request) used to force
-synchronous requests in NodeJS started to fail.
+The simulation is based on the [sync-request](https://www.npmjs.com/package/sync-request) external library that
+implements synchronous HTTP requests in NodeJS. After enabling the JSON polyfills, the tests were failing... because of
+this library.
 
+It revealed two problems:
+* The JSON emulation was incomplete
+* The compatiblity tests were not covering all features of the JSON object
 
+#### Universal Module Definition
 
-Then, when running the
+After fixing the polyfills problems (see below), the final validation consisted in running the debug and release
+versions of the library inside the WScript simulator.
 
-After fixing the JSON polyfills (see below), one problem was remaining.
+However, those versions are based on the concatenation of all sources with the [Universal Module
+Loader](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/UMD.js).
 
-When using the debug & release versions of the library, the [Universal Module
-Loader](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/UMD.js) successfully detects NodeJS and it prevents
-the proper loading of WScript simulation. Indeed, when using NodeJS, the result is expected to be obtained through the
-module.export syntax (CommonJS link).
-In WScript (link to loading the library), the library is loaded by defining the global symbol gpf.
-A workaround takes care of simulating this behavior by mocking the AMD syntax
-(https://github.com/ArnaudBuchholz/gpf-js/commit/7b85dca0f8af8008405b1cb6c7a82deacd9b8415)
+This mechanism detects the current host and defines the gpf symbol accordingly.
+
+When NodeJS is detected, which is the case here, the loader assigns the gpf object to the module.exports object as a
+result of a [require](https://nodejs.org/api/modules.html#modules_modules) call.
+
+But in [WScript](https://arnaudbuchholz.github.io/gpf/doc/tutorial-LOADING.html), the library is supposed to define the
+gpf symbol globally.
+
+A workaround was implemented to simulate this behavior, it is done by [leveraging the AMD
+syntax](https://github.com/ArnaudBuchholz/gpf-js/commit/7b85dca0f8af8008405b1cb6c7a82deacd9b8415)
 
 ### Improved JSON polyfill
 
-JSON.parse with reviver parameter
-JSON.stringify with replacer and space
+The [JSON.parse method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)
+accepts a reviver parameter that is used to transform parsed values before the final value is returned.
+
+The same way, the [JSON.stringify
+method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) accepts two
+additional parameters:
+* One, named replacer, that can be either a function to transform values before the stringification process or an array
+of string that serves as a whitelist of properties to be included in the final string.
+* A formatting parameter, named space, that is used to beautify the output of the method.
 
 ### Improved development environment
 
