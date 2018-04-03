@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">124</p>
+      <p class="stat">110</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">22.62</p>
+      <p class="stat">23.97</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.58</p>
+      <p class="stat">0.53</p>
     </div>
   </div>
 </div>
@@ -97,10 +97,28 @@
 &quot;use strict&quot;;
 /*global _GPF_HOST*/ // Host types
 /*global _gpfAssert*/ // Assertion method
+/*global _gpfCompatibilityInstallGlobal*/ // Install compatible global if missing
 /*global _gpfEmptyFunc*/ // An empty function
 /*global _gpfHost*/ // Host type
-/*global _gpfMainContext*/ // Main context object
 /*#endif*/
+
+/*jshint wsh: true*/
+/*eslint-env wsh*/
+/*jshint rhino: true*/
+/*eslint-env rhino*/
+
+var _gpfTimeoutImpl = {};
+
+_gpfTimeoutImpl[_GPF_HOST.WSCRIPT] = function (t) {
+    WScript.Sleep(t); //eslint-disable-line new-cap
+};
+
+function _gpfTimeoutJavaImpl (t) {
+    java.lang.Thread.sleep(t);
+}
+
+_gpfTimeoutImpl[_GPF_HOST.RHINO] = _gpfTimeoutJavaImpl;
+_gpfTimeoutImpl[_GPF_HOST.NASHORN] = _gpfTimeoutJavaImpl;
 
 var
     // List of pending callbacks (sorted by execution time)
@@ -108,10 +126,7 @@ var
     // Last allocated timeoutID
     _gpfTimeoutID = 0,
     // Sleep function
-    _gpfSleep = _gpfEmptyFunc;
-
-// Handle timeouts (mandatory for some environments)
-gpf.handleTimeout = _gpfEmptyFunc;
+    _gpfSleep = _gpfTimeoutImpl[_gpfHost] || _gpfEmptyFunc;
 
 // Sorting function used to reorder the async queue
 function _gpfSortOnDt (a, b) {
@@ -147,8 +162,9 @@ function _gpfClearTimeoutPolyfill (timeoutId) {
 }
 
 /**
- * For WSCRIPT and RHINO environments, this function must be used to process the timeout queue when using
- * [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout)
+ * For WSCRIPT, RHINO and NASHORN environments, this function must be used to process the timeout queue when using
+ * [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout).
+ * For the other environments, this function has no effect.
  * @since 0.1.5
  */
 function _gpfHandleTimeout () {
@@ -166,44 +182,14 @@ function _gpfHandleTimeout () {
     }
 }
 
-/*jshint wsh: true*/
-/*eslint-env wsh*/
-/*jshint rhino: true*/
-/*eslint-env rhino*/
+/**
+ * @gpf:sameas _gpfHandleTimeout
+ * @since 0.1.5
+ */
+gpf.handleTimeout = _gpfHandleTimeout;
 
-var _gpfTimeoutImpl = {};
-
-_gpfTimeoutImpl[_GPF_HOST.WSCRIPT] = function (t) {
-    WScript.Sleep(t); //eslint-disable-line new-cap
-};
-
-function _gpfTimeoutJavaImpl (t) {
-    java.lang.Thread.sleep(t);
-}
-
-_gpfTimeoutImpl[_GPF_HOST.RHINO] = _gpfTimeoutJavaImpl;
-_gpfTimeoutImpl[_GPF_HOST.NASHORN] = _gpfTimeoutJavaImpl;
-
-// Used only for WSCRIPT, RHINO &amp; NASHORN environments
-if (&quot;undefined&quot; === typeof setTimeout) {
-
-    _gpfSleep = _gpfTimeoutImpl[_gpfHost];
-
-    /* istanbul ignore next */ // unknown.1
-    if (undefined === _gpfSleep) {
-        console.warn(&quot;No implementation for setTimeout&quot;);
-    }
-
-    _gpfMainContext.setTimeout = _gpSetTimeoutPolyfill;
-    _gpfMainContext.clearTimeout = _gpfClearTimeoutPolyfill;
-
-    /**
-     * @gpf:sameas _gpfHandleTimeout
-     * @since 0.1.5
-     */
-    gpf.handleTimeout = _gpfHandleTimeout;
-
-}
+_gpfCompatibilityInstallGlobal(&quot;setTimeout&quot;, _gpSetTimeoutPolyfill);
+_gpfCompatibilityInstallGlobal(&quot;clearTimeout&quot;, _gpfClearTimeoutPolyfill);
 
 /*#ifndef(UMD)*/
 

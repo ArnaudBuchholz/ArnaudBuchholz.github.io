@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/compatibility/json/stringify.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/compatibility/json/stringify.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">77.42</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">134</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">28.37</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.68</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file JSON.stringify polyfill
+ * @since 0.1.5
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
+/*global _gpfEmptyFunc*/ // An empty function
+/*global _gpfIsArray*/ // Return true if the parameter is an array
+/*global _gpfObjectForEach*/ // Similar to [].forEach but for objects
+/*global _gpfStringEscapeFor*/ // Make the string content compatible with lang
+/*exported _gpfJsonStringifyPolyfill*/ // JSON.stringify polyfill
+/*#endif*/
+
+var _gpfJsonStringifyMapping;
+
+function _gpfJsonStringifyGeneric (object) {
+    return object.toString();
+}
+
+function _gpfJsonStringifyFormat (values, space) {
+    if (space) {
+        return &quot;\n&quot; + space + values.join(&quot;,\n&quot; + space) + &quot;\n&quot;;
+    }
+    return values.join(&quot;,&quot;);
+}
+
+function _gpfJsonStringifyArray (array, replacer, space) {
+    var values = [];
+    _gpfArrayForEach(array, function (value, index) {
+        var replacedValue = replacer(index.toString(), value);
+        if (undefined === replacedValue) {
+            replacedValue = &quot;null&quot;;
+        } else {
+            replacedValue = _gpfJsonStringifyMapping[typeof replacedValue](replacedValue, replacer, space);
+        }
+        values.push(replacedValue);
+    });
+    return &quot;[&quot; + _gpfJsonStringifyFormat(values, space) + &quot;]&quot;;
+}
+
+function _gpfJsonStringifyObjectMembers (object, replacer, space) {
+    var values = [],
+        separator;
+    if (space) {
+        separator = &quot;: &quot;;
+    } else {
+        separator = &quot;:&quot;;
+    }
+    _gpfObjectForEach(object, function (value, name) {
+        var replacedValue = replacer(name, value);
+        replacedValue = _gpfJsonStringifyMapping[typeof replacedValue](value, replacer, space);
+        if (undefined === replacedValue) {
+            return;
+        }
+        values.push(_gpfStringEscapeFor(name, &quot;javascript&quot;) + separator + replacedValue);
+    });
+    return &quot;{&quot; + _gpfJsonStringifyFormat(values, space) + &quot;}&quot;;
+}
+
+function _gpfJsonStringifyObject (object, replacer, space) {
+    if (null === object) {
+        return &quot;null&quot;;
+    }
+    return _gpfJsonStringifyObjectMembers(object, replacer, space);
+}
+
+_gpfJsonStringifyMapping = {
+    undefined: _gpfEmptyFunc,
+    &quot;function&quot;: _gpfEmptyFunc,
+    number: _gpfJsonStringifyGeneric,
+    &quot;boolean&quot;: _gpfJsonStringifyGeneric,
+    string: function (object) {
+        return _gpfStringEscapeFor(object, &quot;javascript&quot;);
+    },
+    object: function (object, replacer, space) {
+        if (_gpfIsArray(object)) {
+            return _gpfJsonStringifyArray(object, replacer, space);
+        }
+        return _gpfJsonStringifyObject(object, replacer, space);
+    }
+};
+
+function _gpfJsonStringifyGetReplacerFunction (replacer) {
+    if (&quot;function&quot; === typeof replacer) {
+        return replacer;
+    }
+    return function (key, value) {
+        return value;
+    };
+}
+
+function _gpfJsonStringifyCheckReplacer (replacer) {
+    if (_gpfIsArray(replacer)) {
+        // whitelist
+        return function (key, value) {
+            if (replacer.indexOf(key) !== -1) {
+                return value;
+            }
+        };
+    }
+    return _gpfJsonStringifyGetReplacerFunction(replacer);
+}
+
+function _gpfJsonStringifyCheckSpaceValue (space) {
+    if (&quot;number&quot; === typeof space) {
+        return new Array(Math.min(space, 10) + 1).join(&quot; &quot;);
+    }
+    return space || &quot;&quot;;
+}
+
+/**
+ * JSON.stringify polyfill
+ *
+ * @param {*} value The value to convert to a JSON string
+ * @param {Function|Array} [replacer] A function that alters the behavior of the stringification process, or an array of
+ * String and Number objects that serve as a whitelist for selecting/filtering the properties of the value object to be
+ * included in the JSON string
+ * @param {String|Number} [space] A String or Number object that&#039;s used to insert white space into the output JSON
+ * string for readability purposes. If this is a Number, it indicates the number of space characters to use as white
+ * space; this number is capped at 10 (if it is greater, the value is just 10).
+ * @return {String} JSON representation of the value
+ * @since 0.1.5
+ */
+function _gpfJsonStringifyPolyfill (value, replacer, space) {
+    return _gpfJsonStringifyMapping[typeof value](value, _gpfJsonStringifyCheckReplacer(replacer),
+        _gpfJsonStringifyCheckSpaceValue(space));
+}
+
+/*#ifndef(UMD)*/
+
+gpf.internals._gpfJsonStringifyPolyfill = _gpfJsonStringifyPolyfill;
+
+/*#endif*/</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

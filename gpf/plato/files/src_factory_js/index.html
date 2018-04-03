@@ -125,7 +125,7 @@ function _gpfGenerateGenericFactorySource (parameters) {
         var count = index + 1;
         src.push(&quot;if (&quot; + count + &quot; === l) { return new C(&quot; + parameters.slice(0, count).join(&quot;, &quot;) + &quot;);}&quot;);
     });
-    return src.join(&quot;\r\n&quot;);
+    return src.join(&quot;\n&quot;);
 }
 
 function _gpfGenerateGenericFactory (maxParameters) {

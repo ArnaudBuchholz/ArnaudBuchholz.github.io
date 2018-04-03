@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">147</p>
+      <p class="stat">151</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">18.00</p>
+      <p class="stat">17.32</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.35</p>
+      <p class="stat">0.37</p>
     </div>
   </div>
 </div>
@@ -106,6 +106,7 @@
 /*exported _gpfIdentifierFirstChar*/ // allowed first char in an identifier
 /*exported _gpfIdentifierOtherChars*/ // allowed other chars in an identifier
 /*exported _gpfIsUnsignedByte*/ // Check if the parameter is an unsigned byte
+/*exported _gpfJsCommentsRegExp*/ // Find all JavaScript comments
 /*exported _gpfJsKeywords*/ //  List of JavaScript keywords
 /*exported _gpfMax31*/ // Max value on 31 bits
 /*exported _gpfMax32*/ // Max value on 32 bits
@@ -152,8 +153,11 @@ var
     _gpfIdentifierOtherChars = _gpfAlpha + _gpfALPHA + _gpfDigit + &quot;_$&quot;,
 
     // List of JavaScript keywords
-    _gpfJsKeywords = _gpfSyncReadSourceJSON(&quot;javascript/keywords.json&quot;)
-    ;
+    _gpfJsKeywords = _gpfSyncReadSourceJSON(&quot;javascript/keywords.json&quot;),
+
+    // Get the name of a function if bound to the call
+    _gpfJsCommentsRegExp =  new RegExp(&quot;//.*$|/\\*(?:[^\\*]*|\\*[^/]*)\\*/&quot;, &quot;gm&quot;)
+;
 
 // Unprotected version of _gpfFunc
 function _gpfFuncUnsafe (params, source) {
@@ -176,7 +180,7 @@ function _gpfFuncImpl (params, source) {
         /*#ifdef(DEBUG)*/
     } catch (e) {
         // Makes it easier to debug
-        throw new Error(&quot;_gpfFuncImpl exception: &quot; + e.message + &quot;\r\n&quot; + source);
+        throw new Error(&quot;_gpfFuncImpl exception: &quot; + e.message + &quot;\n&quot; + source);
     }
     /*#endif*/
 }
