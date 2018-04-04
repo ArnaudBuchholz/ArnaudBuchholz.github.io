@@ -66,12 +66,14 @@ But in [WScript](https://arnaudbuchholz.github.io/gpf/doc/tutorial-LOADING.html)
 gpf symbol globally.
 
 A workaround was implemented to simulate this behavior, it is done by [leveraging the AMD
-syntax](https://github.com/ArnaudBuchholz/gpf-js/commit/7b85dca0f8af8008405b1cb6c7a82deacd9b8415)
+syntax](https://github.com/ArnaudBuchholz/gpf-js/commit/7b85dca0f8af8008405b1cb6c7a82deacd9b8415).
 
 ### Improved JSON polyfill
 
 The [JSON.parse method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)
 accepts a reviver parameter that is used to transform parsed values before the final value is returned.
+[New tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/test/compatibility/json.js#L209-L233) were added and
+the missing parts were implemented.
 
 The same way, the [JSON.stringify
 method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) accepts two
@@ -79,11 +81,26 @@ additional parameters:
 * One, named replacer, that can be either a function to transform values before the stringification process or an array
 of string that serves as a whitelist of properties to be included in the final string.
 * A formatting parameter, named space, that is used to beautify the output of the method.
+[New tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/test/compatibility/json.js#L121-L184) were added and
+the missing parts were implemented.
 
 ### Improved development environment
 
-Sources.json don't need doc=true anymore
-Adds tags to identify features
+In this release, a significant effort was put in the development environment.
+
+#### sources.json
+
+The [sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/src/sources.json) is the spinal column of the
+library. It defines which sources are loaded and, for each of them, additional attributes are set to qualify them.
+
+The "doc" attribute disappeared because it was always set to true.
+
+A new attribute "tags" was added:
+* core means the source must always be loaded
+* host:<name> means the source is host specific
+* any other string is interpreted as a feature name (for instance: define, require, fs...)
+
+#### GitHub tile
 
 GitHub tile
 Refactored the code to use gpf.require.define
@@ -92,6 +109,11 @@ Documentation validation using gpf.http => Detected issue with https
 Sources redesigned to show dependencies
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/KRS4_lrG-kU" frameborder="0"
+allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+Simplified release
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/9H0QisPMCgg" frameborder="0"
 allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ### Flavors
