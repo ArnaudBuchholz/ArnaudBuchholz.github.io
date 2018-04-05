@@ -48,7 +48,7 @@ because of this library.
 
 It revealed two problems:
 * The **JSON emulation was incomplete**
-* The **compatiblity tests** were not covering all features of the JSON object
+* The **compatibility tests** were not covering all features of the JSON object
 
 #### Universal Module Definition
 
@@ -103,7 +103,7 @@ For instance, the "test" attribute defines when the associated test file (same n
 being true, only the sources with no test file are flagged with false
 (for [example](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json#L12)).
 
-The souces list was **[recently](http://gpf-js.blogspot.ca/2018/03/release-024-attributes.html) cleaned up** for
+The sources list was **[recently](http://gpf-js.blogspot.ca/2018/03/release-024-attributes.html) cleaned up** for
 [DeepScan](https://deepscan.io/dashboard#view=project&pid=1923&bid=8681). As a result, the remaining sources were all
 containing documentation to extract. Consequently, the **"doc" attribute has been removed**.
 
@@ -112,7 +112,7 @@ Also, **a space separated list of tags** was added, where:
 * **host:hostname** means the source is specific to the host hostname
 * any other tag is interpreted as a **feature name** (for instance: define, require, fs...)
 
-This is used for the flavors development that will be detailled right after.
+This is used for the flavors development that will be detailed right after.
 
 #### GitHub tile
 
@@ -148,7 +148,7 @@ allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 #### Simplified release
 
-Last but not least, the library is now completly released through a **single command line**.
+Last but not least, the library is now completely released through a **single command line**.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/9H0QisPMCgg" frameborder="0"
 allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -207,8 +207,9 @@ gpf.stream.pipe(csvFile, lineAdapter, csvParser, filter, map, output)
         // process records
     });`
 
-See how you can easily swap the streams to refactor the code: let say that the Record class has a method named
-isObsolete. You don't need to rely on the CSV literal object to encapsulate the filtering logic:
+See how you can **easily swap the streams to refactor the code**:
+let say that the Record class has a method named isObsolete which gives the filtering condition.
+You don't need to rely on the CSV literal object properties to reproduce the logic:
 
 `// Reading a CSV file and keep only some records
 /*global Record*/
