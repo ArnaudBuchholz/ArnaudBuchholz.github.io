@@ -90,16 +90,24 @@ the missing parts were implemented.
 
 ### Improved development environment
 
-In this release, a significant effort was put in the development environment.
+In this release, a **significant effort** was put in the development environment.
 
 #### sources.json
 
 The [sources.json file](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/src/sources.json) is the **spinal column**
-of the library. It defines **which sources are loaded** and **additional attributes** can be set to qualify them.
+of the library. It defines **which sources are loaded** and **additional properties** can be associated to them.
 
-First, the **"doc" attribute has been removed** because it was always set to true.
+For instance, the "test" attribute defines when the associated test file (same name but under
+[test](https://github.com/ArnaudBuchholz/gpf-js/tree/master/test) instead of
+[src](https://github.com/ArnaudBuchholz/gpf-js/tree/master/src)) should be loaded. The default value
+being true, only the sources with no test file are flagged with false
+(for [example](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json#L12)).
 
-Then, **a space separated list of tags** was added, where:
+The souces list was **[recently](http://gpf-js.blogspot.ca/2018/03/release-024-attributes.html) cleaned up** for
+[DeepScan](https://deepscan.io/dashboard#view=project&pid=1923&bid=8681). As a result, the remaining sources were all
+containing documentation to extract. Consequently, the **"doc" attribute has been removed**.
+
+Also, **a space separated list of tags** was added, where:
 * **core** means the source is a core feature and it must always be loaded
 * **host:hostname** means the source is specific to the host hostname
 * any other tag is interpreted as a **feature name** (for instance: define, require, fs...)
@@ -123,7 +131,7 @@ are organized thanks to the
 #### Documentation validation
 
 The only way to make sure that all links contained in the documentation are actually pointing to something is to try
-them all. A new step in the build process was added to
+them. A new step in the build process was added to
 **[validate](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/doc/validate.js) the documentation by checking all
 the links**.
 
@@ -140,23 +148,41 @@ allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 #### Simplified release
 
-Finally, the library is released through a **single command line**.
+Last but not least, the library is now completly released through a **single command line**.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/9H0QisPMCgg" frameborder="0"
 allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ### Flavors
 
-The library starts to generate interest but people complain about the fact that it handles too many hosts.
-Hence the idea of being able to build smaller version by picking only what could be built in
+The library starts to **generate interest** but people often complain about the fact that it handles too many hosts and,
+consequently, **it's too big**.
+
+Furthermore, some internal mechanics generate troubles:
+* The use of
+[ActiveXObject](https://docs.microsoft.com/en-us/scripting/javascript/reference/activexobject-object-javascript)
+may generate security issues on Internet Explorer
+* require("js") produces extra work with [webpack](https://webpack.js.org/)
+* ...
+
+Hence, some time was invested to study the ability to build **smaller - more dedicated - versions** by having a way to
+specify **which parts to consolidate** in the library.
+
+The idea is to rely on feature tags.
+
+For instance, if one wants to use [require](https://arnaudbuchholz.github.io/gpf/doc/tutorial-REQUIRE.html) on
+[NodeJS](https://nodejs.org/en/) only, the flavor would be "require host:nodejs".
+From there, an [algorithm](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/make/flavor.js) is capable of
+**listing all the sources that must be included** by:
+* filtering sources from tags
+* adding selected sources' dependencies
 
 ### Mapping stream
 
-[Previous release](http://gpf-js.blogspot.ca/2017/12/release-023-streams-and-pipes.html) introduced
-[gpf.stream.pipe](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.html#.pipe__anchor) to chain streams together.
+This release delivers a [mapping stream](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.Map.html) that completes
+the [filtering stream](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.Filter.html) introduced in the last version.
 
-This release delivers a filtering processor that forwards or blocks data based on a filtering function.
-Here is a modified version of the previous release's sample that includes filtering:
+Here is a modified version of the previous release's sample that includes mapping:
 
 `// Reading a CSV file and keep only some records
 /*global Record*/
@@ -172,7 +198,7 @@ var csvFile = gpf.fs.getFileStorage()
     })
     output = new gpf.stream.WritableArray();
 
-// csvFile -> lineAdapter -> csvParser -> filter -> output
+// csvFile -> lineAdapter -> csvParser -> filter -> map -> output
 gpf.stream.pipe(csvFile, lineAdapter, csvParser, filter, map, output)
     .then(function () {
         return output.toArray();
@@ -180,6 +206,33 @@ gpf.stream.pipe(csvFile, lineAdapter, csvParser, filter, map, output)
     .then(function (records) {
         // process records
     });`
+
+See how you can easily swap the streams to refactor the code: let say that the Record class has a method named
+isObsolete. You don't need to rely on the CSV literal object to encapsulate the filtering logic:
+
+`// Reading a CSV file and keep only some records
+/*global Record*/
+var csvFile = gpf.fs.getFileStorage()
+        .openTextStream("file.csv", gpf.fs.openFor.reading),
+    lineAdapter = new gpf.stream.LineAdapter(),
+    csvParser = new gpf.stream.csv.Parser(),
+    filter = new gpf.stream.Filter(function (record) {
+        return !record.isObsolete();
+    }),
+    map = new gpf.stream.Map(function (record) {
+        return new Record(record);
+    })
+    output = new gpf.stream.WritableArray();
+
+// csvFile -> lineAdapter -> csvParser -> map -> filter -> output
+gpf.stream.pipe(csvFile, lineAdapter, csvParser, map, filter, output)
+    .then(function () {
+        return output.toArray();
+    })
+    .then(function (records) {
+        // process records
+    });`
+
 
 ## Lessons learned
 
