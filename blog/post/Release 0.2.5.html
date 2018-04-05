@@ -237,15 +237,38 @@ gpf.stream.pipe(csvFile, lineAdapter, csvParser, map, filter, output)
 
 ## Lessons learned
 
-Since this is the first productive use of the gpf.require.define, it appears to be really helpful to build the new tiles of the dashboard.
+This release enabled a 'real' **productive use of the library**. And, naturally, several weaknesses were identified.
+
+For instance, requests to HTTPS websites were [not working](https://github.com/ArnaudBuchholz/gpf-js/issues/246) with
+NodeJS.
+
+The same way, the usability of the
+[gpf.require.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html#.define__anchor) feature has to be
+improved **whenever something goes wrong**.
+
+If loading fails because the resource file does not exist or its evaluation generates an error, the resulting exception
+must help the developer to quickly find and fix the problem:
+* **Which** resource is concerned?
+* Through which **intermediate** resources it was loaded?
+* **What** is the problem?
+* **Where** is the problem (line number)?
+
+Also, debugging loaded module might become a challenge since the evaluation model prevents the browser to **map the file
+in the debugger**.
+
+But, in the end, this exercise **validated the concepts**: the tiles were quickly redesigned and common code put in
+modules that are shared by all of them:
+* a [tile base class](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/res/tiles/tile.js)
+* targeted helpers ([dom](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/res/dom.js) and
+[dialogs](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/res/dialogs.js))
 
 ## Next release
 
 The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/14) will mostly focus on:
-* Documenting attributes
-* Refining the WScript simulation
-* Improving the development framework (illustrate the versions)
-* Adding a new stream helper to transform records
+* Taking care of improving gpf.define.require
+* Releasing a standalone version of the gpf.define.require feature
+* Offering Object Oriented concepts (abstract classes, singletons, final classes)
+* Documenting JSON compatibility
 
 </code>
 <!-- Drop those two lines -->
