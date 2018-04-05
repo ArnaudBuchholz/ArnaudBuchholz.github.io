@@ -16,7 +16,7 @@
 <code class="markdown">
 ## New version
 
-Released right on time, here comes the new version:
+Here comes the new version:
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/13?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.5)
 * [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
@@ -27,60 +27,64 @@ Released right on time, here comes the new version:
 ### Finalized WScript simulation
 
 In the previous [release](http://gpf-js.blogspot.ca/2018/03/release-024-attributes.html), Travis continuous integration
-platform was [added](http://gpf-js.blogspot.ca/2018/03/travis-integration.html).
-To assess that **all hosts are working fine**, WScript had to be simulated because not supported on Linux environments.
+platform was [integrated](http://gpf-js.blogspot.ca/2018/03/travis-integration.html).
+To assess that **all hosts are working fine**, WScript had to be **simulated** because not supported on Linux
+environments.
 
-At that time, the result was not perfect and the coverage was reaching only
+At that time, **the result was not perfect** and the coverage was reaching only
 [99%](https://coveralls.io/github/ArnaudBuchholz/gpf-js?branch=master) (including the
 [documented exceptions](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COVERAGE.html)).
 
-To achieve 100%, the environment is [tweaked to disable standard
-objects](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/wscript/WScript.js#L15-L27) and let the
+To achieve 100%, the environment is now **[tweaked to disable standard
+objects](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/host/wscript/WScript.js#L15-L27)** and let the
 [compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) replace them with
 [polyfills](https://developer.mozilla.org/en-US/docs/Glossary/Polyfill).
 
 #### An unexpected test case
 
 The simulation is based on the [sync-request](https://www.npmjs.com/package/sync-request) external library that
-implements synchronous HTTP requests in NodeJS. After enabling the JSON polyfills, the tests were failing... because of
-this library.
+implements **synchronous HTTP requests in NodeJS**. After enabling the JSON polyfills, **the tests were failing**...
+because of this library.
 
 It revealed two problems:
-* The JSON emulation was incomplete
-* The compatiblity tests were not covering all features of the JSON object
+* The **JSON emulation was incomplete**
+* The **compatiblity tests** were not covering all features of the JSON object
 
 #### Universal Module Definition
 
-After fixing the polyfills problems (see below), the final validation consisted in running the debug and release
-versions of the library inside the WScript simulator.
+After fixing the polyfills problems (see below), the final validation consisted in **running the debug and release
+versions** of the library inside the WScript simulator.
 
 However, those versions are based on the concatenation of all sources with the [Universal Module
 Loader](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/UMD.js).
 
-This mechanism detects the current host and defines the gpf symbol accordingly.
+This mechanism **detects the current host** and defines the gpf symbol accordingly.
 
-When NodeJS is detected, which is the case here, the loader assigns the gpf object to the module.exports object as a
-result of a [require](https://nodejs.org/api/modules.html#modules_modules) call.
+When NodeJS is detected, which is the case here, the loader assigns the gpf namespace to
+[module.exports](https://www.sitepoint.com/understanding-module-exports-exports-node-js/)  to
+be the result of a [require](https://nodejs.org/api/modules.html#modules_modules) call.
 
-But in [WScript](https://arnaudbuchholz.github.io/gpf/doc/tutorial-LOADING.html), the library is supposed to define the
-gpf symbol globally.
+But in WScript, the library is **supposed to define the gpf symbol
+[globally](https://arnaudbuchholz.github.io/gpf/doc/tutorial-LOADING.html)**.
 
-A workaround was implemented to simulate this behavior, it is done by [leveraging the AMD
+A **workaround was implemented** to simulate this behavior, it is done by [leveraging the AMD
 syntax](https://github.com/ArnaudBuchholz/gpf-js/commit/7b85dca0f8af8008405b1cb6c7a82deacd9b8415).
 
 ### Improved JSON polyfill
 
 The [JSON.parse method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)
-accepts a reviver parameter that is used to transform parsed values before the final value is returned.
+accepts a reviver parameter that is used to **transform parsed values** before the final value is returned.
+
 [New tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/test/compatibility/json.js#L209-L233) were added and
-the missing parts were implemented.
+the missing part was implemented.
 
 The same way, the [JSON.stringify
 method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) accepts two
 additional parameters:
-* One, named replacer, that can be either a function to transform values before the stringification process or an array
-of string that serves as a whitelist of properties to be included in the final string.
-* A formatting parameter, named space, that is used to beautify the output of the method.
+* One, documented as replacer, that can be either a function to **transform values before the stringification process**
+or an array of string that serves as a **whitelist of properties** to be included in the final string.
+* A formatting parameter, documented as space, that is used to **beautify the output** of the method.
+
 [New tests](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/test/compatibility/json.js#L121-L184) were added and
 the missing parts were implemented.
 
@@ -90,28 +94,53 @@ In this release, a significant effort was put in the development environment.
 
 #### sources.json
 
-The [sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/src/sources.json) is the spinal column of the
-library. It defines which sources are loaded and, for each of them, additional attributes are set to qualify them.
+The [sources.json file](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/src/sources.json) is the **spinal column**
+of the library. It defines **which sources are loaded** and **additional attributes** can be set to qualify them.
 
-The "doc" attribute disappeared because it was always set to true.
+First, the **"doc" attribute has been removed** because it was always set to true.
 
-A new attribute "tags" was added:
-* core means the source must always be loaded
-* host:<name> means the source is host specific
-* any other string is interpreted as a feature name (for instance: define, require, fs...)
+Then, **a space separated list of tags** was added, where:
+* **core** means the source is a core feature and it must always be loaded
+* **host:hostname** means the source is specific to the host hostname
+* any other tag is interpreted as a **feature name** (for instance: define, require, fs...)
+
+This is used for the flavors development that will be detailled right after.
 
 #### GitHub tile
 
-GitHub tile
-Refactored the code to use gpf.require.define
-Documentation validation using gpf.http => Detected issue with https
+A new tile was added to the development dashboard.
 
-Sources redesigned to show dependencies
+![The GitHub tile](http://arnaudbuchholz.github.io/blog/post/Release%200.2.5/GitHub%20tile.png)
+
+It connects to the [GitHub API](https://github.com/) to **fetch the current release progress** and **links directly**
+to it.
+
+This was also the opportunity to **redesign the whole dashboard**.
+All the **HTML is now generated** and [modules](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.5/res/tiles)
+are organized thanks to the
+[gpf.require.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html#.define__anchor) feature.
+
+#### Documentation validation
+
+The only way to make sure that all links contained in the documentation are actually pointing to something is to try
+them all. A new step in the build process was added to
+**[validate](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.5/doc/validate.js) the documentation by checking all
+the links**.
+
+Here again, it was a nice opportunity to test the [gpf.http](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html)
+feature.
+
+#### Dependency viewer
+
+The sources page was redesigned to **visually show dependencies**. It was done thanks to the awesome
+[dependency wheel](https://github.com/fzaninotto/DependencyWheel) from Francois Zaninotto.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/KRS4_lrG-kU" frameborder="0"
 allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-Simplified release
+#### Simplified release
+
+Finally, the library is released through a **single command line**.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/9H0QisPMCgg" frameborder="0"
 allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -158,16 +187,7 @@ Since this is the first productive use of the gpf.require.define, it appears to 
 
 ## Next release
 
-The library becoming more complex (and bigger), it might evolve to propose several 'flavors'.
-The goal would be to provide smaller / dedicated versions that cut in the feature set.
-
-For instance, a modern browser version could see the file system management removed as well as the compatibility layer.
-
-Today, the [dependencies.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/dependencies.json)  file
-enumerates module dependencies. To be able to isolate them, a more accurate view is required and some modifications must
-be done inside the [sources.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/sources.json) file.
-
-The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/13) will mostly focus on:
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/14) will mostly focus on:
 * Documenting attributes
 * Refining the WScript simulation
 * Improving the development framework (illustrate the versions)
