@@ -33,7 +33,7 @@ function install() {
         var proposal = $("#proposal").val(),
             modifiedSource = source.replace("your_solution_here", $("#proposal").val());
         $(".language-javascript").html(Prism.highlight(modifiedSource, Prism.languages.javascript, "html"));
-        $("#email").attr("href", "mailto:arnaud.buchholz@free.fr?subject=[JS-Challenge]%20Solved!&body=" + encodeURIComponent(proposal));
+        $("#email").attr("href", "mailto:arnaud.buchholz@free.fr?subject=[JS-Challenge:global%20scope]%20I%20solved%20it%20with%3A%20" + encodeURIComponent(proposal));
         jQuery.globalEval([
             // Disable all global symbols but alert
             "(function (" + Object.keys(window).filter(function (name) { return name !== "alert"; }).join(", ") + "){",
