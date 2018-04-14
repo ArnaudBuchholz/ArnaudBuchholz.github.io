@@ -1,0 +1,24 @@
+{
+  "name": "arnaudbuchholz.github.io",
+  "version": "1.0.0",
+  "description": "publishing repository",
+  "main": "gpf.js",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "grunt-serve": "^0.1.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io.git"
+  },
+  "author": "Arnaud Buchholz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/issues"
+  },
+  "homepage": "https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io#readme"
+}
