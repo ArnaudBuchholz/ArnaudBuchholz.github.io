@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <script src="http://arnaudbuchholz.github.io/gpf/0.2.5/gpf.js"></script>
+        <script src="challenge.js"></script>
+    </head>
+    <body>
+        <div style="display: none;">
+            <p>Consider the sample code below.
+
+This pattern is used to inject a <a href="https://developer.mozilla.org/en-US/docs/Glossary/Polyfill" target="_blank">polyfill</a>
+of an API when the native implementation does not exist <i>(here the API to inject is myApi but it could be
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">Promise<a>)</i>.
+Very often, the scripting host offers a keyword that gives access to the global scope (such as
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Window" target="_blank">window</a> in browsers or
+<a href="https://nodejs.org/api/globals.html#globals_global" target="_blank">global</a> in <a href="https://nodejs.org/" target="_blank">NodeJS</a>).
+
+</p><p>But what happens if such a keyword does not exist (as in <a href="https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine)" target="_blank">Nashorn</a>)
+or it is made unavailable on purpose <i>(check the source code of this exercise)</i>?</p>
+
+<p>Rules are:
+<ul>
+<li>You can only type code in the <strong>your_solution_here</strong> placeholder, use the field below and press Submit to test it</li>
+<li>The solution does not require any external library and should work for any host</li>
+</ul></p>
+        <code>
+"use strict";
+
+function Counter () {
+}
+
+Counter.prototype = {
+
+    _value: 0,
+
+    next: function () {
+        return this._value++;
+    }
+
+}
+
+var original = new Counter();
+assert(original.next() === 0);
+assert(original.next() === 1);
+
+var clone = your_solution_here;
+assert(clone.next() === 2);
+assert(clone.next() === 3);
+
+assert(original.next() === 2);
+        </code>
+    </div>
+    </body>
+</html>
