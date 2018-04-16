@@ -33,7 +33,7 @@ dom.div({className: "container"}, [
     dom.div({className: "jumbotron"}, [
         dom.h1({id: "title"}, "title"),
         dom.p({id: "content"}, "content"),
-        dom.pre({id: "code"})
+        dom.pre({className: "language-javascript", id: "code"})
     ]),
 
     dom.div({className: "alert alert-danger", role: "alert"}, [
