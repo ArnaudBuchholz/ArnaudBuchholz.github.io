@@ -21,6 +21,7 @@ var dom = {
     "optgroup",
     "option",
     "p",
+    "pre",
     "script",
     "select",
     "span",
