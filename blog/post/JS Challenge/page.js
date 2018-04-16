@@ -22,7 +22,7 @@ dom.div({className: "container"}, [
                         "data-toggle": "dropdown", "aria-haspopup": true, "aria-expanded": false}, "challenges"),
                     dom.div({className: "dropdown-menu", "aria-labelledby": "challenges"},
                         challenges.map(function (challenge) {
-                            return dom.a({className: "dropdown-item", href: challenge.url}, challenge.title);
+                            return dom.a({className: "dropdown-item", href: challenge.url + ".html"}, challenge.title);
                         })
                     )
                 ])
@@ -31,8 +31,9 @@ dom.div({className: "container"}, [
     ]),
 
     dom.div({className: "jumbotron"}, [
-        dom.h1("title"),
-        dom.p("content")
+        dom.h1({id: "title"}, "title"),
+        dom.p({id: "content"}, "content"),
+        dom.pre({id: "code"})
     ]),
 
     dom.div({className: "alert alert-danger", role: "alert"}, [
