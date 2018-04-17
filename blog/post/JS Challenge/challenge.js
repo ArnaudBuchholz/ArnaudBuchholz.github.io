@@ -60,8 +60,10 @@ gpf.require.define({
             "}());"
         ].join("\n"));
         // Determine if success
-        debugger;
-        var success = false;
+        var success = !$(".alert-danger").is(":visible");
+        if (success) {
+            $(".alert-success").show();
+        }
         track(proposal, success);
     });
 
