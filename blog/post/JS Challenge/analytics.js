@@ -19,13 +19,9 @@ gtag("js", new Date());
 gtag("config", "UA-117311466-1");
 
 module.exports = function (proposal, success) {
-    if (ga) {
-        ga("send", {
-            hitType: "event",
-            eventCategory: "Proposal",
-            eventAction: "submit",
-            eventLabel: proposal,
-            eventValue: success ? 1 : 0
-        });
-    }
+    gtag("event", "submit", {
+        event_Category: "Proposal",
+        event_Label: proposal,
+        value: success ? 1 : 0
+    });
 };
