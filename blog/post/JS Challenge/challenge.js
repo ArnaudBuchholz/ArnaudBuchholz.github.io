@@ -15,8 +15,13 @@ gpf.require.define({
         })[0] || {title: "Unknown"}).title,
         description = $("div.definition.description").text(),
         source = $("div.definition.source").text().trim(),
-        converter = new showdown.Converter()
+        converter = new showdown.Converter(),
+        allowedGlobals = ["assert"]
     ;
+
+    if (window.allowedGlobals) {
+        allowedGlobals = allowedGlobals.concat(window.allowedGlobals);
+    }
 
     $("div.definition").remove();
     document.title = title;
@@ -53,7 +58,7 @@ gpf.require.define({
             + encodeURIComponent("[JS-Challenge:" + id + "] I solved it with: " + proposal));
         jQuery.globalEval([
             // Disable all global symbols but assert
-            "(function (__proto__, " + Object.keys(window).filter(function (name) { return name !== "assert"; }).join(", ") + "){",
+            "(function (__proto__, " + Object.keys(window).filter(function (name) { return -1 === allowedGlobals.indexOf(name); }).join(", ") + "){",
             modifiedSource.replace(/[^."]assert\((.*)\);/g, function (match, condition) {
                 return match.substr(0, match.length - 2) + ", \"" + condition.split("\\").join("\\\\").split("\"").join("\\\"") + "\");";
             }),
