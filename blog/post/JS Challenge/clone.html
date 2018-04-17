@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script src="http://arnaudbuchholz.github.io/gpf/0.2.5/gpf.js"></script>
+        <script src="challenge.js"></script>
+        <style>.definition {display: none;}</style>
+        <script>
+
+function validateProposal (proposal) {
+    assert(-1 === proposal.indexOf("_value"), "You don't need to alter _value");
+}
+
+        </script>
+    </head>
+    <body>
+        <div class="definition description">
+In the code below, we want to clone an object (with its current state) and use the clone without altering the original
+object.
+        </div>
+        <div class="definition source">
+"use strict";
+
+function Counter () {
+}
+
+Counter.prototype = {
+    _value: 0,
+    next: function () {
+        return this._value++;
+    }
+};
+
+var original = new Counter();
+assert(original.next() === 0);
+assert(original.next() === 1);
+
+var clone = your_solution_here;
+assert(clone.next() === 2);
+assert(clone.next() === 3);
+
+assert(original.next() === 2);
+        </div>
+    </body>
+</html>
