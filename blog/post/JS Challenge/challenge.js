@@ -1,5 +1,6 @@
 gpf.require.define({
     dom: "dom.js",
+    google: "analytics.js",
     libs: "libs.js",
     page: "page.js",
     challenges: "challenges.json"
@@ -7,17 +8,17 @@ gpf.require.define({
 }, function (require) {
     "use strict";
 
-    var id = decodeURIComponent(location.pathname.split("/").pop()).split(".")[0],
+    var track = require.google,
+        id = decodeURIComponent(location.pathname.split("/").pop()).split(".")[0],
         title = (require.challenges.filter(function (challenge) {
             return challenge.url === id;
         })[0] || {title: "Unknown"}).title,
-        codes = $("code"),
-        description = $(codes[0]).text(),
-        source = $(codes[1]).text().trim(),
+        description = $("div.definition.description").text(),
+        source = $("div.definition.source").text().trim(),
         converter = new showdown.Converter()
     ;
 
-    codes.remove();
+    $("div.definition").remove();
     document.title = title;
     $("#title").text(title);
     $("#content").html(converter.makeHtml(description));
@@ -58,6 +59,10 @@ gpf.require.define({
             }),
             "}());"
         ].join("\n"));
+        // Determine if success
+        debugger;
+        var success = false;
+        track(proposal, success);
     });
 
     $("#propose").click();
