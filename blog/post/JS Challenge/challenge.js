@@ -59,12 +59,19 @@ gpf.require.define({
             }),
             "}());"
         ].join("\n"));
-        // Determine if success
-        var success = !$(".alert-danger").is(":visible");
-        if (success) {
-            $(".alert-success").show();
+        var done;
+        if ("function" === typeof validateProposal) {
+            done = validateProposal(proposal) || Promise.resolve();
+        } else {
+            done = Promise.resolve();
         }
-        track(proposal, success);
+        done.then(function () {
+            var success = !$(".alert-danger").is(":visible");
+            if (success) {
+                $(".alert-success").show();
+            }
+            track(proposal, success);
+        })
     });
 
     $("#propose").click();
