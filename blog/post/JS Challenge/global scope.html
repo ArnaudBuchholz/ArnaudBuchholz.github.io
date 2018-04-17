@@ -1,105 +1,46 @@
 <html>
     <head>
-        <title>JS-Challenge:global scope</title>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js" integrity="sha384-feJI7QwhOS+hwpX2zkaeJQjeiwlhOP+SdQDqhgvvo1DsjtiSQByFdThsxO669S2D" crossorigin="anonymous"></script>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/prism.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/themes/prism.css" />
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
-        <script language="javascript">
-"use strict";
-
-function alert() {
-    $(".alert-success").show();
-}
-
-window.onerror = function (e) {
-    $("#error").text(e.toString());
-    $(".alert-danger").show();
-    $(".alert-success").hide();
-}
-
-function install() {
-    $(".alert").hide();
-    var source = $("pre code.language-javascript").text();
-
-    $("#proposal").keypress(function (e) {
-        if(13 === e.which) {
-            $("#propose").click();
-        }
-    });
-
-    $("#propose").on("click", function () {
-        $(".alert").hide();
-        var proposal = $("#proposal").val(),
-            modifiedSource = source.replace("your_solution_here", $("#proposal").val());
-        $(".language-javascript").html(Prism.highlight(modifiedSource, Prism.languages.javascript, "html"));
-        $("#email").attr("href", "mailto:arnaud.buchholz@free.fr?subject=[JS-Challenge:global%20scope]%20I%20solved%20it%20with%3A%20" + encodeURIComponent(proposal));
-        jQuery.globalEval([
-            // Disable all global symbols but alert
-            "(function (__proto__, " + Object.keys(window).filter(function (name) { return name !== "alert"; }).join(", ") + "){",
-            modifiedSource,
-            "}());"
-        ].join("\n"));
-        if ("function" !== typeof myApi) {
-            $(".alert-success").hide();
-        }
-    });
-
-    $("#propose").click();
-}
-
-        </script>
+        <script src="http://arnaudbuchholz.github.io/gpf/0.2.5/gpf.js"></script>
+        <script>var allowedGlobals = ["myApi"];</script>
+        <script src="challenge.js"></script>
+        <style>.definition {display: none;}</style>
     </head>
-    <body onload="install()">
-        <div class="container">
-            <div class="jumbotron">
-                <h1>The JS Challenge: Accessing the global scope</h1>
-                <p>Consider the sample code below.
-This pattern is used to inject a <a href="https://developer.mozilla.org/en-US/docs/Glossary/Polyfill" target="_blank">polyfill</a>
-of an API when the native implementation does not exist <i>(here the API to inject is myApi but it could be
-<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">Promise<a>)</i>.
+    <body>
+        <div class="definition description">
+Consider the sample code below.
+
+This pattern is used to inject a [polyfill](https://developer.mozilla.org/en-US/docs/Glossary/Polyfill)
+of an API when the native implementation does not exist *(here the API to inject is myApi but it could be
+[Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise))*.
 Very often, the scripting host offers a keyword that gives access to the global scope (such as
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Window" target="_blank">window</a> in browsers or
-<a href="https://nodejs.org/api/globals.html#globals_global" target="_blank">global</a> in <a href="https://nodejs.org/" target="_blank">NodeJS</a>).
+[window](https://developer.mozilla.org/en-US/docs/Web/API/Window) in browsers or
+[global](https://nodejs.org/api/globals.html#globals_global) in [NodeJS](https://nodejs.org/)).
 
-</p><p>But what happens if such a keyword does not exist (as in <a href="https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine)" target="_blank">Nashorn</a>)
-or it is made unavailable on purpose <i>(check the source code of this exercise)</i>?</p>
+But what happens if such a keyword does not exist (as in [Nashorn](https://en.wikipedia.org/wiki/Nashorn_%28JavaScript_engine%29))
+or it is made unavailable on purpose *(check the source code of this exercise)*?
 
-<p>Rules are:
-<ul>
-    <li>You can only type code in the <strong>your_solution_here</strong> placeholder, use the field below and press Submit to test it</li>
-    <li>The solution does not require any external library and should work for any host</li>
-</ul></p>
-
-            <pre><code class="language-javascript">"use strict";
+Rules are:
+* You can only type code in the <strong>your_solution_here</strong> placeholder, use the field below and press Submit to test it
+* The solution does not require any external library and should work for any host
+        </div>
+        <div class="definition source">
+  "use strict";
 
 (function () {
 
     var globalScope = your_solution_here;
 
+    assert("function" === typeof globalScope.Promise);
+
     if (!globalScope.myApi) {
         globalScope.myApi = function () {
-            alert("Congratulations");
+            assert(true);
         };
     }
 
 }());
 
 myApi();
-</code></pre>
-            </div>
-            <div class="alert alert-danger" role="alert">
-                <strong>An error occurred: </strong><span id="error"></span>
-            </div>
-            <div class="alert alert-success" role="alert">
-                <strong>Well done!</strong> You successfully found the answer,
-                please <a id="email" href="">send your answer</a>!
-            </div>
-            <div class="row">
-              <div class="col-10"><input type="text" class="form-control" id="proposal" value="your_solution_here"></input></div>
-              <div class="col-2"><button type="button" class="btn btn-primary" id="propose">Submit</button></div>
-            </div>
         </div>
     </body>
 </html>
