@@ -1,19 +1,11 @@
 "use strict";
 
-var dom = require("dom.js"),
-    script = dom.script,
+var dom = require("/res/dom.js"),
+    waitForScript = dom.waitForScript,
     link = dom.link,
     head = dom.head();
 
-function waitFor(scriptDef) {
-    return new Promise(function (resolve) {
-        script(scriptDef).appendTo(head).addEventListener("load", function () {
-            resolve();
-        });
-    });
-}
-
-var jQueryAndBootstrap = waitFor({
+var jQueryAndBootstrap = waitForScript({
         src: "https://code.jquery.com/jquery-3.3.1.min.js",
         integrity: "sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=",
         crossorigin: "anonymous"
@@ -21,7 +13,7 @@ var jQueryAndBootstrap = waitFor({
     }).then(function () {
 
         // jQuery is required for bootstrap
-        return waitFor({
+        return waitForScript({
             src: "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js",
             integrity: "sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M",
             crossorigin: "anonymous"
@@ -38,7 +30,7 @@ link({
 
 }).appendTo(head);
 
-var prism = waitFor({
+var prism = waitForScript({
     src: "https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/prism.js"
 
 });
@@ -49,7 +41,7 @@ link({
 
 }).appendTo(head);
 
-var showdown = waitFor({
+var showdown = waitForScript({
     src: "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.js",
     integrity: "sha256-WZhItMKyEJQarLzuYWKmNplzBgqEKvlAedjRsChG3JA=",
     crossorigin: "anonymous"
