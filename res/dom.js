@@ -1,34 +1,29 @@
 "use strict";
 
-var dom = {
+var _head,
 
-    head: function () {
-        return document.querySelector("head");
-    }
+    dom = {
 
-};
+        head: function () {
+            if (!_head) {
+                _head = document.querySelector("head");
+            }
+            return _head;
+        },
 
-[
-    "a",
-    "button",
-    "div",
-    "h1",
-    "input",
-    "label",
-    "li",
-    "link",
-    "nav",
-    "optgroup",
-    "option",
-    "p",
-    "pre",
-    "script",
-    "select",
-    "span",
-    "strong",
-    "ul"
+        waitForScript (attributes) {
+            return new Promise(function (resolve) {
+                dom.script(attributes)
+                    .appendTo(dom.head())
+                    .addEventListener("load", function () {
+                        resolve();
+                    });
+            });
+        }
 
-].forEach(function (tagName) {
+    };
+
+require("dom.json").forEach(function (tagName) {
     dom[tagName] = gpf.web.createTagFunction(tagName);
 });
 
