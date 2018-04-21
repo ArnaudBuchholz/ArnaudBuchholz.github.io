@@ -1,5 +1,5 @@
 gpf.require.define({
-    dom: "dom.js",
+    dom: "/res/dom.js",
     google: "analytics.js",
     libs: "libs.js",
     page: "page.js",
