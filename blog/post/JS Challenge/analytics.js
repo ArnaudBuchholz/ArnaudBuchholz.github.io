@@ -2,7 +2,7 @@
 
 // Google analytics
 
-var dom = require("dom.js");
+var dom = require("/res/dom.js");
 
 dom.script({
     async: true,
