@@ -1,7 +1,7 @@
 "use strict";
 
 var challenges = require("challenges.json"),
-    dom = require("dom.js");
+    dom = require("/res/dom.js");
 
 dom.div({className: "container"}, [
 
