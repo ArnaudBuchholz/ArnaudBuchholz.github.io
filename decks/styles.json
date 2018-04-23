@@ -1,0 +1,10 @@
+[{
+    "href": "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/reveal.min.css",
+    "integrity": "sha256-ol2N5Xr80jdDqxK0lte3orKGb9Ja3sOnpAUV7TTADmg="
+}, {
+    "href": "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css",
+    "integrity": "sha256-5Wuqy8aSzReNhqwX5eDQlDZkMT18OJMzvXthwHGKl4o="
+}, {
+    "href": "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/lib/css/zenburn.min.css",
+    "integrity": "sha256-GN8HsMOOckKB/M7+4WPg3rJkM8nem9eRdTiSgcKLVyA="
+}]
