@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>UICon'18 A journey with OPA</title>
+        <meta name="description" content="UICon'18 A journey with OPA">
+		<meta name="author" content="Arnaud Buchholz">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+        <style>
+
+strong {
+    color: rgb(253, 164, 44);
+}
+
+        </style>
+    </head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+                <section>
+                    <h3>A journey with <strong>OPA</strong></h3>
+					<p>
+						<small>
+							Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+							<br/>
+							Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+						</small>
+					</p>
+                    <img src="http://openui5.org/images/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
+                    <img src="http://openui5.org/ui5con/ebd3caeffacf9106b0b4d9f7ff31d6be.png" height="100px" style="border: 0;" />
+                </section>
+                <section>
+                    <h3>Arnaud <strong>Buchholz</strong></h3>
+                    <table>
+                        <tr>
+                            <td width="25%">
+                                <img src="/gfx/me40.png">
+                            </td>
+                            <td  style="vertical-align: top;">
+                            <small>
+                                <ul>
+                                    <li>Development Expert @ SAP</li>
+                                    <li>In the software industry since <strong>1998</strong></li>
+                                    <li>Working with <strong>JavaScript since 2008</strong>
+                                        <ul>
+                                            <li>Front-End development since 2013</li>
+                                            <li>SapUI5 since 2015</li>
+                                        </ul>
+                                    </li>
+                                    <li>Passionate, curious &amp; experimenting</li>
+                                    <li>French and almost Canadian</li>
+                                </ul>
+                            </small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" style="border: 0;" /></a>
+                                <a href="https://https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" style="border: 0;" /></a>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+				<section data-markdown data-separator="---">
+                    <script type="text/template">
+## Agenda
+- OPA Presentation
+- Anatomy of waitFor
+- Journeys & Pages
+- Mocking Backend
+
+---
+
+## OPA Presentation
+- **Asynchronous** programming (and the need for waitFor)
+- Window / iFrame isolation (explain subtle issues with instanceof Array / Date that doesn't work properly)
+
+---
+
+## Anatomy of **waitFor**
+- filtering options (id, controlType, view...)
+- matchers
+- checker
+- actions
+- success
+- autoWait
+
+---
+
+## Pages & Journeys
+- UI **abstraction**
+- BDD
+
+---
+
+## Mocking Backend
+- **CRUD** on entities
+- **Entities** storage & generation
+- **Request** mocking
+
+---
+
+## Our intiatives
+- Automatic Performance **monitoring**
+- Extensibility & RTA
+
+                    </script>
+				</section>
+            </div>
+        </div>
+		<script src="http://arnaudbuchholz.github.io/gpf/0.2.5/gpf.js"></script>
+		<script src="reveal.js"></script>
+    </body>
+</html>
