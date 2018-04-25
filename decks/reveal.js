@@ -1,24 +1,29 @@
 gpf.require.define({
     dom: "/res/dom.js",
-    styles: "styles.json",
-    scripts: "scripts.json",
-    plugins: "plugins.json"
+    cdnStyles: "styles.json",
+    cdnScripts: "scripts.json",
+    cdnPlugins: "plugins.json",
+    cfgPlugins: "plugins.js"
 
 }, function (require) {
 
     var dom = require.dom;
 
-    require.styles.forEach(function (attributes) {
-        dom.link(Object.assign({
+    require.cdnStyles.forEach(function (attributes) {
+        dom.link({
             rel: "stylesheet",
-            crossorigin: "anonymous"
-        }, attributes)).appendTo(dom.head());
+            crossorigin: "anonymous",
+            href: attributes.url,
+            integrity: attributes.integrity
+        }).appendTo(dom.head());
     });
 
-    return Promise.all(require.scripts.map(function (attributes) {
-        return dom.waitForScript(Object.assign({
-            crossorigin: "anonymous"
-        }, attributes));
+    return Promise.all(require.cdnScripts.map(function (attributes) {
+        return dom.waitForScript({
+            crossorigin: "anonymous",
+            src: attributes.url,
+            integrity: attributes.integrity
+        });
     })).then(function () {
         /*global Reveal*/
         Reveal.initialize({
@@ -27,11 +32,11 @@ gpf.require.define({
             history: true,
             center: true,
             transition: "slide",
-            dependencies: require.plugins.map(function (src) {
-                return {
-                    src: src,
+            dependencies: Object.keys(require.cdnPlugins).map(function (name) {
+                return Object.assign({
+                    src: require.cdnPlugins[name],
                     async: true
-                };
+                }, require.cfgPlugins[name]);
             })
         });
         return Reveal;
