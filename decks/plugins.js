@@ -6,6 +6,12 @@ module.exports = {
         condition: function () {
             return !!document.querySelector("[data-markdown]");
         }
+    },
+
+    hljs: {
+        callback: function() {
+            hljs.initHighlightingOnLoad();
+        }
     }
 
 };
