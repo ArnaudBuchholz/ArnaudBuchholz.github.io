@@ -33,58 +33,61 @@ q {
 		<div class="reveal">
 			<div class="slides">
                 <section>
-                    <h3>A journey with <strong>OPA</strong></h3>
-					<p>
-						<small>
-							Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
-							<br/>
-							Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
-						</small>
-					</p>
-                    <img src="http://openui5.org/images/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
-                    <img src="http://openui5.org/ui5con/ebd3caeffacf9106b0b4d9f7ff31d6be.png" height="100px" style="border: 0;" />
-                </section>
-                <section>
-                    <h3>Arnaud <strong>Buchholz</strong></h3>
-                    <table>
-                        <tr>
-                            <td width="25%">
-                                <img src="/gfx/me40.png">
-                            </td>
-                            <td  style="vertical-align: top;">
-	                            <small>
-	                                <ul>
-	                                    <li>Development Expert @ SAP</li>
-	                                    <li>In the software industry since <strong>1998</strong></li>
-	                                    <li>Working with <strong>JavaScript since 2008</strong>
-	                                        <ul>
-	                                            <li>Front-End development since 2013</li>
-	                                            <li>SapUI5 since 2015</li>
-	                                        </ul>
-	                                    </li>
-	                                    <li>Passionate, curious &amp; experimenting</li>
-	                                    <li>French and almost <strong>Canadian</strong></li>
-	                                </ul>
-	                            </small>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" style="border: 0;" /></a>
-                                <a href="https://https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" style="border: 0;" /></a>
-                            </td>
-                        </tr>
-                    </table>
-                </section>
-				<section>
-					<h3><strong>Agenda</strong></h3>
-					<ul>
-						<li>Why <strong>automated</strong> testing?</li>
-						<li>OPA <strong>Presentation</strong></li>
-						<li>Anatomy of <strong>waitFor</strong></li>
-						<li><strong>Journeys</strong> & Pages</li>
-						<li><strong>Mocking</strong> Backend</li>
-					</ul>
+					<section>
+	                    <h3>A journey with <strong>OPA</strong></h3>
+						<p>
+							<small>
+								Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+								<br/>
+								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+							</small>
+						</p>
+	                    <img src="http://openui5.org/images/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
+	                    <img src="http://openui5.org/ui5con/ebd3caeffacf9106b0b4d9f7ff31d6be.png" height="100px" style="border: 0;" />
+					</section>
+					<section>
+	                    <h3>Arnaud <strong>Buchholz</strong></h3>
+	                    <table>
+	                        <tr>
+	                            <td width="25%">
+	                                <img src="/gfx/me40.png">
+	                            </td>
+	                            <td  style="vertical-align: top;">
+		                            <small>
+		                                <ul>
+		                                    <li>Development Expert @ SAP</li>
+		                                    <li>In the software industry since <strong>1998</strong></li>
+		                                    <li>Working with <strong>JavaScript since 2008</strong>
+		                                        <ul>
+		                                            <li>Front-End development since 2013</li>
+		                                            <li>SapUI5 since 2015</li>
+		                                        </ul>
+		                                    </li>
+		                                    <li>Passionate, curious &amp; experimenting</li>
+		                                    <li>French and almost <strong>Canadian</strong></li>
+		                                </ul>
+		                            </small>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="2" style="border: 0;">
+	                                <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" style="border: 0; box-shadow: unset;" /></a>
+	                                <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" style="border: 0; box-shadow: unset;" /></a>
+									<a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" style="border: 0; box-shadow: unset;" /></a>
+	                            </td>
+	                        </tr>
+	                    </table>
+	                </section>
+					<section>
+						<h3><strong>Agenda</strong></h3>
+						<ul>
+							<li>Why <strong>automated</strong> testing?</li>
+							<li>OPA <strong>Presentation</strong></li>
+							<li>Anatomy of <strong>waitFor</strong></li>
+							<li><strong>Journeys</strong> & Pages</li>
+							<li><strong>Mocking</strong> Backend</li>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<section>
@@ -159,47 +162,146 @@ q {
 						</p>
 					</section>
 				</section>
-				<section data-markdown data-separator="---">
-                    <script type="text/template">
+				<section>
+					<section>
+						<h3><strong>OPA</strong> Presentation</h3>
+					</section>
+					<section>
+						<h3><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h3>
+						<ul>
+							<li><strong>JavaScript</strong> based</li>
+							<li>Tightly <strong>integrated</strong> with UI5</li>
+							<li><strong>Asynchronous</strong> with active polling mechanisms</li>
+							<li>Enables test-driven development (TDD) through <strong>abstractions</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h3>What is OPA?</h3>
+						<p class="TODO">
+							Integration testing with a simulated backend (MockServer).
+							Tests are written in Journeys, based on Pages that abstract the UI.
+							For instance:
+						</p>
+						<pre><code data-trim data-noescape>
+							opaTest("Display currency change is reflected in the Gantt chart",
+								function(Given, When, Then) {
+									Given.iStartMyApp();
+									When.onTheWorklistPage.iPressATableItemAtPosition(2);
+									When.onTheOverviewPage.iChangeTheCurrency("CAD");
+									Then.onTheOverviewPage.iSeeCurrencyInTheGanttChart("CAD");
+									Then.iTeardownMyAppFrame();
+								});
+						</code></pre>
+					</section>
+					<section>
+						<h3><strong>Flavors</strong> of OPA</h3>
+						<ul>
+							<li>Window / iFrame isolation (explain subtle issues with instanceof Array / Date that doesn't work properly)</li>
+							<li>Component running (same window)</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Anatomy of <strong>waitFor</strong></h3>
+					</section>
+					<section>
+						<h4>Presentation of waitFor</h4>
+						Synchronize the asynchronous
+						Unique mechanism to synchronize, locate and interact with UI5 controls
+					</section>
+					<section>
+						<h4>Filtering options</h4>
+						<ul>
+							<li>id: string or regexp</li>
+							<li>controlType: class or base class</li>
+							<li>viewNamespace & viewName</li>
+						</ul>
+						When nothing found, polling until timeout
+					</section>
+					<section>
+						<h4>Matchers</h4>
+						Given the items resulting from the filtering options
+						Can filter out / replace one by one
+						Falsy value => removed
+						When no result left, polling until timeout
+					</section>
+					<section>
+						<h4>Checker</h4>
+						Given the item(s) resulting from the filtering options & matchers
+						Can accept or reject all results
 
-## OPA Presentation
-- **Asynchronous** programming (and the need for waitFor)
-- Window / iFrame isolation (explain subtle issues with instanceof Array / Date that doesn't work properly)
+						When false, polling until timeout
+					</section>
+					<section>
+						<h4>actions</h4>
+						Given the item(s) resulting from the filtering options, matchers & Checker
 
----
+						Actions is executed on all results:
+						<ul>
+							<li>Press</li>
+							<li>EnterText</li>
+						</ul>
+						These classes are capable of adapting to the target control.
+						For instance, Press on a search field will trigger the search and EnterText will enter search
+						criteria.
+					</section>
+					<section>
+						<h4>success</h4>
+						Final step of the waitFor
+						Should never test control state in success: if failed, the whole test fails
+						Can chain to a subsequent waitFor
 
-## Anatomy of **waitFor**
-- filtering options (id, controlType, view...)
-- matchers
-- checker
-- actions
-- success
-- autoWait
+						RATHER fail on a timeout than in a success method
+					</section>
+					<section>
+						<h4>autoWait and timeout</h4>
+						Controls states are tested to check that they are 'available' and 'interactable'
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Pages & Journeys</h3>
+					</section>
+					<section>
+						<h4>Pages</h4>
+						They represent UI <strong>abstraction</strong>
+					</section>
+					<section>
+						<h4>Journeys</h4>
+						Given, When, Then
+						BDD
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3><strong>Mocking</strong> Backend</h3>
+					</section>
+					<section>
+						<h4>Backend</h4>
+						- **CRUD** on entities
+						- **Entities** storage & generation
+						- **Request** mocking
 
----
-
-## Pages & Journeys
-- UI **abstraction**
-- BDD
-
----
-
-## Mocking Backend
-- **CRUD** on entities
-- **Entities** storage & generation
-- **Request** mocking
-
----
-
-## Our intiatives
-- Automatic Performance **monitoring**
-- Extensibility & RTA
-
-                    </script>
+					</section>
+					<section>
+						<h4>MockServer</h4>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3><strong>Our</strong> initiatives</h3>
+					</section>
+					<section>
+						<h4>Automatic Performance <strong>monitoring</strong></h4>
+					</section>
+					<section>
+						<h4><strong>Extensibility</strong> & Runtime Adaptation</h4>
+					</section>
 				</section>
             </div>
         </div>
-		<script src="http://arnaudbuchholz.github.io/gpf/0.2.5/gpf.js"></script>
+		<script src="http://arnaudbuchholz.github.io/gpf/0.2.6/gpf.js"></script>
 		<script src="reveal.js"></script>
     </body>
 </html>
