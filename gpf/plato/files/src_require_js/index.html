@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">78.22</p>
+      <p class="stat">78.33</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">240</p>
+      <p class="stat">249</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">25.43</p>
+      <p class="stat">27.56</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.66</p>
+      <p class="stat">0.76</p>
     </div>
   </div>
 </div>
@@ -98,7 +98,6 @@
 /*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
 /*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*global _gpfPathJoin*/ // Join all arguments together and normalize the resulting path
-/*global _gpfPromisify*/ // Converts any value into a Promise
 /*global _gpfRequireLoad*/ // Load the resource
 /*exported _gpfRequireAllocate*/ // Allocate a new require context with the proper methods
 /*#endif*/
@@ -172,7 +171,7 @@ var _gpfRequireOptionHandler = {
 
     cache: function (cache) {
         _gpfArrayForEach(Object.keys(cache), function (name) {
-            this.cache[name] = _gpfPromisify(cache[name]);
+            this.cache[name] = Promise.resolve(cache[name]);
         }, this);
     },
 
@@ -210,6 +209,13 @@ function _gpfRequireResolve (name) {
     return _gpfPathJoin(this.base, name);
 }
 
+function _gpfRequireDocumentStack (reason, name) {
+    if (!Array.isArray(reason.requires)) {
+        reason.requires = [];
+    }
+    reason.requires.push(name);
+}
+
 /**
  * Get the cached resource or load it
  *
@@ -225,7 +231,10 @@ function _gpfRequireGet (name) {
     }
     promise = _gpfRequireLoad.call(me, name);
     me.cache[name] = promise;
-    return promise;
+    return promise[&quot;catch&quot;](function (reason) {
+        _gpfRequireDocumentStack(reason, name);
+        return Promise.reject(reason);
+    });
 }
 
 /**

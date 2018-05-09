@@ -14,6 +14,19 @@ strong {
     color: rgb(253, 164, 44);
 }
 
+q {
+	quotes: "\00AB" "\00BB"
+}
+
+.TODO {
+	background-color: #FFFFA5;
+}
+
+.TODO::before {
+	content: "TODO";
+	font-size: small;
+}
+
         </style>
     </head>
 	<body>
@@ -39,20 +52,20 @@ strong {
                                 <img src="/gfx/me40.png">
                             </td>
                             <td  style="vertical-align: top;">
-                            <small>
-                                <ul>
-                                    <li>Development Expert @ SAP</li>
-                                    <li>In the software industry since <strong>1998</strong></li>
-                                    <li>Working with <strong>JavaScript since 2008</strong>
-                                        <ul>
-                                            <li>Front-End development since 2013</li>
-                                            <li>SapUI5 since 2015</li>
-                                        </ul>
-                                    </li>
-                                    <li>Passionate, curious &amp; experimenting</li>
-                                    <li>French and almost Canadian</li>
-                                </ul>
-                            </small>
+	                            <small>
+	                                <ul>
+	                                    <li>Development Expert @ SAP</li>
+	                                    <li>In the software industry since <strong>1998</strong></li>
+	                                    <li>Working with <strong>JavaScript since 2008</strong>
+	                                        <ul>
+	                                            <li>Front-End development since 2013</li>
+	                                            <li>SapUI5 since 2015</li>
+	                                        </ul>
+	                                    </li>
+	                                    <li>Passionate, curious &amp; experimenting</li>
+	                                    <li>French and almost <strong>Canadian</strong></li>
+	                                </ul>
+	                            </small>
                             </td>
                         </tr>
                         <tr>
@@ -63,15 +76,91 @@ strong {
                         </tr>
                     </table>
                 </section>
+				<section>
+					<h3><strong>Agenda</strong></h3>
+					<ul>
+						<li>Why <strong>automated</strong> testing?</li>
+						<li>OPA <strong>Presentation</strong></li>
+						<li>Anatomy of <strong>waitFor</strong></li>
+						<li><strong>Journeys</strong> & Pages</li>
+						<li><strong>Mocking</strong> Backend</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h3>Why <strong>automated</strong> testing?</h3>
+					</section>
+					<section>
+						<q>If it's not tested, it doesn't work</q>
+						<img src="/gfx/deadpool common sense.png" style="border: 0;" />
+						<p>
+							<i class="fragment" style="font-size: smaller;">Need I say more?</i>
+						</p>
+					</section>
+					<section>
+						<h4><strong>Automated</strong> vs manual testing</h4>
+						<p>As the code <strong>complexity grows</strong>, it takes more and <strong>more time</strong>
+						to test the software.</p>
+
+						<p>The only <strong>sustainable</strong> solution is to automate the tests.</p>
+					</section>
+					<section>
+						<h4>Some <strong>drawbacks</strong> of automated testing</h4>
+						<p>
+							<q>It takes too much time</q><br />
+							<cite>Some Product Owners...</cite><br />
+						</p>
+						<p>This is a <strong>short term</strong> vision of automated testing:
+							by reducing the number of bugs and maximizing the quality, you end up doing
+							<strong>more features</strong> and <strong>less bug fixing</strong>.
+						</p>
+						<q>Go slow to go fast</q>
+					</section>
+					<section>
+						<h4>Some <strong>advantages</strong> of automated testing</h4>
+						<p>
+							<q>Code never lies, comments sometimes do</q><br />
+							<cite>Ron Jeffries</cite><br />
+						</p>
+						<p>
+							Automated tests ensure the <strong>proper documentation</strong> of your software:
+							they showcase the application features.
+						</p>
+						<p>
+							Tests secure <strong>future code</strong>,
+							enabling fast <strong>non-regression</strong> testing
+						</p>
+					</section>
+					<section>
+						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
+						<p>
+							<strong>Mazimize</strong> unit testing: they must be <strong>fast</strong> and
+							they ensure <strong>code modularity</strong>
+						</p>
+						<p class="TODO">
+							'Choose wisely' integration testing...
+							Respect the 80 / 20 rule, test happy path and edge cases
+						</p>
+					</section>
+					<section>
+						<h4><strong>Measuring</strong> test coverage</h4>
+						<p class="TODO">
+							Ideally, follow the code coverage
+						</p>
+						<p class="TODO">
+							However, never forget the following example:
+							<pre><code data-trim data-noescape>
+								function divide (dividend, divisor) {
+									return dividend / divisor;
+								}
+
+								assert(divide(2,2) === 1);
+							</code></pre>
+						</p>
+					</section>
+				</section>
 				<section data-markdown data-separator="---">
                     <script type="text/template">
-## Agenda
-- OPA Presentation
-- Anatomy of waitFor
-- Journeys & Pages
-- Mocking Backend
-
----
 
 ## OPA Presentation
 - **Asynchronous** programming (and the need for waitFor)

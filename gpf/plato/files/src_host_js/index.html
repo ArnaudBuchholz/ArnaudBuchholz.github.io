@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">88.53</p>
+      <p class="stat">100.00</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">11</p>
+      <p class="stat">64</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">1.00</p>
+      <p class="stat">4.00</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.00</p>
+      <p class="stat">0.08</p>
     </div>
   </div>
 </div>
@@ -95,11 +95,64 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
-/*global _gpfBootImplByHost*/ // Boot host specific implementation per host
+/*global _GPF_HOST*/ // Host types
 /*global _gpfHost*/ // Host type
 /*#endif*/
 
-_gpfBootImplByHost[_gpfHost]();</textarea>
+/**
+ * Host type enumeration
+ *
+ * @enum {String}
+ * @readonly
+ * @since 0.1.5
+ */
+gpf.hosts = {
+    /**
+     * Any browser (phantomjs is recognized separately)
+     * @since 0.1.5
+     */
+    browser: _GPF_HOST.BROWSER,
+    /**
+     * [Nashorn](https://en.wikipedia.org/wiki/Nashorn_%28JavaScript_engine%29)
+     * @since 0.2.4
+     */
+    nashorn: _GPF_HOST.NASHORN,
+    /**
+     * [NodeJs](http://nodejs.org/)
+     * @since 0.1.5
+     */
+    nodejs: _GPF_HOST.NODEJS,
+    /**
+     * [PhantomJS](http://phantomjs.org/)
+     * @since 0.1.5
+     */
+    phantomjs: _GPF_HOST.PHANTOMJS,
+    /**
+     * [Rhino](http://developer.mozilla.org/en/docs/Rhino)
+     * @since 0.1.5
+     */
+    rhino: _GPF_HOST.RHINO,
+    /**
+     * Unknown (detection failed or the host is unknown)
+     * @since 0.1.5
+     */
+    unknown: _GPF_HOST.UNKNOWN,
+    /**
+     * [cscript/wscript](http://technet.microsoft.com/en-us/library/bb490887.aspx)
+     * @since 0.1.5
+     */
+    wscript: _GPF_HOST.WSCRIPT
+};
+
+/**
+ * Returns the detected host type
+ *
+ * @return {gpf.hosts} Host type
+ * @since 0.1.5
+ */
+gpf.host = function () {
+    return _gpfHost;
+};</textarea>
   </div>
 </div>
 
