@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.86</p>
+      <p class="stat">77.31</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">154</p>
+      <p class="stat">171</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">15.26</p>
+      <p class="stat">19.56</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.39</p>
+      <p class="stat">0.48</p>
     </div>
   </div>
 </div>
@@ -96,9 +96,8 @@
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
 /*global _GPF_HTTP_METHODS*/ // HTTP Methods
-/*global _gpfArrayForEachFalsy*/ // _gpfArrayForEach that returns first truthy value computed by the callback
-/*global _gpfPromisifyDefined*/ // Converts any value but undefined into a Promise
-/*exported _gpfHttpMockCheck*/ // Check if the provided request match any of the mocked one
+/*global _gpfHost*/ // Host type
+/*global _gpfHttpSetRequestImplIf*/ // Set the http request implementation if the host matches
 /*#endif*/
 
 /**
@@ -141,18 +140,17 @@ var _gpfHttpMockedRequests = {};
  * Match the provided request with the mocked one
  *
  * @param {gpf.typedef.mockedRequest} mockedRequest Mocked request to match
+ * @param {gpf.typedef.httpRequestSettings} request Request to match
  * @return {Promise&lt;gpf.typedef.httpRequestResponse&gt;|undefined} undefined if not matching
- * @this {gpf.typedef.httpRequestSettings}
  * @since 0.2.2
  */
-function _gpfHttMockMatchRequest (mockedRequest) {
-    /*jshint validthis:true*/
+function _gpfHttMockMatchRequest (mockedRequest, request) {
     var url = mockedRequest.url,
         match;
     url.lastIndex = 0;
-    match = url.exec(this.url);
+    match = url.exec(request.url);
     if (match) {
-        return _gpfPromisifyDefined(mockedRequest.response.apply(null, [this].concat([].slice.call(match, 1))));
+        return mockedRequest.response.apply(mockedRequest, [request].concat([].slice.call(match, 1)));
     }
 }
 
@@ -165,7 +163,12 @@ function _gpfHttMockMatchRequest (mockedRequest) {
  * @since 0.2.2
  */
 function _gpfHttMockMatch (mockedRequests, request) {
-    return _gpfArrayForEachFalsy(mockedRequests, _gpfHttMockMatchRequest.bind(request));
+    var result;
+    mockedRequests.every(function (mockedRequest) {
+        result = _gpfHttMockMatchRequest(mockedRequest, request);
+        return result === undefined;
+    });
+    return result;
 }
 
 /**
@@ -195,7 +198,6 @@ function _gpfHttpMockAdd (definition) {
     ++_gpfHttpMockLastId;
     id = method + &quot;.&quot; + _gpfHttpMockLastId;
     _gpfHttpMockedRequests[method].unshift(Object.assign({
-        method: method,
         id: id
     }, definition));
     return id;
@@ -242,7 +244,22 @@ gpf.http.mock.remove = _gpfHttpMockRemove;
  * @gpf:sameas _gpfHttpMockReset
  * @since 0.2.2
  */
-gpf.http.mock.reset = _gpfHttpMockReset;</textarea>
+gpf.http.mock.reset = _gpfHttpMockReset;
+
+// Hook the mocking algorithm on top of host specific implementation
+
+var _gpfHttpMockRequestImpl;
+
+function _gpfHttpMockImpl (request, resolve, reject) {
+    var mockedResult = _gpfHttpMockCheck(request);
+    if (undefined === mockedResult) {
+        _gpfHttpMockRequestImpl(request, resolve, reject);
+    } else {
+        resolve(mockedResult);
+    }
+}
+
+_gpfHttpMockRequestImpl = _gpfHttpSetRequestImplIf(_gpfHost, _gpfHttpMockImpl);</textarea>
   </div>
 </div>
 

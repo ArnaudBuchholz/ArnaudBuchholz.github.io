@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.15</p>
+      <p class="stat">76.81</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">198</p>
+      <p class="stat">213</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">19.31</p>
+      <p class="stat">17.51</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.33</p>
+      <p class="stat">0.35</p>
     </div>
   </div>
 </div>
@@ -97,9 +97,8 @@
 &quot;use strict&quot;;
 /*global _GPF_HTTP_METHODS*/ // HTTP Methods
 /*global _gpfHost*/ // Host type
-/*global _gpfHttpMockCheck*/ // Check if the provided request match any of the mocked one
 /*exported _gpfHttpRequest*/ // HTTP request common implementation
-/*exported _gpfHttpRequestImplByHost*/ // HTTP Request Implementation per host
+/*exported _gpfHttpSetRequestImplIf*/ // Set the http request implementation if the host matches
 /*#endif*/
 
 /**
@@ -128,12 +127,28 @@
  */
 
 /**
- * HTTP request host specific implementation per host
+ * HTTP request host specific implementation
  *
- * @type {Object}
+ * @type {Function}
  * @since 0.2.1
  */
-var _gpfHttpRequestImplByHost = {};
+var _gpfHttpRequestImpl;
+
+/**
+ * Set the http request implementation if the host matches
+ *
+ * @param {String} host host to test, if matching with the current one, the http request implementation is set
+ * @param {Function} httpRequestImpl http request implementation function
+ * @return {Function} Previous host specific implementation
+ * @since 0.2.6
+ */
+function _gpfHttpSetRequestImplIf (host, httpRequestImpl) {
+    var result = _gpfHttpRequestImpl;
+    if (host === _gpfHost) {
+        _gpfHttpRequestImpl = httpRequestImpl;
+    }
+    return result;
+}
 
 /**
  * HTTP request common implementation
@@ -143,8 +158,8 @@ var _gpfHttpRequestImplByHost = {};
  * @since 0.2.1
  */
 function _gpfHttpRequest (request) {
-    return _gpfHttpMockCheck(request) || new Promise(function (resolve, reject) {
-        _gpfHttpRequestImplByHost[_gpfHost](request, resolve, reject);
+    return new Promise(function (resolve, reject) {
+        _gpfHttpRequestImpl(request, resolve, reject);
     });
 }
 

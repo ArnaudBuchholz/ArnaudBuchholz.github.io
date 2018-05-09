@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">86.88</p>
+      <p class="stat">88.47</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">183</p>
+      <p class="stat">147</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">8.95</p>
+      <p class="stat">8.33</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.28</p>
+      <p class="stat">0.17</p>
     </div>
   </div>
 </div>
@@ -95,15 +95,11 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
-/*global _GpfStreamWritableString*/ // gpf.stream.WritableString
 /*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*global _gpfHost*/ // Host type
 /*exported _GPF_FS_OPENFOR*/ // File system stream opening mode
 /*exported _GPF_FS_TYPES*/ // File system types constants
-/*exported _gpfFileStorageByHost*/ // gpf.interfaces.IFileStorage per host
-/*exported _gpfFileStorageRead*/ // Generic read method using FileStorage
-/*exported _gpfFsRead*/ // Generic read method
-/*exported _gpfFsReadImplByHost*/ // gpf.fs.read per host
+/*exported _gpfFsSetFileStorageIf*/ // Set the file storage implementation if the host matches
 /*#endif*/
 
 _gpfErrorDeclare(&quot;fs&quot;, {
@@ -146,50 +142,24 @@ var
     },
 
     /**
-     * {@see gpf.interfaces.IFileStorage} per host
+     * Host {@see gpf.interfaces.IFileStorage} implementation
      *
-     * @type {Object}
+     * @type {gpf.interfaces.IFileStorage}
      * @since 0.2.1
      */
-    _gpfFileStorageByHost = {},
-
-    /**
-     * {@see gpf.fs.read} per host
-     *
-     * @type {Object}
-     * @since 0.2.2
-     */
-    _gpfFsReadImplByHost = {};
+    _gpfFileStorageImpl = null;
 
 /**
- * Generic read method using FileStorage
+ * Set the file storage implementation if the host matches
  *
- * @param {String} path File path
- * @return {Promise&lt;String&gt;} Resolved with the file content
- * @since 0.2.2
+ * @param {String} host host to test, if matching with the current one, an instance of the FileStorageClass is created
+ * @param {Function} FileStorageClass Class of the host specific file storage implementation
+ * @since 0.2.6
  */
-function _gpfFileStorageRead (path) {
-    var fs = _gpfFileStorageByHost[_gpfHost],
-        iWritableStream = new _GpfStreamWritableString();
-    return fs.openTextStream(path, _GPF_FS_OPENFOR.READING)
-        .then(function (iReadStream) {
-            return iReadStream.read(iWritableStream);
-        })
-        .then(function () {
-            return iWritableStream.toString();
-        });
-}
-
-/**
- * Generic read method
- *
- * @param {String} path File path
- * @return {Promise&lt;String&gt;} Resolved with the file content
- * @since 0.2.2
- */
-
-function _gpfFsRead (path) {
-    return _gpfFsReadImplByHost[_gpfHost](path);
+function _gpfFsSetFileStorageIf (host, FileStorageClass) {
+    if (host === _gpfHost) {
+        _gpfFileStorageImpl = new FileStorageClass();
+    }
 }
 
 /**
@@ -262,14 +232,8 @@ gpf.fs = {
      * @since 0.1.9
      */
     getFileStorage: function () {
-        return _gpfFileStorageByHost[_gpfHost] || null;
-    },
-
-    /**
-     * @gpf:sameas _gpfFsRead
-     * @since 0.2.2
-     */
-    read: _gpfFsRead
+        return _gpfFileStorageImpl;
+    }
 
 };</textarea>
   </div>
