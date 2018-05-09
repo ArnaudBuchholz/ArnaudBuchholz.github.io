@@ -10,7 +10,7 @@ module.exports = {
 
     hljs: {
         callback: function() {
-            hljs.initHighlightingOnLoad();
+            hljs.initHighlighting();
         }
     }
 
