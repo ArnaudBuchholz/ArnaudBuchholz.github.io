@@ -8,6 +8,7 @@
     <div class="post-header-line-1"></div>
 </div>
 <div class="post-body">
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
@@ -32,9 +33,9 @@ From time to time, the **Travis continuous integration build was failing** with 
 [a recent example](https://travis-ci.org/ArnaudBuchholz/gpf-js/builds/367614025#L693).
 
 I was first suspecting the **concurrent execution of quality checks** to be the root cause of the issue.
-So I disabled it. Still, the problem persisted.
+I disabled it but, still, the problem persisted.
 
-So I took a closer look on how the coverage information was generated while executing tests in the browser.
+So, I took a closer look on how the coverage information was generated while executing tests in the browser.
 
 In the Travis environment, **chrome is spawned as a command line** with options to disable user interface.
 When the tests are completed, an AJAX request is triggered to **save the tests results** through the
@@ -62,37 +63,63 @@ The trick consisted in augmenting the file content with a
 
 ### gpf.require.js
 
-#### Dependencies
+#### Flavor specification
 
-In the previous version, the dependency wheel was added to the source page to visually see the dependencies.
+In the previous version, the dependency wheel was added to the source tile to give a visual representation of
+the **dependencies**. Also, each source file has been documented with 'tags' qualifying the **feature** or the **host**
+the source relates to.
 
-![Sources without any flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/sources%20before%20flavor.png)
+![Sources without any flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/
+sources%20before%20flavor.png)
 
-Based on the existing dependencies, a syntax was created to select which component should be kept (or not).
+Also, in the previous version, a **syntax was initiated** to instruct, in a readable way, which sources should be kept
+for a given **flavor**. Combining the features list, hosts specification and dependencies, an
+[algorithm - not my proudest one -](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/make/flavor.js) is capable of
+generating an array of booleans **filtering the list of sources**.
 
-![Flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/flavor.png)
+![Exampe of flavor syntax](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/flavor.png)
 
-As a result, the list of sources is restricted to what fits the flavor specification.
+As a result, the list of sources is **reduced to meet the flavor specification**.
 
-![Sources with a flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/sources%20after%20flavor.png)
+![Sources with a flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/
+sources%20after%20flavor.png)
 
-show dependencies before and After
+This confirmed that all was ready to setup the [require flavor specification](https://github.com/ArnaudBuchholz/
+gpf-js/blob/v0.2.6/make/flavor/require.json). It contains:
+* The **version in which the flavor was introduced**: it is required to build the versions table in the
+[readme page](https://github.com/ArnaudBuchholz/gpf-js#versions)
+* The **flavor filter string**
+* The tests required to **validate the flavor**
+* A functional description of the flavor: it will be used to document flavors
+* A technical description of the exposed API: the goal is to narrow down the list of namespaces / methods that are
+**exposed** by the flavor
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+#### Reducing flavor size
+
 Explain -http/mock
 Explain read
-Explain new host specific implementation pattern
-Explain mock pattern
+
+#### Testing the flavor
+
 Testing
+
+'modern' browser => Need to investigate
 
 ## Lessons learned
 
 Creating this first flavor was quite a challenge. It forced me to rethink the way the code is made.
 I also think of further optimization in the final code by removing functions that are not called.
 
+Explain new host specific implementation pattern
+Explain mock pattern
+
 ## Next release
 
 The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/15) is not yet clearly defined.
-Since I will participate to UICon'18 as a presenter, I will focus on delivering a good presentation.
-
+Since I will participate to [UICon'18](https://openui5.org/ui5con/) as a presenter, I will focus on delivering a good
+presentation.
 </code>
 <!-- Drop those two lines -->
 </div>
