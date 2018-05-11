@@ -27,21 +27,27 @@ Here comes the new version:
 
 ### Sporadic Travis issues
 
-From time to time, the Travis continuous integration build was failing with a message indicating that the coverage
-information was missing for the browser.
+From time to time, the **Travis continuous integration build was failing** with a message indicating that the
+**coverage information was missing for the browser**. Here is
+[a recent example](https://travis-ci.org/ArnaudBuchholz/gpf-js/builds/367614025#L693).
 
-I was first suspecting concurrent execution of hosts to be the cause of the issue until I understood the issue.
-For Travis, the browser is spawned. Execution goes until the result is sent to the cache middleware.
-At that moment, the command line kills the browser.
+I was first suspecting the **concurrent execution of quality checks** to be the root cause of the issue.
+So I disabled it. Still, the problem persisted.
 
-However, coverage was saved *after* that step.
+So I took a closer look on how the coverage information was generated while executing tests in the browser.
 
-Fix is here:
+In the Travis environment, **chrome is spawned as a command line** with options to disable user interface.
+When the tests are completed, an AJAX request is triggered to **save the tests results** through the
+[cache middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/cache.js).
+In the meantime a command line, responsible of spawning the browser, **[waits for the cache to be updated before closing
+the process](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/test/host/browser.js#L22-L48)**.
 
-https://github.com/ArnaudBuchholz/gpf-js/commit/accc6830d5b29af93c734df5b63af082e2cef8ad#diff-1db347236fe2e62038c9d9829be1b967
+Also, the test page is responsible of **saving the coverage information** through another AJAX request that goes to [fs
+middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/master/grunt/connect-middleware/fs.js).
 
-Coverage was missing for browser
-Was due to Chrome testing because the browser was closed *before* uploading the coverage results.
+I realized that the sequence was incorrect: the tests results were sent **before** the coverage information.
+The two steps are now executed in the [correct order](https://github.com/ArnaudBuchholz/gpf-js/commit/
+accc6830d5b29af93c734df5b63af082e2cef8ad#diff-1db347236fe2e62038c9d9829be1b967).
 
 ### Improved gpf.require namespace
 
