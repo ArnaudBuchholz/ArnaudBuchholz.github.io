@@ -11,7 +11,7 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
-    This release fixes sporadic Travis issues, improves the modularizatin helper and finalizes the flavor mechanism to
+    This release fixes sporadic Travis issues, improves the modularization helper and finalizes the flavor mechanism to
     deliver the first reduced version of the library (gpf.require.js).
 </div>
 <code class="markdown">
@@ -51,11 +51,30 @@ accc6830d5b29af93c734df5b63af082e2cef8ad#diff-1db347236fe2e62038c9d9829be1b967).
 
 ### Improved gpf.require namespace
 
-In browsers, loaded files now appear
+The [modularization helper](http://gpf-js.blogspot.ca/2018/01/my-own-require-implementation.html) was **improved**
+following the feedback obtained after the first use:
 
-Errors are better documented
+* Errors are **better [documented](https://github.com/ArnaudBuchholz/gpf-js/issues/241)** to help the developer figure
+what went wrong and where
+* Loaded files now **[appear inside the browser debugger](https://github.com/ArnaudBuchholz/gpf-js/issues/244)**.
+The trick consisted in augmenting the file content with a
+[SourceURL information](https://www.html5rocks.com/en/tutorials/developertools/sourcemaps/)
 
 ### gpf.require.js
+
+#### Dependencies
+
+In the previous version, the dependency wheel was added to the source page to visually see the dependencies.
+
+![Sources without any flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/sources%20before%20flavor.png)
+
+Based on the existing dependencies, a syntax was created to select which component should be kept (or not).
+
+![Flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/flavor.png)
+
+As a result, the list of sources is restricted to what fits the flavor specification.
+
+![Sources with a flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/sources%20after%20flavor.png)
 
 show dependencies before and After
 Explain -http/mock
