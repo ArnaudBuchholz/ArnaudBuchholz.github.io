@@ -7,7 +7,10 @@ gpf.require.define({
 
 }, function (require) {
 
-    var dom = require.dom;
+    var dom = require.dom,
+        head = dom.head(),
+        // Keep track of any styles node below the head node
+        styles = [].slice.call(head.querySelectorAll("style"));
 
     require.cdnStyles.forEach(function (attributes) {
         dom.link({
@@ -15,7 +18,12 @@ gpf.require.define({
             crossorigin: "anonymous",
             href: attributes.url,
             integrity: attributes.integrity
-        }).appendTo(dom.head());
+        }).appendTo(head);
+    });
+
+    // Move all style nodes back to the bottom of the head
+    styles.forEach(function (style) {
+        head.appendChild(style);
     });
 
     return Promise.all(require.cdnScripts.map(function (attributes) {
