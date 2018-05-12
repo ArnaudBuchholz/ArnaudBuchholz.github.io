@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Disclaimer</title>
+		<title>JS challenge global scope</title>
         <meta name="description" content="Solution for JS challenge global scope">
 		<meta name="author" content="Arnaud Buchholz">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,30 +13,126 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					<h3>Purpose</h3>
-                    <ul>
-                        <li class="fragment">Any views or opinions presented in these videos are solely those of the <strong>author</strong> and <strong>do not</strong> represent those of the past, current or future companies I am working for</li>
-                        <br/>
-                        <li class="fragment">I am a <strong>native French speaker</strong> trying to express himself in English</li>
-                        <br/>
-                        <li class="fragment">This is for <strong>fun</strong> and <strong>sharing knowledge</strong>, I may be wrong or make mistakes, use <strong>comments</strong> to engage conversation</li>
-                    </ul>
+					<img src="/blog/post/JS Challenge/solved.png">
+					<a href="/blog/post/JS Challenge/global%20scope.html" target="_blank"><h3>Global scope</h3></a>
 				</section>
                 <section>
-					<h3>First solution</h3>
-                    <ul>
-                        <li class="fragment">Value of this inside a function</li>
-                        <li class="fragment">The consequence of "use strict"</li>
-                        <li class="fragment">How to create a non-strict function inside a strict environment</li>
-                    <ul>
+					<section>
+						<h3>First solution</h3>
+					</section>
+					<section>
+						<h4>this</h4>
+						<pre><code data-trim data-noescape>
+							function give_me_this () {
+								return this;
+							}
+							alert(give_me_this()); // [object Window]
+						</code></pre>
+					</section>
+					<section>
+						<h4>strict mode (inner scope)</h4>
+						<pre><code data-trim data-noescape>
+							function give_me_this () {
+								"use strict";
+								return this;
+							}
+							alert(give_me_this()); // undefined
+						</code></pre>
+					</section>
+					<section>
+						<h4>strict mode (outer scope)</h4>
+						<pre><code data-trim data-noescape>
+							"use strict";
+							function give_me_this () {
+								return this;
+							}
+							alert(give_me_this()); // undefined
+						</code></pre>
+					</section>
+					<section>
+						<h4>Creating a non-strict function inside a strict scope</h4>
+						<pre><code data-trim data-noescape>
+							"use strict";
+							var give_me_this = Function("return this;");
+							alert(give_me_this()); // [object Window]
+						</code></pre>
+					</section>
+					<section>
+						<h4>Solution</h4>
+						<pre><code data-trim data-noescape>
+							"use strict";
+
+							(function () {
+
+							    var globalScope = Function("return this;")();
+
+							    assert("function" === typeof globalScope.Promise);
+
+							    if (!globalScope.myApi) {
+							        globalScope.myApi = function () {
+							            assert(true);
+							        };
+							    }
+
+							}());
+
+							myApi();
+						</code></pre>
+					</section>
                 </section>
                 <section>
-					<h3>Second solution</h3>
-                    <ul>
-                        <li class="fragment">eval is evil</li>
-                        <li class="fragment">Indirect function reference</li>
-                    <ul>
-                </section>
+					<section>
+						<h3>Second solution</h3>
+					</section>
+					<section>
+						<h4>eval</h4>
+						<pre><code data-trim data-noescape>
+							alert(eval("this")); // [object Window]
+						</code></pre>
+					</section>
+					<section>
+						<h4>strict mode (outer scope)</h4>
+						<pre><code data-trim data-noescape>
+							"use strict";
+							function give_me_this () {
+								return eval("this");
+							}
+							alert(give_me_this()); // undefined
+						</code></pre>
+					</section>
+					<section>
+						<h4>Indirect function reference</h4>
+						<pre><code data-trim data-noescape>
+							"use strict";
+							function give_me_this () {
+								return (0,eval)("this");
+							}
+							alert(give_me_this()); // [object Window]
+						</code></pre>
+					</section>
+					<section>
+						<h4>Solution</h4>
+						<pre><code data-trim data-noescape>
+							"use strict";
+
+							(function () {
+
+							    var globalScope = (0,eval)("this");
+
+							    assert("function" === typeof globalScope.Promise);
+
+							    if (!globalScope.myApi) {
+							        globalScope.myApi = function () {
+							            assert(true);
+							        };
+							    }
+
+							}());
+
+							myApi();
+						</code></pre>
+					</section>
+				</section>
             </div>
         </div>
 		<script src="http://arnaudbuchholz.github.io/gpf/0.2.5/gpf.js"></script>
