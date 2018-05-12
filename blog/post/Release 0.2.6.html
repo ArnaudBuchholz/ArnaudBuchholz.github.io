@@ -9,6 +9,7 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
@@ -65,9 +66,9 @@ The trick consisted in augmenting the file content with a
 
 #### Flavor specification
 
-In the previous version, the dependency wheel was added to the source tile to give a visual representation of
-the **dependencies**. Also, each source file has been documented with 'tags' qualifying the **feature** or the **host**
-the source relates to.
+In the previous version, the [dependency wheel](https://github.com/fzaninotto/DependencyWheel) was added to the source
+tile to give a visual representation of the **dependencies**. Also, each source file has been documented with 'tags'
+qualifying the **feature** or the **host** the source relates to.
 
 ![Sources without any flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/
 sources%20before%20flavor.png)
@@ -77,49 +78,98 @@ for a given **flavor**. Combining the features list, hosts specification and dep
 [algorithm - not my proudest one -](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/make/flavor.js) is capable of
 generating an array of booleans **filtering the list of sources**.
 
-![Exampe of flavor syntax](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/flavor.png)
+![Example of flavor syntax](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/flavor.png)
 
 As a result, the list of sources is **reduced to meet the flavor specification**.
 
 ![Sources with a flavor selection](http://arnaudbuchholz.github.io/blog/post/Release%200.2.6/
 sources%20after%20flavor.png)
 
-This confirmed that all was ready to setup the [require flavor specification](https://github.com/ArnaudBuchholz/
-gpf-js/blob/v0.2.6/make/flavor/require.json). It contains:
+Everything was ready to setup the [require flavor specification](https://github.com/ArnaudBuchholz/
+gpf-js/blob/v0.2.6/make/flavor/require.json), it contains:
 * The **version in which the flavor was introduced**: it is required to build the versions table in the
 [readme page](https://github.com/ArnaudBuchholz/gpf-js#versions)
 * The **flavor filter string**
 * The tests required to **validate the flavor**
-* A functional description of the flavor: it will be used to document flavors
-* A technical description of the exposed API: the goal is to narrow down the list of namespaces / methods that are
-**exposed** by the flavor
+* A functional description of the flavor: it will be used to document flavors *(not yet implemented)*
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+* A technical description of the exposed API: the goal is to narrow down the list of namespaces / methods that are
+**exposed** by the flavor *(not yet implemented)*
 
 #### Reducing flavor size
 
-Explain -http/mock
-Explain read
+The very first results were **quite disappointing**:
+
+* NodeJS implementation of require depended on [gpf.fs](https://arnaudbuchholz.github.io/gpf/doc/gpf.fs.html),
+**almost the whole library was included**
+([gpf.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.define__anchor),
+[gpf.interfaces](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.html),
+[gpf.stream](https://arnaudbuchholz.github.io/gpf/doc/gpf.stream.html), ...). So I decided to **isolate**
+[gpf.fs.read](https://arnaudbuchholz.github.io/gpf/doc/gpf.fs.html#.read__anchor) into
+a [smaller read feature](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.read__anchor).
+
+* The same way, Browser implementation of require depends on
+[gpf.http](https://arnaudbuchholz.github.io/gpf/doc/gpf.fs.html) to load the resource content. This namespace offers
+a [mocking helper](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.mock__anchor) that is **not needed**
+for require. The code had to be **drastically changed** to successfully unplug this source.
 
 #### Testing the flavor
 
-Testing
+There is no way the flavor could be officially released without making sure **it works as expected**. Luckily, the whole
+library is already **100% tested**. Since the flavor description lists the test files to run, the development
+framework was altered to **support a flavor parameter** that:
+* loads the [flavor output file](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/build/gpf-require.js)
+* loads and executes the necessary test files
 
-'modern' browser => Need to investigate
+Mostly, the following files were modified:
+* [test/host/web_loader.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/test/host/web_loader.js#L168-L185):
+as it takes care of browsers tests execution
+* [test/host/loader.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/test/host/loader.js#L383-L398): as it takes
+care of the other - command line type - hosts
+* [grunt/exec.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/grunt/exec.js): it declares all the
+[exec:test](https://arnaudbuchholz.github.io/gpf/doc/tutorial-TESTME.html) tasks
+* [grunt/concurrent.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/grunt/concurrent.js): it creates tasks to
+run all tests for a given version or flavor
+
+Obviously, the [grunt make task](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/grunt/tasks/make.js#L24-L28) that
+schedules all the tasks required to build the version was also modified.
 
 ## Lessons learned
 
-Creating this first flavor was quite a challenge. It forced me to rethink the way the code is made.
-I also think of further optimization in the final code by removing functions that are not called.
+Creating this first flavor was quite an **interesting challenge** and it took **longer than expected**.
+It forced me to **rethink the way the code is articulated**, especially with regards to host specific implementations.
 
-Explain new host specific implementation pattern
-Explain mock pattern
+The original pattern consisted in **dictionaries** containing operations indexed by host name.
+However, this had a major drawback: every time it was accessed, it was uselessly **impacting the performances** and
+**producing complex code**.
+
+Now, when appropriate, a new helper is introduced to define the proper implementation depending on the host.
+
+Here is the [gpf.http](https://arnaudbuchholz.github.io/gpf/doc/gpf.fs.html) use case:
+* [_gpfHttpSetRequestImplIf](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/src/http.js#L46-L60) sets the
+http request method if the provided host matches the detected one
+* NodeJS' implementation [call](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.6/src/http/nodejs.js#L79)
+
+Regarding [gpf.http.mock](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.mock__anchor), I decided to
+[plug it in the gpf.http implementation](https://github.com/ArnaudBuchholz/gpf-js/
+blob/v0.2.6/src/http/mock.js#L160-L171) only when loaded, improving its **modularity**.
+
+All this work paid, the [maintainability ratio](https://arnaudbuchholz.github.io/gpf/plato/index.html) **increased**
+to 82.22.
+
+One last thing, the require flavor supports only **'modern' browsers** meaning the ones where the **compatibility layer
+is not required**. However, as of now, the development framework does not distinguish the configured browsers.
+
+A configuration [will be defined](https://github.com/ArnaudBuchholz/gpf-js/issues/261).
 
 ## Next release
 
 The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/15) is not yet clearly defined.
-Since I will participate to [UICon'18](https://openui5.org/ui5con/) as a presenter, I will focus on delivering a good
-presentation.
+Since I will participate to [UICon'18](https://openui5.org/ui5con/) as a presenter, I will first focus on delivering a
+good presentation.
+
+I expect to work again on the library **after** June.
+
 </code>
 <!-- Drop those two lines -->
 </div>
