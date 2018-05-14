@@ -19,6 +19,10 @@
 	font-style: italic;
 }
 
+.reveal cite::before {
+	content: "🗣"
+}
+
 strong {
     color: rgb(253, 164, 44);
 }
@@ -123,8 +127,8 @@ q {
 					</section>
 					<section>
 						<h4><strong>Automated</strong> vs manual testing</h4>
-						<p>As the code <strong>complexity grows</strong>, it takes more and <strong>more time</strong>
-						to test the software manually.</p>
+						<p>As the code <strong>complexity grows</strong>, it takes more and <strong>more time
+						and/or resources</strong> to test the software <strong>manually</strong>.</p>
 						<p>The only <strong>sustainable</strong> solution is to automate the tests
 							and have them <strong>run fast</strong>.</p>
 					</section>
@@ -167,7 +171,7 @@ q {
 					<section>
 						<h4><strong>Assessing</strong> test coverage</h4>
 						<p>
-							There are many ways to <strong>quantify</strong> the tests coverage:
+							There are many ways to <strong>measure</strong> the tests coverage:
 							<ul>
 								<li>Number of scenarios tested</li>
 								<li>Number of acceptance criterias tested</li>
@@ -273,13 +277,74 @@ q {
 						<h3>Pages & Journeys</h3>
 					</section>
 					<section>
-						<h4>Pages</h4>
-						They represent UI <strong>abstraction</strong>
+						<h4><string>Pages</strong></h4>
+						<p>
+							They are used to <strong>abstract</strong> UI elements
+						</p>
 					</section>
 					<section>
-						<h4>Journeys</h4>
-						Given, When, Then
-						BDD
+						<h4>Pages Examples</h4>
+						<img src="UICon'18%20A%20journey%20with%20OPA/Master%20Detail%20pages%201.png">
+					</section>
+					<section>
+						<h4>Pages API</h4>
+						<ul>
+							<li>onCategoryList
+								<pre><code data-trim data-noescape>
+									Then.onCategoryList.iShouldSee("Accessories");
+									When.onCategoryList.iClickOn("Accessories");
+								</code></pre>
+							</li>
+							<li>onCategorySearch
+								<pre><code data-trim data-noescape>
+									When.onCategorySearch.iClickRefresh();
+								</code></pre>
+							</li>
+							<li>onWelcomePageList
+								<pre><code data-trim data-noescape>
+									Then.onWelcomePageList.iShouldSee("NBB015XTK") // NoteBook Basic 15
+									Then.onWelcomePageList.iClickOn("NBB015XTK") // NoteBook Basic 15
+								</code></pre>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Pages Examples</h4>
+						<img src="UICon'18%20A%20journey%20with%20OPA/Master%20Detail%20pages%202.png">
+					</section>
+					<section>
+						<h4>Pages API</h4>
+						<ul>
+							<li>onCategoryContentList
+								<pre><code data-trim data-noescape>
+									Then.onCategoryContentList.iShouldSeeTitle("Flat Screens");
+									Then.onCategoryContentList.iShouldSeeItemCount(3);
+									When.onCategoryContentList.iClickOn("FXXL0OKPL"); // Flat XXL
+								</code></pre>
+							</li>
+							<li>onArticleDetail
+								<pre><code data-trim data-noescape>
+									Then.onArticleDetail.iClickOnShopCart();
+									When.onArticleDetail.iShouldSeeTitle("Flat XXL");
+									When.onArticleDetail.iShouldSeeCurrency("EUR");
+									When.onArticleDetail.iShouldSeeAvailable();
+								</code></pre>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Journeys</strong></h4>
+						<ul>
+							<li>Relying on pages, they describe the <strong>user experience</strong> with the
+								application</li>
+							<li>Follow the pattern
+								<ul>
+									<li>Given: setup the initial state of the application</li>
+									<li>When: execute actions</li>
+									<li>Then: check assertions</li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 				</section>
 				<section>
@@ -288,8 +353,10 @@ q {
 					</section>
 					<section>
 						<h4>Presentation of waitFor</h4>
-						Synchronize the asynchronous
-						Unique mechanism to synchronize, locate and interact with UI5 controls
+						<ul>
+							<li><strong>Main</strong> entry point to synchronize tests with the app</li>
+							<li><strong>Locate</strong> and <strong>interact</strong> with UI5 controls</li>
+						</ul>
 					</section>
 					<section>
 						<h4>Filtering options</h4>
