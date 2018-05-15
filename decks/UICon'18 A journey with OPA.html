@@ -105,13 +105,7 @@ q {
 	                </section>
 					<section>
 						<h3><strong>Agenda</strong></h3>
-						<ul>
-							<li>Why <strong>automated</strong> testing?</li>
-							<li>OPA <strong>Presentation</strong></li>
-							<li><strong>Journeys</strong> & Pages</li>
-							<li>Anatomy of <strong>waitFor</strong></li>
-							<li><strong>Mocking</strong> Backend</li>
-						</ul>
+						<ul id="agenda"></ul>
 					</section>
 				</section>
 				<section>
@@ -125,14 +119,14 @@ q {
 							<i class="fragment" style="font-size: smaller;">Need I say more?</i>
 						</p>
 					</section>
-					<section>
+					<section class="hide">
 						<h4><strong>Automated</strong> vs manual testing</h4>
 						<p>As the code <strong>complexity grows</strong>, it takes more and <strong>more time
 						and/or resources</strong> to test the software <strong>manually</strong>.</p>
 						<p>The only <strong>sustainable</strong> solution is to automate the tests
 							and have them <strong>run fast</strong>.</p>
 					</section>
-					<section>
+					<section class="hide">
 						<h4>Some <strong>drawbacks</strong> of automated testing</h4>
 						<p>
 							<q>It takes too much time</q><cite>Some Product Owners...</cite>
@@ -143,7 +137,7 @@ q {
 						</p>
 						<q>Go slow to go fast</q>
 					</section>
-					<section>
+					<section class="hide">
 						<h4>Some <strong>advantages</strong> of automated testing</h4>
 						<p>
 							<q>Code never lies, comments sometimes do</q><cite>Ron Jeffries</cite>
@@ -168,7 +162,7 @@ q {
 							<strong>edge cases</strong>.
 						</p>
 					</section>
-					<section>
+					<section class="hide">
 						<h4><strong>Assessing</strong> test coverage</h4>
 						<p>
 							There are many ways to <strong>measure</strong> the tests coverage:
@@ -183,7 +177,7 @@ q {
 							<small>(a.k.a. the 80 / 20 rule)</small>
 						</p>
 					</section>
-					<section>
+					<section class="hide">
 						<h4><strong>Limits</strong> of code coverage</h4>
 						<p>
 							Code coverage gives you insights on which lines of code were executed.
@@ -197,21 +191,21 @@ q {
 							</code></pre>
 						</p>
 					</section>
-					<section>
+					<section class="hide">
 						<h4>Experiences feedback</h4>
 						<q>After one year working with OPA tests, I <strong>changed my mind</strong> completely concerning OPA.<br />
 						It is a great opportunity to verify the <strong>robustness and quality</strong> of the UI5 developments.<br />
 						At the beginning it is hard to start, <strong>with the time it becomes much more faster to develop OPA tests</strong>.</q>
 						<cite>Roger Knop</cite>
 					</section>
-					<section>
+					<section class="hide">
 						<h4>Experiences feedback</h4>
 						<q>[...] App seems to be quite stable. The effort for OPA testing <strong>(especially at the beginning of the project)</strong> pays out!
 							A good example is the Variant Management of the GanttChart [...]. At a certain point in time we thought everything would have been covered.
 							But due to existing OPA tests we figured out, that some <strong>functionalities were still missing</strong> [...].</q>
 						<cite>Maximilian Rupp</cite>
 					</section>
-					<section>
+					<section class="hide">
 						<h4>Experiences feedback</h4>
 						<q>From my expierence in other projects I already <strong>knew the value of testing</strong>. But we never did testing to that extent.
 							So developing a new feature was really <strong>half implementing the functionality half writing tests</strong>.
@@ -439,6 +433,20 @@ q {
 				</section>
             </div>
         </div>
+		<script>
+			// Build agenda
+			[].slice.call(document.querySelectorAll("h3"), 3).forEach(function (h3) {
+				var item = document.createElement("li");
+				[].slice.call(h3.childNodes, 0).forEach(function (node) {
+					item.appendChild(node.cloneNode(true));
+				});
+				this.appendChild(item);
+			}, document.getElementById("agenda"));
+			// Remove hidden slides
+			[].slice.call(document.querySelectorAll(".hide")).forEach(function (node) {
+				node.parentNode.removeChild(node);
+			});
+		</script>
 		<script src="http://arnaudbuchholz.github.io/gpf/0.2.6/gpf.js"></script>
 		<script src="reveal.js"></script>
     </body>
