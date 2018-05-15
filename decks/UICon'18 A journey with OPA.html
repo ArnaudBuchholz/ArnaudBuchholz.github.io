@@ -228,22 +228,26 @@ q {
 					<section>
 						<h4><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h4>
 						<ul>
+							<li><strong>UI integration</strong> testing</li>
 							<li><strong>JavaScript</strong> based</li>
 							<li>Tightly <strong>integrated</strong> with UI5</li>
-							<li><strong>Asynchronous</strong> with active polling mechanisms</li>
+							<li><strong>Asynchronous</strong> with <strong>active polling</strong> mechanisms</li>
 							<li>Enables test-driven development (TDD) through <strong>abstractions</strong></li>
 						</ul>
 					</section>
 					<section>
-						<h4>Compared to other automation framework</h4>
-						<div class="TODO">such as Selenium or Marionette</div>
-						<p>OPA was designed by UI5 people for UI5 applications</p>
+						<h4>Compared to other <strong>automation frameworks</strong></h4>
+						<p>Selenium, Marionette or Puppetter are <strong>framework agnostic</strong>,
+							one must rely on the <strong>generated HTML</strong> to code automation (IDs, CSS selectors...).</p>
+						<p>OPA was designed <strong>by and for</strong> UI5 developers: one manipulate <strong>UI5 controls</strong>.</p>
 					</section>
 					<section>
-						<h4>What is OPA?</h4>
-						<p class="TODO">
-							Integration testing with a simulated backend (MockServer).
-							Tests are written in Journeys, based on Pages that abstract the UI.
+						<h4>What is <strong>OPA</strong>?</h4>
+						<p>
+							OPA is a set of tools and helpers used to automate UI (with a simulated backend).
+							Tests are organized in Journeys, based on Pages that abstract the UI.
+						</p>
+						<p>
 							For instance:
 						</p>
 						<pre><code data-trim data-noescape>
@@ -258,7 +262,7 @@ q {
 						</code></pre>
 					</section>
 					<section>
-						<h4><strong>Flavors</strong> of OPA</h4>
+						<h4><strong>Running</strong> OPA</h4>
 						<ul>
 							<li>Window / iFrame isolation (explain subtle issues with instanceof Array / Date that doesn't work properly)</li>
 							<li>Component running (same window)</li>
@@ -267,8 +271,8 @@ q {
 					<section>
 						<h4><strong>Limits</strong> of OPA</h4>
 						<ul>
-							<li>Designed to test one application</li>
-							<li>Not integrated with backend</li>
+							<li>Designed to test one UI5 application</li>
+							<li>Not integrated with backend (simulated)</li>
 						</ul>
 					</section>
 				</section>
