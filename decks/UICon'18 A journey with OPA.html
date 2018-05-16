@@ -23,6 +23,21 @@
 	content: "🗣"
 }
 
+
+.reveal .split {
+	display: inline-block;
+}
+
+.reveal .left {
+	float: left;
+	width: 50%;
+}
+
+.reveal .right {
+	float: right;
+	width: 50%;
+}
+
 strong {
     color: rgb(253, 164, 44);
 }
@@ -238,20 +253,17 @@ q {
 					<section>
 						<h4>What is <strong>OPA</strong>?</h4>
 						<p>
-							OPA is a set of tools and helpers used to automate UI (with a simulated backend).
-							Tests are organized in Journeys, based on Pages that abstract the UI.
-						</p>
-						<p>
-							For instance:
+							OPA is a <strong>set of tools</strong> used to automate UI <i>(backend can be simulated)</i>.
+							Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong> to abstract the UI.
 						</p>
 						<pre><code data-trim data-noescape>
-							opaTest("Display currency change is reflected in the Gantt chart",
+							opaTest("Display currency change is reflected in the chart",
 								function(Given, When, Then) {
 									Given.iStartMyApp();
 									When.onTheWorklistPage.iPressATableItemAtPosition(2);
 									When.onTheOverviewPage.iChangeTheCurrency("CAD");
-									Then.onTheOverviewPage.iSeeCurrencyInTheGanttChart("CAD");
-									Then.iTeardownMyAppFrame();
+									Then.onTheOverviewPage.iSeeCurrencyInTheChart("CAD")
+										.and.iTeardownMyAppFrame();
 								});
 						</code></pre>
 					</section>
@@ -285,7 +297,7 @@ q {
 						<img src="UICon'18%20A%20journey%20with%20OPA/Master%20Detail%20pages%201.png">
 					</section>
 					<section>
-						<h4>Pages API</h4>
+						<h4>Pages Actions & Assertions</h4>
 						<ul>
 							<li>onCategoryList
 								<pre><code data-trim data-noescape>
@@ -311,7 +323,7 @@ q {
 						<img src="UICon'18%20A%20journey%20with%20OPA/Master%20Detail%20pages%202.png">
 					</section>
 					<section>
-						<h4>Pages API</h4>
+						<h4>Pages Actions & Assertions</h4>
 						<ul>
 							<li>onCategoryContentList
 								<pre><code data-trim data-noescape>
@@ -352,53 +364,105 @@ q {
 					<section>
 						<h4>Presentation of waitFor</h4>
 						<ul>
-							<li><strong>Main</strong> entry point to synchronize tests with the app</li>
+							<li><strong>Main</strong> entry point to synchronize tests with the tested application</li>
 							<li><strong>Locate</strong> and <strong>interact</strong> with UI5 controls</li>
 						</ul>
 					</section>
 					<section>
-						<h4>Filtering options</h4>
-						<ul>
-							<li>id: string or regexp</li>
-							<li>controlType: class or base class</li>
-							<li>viewNamespace & viewName</li>
-						</ul>
-						When nothing found, polling until timeout
+						<h4>waitFor is <strong>asynchronous</strong></h4>
+						<div class="TODO">Explain that all actions / assertions are stacked</div>
 					</section>
 					<section>
-						<h4>Matchers</h4>
-						Given the items resulting from the filtering options
-						Can filter out / replace one by one
-						Falsy value => removed
-						When no result left, polling until timeout
+						<h4><strong>Filtering</strong></h4>
+						<hr />
+						<div class="split">
+							<div class="left">
+								<ul>
+									<li>id: string or regexp</li>
+									<li>controlType: class or base class</li>
+									<li>viewNamespace & viewName</li>
+								</ul>
+							</div>
+							<div class="right">
+								<div class="TODO">find an illustration</div>
+							</div>
+						</div>
+						<hr />
+						<small>Polling until <strong>something found</strong> or timeout</small>
 					</section>
 					<section>
-						<h4>Checker</h4>
-						Given the item(s) resulting from the filtering options & matchers
-						Can accept or reject all results
-
-						When false, polling until timeout
+						<h4><strong>Matchers</strong></h4>
+						<small>Given the resultset of previous step</small>
+						<hr />
+						<div class="split">
+							<div class="left">
+								<ul>
+									<li>Can filter out / replace one by one</li>
+									<li>Falsy value => removed</li>
+								</ul>
+							</div>
+							<div class="right">
+								<div class="TODO">find an illustration</div>
+							</div>
+						</div>
+						<hr />
+						<small>Polling until <strong>remaining results</strong> or timeout</small>
 					</section>
 					<section>
-						<h4>actions</h4>
-						Given the item(s) resulting from the filtering options, matchers & Checker
-
-						Actions is executed on all results:
-						<ul>
-							<li>Press</li>
-							<li>EnterText</li>
-						</ul>
-						These classes are capable of adapting to the target control.
-						For instance, Press on a search field will trigger the search and EnterText will enter search
-						criteria.
+						<h4><strong>Checker</strong></h4>
+						<small>Given the resultset of previous step</small>
+						<hr />
+						<div class="split">
+							<div class="left">
+								<ul>
+									<li>Can accept or reject all results</li>
+								</ul>
+							</div>
+							<div class="right">
+								<div class="TODO">find an illustration</div>
+							</div>
+						</div>
+						<hr />
+						<small>Polling until <strong>truthy</strong> or timeout</small>
 					</section>
 					<section>
-						<h4>success</h4>
-						Final step of the waitFor
-						Should never test control state in success: if failed, the whole test fails
-						Can chain to a subsequent waitFor
-
-						RATHER fail on a timeout than in a success method
+						<h4><strong>actions</strong></h4>
+						<small>Given the resultset of previous step</small>
+						<hr />
+						<div class="split">
+							<div class="left">
+								<ul>
+									<li>Press or EnterText</li>
+									<li>Executed on all results</li>
+									<li>capable of adapting to the target control<br />
+										<small>For instance, Press on a search field will trigger the search and EnterText will enter search
+										criteria.</small>
+									</li>
+								</ul>
+							</div>
+							<div class="right">
+								<div class="TODO">find an illustration</div>
+							</div>
+						</div>
+						<hr />
+					</section>
+					<section>
+						<h4><strong>success</strong></h4>
+						<small>Given the resultset of previous step</small>
+						<hr />
+						<div class="split">
+							<div class="left">
+								<ul>
+									<li>Final step of the waitFor</li>
+									<li>Should never test control state in success: if failed, the whole test fails</li>
+									<li>Can chain to a subsequent waitFor</li>
+								</ul>
+							</div>
+							<div class="right">
+								<div class="TODO">find an illustration</div>
+							</div>
+						</div>
+						<hr />
 					</section>
 					<section>
 						<h4>autoWait and timeout</h4>
