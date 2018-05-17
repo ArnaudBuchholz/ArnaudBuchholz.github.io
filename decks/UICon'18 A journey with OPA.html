@@ -23,6 +23,10 @@
 	content: "🗣"
 }
 
+.reveal span.pre {
+	font-family: monospace;
+    white-space: pre;
+}
 
 .reveal .split {
 	display: inline-block;
@@ -168,14 +172,9 @@ q {
 					</section>
 					<section>
 						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
-						<p>
-							<strong>Mazimize</strong> unit testing: they must be <strong>fast</strong> and
-							they ensure <strong>code modularity</strong>
-						</p>
-						<p>
-							<strong>Leverage</strong> integration testing to check the <strong>happy path</strong> and
-							<strong>edge cases</strong>.
-						</p>
+						<img src="UICon'18%20A%20journey%20with%20OPA/test%20pyramid.png" align="left">
+						<p><strong>Maximize</strong> unit testing: they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.</p>
+						<p><strong>Leverage</strong> integration testing to check the <strong>happy path</strong> then<strong>edge cases</strong>.</p>
 					</section>
 					<section class="hide">
 						<h4><strong>Assessing</strong> test coverage</h4>
@@ -232,7 +231,7 @@ q {
 				</section>
 				<section>
 					<section>
-						<h3><strong>OPA</strong> Presentation</h3>
+						<h3><strong>OPA</strong> Overview</h3>
 					</section>
 					<section>
 						<h4><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h4>
@@ -241,22 +240,25 @@ q {
 							<li><strong>JavaScript</strong> based</li>
 							<li>Tightly <strong>integrated</strong> with UI5</li>
 							<li><strong>Asynchronous</strong> with <strong>active polling</strong> mechanisms</li>
-							<li>Enables test-driven development (TDD) through <strong>abstractions</strong></li>
+							<li>Enables <strong>T</strong>est-<strong>D</strong>riven <strong>D</strong>evelopment through <strong>abstractions</strong></li>
 						</ul>
 					</section>
 					<section>
 						<h4>Compared to other <strong>automation frameworks</strong></h4>
 						<p>Selenium, Marionette or Puppetter are <strong>framework agnostic</strong>,
 							one must rely on the <strong>generated HTML</strong> to code automation (IDs, CSS selectors...).</p>
-						<p>OPA was designed <strong>by and for</strong> UI5 developers: one manipulate <strong>UI5 controls</strong>.</p>
+						<br/>
+						<p>OPA is designed <strong>by and for</strong> UI5 developers: one manipulates <strong>UI5 controls</strong>.</p>
 					</section>
 					<section>
 						<h4>What is <strong>OPA</strong>?</h4>
-						<p>
-							OPA is a <strong>set of tools</strong> used to automate UI <i>(backend can be simulated)</i>.
-							Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong> to abstract the UI.
-						</p>
-						<pre><code data-trim data-noescape>
+						<p>OPA is a <strong>set of tools</strong> used to automate UI <i>(and offering backend mocking)</i>.</p>
+						<br/>
+						<p>Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong> to abstract the UI, and <strong>readable</strong>.</p>
+					</section>
+					<section>
+						<h4>An <strong>example</strong> of OPA</h4>
+						<pre id="opa_sample"><code data-trim data-noescape>
 							opaTest("Display currency change is reflected in the chart",
 								function(Given, When, Then) {
 									Given.iStartMyApp();
@@ -268,23 +270,29 @@ q {
 						</code></pre>
 					</section>
 					<section>
-						<h4><strong>Running</strong> OPA</h4>
+						<h4><strong>Executing</strong> OPA tests</h4>
 						<ul>
-							<li>Window / iFrame isolation (explain subtle issues with instanceof Array / Date that doesn't work properly)</li>
-							<li>Component running (same window)</li>
+							<li>As <strong>simple</strong> as running a web page</li>
+							<li>A <strong>qUnit report</strong> documents execution results</li>
+							<li>Application can be run in two different modes
+								<ul>
+									<li>Inside an <strong>iFrame</strong> <i>(slower but isolated)</i></li>
+									<li>Within the test window</li>
+								</ul>
+							</li>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>Limits</strong> of OPA</h4>
 						<ul>
-							<li>Designed to test one UI5 application</li>
-							<li>Not integrated with backend (simulated)</li>
+							<li>Designed to test <strong>one UI5</strong> application</li>
+							<li>Not <strong>integrated</strong> with backend</li>
 						</ul>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3>Pages & Journeys</h3>
+						<h3>Pages <strong>&</strong> Journeys</h3>
 					</section>
 					<section>
 						<h4><string>Pages</strong></h4>
@@ -347,11 +355,12 @@ q {
 						<ul>
 							<li>Relying on pages, they describe the <strong>user experience</strong> with the
 								application</li>
+							<br/>
 							<li>Follow the pattern
 								<ul>
-									<li>Given: setup the initial state of the application</li>
-									<li>When: execute actions</li>
-									<li>Then: check assertions</li>
+									<li><strong>Given</strong>: setup the initial state of the test</li>
+									<li><strong>When</strong>: execute actions</li>
+									<li><strong>Then</strong>: check assertions</li>
 								</ul>
 							</li>
 						</ul>
@@ -362,15 +371,21 @@ q {
 						<h3>Anatomy of <strong>waitFor</strong></h3>
 					</section>
 					<section>
-						<h4>Presentation of waitFor</h4>
+						<h4><strong>Presentation</strong> of waitFor</h4>
 						<ul>
-							<li><strong>Main</strong> entry point to synchronize tests with the tested application</li>
+							<li><strong>Main</strong> entry point to <strong>synchronize</strong> tests with the running application</li>
+							<br/>
 							<li><strong>Locate</strong> and <strong>interact</strong> with UI5 controls</li>
 						</ul>
 					</section>
 					<section>
 						<h4>waitFor is <strong>asynchronous</strong></h4>
-						<div class="TODO">Explain that all actions / assertions are stacked</div>
+						<pre><script>document.write(document.getElementById("opa_sample").innerHTML)</script></pre>
+						<ul>
+							<li><span class="pre">Given.iStartMyApp</span> starts the application synchronously</li>
+							<li>All pages members, relying on waitFor, fill a stack of waitFor to be executed</li>
+							<li><span class="pre">iTeardownMyAppFrame</span> is also asynchronous</li>
+						</ul>
 					</section>
 					<section>
 						<h4><strong>Filtering</strong></h4>
@@ -388,6 +403,8 @@ q {
 							</div>
 						</div>
 						<hr />
+						<small>No filtering criteria means <strong>all controls</strong></small>
+						<br/>
 						<small>Polling until <strong>something found</strong> or timeout</small>
 					</section>
 					<section>
@@ -465,7 +482,27 @@ q {
 						<hr />
 					</section>
 					<section>
-						<h4>autoWait and timeout</h4>
+						<h4><strong>autoWait</strong></h4>
+						<ul>
+							<li>When enabled, waitFor monitors <strong>pending tasks</strong>
+								and includes the <strong>Interactable matcher</strong><br/>
+								<small>Pending tasks are: requests, timeouts, promises, UI navigation...</small>
+							</li>
+							<br />
+							<li>Use <span class="pre">sap.ui.test.Opa5.extendConfig</span> to <strong>set it globally</strong></li>
+							<li>Can be <strong>turned off</strong> in a specific waitFor.<br />
+								<small>For instance if you want to check that a button is disabled</small>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>timeout</strong></h4>
+						<ul>
+							<li>The timeout setting decides of the maximum polling time</li>
+							<li>pollingInterval can be set <i>(defaulted to 400ms)</i>
+							<li>When enabled, autoWait monitors unfinished asynchronous work (requests, timeouts, promises, UI navigation...)
+								and includes the sap.ui.test.matchers.Interactable matcher to all waitFor.</li>
+						</ul>
 						Controls states are tested to check that they are 'available' and 'interactable'
 					</section>
 				</section>
@@ -512,6 +549,13 @@ q {
 			});
 		</script>
 		<script src="http://arnaudbuchholz.github.io/gpf/0.2.6/gpf.js"></script>
-		<script src="reveal.js"></script>
+		<script>
+		gpf.require.define({Reveal: "reveal.js"}, function (require) {
+			"use strict";
+			require.Reveal.configure({
+				slideNumber: "c/t"
+			});
+		});
+		</script>
     </body>
 </html>
