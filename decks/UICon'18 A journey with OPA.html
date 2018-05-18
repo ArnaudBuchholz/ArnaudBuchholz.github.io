@@ -3,12 +3,12 @@
 	<head>
 		<meta charset="utf-8">
 		<title>UICon'18 A journey with OPA</title>
-        <meta name="description" content="UICon'18 A journey with OPA">
+		<meta name="description" content="UICon'18 A journey with OPA">
 		<meta name="author" content="Arnaud Buchholz">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-        <style>
+		<style>
 
 .reveal h3, .reveal h4 {
 	padding-bottom: 5rem;
@@ -25,7 +25,7 @@
 
 .reveal span.pre {
 	font-family: monospace;
-    white-space: pre;
+	white-space: pre;
 }
 
 .reveal .split {
@@ -43,7 +43,7 @@
 }
 
 strong {
-    color: rgb(253, 164, 44);
+	color: rgb(253, 164, 44);
 }
 
 q {
@@ -59,14 +59,14 @@ q {
 	font-size: small;
 }
 
-        </style>
-    </head>
+		</style>
+	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
-                <section>
+				<section>
 					<section>
-	                    <h3>A journey with <strong>OPA</strong></h3>
+						<h3>A journey with <strong>OPA</strong></h3>
 						<p>
 							<small>
 								Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
@@ -74,31 +74,31 @@ q {
 								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
 							</small>
 						</p>
-	                    <img src="http://openui5.org/images/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
-	                    <img src="http://openui5.org/ui5con/ebd3caeffacf9106b0b4d9f7ff31d6be.png" height="100px" style="border: 0;" />
+						<img src="http://openui5.org/images/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
+						<img src="http://openui5.org/ui5con/ebd3caeffacf9106b0b4d9f7ff31d6be.png" height="100px" style="border: 0;" />
 					</section>
 					<section>
-	                    <h3>Arnaud <strong>Buchholz</strong></h3>
-	                    <table>
-	                        <tr>
-	                            <td width="25%">
-	                                <img src="/gfx/me40.png">
-	                            </td>
-	                            <td  style="vertical-align: top;">
-		                            <small>
-		                                <ul>
-		                                    <li>Development Expert @ SAP</li>
-		                                    <li>In the software industry for <strong><span id="software_years"></span> years</strong></li>
-		                                    <li><strong><span id="js_years"></span> years</strong> of experience with <strong>JavaScript</strong>
-		                                        <ul>
-		                                            <li>Front-End development: <span id="fe_years"></span> years</li>
-		                                            <li>SapUI5: <span id="ui5_years"></span> years</li>
-		                                        </ul>
-		                                    </li>
-		                                    <li>Passionate, curious &amp; experimenting</li>
-		                                    <li>French and almost <strong>Canadian</strong></li>
-		                                </ul>
-		                            </small>
+						<h3>Arnaud <strong>Buchholz</strong></h3>
+						<table>
+							<tr>
+								<td width="25%">
+									<img src="/gfx/me40.png">
+								</td>
+								<td  style="vertical-align: top;">
+									<small>
+										<ul>
+											<li>Development Expert @ SAP</li>
+											<li>In the software industry for <strong><span id="software_years"></span> years</strong></li>
+											<li><strong><span id="js_years"></span> years</strong> of experience with <strong>JavaScript</strong>
+												<ul>
+													<li>Front-End development: <span id="fe_years"></span> years</li>
+													<li>SapUI5: <span id="ui5_years"></span> years</li>
+												</ul>
+											</li>
+											<li>Passionate, curious &amp; experimenting</li>
+											<li>French and almost <strong>Canadian</strong></li>
+										</ul>
+									</small>
 									<script>
 										var year = new Date().getFullYear(),
 											years = {
@@ -111,17 +111,17 @@ q {
 											document.getElementById(id + "_years").innerHTML = year - years[id];
 										});
 									</script>
-	                            </td>
-	                        </tr>
-	                        <tr>
-	                            <td colspan="2" style="border: 0;">
-	                                <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" style="border: 0; box-shadow: unset;" /></a>
-	                                <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" style="border: 0; box-shadow: unset;" /></a>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2" style="border: 0;">
+									<a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" style="border: 0; box-shadow: unset;" /></a>
+									<a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" style="border: 0; box-shadow: unset;" /></a>
 									<a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" style="border: 0; box-shadow: unset;" /></a>
-	                            </td>
-	                        </tr>
-	                    </table>
-	                </section>
+								</td>
+							</tr>
+						</table>
+					</section>
 					<section>
 						<h3><strong>Agenda</strong></h3>
 						<ul id="agenda"></ul>
@@ -257,7 +257,7 @@ q {
 						<p>Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong> to abstract the UI, and <strong>readable</strong>.</p>
 					</section>
 					<section>
-						<h4>An <strong>example</strong> of OPA</h4>
+						<h4>An <strong>example</strong> of one OPA test</h4>
 						<pre id="opa_sample"><code data-trim data-noescape>
 							opaTest("Display currency change is reflected in the chart",
 								function(Given, When, Then) {
@@ -274,10 +274,11 @@ q {
 						<ul>
 							<li>As <strong>simple</strong> as running a web page</li>
 							<li>A <strong>qUnit report</strong> documents execution results</li>
-							<li>Application can be run in two different modes
+							<br />
+							<li>Application can be run in two different modes:
 								<ul>
+									<li>As a component <strong>within</strong> the test window</li>
 									<li>Inside an <strong>iFrame</strong> <i>(slower but isolated)</i></li>
-									<li>Within the test window</li>
 								</ul>
 							</li>
 						</ul>
@@ -351,12 +352,37 @@ q {
 						</ul>
 					</section>
 					<section>
+						<h4>Pages <strong>implementation</strong></h4>
+						<pre><code data-trim data-noescape>
+							sap.ui.define([
+								"sap/ui/test/Opa5"
+							], function(Opa5) {
+								Opa5.createPageObjects({
+									onAbstractNamePage: {
+										/*baseClass: ClassOfferingCommonHelpers*/,
+										actions: {
+											iExecuteAnAction: function() { return this.waitFor(/*...*/); },
+											/*...*/
+										},
+										assertions: {
+											iCheckAnAssertion: function() { return this.waitFor(/*...*/); },
+											/*...*/
+										}
+									}
+								});
+							});
+						</code></pre>
+						<p>Makes an <strong>extensive use</strong> of <span class="pre">this.waitFor</span><p>
+					</section>
+					<section>
 						<h4><strong>Journeys</strong></h4>
 						<ul>
-							<li>Relying on pages, they describe the <strong>user experience</strong> with the
+							<li>Relying on pages' methods, they describe the <strong>user experience</strong> within the
 								application</li>
 							<br/>
-							<li>Follow the pattern
+							<li>A journey is composed of <strong>tests</strong></li>
+							<br/>
+							<li>Each test follow the pattern
 								<ul>
 									<li><strong>Given</strong>: setup the initial state of the test</li>
 									<li><strong>When</strong>: execute actions</li>
@@ -364,6 +390,55 @@ q {
 								</ul>
 							</li>
 						</ul>
+					</section>
+					<section>
+						<h4>Journey <strong>implementation</strong></h4>
+						<pre><code data-trim data-noescape>
+							sap.ui.define([
+								"sap/ui/test/opaQunit"
+							], function(opaTest) {
+								QUnit.module("Journey name");
+								opaTest("Test name", function(Given, When, Then) {
+									Given.iStartMyApp();
+									When.onAbstractNamePage.iExecuteAnAction()
+										.and.iExecuteAnotherAction();
+									Then.onAbstractNamePage.iCheckAnAssertion()
+										.and.iTeardownMyAppFrame();
+								});
+								opaTest("Test name 2", function(Given, When, Then) {/*...*/});
+								/*...*/
+							});
+						</code></pre>
+					</section>
+					<section>
+						<h4><strong>Loading</strong> pages & journeys</h4>
+						<ul>
+							<li>Load qUnit</li>
+							<li>Load OPA & pages</li>
+							<li>Load journeys</li>
+							<li>Start !</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Example of loading</h4>
+						<pre><code data-trim data-noescape>
+							jQuery.sap.require("sap.ui.qunit.qunit-css");
+							jQuery.sap.require("sap.ui.thirdparty.qunit");
+							jQuery.sap.require("sap.ui.qunit.qunit-junit");
+							sap.ui.require([
+								"sap/ui/test/Opa5",
+								/* pages */
+							], function(Opa5) {
+								Opa5.extendConfig({
+									/* Default settings */
+								});
+								sap.ui.require([
+									/* journeys */
+								], function() {
+									QUnit.start();
+								});
+							});
+						</code></pre>
 					</section>
 				</section>
 				<section>
@@ -532,8 +607,8 @@ q {
 						<h4><strong>Extensibility</strong> & Runtime Adaptation</h4>
 					</section>
 				</section>
-            </div>
-        </div>
+			</div>
+		</div>
 		<script>
 			// Build agenda
 			[].slice.call(document.querySelectorAll("h3"), 3).forEach(function (h3) {
@@ -547,6 +622,10 @@ q {
 			[].slice.call(document.querySelectorAll(".hide")).forEach(function (node) {
 				node.parentNode.removeChild(node);
 			});
+			// Replace tabs with double spaces in code samples to reduce code width
+			[].slice.call(document.querySelectorAll("code")).forEach(function (node) {
+				node.innerHTML = node.innerHTML.replace(/	/g, "  ");
+			});
 		</script>
 		<script src="http://arnaudbuchholz.github.io/gpf/0.2.6/gpf.js"></script>
 		<script>
@@ -557,5 +636,5 @@ q {
 			});
 		});
 		</script>
-    </body>
+	</body>
 </html>
