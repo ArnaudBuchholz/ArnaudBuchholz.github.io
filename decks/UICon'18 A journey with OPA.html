@@ -59,6 +59,15 @@ q {
 	font-size: small;
 }
 
+.reveal .screenshot {
+ 	max-height: 70%;
+	max-width: 70%;
+}
+
+.reveal pre {
+	width: unset;
+}
+
 		</style>
 	</head>
 	<body>
@@ -74,15 +83,15 @@ q {
 								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
 							</small>
 						</p>
-						<img src="http://openui5.org/images/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
-						<img src="http://openui5.org/ui5con/ebd3caeffacf9106b0b4d9f7ff31d6be.png" height="100px" style="border: 0;" />
+						<img src="UICon'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
+						<img src="UICon'18%20A%20journey%20with%20OPA/UI5Con.png" height="100px" style="border: 0;" />
 					</section>
 					<section>
 						<h3>Arnaud <strong>Buchholz</strong></h3>
 						<table>
 							<tr>
 								<td width="25%">
-									<img src="/gfx/me40.png">
+									<img src="/gfx/me40.png" />
 								</td>
 								<td  style="vertical-align: top;">
 									<small>
@@ -172,9 +181,9 @@ q {
 					</section>
 					<section>
 						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
-						<img src="UICon'18%20A%20journey%20with%20OPA/test%20pyramid.png" align="left">
+						<img src="UICon'18%20A%20journey%20with%20OPA/test%20pyramid.png" align="left" />
 						<p><strong>Maximize</strong> unit testing: they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.</p>
-						<p><strong>Leverage</strong> integration testing to check the <strong>happy path</strong> then<strong>edge cases</strong>.</p>
+						<p><strong>Leverage</strong> integration testing: check the <strong>happy path</strong> then <strong>edge cases</strong>.</p>
 					</section>
 					<section class="hide">
 						<h4><strong>Assessing</strong> test coverage</h4>
@@ -259,14 +268,19 @@ q {
 					<section>
 						<h4>An <strong>example</strong> of one OPA test</h4>
 						<pre id="opa_sample"><code data-trim data-noescape>
-							opaTest("Display currency change is reflected in the chart",
-								function(Given, When, Then) {
-									Given.iStartMyApp();
-									When.onTheWorklistPage.iPressATableItemAtPosition(2);
-									When.onTheOverviewPage.iChangeTheCurrency("CAD");
-									Then.onTheOverviewPage.iSeeCurrencyInTheChart("CAD")
-										.and.iTeardownMyAppFrame();
-								});
+							opaTest("should remove completed items", function(Given, When, Then) {
+								// Arrangements
+								Given.iStartTheApp();
+
+								// Actions
+								When.onTheAppPage.iEnterTextForNewItemAndPressEnter(S_NEW_ITEM_TITLE);
+								When.onTheListOfItems.iSetTheItemToCompleted(S_NEW_ITEM_TITLE);
+								When.onTheAppPage.iClearTheCompletedItems();
+
+								// Assertions
+								Then.onTheListOfItems.iShouldNotSeeAnyItemTitled(S_NEW_ITEM_TITLE)
+									.and.iTeardownTheApp();
+							});
 						</code></pre>
 					</section>
 					<section>
@@ -303,50 +317,38 @@ q {
 					</section>
 					<section>
 						<h4>Pages Examples</h4>
-						<img src="UICon'18%20A%20journey%20with%20OPA/Master%20Detail%20pages%201.png">
+						<img src="UICon'18%20A%20journey%20with%20OPA/Pages%201.png" class="screenshot" />
 					</section>
 					<section>
 						<h4>Pages Actions & Assertions</h4>
 						<ul>
-							<li>onCategoryList
+							<li>onTheListOfItems
 								<pre><code data-trim data-noescape>
-									Then.onCategoryList.iShouldSee("Accessories");
-									When.onCategoryList.iClickOn("Accessories");
+									When.onTheListOfItems.iSetTheItemToCompleted(S_NEW_ITEM_TITLE);
+									Then.onTheListOfItems.iShouldSeeTheNewItem(S_NEW_ITEM_TITLE);
 								</code></pre>
 							</li>
-							<li>onCategorySearch
+							<li>onTheFilterButtons
 								<pre><code data-trim data-noescape>
-									When.onCategorySearch.iClickRefresh();
-								</code></pre>
-							</li>
-							<li>onWelcomePageList
-								<pre><code data-trim data-noescape>
-									Then.onWelcomePageList.iShouldSee("NBB015XTK") // NoteBook Basic 15
-									Then.onWelcomePageList.iClickOn("NBB015XTK") // NoteBook Basic 15
+									When.onTheFilterButtons.iClick(filters.COMPLETED);
+									Then.onTheFilterButtons.iShouldSeeTheButtonCount(filters.COMPLETED, 4);
 								</code></pre>
 							</li>
 						</ul>
 					</section>
 					<section>
 						<h4>Pages Examples</h4>
-						<img src="UICon'18%20A%20journey%20with%20OPA/Master%20Detail%20pages%202.png">
+						<img src="UICon'18%20A%20journey%20with%20OPA/Pages%202.png" class="screenshot" />
 					</section>
 					<section>
 						<h4>Pages Actions & Assertions</h4>
 						<ul>
-							<li>onCategoryContentList
+							<li>onTheEditDialog
 								<pre><code data-trim data-noescape>
-									Then.onCategoryContentList.iShouldSeeTitle("Flat Screens");
-									Then.onCategoryContentList.iShouldSeeItemCount(3);
-									When.onCategoryContentList.iClickOn("FXXL0OKPL"); // Flat XXL
-								</code></pre>
-							</li>
-							<li>onArticleDetail
-								<pre><code data-trim data-noescape>
-									Then.onArticleDetail.iClickOnShopCart();
-									When.onArticleDetail.iShouldSeeTitle("Flat XXL");
-									When.onArticleDetail.iShouldSeeCurrency("EUR");
-									When.onArticleDetail.iShouldSeeAvailable();
+									When.onTheEditDialog.iClickSave();
+									When.onTheEditDialog.iClickClose();
+									Then.onTheEditDialog.iShouldSeeTheTitleField();
+									Then.onTheEditDialog.iShouldNotSeeTheTitleField();
 								</code></pre>
 							</li>
 						</ul>
@@ -413,30 +415,23 @@ q {
 					<section>
 						<h4><strong>Loading</strong> pages & journeys</h4>
 						<ul>
-							<li>Load qUnit</li>
-							<li>Load OPA & pages</li>
-							<li>Load journeys</li>
-							<li>Start !</li>
+							<li>Ensure <strong>qUnit</strong> is loaded</li>
+							<li>Load OPA, pages & journeys</li>
+							<li><strong>Start</strong></li>
 						</ul>
-					</section>
+					<!-- </section>
 					<section>
-						<h4>Example of loading</h4>
+						<h4>Example of loading</h4> -->
 						<pre><code data-trim data-noescape>
-							jQuery.sap.require("sap.ui.qunit.qunit-css");
-							jQuery.sap.require("sap.ui.thirdparty.qunit");
-							jQuery.sap.require("sap.ui.qunit.qunit-junit");
 							sap.ui.require([
 								"sap/ui/test/Opa5",
 								/* pages */
+								/* journeys */
 							], function(Opa5) {
 								Opa5.extendConfig({
 									/* Default settings */
 								});
-								sap.ui.require([
-									/* journeys */
-								], function() {
-									QUnit.start();
-								});
+								QUnit.start();
 							});
 						</code></pre>
 					</section>
