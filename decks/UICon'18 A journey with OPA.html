@@ -135,6 +135,20 @@ q {
 						<h3><strong>Agenda</strong></h3>
 						<ul id="agenda"></ul>
 					</section>
+					<section>
+						<h4><strong>Sample</strong> application</h4>
+						<ul>
+							<li>Developed to <strong>illustrate</strong> the OPA concepts</li>
+							<li><strong>100%</strong> coverage</li>
+							<li><strong>Continuous Integration</strong> builds</li>
+						</ul>
+						<p>
+							<a href="https://github.com/ArnaudBuchholz/training-uicon18-opa" target="_blank">
+								<img src="/gfx/GitHub.png" style="border: 0; box-shadow: unset;" align="left"/>
+								https://github.com/ArnaudBuchholz/<br/>training-uicon18-opa
+							</a>
+						</p>
+					</section>
 				</section>
 				<section>
 					<section>
@@ -451,11 +465,9 @@ q {
 					<section>
 						<h4>waitFor is <strong>asynchronous</strong></h4>
 						<pre><script>document.write(document.getElementById("opa_sample").innerHTML)</script></pre>
-						<ul>
-							<li><span class="pre">Given.iStartMyApp</span> starts the application synchronously</li>
-							<li>All pages members, relying on waitFor, fill a stack of waitFor to be executed</li>
-							<li><span class="pre">iTeardownMyAppFrame</span> is also asynchronous</li>
-						</ul>
+						<p>
+							<span class="pre">waitFor</span>-based members fill an <strong>execution stack</strong>
+						</p>
 					</section>
 					<section>
 						<h4><strong>Filtering</strong></h4>
@@ -463,9 +475,9 @@ q {
 						<div class="split">
 							<div class="left">
 								<ul>
-									<li>id: string or regexp</li>
-									<li>controlType: class or base class</li>
-									<li>viewNamespace & viewName</li>
+									<li><span class="pre">id</span>: string or regexp</li>
+									<li><span class="pre">controlType</span>: class or base class</li>
+									<li><span class="pre">viewNamespace</span> & <span class="pre">viewName</span></li>
 								</ul>
 							</div>
 							<div class="right">
