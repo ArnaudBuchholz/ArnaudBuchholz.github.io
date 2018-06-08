@@ -662,14 +662,18 @@ q {
 					node.setAttribute("title", "Download the training-uicon18-opa project and use grunt serve");
 				}
 			});
-		</script>
-		<script>
-		gpf.require.define({Reveal: "reveal.js"}, function (require) {
-			"use strict";
-			require.Reveal.configure({
-				slideNumber: "c/t"
+
+			// Load reveal
+			gpf.require.define({Reveal: "reveal.js"}, function (require) {
+				"use strict";
+				require.Reveal.configure({
+					slideNumber: "c/t",
+					allottedTime: 40 * 60 * 1000, // 40 minutes
+					progressBarHeight: 10,
+					barColor: 'rgb(200,0,0)',
+					pausedBarColor: 'rgba(200,0,0,.6)'
+				});
 			});
-		});
 		</script>
 	</body>
 </html>
