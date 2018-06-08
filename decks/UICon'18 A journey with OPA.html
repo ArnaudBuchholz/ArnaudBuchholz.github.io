@@ -472,8 +472,29 @@ q {
 						<h4>waitFor is <strong>asynchronous</strong></h4>
 						<pre><script>document.write(document.getElementById("opa_sample").innerHTML)</script></pre>
 						<p>
-							<span class="pre">waitFor</span>-based members fill an <strong>execution queue</strong>
+							<span class="pre">waitFor</span>-based members fill an <strong>execution queue</strong><br/>
+							<small>You can wait on the end of this queue using
+							<a href="https://sapui5.hana.ondemand.com/#/api/sap.ui.test.Opa5/methods/sap.ui.test.Opa5.emptyQueue"><span class="pre">sap.ui.test.Opa5.emptyQueue</span></a></small>
 						</p>
+					</section>
+					<section>
+						<h4><strong>Synchronization</strong> in asynchronous tests</h4>
+						<p>Since the test function is executed <strong>before</strong> the application is started,
+							<span class="pre">waitFor</span> is required to <strong>synchronize</strong>,
+							for instance, to add a breakpoint<p>
+						<pre><code data-trim data-noescape>
+							// Actions
+							When.onTheAppPage.iEnterTextForNewItemAndPressEnter(S_NEW_ITEM_TITLE);
+							When.onTheListOfItems.iSetTheItemToCompleted(S_NEW_ITEM_TITLE);
+
+							When.waitFor({
+								success: function() {
+									debugger;
+								}
+							});
+
+							When.onTheAppPage.iClearTheCompletedItems();
+						</code></pre>
 					</section>
 					<section>
 						<h4><strong>Filtering</strong></h4>
@@ -481,13 +502,21 @@ q {
 						<div class="split">
 							<div class="left">
 								<ul>
-									<li><span class="pre">id</span>: string or regexp</li>
-									<li><span class="pre">controlType</span>: class or base class</li>
+									<li><span class="pre">id</span></li>
+									<li><span class="pre">controlType</span></li>
 									<li><span class="pre">viewNamespace</span> & <span class="pre">viewName</span></li>
+									<li><span class="pre">searchOpenDialogs</span> <small>can be combined only with <span class="pre">controlType</span></small></li>
 								</ul>
 							</div>
 							<div class="right">
-								<div class="TODO">find an illustration</div>
+								<pre><code data-trim data-noescape>
+									iEditTheItem: function(sTitle) {
+										return this.waitFor({
+											controlType: "sap.m.ObjectListItem",
+											/* ... */
+										});
+									}
+								</code></pre>
 							</div>
 						</div>
 						<hr />
@@ -502,14 +531,26 @@ q {
 						<div class="split">
 							<div class="left">
 								<ul>
-									<li>Can filter out / replace one by one</li>
-									<li>Falsy value => removed</li>
+									<li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Falsy"><strong>falsy</strong></a> result filters out unwanted controls</li>
+									<li><span class="pre">true</span> keeps the control</li>
+									<li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Truthy"><strong>truthy</strong></a> result replaces controls</li>
 								</ul>
 							</div>
 							<div class="right">
-								<div class="TODO">find an illustration</div>
+								<pre><code data-trim data-noescape>
+									iEditTheItem: function(sTitle) {
+										return this.waitFor({
+											controlType: "sap.m.ObjectListItem",
+											matchers: [new Properties({
+												title: sTitle
+											})],
+											/* ... */
+										});
+									}
+								</code></pre>
 							</div>
 						</div>
+						<small>Can be a <strong>function</strong> or one of the <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.matchers"><strong><span class="pre">sap.ui.test.matchers</span></strong></a></small>
 						<hr />
 						<small>Polling until <strong>remaining results</strong> or timeout</small>
 					</section>
@@ -524,7 +565,19 @@ q {
 								</ul>
 							</div>
 							<div class="right">
-								<div class="TODO">find an illustration</div>
+								<pre><code data-trim data-noescape>
+									iShouldNotSeeAnyItemTitled: function(sTitle) {
+										return this.waitFor({
+											controlType: "sap.m.ObjectListItem",
+											check: function(aItems) {
+												return aItems.every(function(oItem) {
+													return oItem.getTitle() !== sTitle;
+												});
+											},
+											/* ... */
+										});
+									}
+								</code></pre>
 							</div>
 						</div>
 						<hr />
