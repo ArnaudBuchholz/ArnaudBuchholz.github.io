@@ -480,8 +480,8 @@ q {
 					<section>
 						<h4><strong>Synchronization</strong> in asynchronous tests</h4>
 						<p>Since the test function is executed <strong>before</strong> the application is started,
-							<span class="pre">waitFor</span> is required to <strong>synchronize</strong>,
-							for instance, to add a breakpoint<p>
+							<span class="pre">waitFor</span> is required to <strong>synchronize</strong>.<br/>
+							For instance, to add a breakpoint:<p>
 						<pre><code data-trim data-noescape>
 							// Actions
 							When.onTheAppPage.iEnterTextForNewItemAndPressEnter(S_NEW_ITEM_TITLE);
@@ -497,7 +497,25 @@ q {
 						</code></pre>
 					</section>
 					<section>
-						<h4><strong>Filtering</strong></h4>
+						<h4>waitFor <strong>options</strong></h4>
+						<p>
+							<ul>
+								<li><span class="pre">waitFor</span> offers a large <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.Opa5/methods/waitFor"><strong>set of options</strong></a></li>
+								<li>They can be <strong>grouped</strong> and <strong>sequenced</strong>:
+									<ul>
+										<li>Finding</li>
+										<li>Filtering</li>
+										<li>Checking</li>
+										<li>Interacting</li>
+										<li>Reporting</li>
+										<li><i>(Configuring)</i></li>
+									</ul>
+								</li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h4><strong>Finding</strong></h4>
 						<hr />
 						<div class="split">
 							<div class="left">
@@ -525,15 +543,16 @@ q {
 						<small>Polling until <strong>something found</strong> or timeout</small>
 					</section>
 					<section>
-						<h4><strong>Matchers</strong></h4>
+						<h4><strong>Filtering</strong> (<span class="pre">matchers</span>)</h4>
 						<small>Given the resultset of previous step</small>
 						<hr />
 						<div class="split">
 							<div class="left">
+								For <strong>each</strong> control:
 								<ul>
-									<li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Falsy"><strong>falsy</strong></a> result filters out unwanted controls</li>
-									<li><span class="pre">true</span> keeps the control</li>
-									<li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Truthy"><strong>truthy</strong></a> result replaces controls</li>
+									<li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Falsy"><strong>falsy</strong></a> filters out</li>
+									<li><strong><span class="pre">true</span></strong> keeps as-is</li>
+									<li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Truthy"><strong>truthy</strong></a> replaces</li>
 								</ul>
 							</div>
 							<div class="right">
@@ -550,18 +569,18 @@ q {
 								</code></pre>
 							</div>
 						</div>
-						<small>Can be a <strong>function</strong> or one of the <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.matchers"><strong><span class="pre">sap.ui.test.matchers</span></strong></a></small>
+						<small>Use one of the <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.matchers"><strong><span class="pre">sap.ui.test.matchers</span></strong></a> or a <strong>function</strong></small>
 						<hr />
 						<small>Polling until <strong>remaining results</strong> or timeout</small>
 					</section>
 					<section>
-						<h4><strong>Checker</strong></h4>
+						<h4><strong>Checking</strong> (<span class="pre">check</span>)</h4>
 						<small>Given the resultset of previous step</small>
 						<hr />
 						<div class="split">
 							<div class="left">
 								<ul>
-									<li>Can accept or reject all results</li>
+									<li>Accept or reject <strong>all</strong> results</li>
 								</ul>
 							</div>
 							<div class="right">
@@ -584,28 +603,38 @@ q {
 						<small>Polling until <strong>truthy</strong> or timeout</small>
 					</section>
 					<section>
-						<h4><strong>actions</strong></h4>
+						<h4><strong>Interacting</strong> (<span class="pre">actions</span>)</h4>
 						<small>Given the resultset of previous step</small>
 						<hr />
 						<div class="split">
 							<div class="left">
 								<ul>
-									<li>Press or EnterText</li>
-									<li>Executed on all results</li>
-									<li>capable of adapting to the target control<br />
+									<li>Applied on <strong>all</strong> controls</li>
+									<li><strong>Adapts</strong> to the control<br />
 										<small>For instance, Press on a search field will trigger the search and EnterText will enter search
 										criteria.</small>
 									</li>
 								</ul>
 							</div>
 							<div class="right">
-								<div class="TODO">find an illustration</div>
+								<pre><code data-trim data-noescape>
+									iSetTheTitleTo: function(sTitle) {
+										return this.waitFor({
+											id: "title",
+											actions: [new EnterText({
+												text: sTitle
+											})],
+											/* ... */
+										});
+									}
+								</code></pre>
 							</div>
 						</div>
+						<small>Use one of the <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.actions"><strong><span class="pre">sap.ui.test.actions</span></strong></a></small>
 						<hr />
 					</section>
 					<section>
-						<h4><strong>success</strong></h4>
+						<h4><strong>Reporting</strong></h4>
 						<small>Given the resultset of previous step</small>
 						<hr />
 						<div class="split">
