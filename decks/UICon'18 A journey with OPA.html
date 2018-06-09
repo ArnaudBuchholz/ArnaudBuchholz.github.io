@@ -538,9 +538,9 @@ q {
 							</div>
 						</div>
 						<hr />
-						<small>No filtering criteria means <strong>all controls</strong></small>
+						<small>No criteria means <strong>all controls</strong></small>
 						<br/>
-						<small>Polling until <strong>something found</strong> or timeout</small>
+						<small>Polling until <strong>some controls are found</strong> or timeout</small>
 					</section>
 					<section>
 						<h4><strong>Filtering</strong> (<span class="pre">matchers</span>)</h4>
@@ -609,6 +609,8 @@ q {
 						<div class="split">
 							<div class="left">
 								<ul>
+									<li><a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.actions.Press"><strong>Press</strong></a></li>
+									<li><a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.actions.EnterText"><strong>EnterText</strong></a></li>
 									<li>Applied on <strong>all</strong> controls</li>
 									<li><strong>Adapts</strong> to the control<br />
 										<small>For instance, Press on a search field will trigger the search and EnterText will enter search
@@ -634,29 +636,35 @@ q {
 						<hr />
 					</section>
 					<section>
-						<h4><strong>Reporting</strong></h4>
-						<small>Given the resultset of previous step</small>
-						<hr />
-						<div class="split">
-							<div class="left">
-								<ul>
-									<li>Final step of the waitFor</li>
-									<li>Should never test control state in success: if failed, the whole test fails</li>
-									<li>Can chain to a subsequent waitFor</li>
-								</ul>
-							</div>
-							<div class="right">
-								<div class="TODO">find an illustration</div>
-							</div>
-						</div>
-						<hr />
+						<h4><strong>Reporting</strong> (<span class="pre">success / error / errorMessage</span>)</h4>
+						<ul>
+							<li>Final step of the <span class="pre">waitFor</span>, receives resultset</li>
+							<li><strong>Avoid</strong> testing controls' state in success function</li>
+							<li>Can chain to a <strong>subsequent <span class="pre">waitFor</span></strong></li>
+						</ul>
+						<pre><code data-trim data-noescape>
+							iShouldSeeAGivenNumberOfItems: function(iCount) {
+								return this.waitFor({
+									controlType: "sap.m.ListBase",
+									matchers: [new AggregationLengthEquals({
+										name: "items",
+										length: iCount
+									})],
+									success: function() {
+										Opa5.assert.ok(true, "The list shows " + iCount + " items");
+									},
+									errorMessage: "The list doesn't show " + iCount + " items"
+								});
+							}
+						</code></pre>
 					</section>
 					<section>
-						<h4><strong>autoWait</strong></h4>
+						<h4><strong>Configuring</strong> - <span class="pre">autoWait</span></h4>
 						<ul>
 							<li>When enabled, waitFor monitors <strong>pending tasks</strong>
+								<small>requests, timeouts, promises, UI navigation...</small><br/>
 								and includes the <strong>Interactable matcher</strong><br/>
-								<small>Pending tasks are: requests, timeouts, promises, UI navigation...</small>
+								<small>Controls states are tested to check that they are 'available' and 'interactable'</small>
 							</li>
 							<br />
 							<li>Use <span class="pre">sap.ui.test.Opa5.extendConfig</span> to <strong>set it globally</strong></li>
@@ -666,14 +674,32 @@ q {
 						</ul>
 					</section>
 					<section>
-						<h4><strong>timeout</strong></h4>
+						<h4><strong>Configuring</strong> - <span class="pre">visible</span></h4>
 						<ul>
-							<li>The timeout setting decides of the maximum polling time</li>
-							<li>pollingInterval can be set <i>(defaulted to 400ms)</i>
-							<li>When enabled, autoWait monitors unfinished asynchronous work (requests, timeouts, promises, UI navigation...)
-								and includes the sap.ui.test.matchers.Interactable matcher to all waitFor.</li>
+							<li>To find controls that are <strong>not visible</strong> <i>from a UI5 point of view</i></li>
 						</ul>
-						Controls states are tested to check that they are 'available' and 'interactable'
+						<pre><code data-trim data-noescape>
+							// iShouldNotSeeTheField(sId, sName)
+							return this.waitFor({
+								autoWait: false,
+								visible: false,
+								id: sId,
+								matchers: [new Properties({
+									visible: false
+								})],
+								success: function() {
+									Opa5.assert.ok(true, "The " + sName + " field is *not* displayed");
+								},
+								errorMessage: "The " + sName + " field is displayed"
+							});
+						</code></pre>
+					</section>
+					<section>
+						<h4><strong>Configuring</strong> - <span class="pre">timeout</span></h4>
+						<ul>
+							<li><span class="pre">timeout</span> decides of the maximum waiting time <i>(we use 15s)</i></li>
+							<li><span class="pre">pollingInterval</span> can be changed <i>(defaulted to 400ms)</i></li>
+						</ul>
 					</section>
 				</section>
 				<section>
@@ -681,23 +707,56 @@ q {
 						<h3><strong>Mocking</strong> Backend</h3>
 					</section>
 					<section>
-						<h4>Backend</h4>
-						- **CRUD** on entities
-						- **Entities** storage & generation
-						- **Request** mocking
-
+						<h4>The <strong>need</strong> for a backend</h4>
+						<p>When the application as a backend counterpart, it <strong>can't run</strong> without being connected to it.</p>
+						<p>However, tests have to rely on a <strong>given dataset</strong> and some features might be <strong>dangerous</strong>.</p>
 					</section>
 					<section>
-						<h4>MockServer</h4>
+						<h4>Introducing the <strong>MockServer</strong></h4>
+						<img src="UICon'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 45%; max-height: 50%;" align="left"/>
+						<p>The MockServer is a software component that <strong>hooks</strong> XmlHttpRequest requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend<p>
+					</section>
+					<section>
+						<h4><strong>Configuring</strong> the MockServer</h4>
+						<p>Basic configuration: metadata and mock data</p>
+						<p>Advanced configuration: override default hooks, add new ones (function import)</p>
+					</section>
+					<section>
+						<h4><strong>Manipulating</strong> the MockServer entities</h4>
+					</section>
+					<section>
+						<h4><strong>Default</strong> MockServer hooks</h4>
+						<ul>
+							<li>CRUD</li>
+							<li>Paging</li>
+							<li>Filtering</li>
+							<li>Sorting</li>
+							<li>Navigation properties</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Altering</strong> the MockServer hooks</h4>
+						<p>Defining a new hook: method, path, response</p>
+						<p>Using capturing group, you can extract url parameters</p>
+					</section>
+					<section>
+						<h4><strong>Adding</strong> new MockServer hooks</h4>
+					</section>
+					<section>
+						<h4>Backend</h4>
+						- **CRUD** on entities
+						- Navigation properties (one level)
+						- **Entities** storage & generation
+						- **Request** mocking
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3><strong>Our</strong> initiatives</h3>
-					</section>
+						<h3><strong>Our</strongMockServer i	%section>
 					<section>
-						<h4>Automatic Performance <strong>monitoring</strong></h4>
-					</section>
+	 50x-width: 50%; max5height:align="left" 50%;					<h4>Automatic Performance <strong>monitoring</strong></h4>
+	 <p>The MockServer is a software component that hooks XmlHttpRequest requests and <strong>either</strong> answer them or let <strong>them go</strong> <strong>to the
+					</</strong> backendreach>section>
 					<section>
 						<h4><strong>Extensibility</strong> & Runtime Adaptation</h4>
 					</section>
