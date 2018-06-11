@@ -730,6 +730,7 @@ q {
 							_oMockServer.simulate("model/metadata.xml", {
 								sMockdataBaseUrl: "model/"
 							});
+							_oMockServer.start();
 						</code></pre>
 						<small>Check the documentation of <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer"><strong><span class="pre">sap.ui.core.util.MockServer</span></strong></a></small>
 					</section>
@@ -758,10 +759,8 @@ q {
 					<section>
 						<h4><strong>Default</strong> MockServer hooks</h4>
 						<ul>
-							<li>CRUD</li>
-							<li>Paging</li>
-							<li>Filtering</li>
-							<li>Sorting</li>
+							<li>Create, Read, Uupdate, Delete</li>
+							<li>Query parameters: Paging, Filtering, Sorting</li>
 							<li>Navigation properties</li>
 						</ul>
 					</section>
@@ -770,27 +769,51 @@ q {
 						<p>Defining a new hook: method, path, response</p>
 						<p>Using capturing group, you can extract url parameters</p>
 						<p>You may change the URL, requestBody</p>
+						<pre><code data-trim data-noescape>
+							var aRequests = _oMockServer.getRequests();
+							// Creation of a todo list item
+							aRequests.push({
+								method: "POST",
+								path: CONST.OData.entityNames.todoItemSet,
+								response: function(oXhr) {
+									/* ... */
+									// Initialize some fields
+									var oBody = JSON.parse(oXhr.requestBody);
+									oBody[CONST.OData.entityProperties.todoItem.completed] = false;
+									oBody[CONST.OData.entityProperties.todoItem.completionDate] = null;
+									oXhr.requestBody = JSON.stringify(oBody);
+									return false; // Keep default processing
+								}
+							});
+							_oMockServer.setRequests(aRequests);
+						</code></pre>
 					</section>
 					<section>
 						<h4><strong>Adding</strong> new MockServer hooks</h4>
-					</section>
-					<section>
-						<h4>Backend</h4>
-						- **CRUD** on entities
-						- Navigation properties (one level)
-						- **Entities** storage & generation
-						- **Request** mocking
+						Function import
+						<pre><code data-trim data-noescape>
+							// Clear Completed
+							aRequests.push({
+								method: CONST.OData.functionImports.clearCompleted.method,
+								path: CONST.OData.functionImports.clearCompleted.name,
+								response: function(oXhr) {
+									/* ... */
+									oXhr.respond(200, {
+										"Content-Type": "application/json;charset=utf-8"
+									}, JSON.stringify({
+										d: oResult
+									}));
+									return true; // Skip default processing
+								}
+							});
+						</code></pre>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3><strong>Our</strongMockServer i	%section>
-					<section>
-	 50x-width: 50%; max5height:align="left" 50%;					<h4>Automatic Performance <strong>monitoring</strong></h4>
-	 <p>The MockServer is a software component that hooks XmlHttpRequest requests and <strong>either</strong> answer them or let <strong>them go</strong> <strong>to the
-					</</strong> backendreach>section>
-					<section>
-						<h4><strong>Extensibility</strong> & Runtime Adaptation</h4>
+						<h3><strong>Our</strong> Initiatives</h3>
+	 					<h4 class="fragment">Automatic Performance <strong>monitoring</strong></h4>
+						<h4 class="fragment"><strong>Extensibility</strong> & Runtime Adaptation</h4>
 					</section>
 				</section>
 			</div>
