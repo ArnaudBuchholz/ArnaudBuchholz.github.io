@@ -280,7 +280,7 @@ q {
 					<section>
 						<h4>What is <strong>OPA</strong>?</h4>
 						<p>OPA is a set of tools used to <strong>automate</strong> and <strong>validate</strong> UI
-							<i>(and offering backend mocking)</i>.</p>
+							<i>(and it comes with backend mocking)</i>.</p>
 						<br/>
 						<p>Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong> to abstract the UI,
 							and <strong>readable</strong>.</p>
@@ -405,7 +405,7 @@ q {
 							<br/>
 							<li>A journey is composed of <strong>tests</strong></li>
 							<br/>
-							<li>Each test follow the pattern
+							<li>Each test follows the pattern
 								<ul>
 									<li><strong>Given</strong>: setup the initial state of the test</li>
 									<li><strong>When</strong>: execute actions</li>
@@ -474,7 +474,7 @@ q {
 						<p>
 							<span class="pre">waitFor</span>-based members fill an <strong>execution queue</strong><br/>
 							<small>You can wait on the end of this queue using
-							<a href="https://sapui5.hana.ondemand.com/#/api/sap.ui.test.Opa5/methods/sap.ui.test.Opa5.emptyQueue"><span class="pre">sap.ui.test.Opa5.emptyQueue</span></a></small>
+							<a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.Opa5/methods/sap.ui.test.Opa5.emptyQueue"><span class="pre">sap.ui.test.Opa5.emptyQueue</span></a></small>
 						</p>
 					</section>
 					<section>
@@ -772,7 +772,7 @@ q {
 						<p>An hook is defined with:</p>
 						<ul>
 							<li><strong><span class="pre">method</span></strong>: GET, POST, PUT...</li>
-							<li><strong><span class="pre">path</span></strong>: a <strong>regular expression</strong> matching the API URL<br/>
+							<li><strong><span class="pre">path</span></strong>: a <strong>regexp</strong> matching the API URL<br/>
 								<small>Using <strong>capturing group</strong>, you can extract url parameters</small>
 							</li>
 							<li><strong><span class="pre">response</span></strong> function: where the behavior is implemented</li>
@@ -823,15 +823,19 @@ q {
 					<section>
 						<h4>MockServer hooks <strong>Tips & Tricks</strong></h4>
 						<ul>
-							<li>The MockServer does not need to be 100% equivalent to the backend</li>
-
+							<li>The MockServer does <strong>not</strong> need to be <strong>100% equivalent</strong> to the backend</li>
+							<li>Newly added hooks have a <strong>higher priority</strong> than existing ones</li>
+							<li>You may also use <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/attachBefore"><strong><span class="pre">attachBefore</span></strong></a>
+								 or <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/attachAfter"><strong><span class="pre">attachAfter</span></strong></a> callbacks triggered before or after request processing</li>
 						</ul>
+					</section>
 				</section>
 				<section>
 					<section>
 						<h3><strong>Our</strong> Initiatives</h3>
 	 					<h4 class="fragment">Automatic Performance <strong>monitoring</strong></h4>
 						<h4 class="fragment"><strong>Extensibility</strong> & Runtime Adaptation</h4>
+						<h4 class="fragment">OPA Pages <strong>generation</strong></h4>
 					</section>
 				</section>
 			</div>
