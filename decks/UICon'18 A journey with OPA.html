@@ -708,21 +708,52 @@ q {
 					</section>
 					<section>
 						<h4>The <strong>need</strong> for a backend</h4>
-						<p>When the application as a backend counterpart, it <strong>can't run</strong> without being connected to it.</p>
+						<p>When the application has a backend counterpart, it <strong>can't run</strong> without being connected to it.</p>
 						<p>However, tests have to rely on a <strong>given dataset</strong> and some features might be <strong>dangerous</strong>.</p>
 					</section>
 					<section>
 						<h4>Introducing the <strong>MockServer</strong></h4>
 						<img src="UICon'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 45%; max-height: 50%;" align="left"/>
-						<p>The MockServer is a software component that <strong>hooks</strong> XmlHttpRequest requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend<p>
+						<br/>
+						<p>The MockServer is a software component that <strong>hooks</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend<p>
 					</section>
 					<section>
 						<h4><strong>Configuring</strong> the MockServer</h4>
-						<p>Basic configuration: metadata and mock data</p>
-						<p>Advanced configuration: override default hooks, add new ones (function import)</p>
+						<ul>
+							<li>It <strong>requires the metadata</strong> to know the entities and relationships exposed by the ODATA service.</li>
+							<li>It <strong>initializes the entity sets</strong> by generating them or loading JSON files</li>
+						</ul>
+						<pre><code data-trim data-noescape>
+							_oMockServer = new MockServer({
+								rootUri: "/odata/TODO_SRV/"
+							});
+							_oMockServer.simulate("model/metadata.xml", {
+								sMockdataBaseUrl: "model/"
+							});
+						</code></pre>
+						<small>Check the documentation of <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer"><strong><span class="pre">sap.ui.core.util.MockServer</span></strong></a></small>
 					</section>
 					<section>
 						<h4><strong>Manipulating</strong> the MockServer entities</h4>
+						<ul>
+							<li>It is possible to alter the list of known entities</li>
+						</ul>
+						<pre><code data-trim data-noescape>
+							var aExisting = _oMockServer.getEntitySetData(CONST.OData.entityNames.todoItemSet),
+								sGuid = "0MOCKSVR-TODO-MKII-MOCK-00009999";
+							aExisting.push({
+								Guid: sGuid,
+								Title: "Generated",
+								Completed: false,
+								DueDate: "/Date(" + new Date(2099, 11, 31).getTime() + ")/",
+								__metadata: {
+									id: "/odata/TODO_SRV/TodoItemSet(guid'" + sGuid + "')",
+									uri: "/odata/TODO_SRV/TodoItemSet(guid'" + sGuid + "')",
+									type: "TODO_SRV.TodoItem"
+								}
+							});
+							_oMockServer.setEntitySetData(CONST.OData.entityNames.todoItemSet, aExisting);
+						</code></pre>
 					</section>
 					<section>
 						<h4><strong>Default</strong> MockServer hooks</h4>
@@ -738,6 +769,7 @@ q {
 						<h4><strong>Altering</strong> the MockServer hooks</h4>
 						<p>Defining a new hook: method, path, response</p>
 						<p>Using capturing group, you can extract url parameters</p>
+						<p>You may change the URL, requestBody</p>
 					</section>
 					<section>
 						<h4><strong>Adding</strong> new MockServer hooks</h4>
