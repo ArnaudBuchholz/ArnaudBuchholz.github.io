@@ -709,18 +709,18 @@ q {
 					<section>
 						<h4>The <strong>need</strong> for a backend</h4>
 						<p>When the application has a backend counterpart, it <strong>can't run</strong> without being connected to it.</p>
-						<p>However, tests have to rely on a <strong>given dataset</strong> and some features might be <strong>dangerous</strong>.</p>
+						<p>However, tests have to rely on a <strong>stable dataset</strong> and some features might be <strong>dangerous</strong>.</p>
 					</section>
 					<section>
 						<h4>Introducing the <strong>MockServer</strong></h4>
 						<img src="UICon'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 45%; max-height: 50%;" align="left"/>
 						<br/>
-						<p>The MockServer is a software component that <strong>hooks</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend<p>
+						<p>The MockServer is a software component that <strong>hooks</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
 					</section>
 					<section>
 						<h4><strong>Configuring</strong> the MockServer</h4>
 						<ul>
-							<li>It <strong>requires the metadata</strong> to know the entities and relationships exposed by the ODATA service.</li>
+							<li>It <strong>requires the metadata</strong> to know the entities and relationships exposed by the ODATA service</li>
 							<li>It <strong>initializes the entity sets</strong> by generating them or loading JSON files</li>
 						</ul>
 						<pre><code data-trim data-noescape>
@@ -735,44 +735,54 @@ q {
 						<small>Check the documentation of <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer"><strong><span class="pre">sap.ui.core.util.MockServer</span></strong></a></small>
 					</section>
 					<section>
-						<h4><strong>Manipulating</strong> the MockServer entities</h4>
-						<ul>
-							<li>It is possible to alter the list of known entities</li>
-						</ul>
+						<h4>MockServer <strong>entities</strong></h4>
+						<p>At <strong>any time</strong>, one can <strong>manipulate</strong> the entities</p>
 						<pre><code data-trim data-noescape>
-							var aExisting = _oMockServer.getEntitySetData(CONST.OData.entityNames.todoItemSet),
+							var aExisting = _oMockServer.getEntitySetData("TodoItemSet"),
 								sGuid = "0MOCKSVR-TODO-MKII-MOCK-00009999";
+							// Adding a new entity
 							aExisting.push({
-								Guid: sGuid,
-								Title: "Generated",
-								Completed: false,
-								DueDate: "/Date(" + new Date(2099, 11, 31).getTime() + ")/",
-								__metadata: {
+								"Guid": sGuid,
+								"Title": "Generated",
+								"Completed": false,
+								"DueDate": "/Date(" + new Date(2099, 11, 31).getTime() + ")/",
+								"__metadata": {
 									id: "/odata/TODO_SRV/TodoItemSet(guid'" + sGuid + "')",
 									uri: "/odata/TODO_SRV/TodoItemSet(guid'" + sGuid + "')",
 									type: "TODO_SRV.TodoItem"
 								}
 							});
-							_oMockServer.setEntitySetData(CONST.OData.entityNames.todoItemSet, aExisting);
+							_oMockServer.setEntitySetData("TodoItemSet", aExisting);
 						</code></pre>
+						<sample>?randomize=test/MockServer.js#L83</sample>
 					</section>
 					<section>
 						<h4><strong>Default</strong> MockServer hooks</h4>
+						<p>By default, the MockServer hooks a lot of<br/><strong>ODATA operations</strong> :</p>
 						<ul>
-							<li>Create, Read, Uupdate, Delete</li>
-							<li>Query parameters: Paging, Filtering, Sorting</li>
-							<li>Navigation properties</li>
+							<li><strong>$batch</strong><br/><small><i>(transparently split into individual requests and consolidates results)</i></small></li>
+							<li><strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate and <strong>D</strong>elete</li>
+							<li><strong>Query</strong> parameters: paging, filtering, sorting</li>
+							<li>Resolving <strong>navigation</strong> properties<br/><small><i>One level only</i></small></li>
+						</ul>
+						<small>But function imports are <strong>not supported</strong></small>
+					</section>
+					<section>
+						<h4><strong>Altering</strong> the MockServer hooks</h4>
+						<p>An hook is defined with:</p>
+						<ul>
+							<li><strong><span class="pre">method</span></strong>: GET, POST, PUT...</li>
+							<li><strong><span class="pre">path</span></strong>: a <strong>regular expression</strong> matching the API URL<br/>
+								<small>Using <strong>capturing group</strong>, you can extract url parameters</small>
+							</li>
+							<li><strong><span class="pre">response</span></strong> function: where the behavior is implemented</li>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>Altering</strong> the MockServer hooks</h4>
-						<p>Defining a new hook: method, path, response</p>
-						<p>Using capturing group, you can extract url parameters</p>
-						<p>You may change the URL, requestBody</p>
 						<pre><code data-trim data-noescape>
 							var aRequests = _oMockServer.getRequests();
-							// Creation of a todo list item
-							aRequests.push({
+							aRequests.push({ // Creation of a todo list item
 								method: "POST",
 								path: CONST.OData.entityNames.todoItemSet,
 								response: function(oXhr) {
@@ -787,10 +797,11 @@ q {
 							});
 							_oMockServer.setRequests(aRequests);
 						</code></pre>
+						<sample>Creation of a todo list item=test/MockServer.js#L115</sample>
 					</section>
 					<section>
 						<h4><strong>Adding</strong> new MockServer hooks</h4>
-						Function import
+						<p>This is how <strong>function import</strong> can be implemented</p>
 						<pre><code data-trim data-noescape>
 							// Clear Completed
 							aRequests.push({
@@ -807,7 +818,14 @@ q {
 								}
 							});
 						</code></pre>
+						<sample>Clear Completed=test/MockServer.js#L173</sample>
 					</section>
+					<section>
+						<h4>MockServer hooks <strong>Tips & Tricks</strong></h4>
+						<ul>
+							<li>The MockServer does not need to be 100% equivalent to the backend</li>
+
+						</ul>
 				</section>
 				<section>
 					<section>
