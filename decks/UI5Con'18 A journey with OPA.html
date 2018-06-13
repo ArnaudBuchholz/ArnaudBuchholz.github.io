@@ -2,8 +2,8 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>UICon'18 A journey with OPA</title>
-		<meta name="description" content="UICon'18 A journey with OPA">
+		<title>UI5Con'18 A journey with OPA</title>
+		<meta name="description" content="UI5Con'18 A journey with OPA">
 		<meta name="author" content="Arnaud Buchholz">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -25,6 +25,10 @@
 
 .reveal a::before {
 	content: "🔗"
+}
+
+.reveal a.missingSampleApp::before {
+	content: "🛈"
 }
 
 .reveal span.pre {
@@ -74,7 +78,7 @@ q {
 
 		</style>
 	</head>
-	<body>
+	<body onload="onLoad()">
 		<div class="reveal">
 			<div class="slides">
 				<section>
@@ -87,8 +91,8 @@ q {
 								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
 							</small>
 						</p>
-						<img src="UICon'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
-						<img src="UICon'18%20A%20journey%20with%20OPA/UI5Con.png" height="100px" style="border: 0;" />
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/UI5Con.png" height="100px" style="border: 0;" />
 					</section>
 					<section>
 						<h3>Arnaud <strong>Buchholz</strong></h3>
@@ -144,12 +148,12 @@ q {
 						<ul>
 							<li>A simple  <a href="http://localhost:8080"><strong>todo list</strong></a></li>
 							<li>Developed to <a href="http://localhost:8080/test/integration/opaTests.qunit.html"><strong>illustrate</strong></a> the OPA concepts</li>
-							<li><a href="https://travis-ci.org/ArnaudBuchholz/training-uicon18-opa/jobs/389337036#L1995"><strong>100%</strong></a> coverage</li>
-							<li><a href="https://travis-ci.org/ArnaudBuchholz/training-uicon18-opa"><strong>Continuous Integration</strong></a> builds</li>
+							<li><a href="https://travis-ci.org/ArnaudBuchholz/training-ui5con18-opa/jobs/389337036#L1995"><strong>100%</strong></a> coverage</li>
+							<li><a href="https://travis-ci.org/ArnaudBuchholz/training-ui5con18-opa"><strong>Continuous Integration</strong></a> builds</li>
 						</ul>
 						<p>
-							<a href="https://github.com/ArnaudBuchholz/training-uicon18-opa">
-								https://github.com/ArnaudBuchholz/<br/>training-uicon18-opa
+							<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
+								https://github.com/ArnaudBuchholz/<br/>training-ui5con18-opa
 							</a>
 						</p>
 					</section>
@@ -199,7 +203,7 @@ q {
 					</section>
 					<section>
 						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
-						<img src="UICon'18%20A%20journey%20with%20OPA/test%20pyramid.png" align="left" />
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" align="left" />
 						<p><strong>Maximize</strong> unit testing: they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.</p>
 						<p><strong>Leverage</strong> integration testing: check the <strong>happy path</strong> then <strong>edge cases</strong>.</p>
 					</section>
@@ -337,7 +341,7 @@ q {
 					</section>
 					<section>
 						<h4>Pages <strong>Examples</strong></h4>
-						<img src="UICon'18%20A%20journey%20with%20OPA/Pages%201.png" class="screenshot" />
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/Pages%201.png" class="screenshot" />
 					</section>
 					<section>
 						<h4>Pages <strong>Actions</strong> & <strong>Assertions</strong></h4>
@@ -358,7 +362,7 @@ q {
 					</section>
 					<section>
 						<h4>Pages <strong>Examples</strong></h4>
-						<img src="UICon'18%20A%20journey%20with%20OPA/Pages%202.png" class="screenshot" />
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/Pages%202.png" class="screenshot" />
 					</section>
 					<section>
 						<h4>Pages <strong>Actions</strong> & <strong>Assertions</strong></h4>
@@ -713,7 +717,7 @@ q {
 					</section>
 					<section>
 						<h4>Introducing the <strong>MockServer</strong></h4>
-						<img src="UICon'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 45%; max-height: 50%;" align="left"/>
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 45%; max-height: 50%;" align="left"/>
 						<br/>
 						<p>The MockServer is a software component that <strong>hooks</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
 					</section>
@@ -841,7 +845,30 @@ q {
 			</div>
 		</div>
 		<script src="http://arnaudbuchholz.github.io/gpf/0.2.6/gpf.js"></script>
+		<img id="running" src="http://localhost:8080/running.png" />
 		<script>
+			"use strict";
+
+			function onLoad () {
+				var isSampleAppAvailable = !!document.getElementById("running").naturalWidth;
+
+				// Links should open in a new tab to keep the presentation state
+				var missingSampleAppMsg = "Download the training-ui5con18-opa project and use grunt serve";
+				window.missingSampleApp = function () {
+					alert(missingSampleAppMsg);
+				};
+				[].slice.call(document.querySelectorAll("a")).forEach(function (node) {
+					node.setAttribute("target", "_blank");
+					if (node.getAttribute("href").indexOf("http://localhost") === 0) {
+						if (!isSampleAppAvailable) {
+							node.setAttribute("title", missingSampleAppMsg);
+							node.setAttribute("href", "javascript:missingSampleApp()");
+							node.className = "missingSampleApp";
+						}
+					}
+				});
+			}
+
 			// Build agenda
 			[].slice.call(document.querySelectorAll("h3"), 3).forEach(function (h3) {
 				var item = document.createElement("li");
@@ -861,7 +888,7 @@ q {
 			// Reformat code samples
 			var small = gpf.web.createTagFunction("small"),
 				a = gpf.web.createTagFunction("a"),
-				base = "https://github.com/ArnaudBuchholz/training-uicon18-opa/blob/master/webapp/"; // or "http://localhost:8080/"
+				base = "https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/webapp/"; // or "http://localhost:8080/"
 			[].slice.call(document.querySelectorAll("sample")).forEach(function (node) {
 				var parts = node.innerHTML.split("="),
 					tag = small([
@@ -873,14 +900,6 @@ q {
 				node.innerHTML = "";
 				tag.appendTo(node);
 			});
-			// Links should open in a new tab to keep the presentation state
-			[].slice.call(document.querySelectorAll("a")).forEach(function (node) {
-				node.setAttribute("target", "_blank");
-				if (node.getAttribute("href").indexOf("http://localhost") === 0) {
-					node.setAttribute("title", "Download the training-uicon18-opa project and use grunt serve");
-				}
-			});
-
 			// Load reveal
 			gpf.require.define({Reveal: "reveal.js"}, function (require) {
 				"use strict";
