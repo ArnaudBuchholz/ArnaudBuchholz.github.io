@@ -153,18 +153,17 @@ q {
 						</ul>
 						<p>
 							<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
-								https://github.com/ArnaudBuchholz/<br/>training-ui5con18-opa
+								<img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" />training-ui5con18-opa
 							</a>
 						</p>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3>Why <strong>automated</strong> testing?</h3>
+						<h3>Why <strong>Automated</strong> Testing?</h3>
 					</section>
 					<section>
 						<q>If it's not tested, it doesn't work</q>
-						<img src="/gfx/deadpool common sense.png" style="border: 0;" />
 						<p>
 							<i class="fragment" style="font-size: smaller;">Need I say more?</i>
 						</p>
@@ -203,7 +202,7 @@ q {
 					</section>
 					<section>
 						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
-						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" align="left" />
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
 						<p><strong>Maximize</strong> unit testing: they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.</p>
 						<p><strong>Leverage</strong> integration testing: check the <strong>happy path</strong> then <strong>edge cases</strong>.</p>
 					</section>
@@ -267,7 +266,7 @@ q {
 					<section>
 						<h4><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h4>
 						<ul>
-							<li><strong>UI integration</strong> testing</li>
+							<li><strong>UI behavior</strong> testing</li>
 							<li><strong>JavaScript</strong> based</li>
 							<li>Tightly <strong>integrated</strong> with UI5</li>
 							<li><strong>Asynchronous</strong> with <strong>active polling</strong> mechanisms</li>
@@ -306,6 +305,7 @@ q {
 									.and.iTeardownTheApp();
 							});
 						</code></pre>
+						<small>Given, When, Then <strong>pattern</strong></small>
 					</section>
 					<section>
 						<h4><strong>Executing</strong> OPA tests</h4>
@@ -313,7 +313,7 @@ q {
 							<li>As <strong>simple</strong> as running a web page</li>
 							<li>A <strong>qUnit report</strong> documents execution results</li>
 							<br />
-							<li>Application can be run in two different modes:
+							<li class="hide">Application can be run in two different modes:
 								<ul>
 									<li>As a component <a href="http://localhost:8080/test/integration/opaTests.qunit.html?component=true"><strong>within</strong></a> the test window</li>
 									<li>Inside an <a href="http://localhost:8080/test/integration/opaTests.qunit.html"><strong>iFrame</strong></a> <i>(slower but isolated)</i></li>
@@ -325,7 +325,7 @@ q {
 						<h4><strong>Limits</strong> of OPA</h4>
 						<ul>
 							<li>Designed to test <strong>one UI5</strong> application</li>
-							<li>Not <strong>integrated</strong> with backend</li>
+							<li><strong>Not designed</strong> to test backend</li>
 						</ul>
 					</section>
 				</section>
@@ -544,7 +544,7 @@ q {
 						<hr />
 						<small>No criteria means <strong>all controls</strong></small>
 						<br/>
-						<small>Polling until <strong>some controls are found</strong> or timeout</small>
+						<small>Polling until <strong>at least one control is found</strong> or timeout</small>
 					</section>
 					<section>
 						<h4><strong>Filtering</strong> (<span class="pre">matchers</span>)</h4>
@@ -644,7 +644,7 @@ q {
 						<ul>
 							<li>Final step of the <span class="pre">waitFor</span>, receives resultset</li>
 							<li><strong>Avoid</strong> testing controls' state in success function</li>
-							<li>Can chain to a <strong>subsequent <span class="pre">waitFor</span></strong></li>
+							<li class="hide">Can chain to a <strong>subsequent <span class="pre">waitFor</span></strong></li>
 						</ul>
 						<pre><code data-trim data-noescape>
 							iShouldSeeAGivenNumberOfItems: function(iCount) {
@@ -665,19 +665,20 @@ q {
 					<section>
 						<h4><strong>Configuring</strong> - <span class="pre">autoWait</span></h4>
 						<ul>
-							<li>When enabled, waitFor monitors <strong>pending tasks</strong>
+							<li><strong>Not enabled</strong> by default</li>
+							<li>When enabled, <span class="pre">waitFor</span> monitors <strong>pending tasks</strong>
 								<small>requests, timeouts, promises, UI navigation...</small><br/>
 								and includes the <strong>Interactable matcher</strong><br/>
 								<small>Controls states are tested to check that they are 'available' and 'interactable'</small>
 							</li>
 							<br />
 							<li>Use <span class="pre">sap.ui.test.Opa5.extendConfig</span> to <strong>set it globally</strong></li>
-							<li>Can be <strong>turned off</strong> in a specific waitFor.<br />
+							<li>Can be <strong>turned off</strong> in a specific <span class="pre">waitFor</span><br />
 								<small>For instance if you want to check that a button is disabled</small>
 							</li>
 						</ul>
 					</section>
-					<section>
+					<section class="hide">
 						<h4><strong>Configuring</strong> - <span class="pre">visible</span></h4>
 						<ul>
 							<li>To find controls that are <strong>not visible</strong> <i>from a UI5 point of view</i></li>
@@ -702,7 +703,7 @@ q {
 						<h4><strong>Configuring</strong> - <span class="pre">timeout</span></h4>
 						<ul>
 							<li><span class="pre">timeout</span> decides of the maximum waiting time <i>(we use 15s)</i></li>
-							<li><span class="pre">pollingInterval</span> can be changed <i>(defaulted to 400ms)</i></li>
+							<li class="hide"><span class="pre">pollingInterval</span> can be changed <i>(defaulted to 400ms)</i></li>
 						</ul>
 					</section>
 				</section>
@@ -717,9 +718,9 @@ q {
 					</section>
 					<section>
 						<h4>Introducing the <strong>MockServer</strong></h4>
-						<img src="UI5Con'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 45%; max-height: 50%;" align="left"/>
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 40%; max-height: 40%;" align="left"/>
 						<br/>
-						<p>The MockServer is a software component that <strong>hooks</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
+						<p>The MockServer is a software component that <strong>captures</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
 					</section>
 					<section>
 						<h4><strong>Configuring</strong> the MockServer</h4>
@@ -769,7 +770,7 @@ q {
 							<li><strong>Query</strong> parameters: paging, filtering, sorting</li>
 							<li>Resolving <strong>navigation</strong> properties<br/><small><i>One level only</i></small></li>
 						</ul>
-						<small>But function imports are <strong>not supported</strong></small>
+						<p>But function imports are <strong>not supported</strong></p>
 					</section>
 					<section>
 						<h4><strong>Altering</strong> the MockServer hooks</h4>
@@ -828,19 +829,27 @@ q {
 						<h4>MockServer hooks <strong>Tips & Tricks</strong></h4>
 						<ul>
 							<li>The MockServer does <strong>not</strong> need to be <strong>100% equivalent</strong> to the backend</li>
-							<li>Newly added hooks have a <strong>higher priority</strong> than existing ones</li>
+							<li>Newly added hooks are <strong>executed first</strong> (LIFO)</li>
 							<li>You may also use <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/attachBefore"><strong><span class="pre">attachBefore</span></strong></a>
 								 or <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/attachAfter"><strong><span class="pre">attachAfter</span></strong></a> callbacks triggered before or after request processing</li>
 						</ul>
 					</section>
 				</section>
 				<section>
-					<section>
-						<h3><strong>Our</strong> Initiatives</h3>
-	 					<h4 class="fragment">Automatic Performance <strong>monitoring</strong></h4>
-						<h4 class="fragment"><strong>Extensibility</strong> & Runtime Adaptation</h4>
-						<h4 class="fragment">OPA Pages <strong>generation</strong></h4>
-					</section>
+					<h3>Key <strong>Take-Aways</strong></h3>
+					<ul>
+						<li><q>If it's not tested, it doesn't work</q></li>
+						<li>OPA is designed to <strong>automate</strong> and <strong>validate</strong> UI5 applications</li>
+						<li><strong>Asynchronous</strong> with <strong>active polling</strong></li>
+						<li>Define pages to <strong>abstract</strong> and <strong>componentize</strong> UI</li>
+						<li>Keep the journeys <strong>readable</strong></li>
+						<li>Use MockServer <strong>to simulate</strong> the backend</li>
+						<li>
+							<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
+								<img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" />training-ui5con18-opa
+							</a>
+						</li>
+					</ul>
 				</section>
 			</div>
 		</div>
