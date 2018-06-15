@@ -348,14 +348,18 @@ q {
 						<ul>
 							<li>onTheListOfItems
 								<pre><code data-trim data-noescape>
+									/* ... */
 									When.onTheListOfItems.iSetTheItemToCompleted(S_NEW_ITEM_TITLE);
 									Then.onTheListOfItems.iShouldSeeTheNewItem(S_NEW_ITEM_TITLE);
+									/* ... */
 								</code></pre>
 							</li>
 							<li>onTheFilterButtons
 								<pre><code data-trim data-noescape>
+									/* ... */
 									When.onTheFilterButtons.iClick(filters.COMPLETED);
 									Then.onTheFilterButtons.iShouldSeeTheButtonCount(filters.ALL, 4);
+									/* ... */
 								</code></pre>
 							</li>
 						</ul>
@@ -369,8 +373,10 @@ q {
 						<ul>
 							<li>onTheEditDialog
 								<pre><code data-trim data-noescape>
+									/* ... */
 									Then.onTheEditDialog.iShouldSeeTheTitleField();
 									When.onTheEditDialog.iClickClose();
+									/* ... */
 								</code></pre>
 							</li>
 						</ul>
