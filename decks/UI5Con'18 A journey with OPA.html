@@ -369,10 +369,8 @@ q {
 						<ul>
 							<li>onTheEditDialog
 								<pre><code data-trim data-noescape>
-									When.onTheEditDialog.iClickSave();
-									When.onTheEditDialog.iClickClose();
 									Then.onTheEditDialog.iShouldSeeTheTitleField();
-									Then.onTheEditDialog.iShouldNotSeeTheTitleField();
+									When.onTheEditDialog.iClickClose();
 								</code></pre>
 							</li>
 						</ul>
@@ -458,6 +456,7 @@ q {
 							});
 						</code></pre>
 						<sample>All Journeys=test/integration/AllJourneys.js</sample>
+						<small><span class="pre">QUnit.start()</span> is not present in AllJourneys.js because of <strong>Continuous Integration</strong></small>
 					</section>
 				</section>
 				<section>
@@ -477,7 +476,7 @@ q {
 						<pre><script>document.write(document.getElementById("opa_sample").innerHTML)</script></pre>
 						<p>
 							<span class="pre">waitFor</span>-based members fill an <strong>execution queue</strong><br/>
-							<small>You can wait on the end of this queue using
+							<small class="hide">You can wait on the end of this queue using
 							<a href="https://openui5.hana.ondemand.com/#/api/sap.ui.test.Opa5/methods/sap.ui.test.Opa5.emptyQueue"><span class="pre">sap.ui.test.Opa5.emptyQueue</span></a></small>
 						</p>
 					</section>
@@ -517,6 +516,13 @@ q {
 								</li>
 							</ul>
 						</p>
+					</section>
+					<section>
+						<h4><strong>Configuring</strong> - <span class="pre">timeout</span></h4>
+						<ul>
+							<li><span class="pre">timeout</span> decides of the maximum waiting time <i>(we use 15s)</i></li>
+							<li class="hide"><span class="pre">pollingInterval</span> can be changed <i>(defaulted to 400ms)</i></li>
+						</ul>
 					</section>
 					<section>
 						<h4><strong>Finding</strong></h4>
@@ -698,13 +704,6 @@ q {
 								errorMessage: "The " + sName + " field is displayed"
 							});
 						</code></pre>
-					</section>
-					<section>
-						<h4><strong>Configuring</strong> - <span class="pre">timeout</span></h4>
-						<ul>
-							<li><span class="pre">timeout</span> decides of the maximum waiting time <i>(we use 15s)</i></li>
-							<li class="hide"><span class="pre">pollingInterval</span> can be changed <i>(defaulted to 400ms)</i></li>
-						</ul>
 					</section>
 				</section>
 				<section>
