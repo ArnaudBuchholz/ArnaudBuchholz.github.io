@@ -10,13 +10,22 @@ gpf.require.define({
     var dom = require.dom,
         head = dom.head(),
         // Keep track of any styles node below the head node
-        styles = [].slice.call(head.querySelectorAll("style"));
+        styles = [].slice.call(head.querySelectorAll("style")),
+        // Use cached reveal if offline
+        offline = !!location.toString().match(/(\?|&)offline\b/);
+
+    function cache (url) {
+        if (offline && url.match(/https?:\/\//)) {
+            return "/decks/reveal.cache/" + url.split("/").pop();
+        }
+        return url;
+    }
 
     require.cdnStyles.forEach(function (attributes) {
         dom.link({
             rel: "stylesheet",
             crossorigin: "anonymous",
-            href: attributes.url,
+            href: cache(attributes.url),
             integrity: attributes.integrity
         }).appendTo(head);
     });
@@ -29,7 +38,7 @@ gpf.require.define({
     return Promise.all(require.cdnScripts.map(function (attributes) {
         return dom.waitForScript({
             crossorigin: "anonymous",
-            src: attributes.url,
+            src: cache(attributes.url),
             integrity: attributes.integrity
         });
     })).then(function () {
@@ -42,7 +51,7 @@ gpf.require.define({
             transition: "slide",
             dependencies: Object.keys(require.cdnPlugins).map(function (name) {
                 return Object.assign({
-                    src: require.cdnPlugins[name],
+                    src: cache(require.cdnPlugins[name]),
                     async: true
                 }, require.cfgPlugins[name]);
             })
