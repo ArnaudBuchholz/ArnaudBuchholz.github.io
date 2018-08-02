@@ -19,7 +19,7 @@
 <code class="markdown">
 ## New version
 
-Here comes the new version:
+Here comes the version 0.2.7:
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/15?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.7)
 * [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
@@ -27,11 +27,15 @@ Here comes the new version:
 
 ## Release content
 
-### A small release
+### A smaller release
 
-As announced during the releasing of [version 0.2.6](http://gpf-js.blogspot.com/2018/05/release-026-gpfrequirejs.html),
+As announced during the release of [version 0.2.6](http://gpf-js.blogspot.com/2018/05/release-026-gpfrequirejs.html),
 the month of June was busy developing a [sample application](https://github.com/ArnaudBuchholz/training-ui5con18-opa)
-for [UICon'18](https://youtu.be/HiZq-kuIbt0).
+to support the [UICon'18 conference](https://youtu.be/HiZq-kuIbt0).
+
+Unexpectedly, another interesting project emerged from this development but this will be detailled later on the blog.
+
+In the end, I had limited bandwidth to work on this release.
 
 ### XML Serialization
 
@@ -52,7 +56,7 @@ gpf.stream.pipe(writer, output).then(() => {
 });
 writer.startDocument()
     .then(() => writer.startElement("document"))
-    .then(() => writer.startElement("child"))
+    .then(() => writer.startElement("a"))
     .then(() => writer.startElement("b"))
     .then(() => writer.endElement())
     .then(() => writer.endElement())
@@ -62,8 +66,18 @@ writer.startDocument()
     .then(() => writer.endDocument());
 `
 
-Since all the methods returns a promise, the syntax might become quite annoying. Hence, for the tests, I created a
-wrapper that may be adapted for any interface.
+Which leads to the following output:
+<pre>&lt;document&gt;&lt;a&gt;&lt;b/&gt;&lt;/a&gt;&lt;c/&gt;&lt;/document&gt;</pre>
+
+Since all the methods returns a promise, the syntax is quite tedious.
+When writing the [first tests](https://github.com/ArnaudBuchholz/gpf-js/blob/
+f506c20d2ad16bffc33f188d94a1151aa5705f50/test/xml/writer.js), I quickly realized that I could greatly reduce this
+complexity by wrapping the interface.
+
+As a result, a [wrapper](https://github.com/ArnaudBuchholz/gpf-js/blob/6478d94ebfe547c3df5a4e4c4ab83966591781f8/test/
+xml/writer.js#L6-L26) was designed to simplify the tests.
+
+This will [surely](https://github.com/ArnaudBuchholz/gpf-js/issues/272) be standardized in a future version.
 
 ### Quality improvement
 
