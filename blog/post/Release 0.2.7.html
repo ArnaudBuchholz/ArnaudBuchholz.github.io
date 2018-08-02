@@ -1,0 +1,85 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.2.7: Quality and XML
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This small release introduces XML serialization and focus on quality measurement by integrating hosted automated
+    code review services.
+</div>
+<code class="markdown">
+## New version
+
+Here comes the new version:
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/15?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.7)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
+* [NPM package](https://www.npmjs.com/package/gpf-js)
+
+## Release content
+
+### A small release
+
+As announced during the releasing of [version 0.2.6](http://gpf-js.blogspot.com/2018/05/release-026-gpfrequirejs.html),
+the month of June was busy developing a [sample application](https://github.com/ArnaudBuchholz/training-ui5con18-opa)
+for [UICon'18](https://youtu.be/HiZq-kuIbt0).
+
+### XML Serialization
+
+This release introduces the
+[IXmlContentHandler](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IXmlContentHandler.html) interface as well
+as the [gpf.xml.Writer](https://arnaudbuchholz.github.io/gpf/doc/gpf.xml.Writer.html) class to enable XML writing.
+
+If you are not familiar with the [Simple API for XML](https://en.wikipedia.org/wiki/Simple_API_for_XML), there are tons
+of existing implementation in different languages.
+
+Here is an example of XML generation (piped to a string buffer):
+`
+const
+    writer = new gpf.xml.Writer(),
+    output = new gpf.stream.WritableString();
+gpf.stream.pipe(writer, output).then(() => {
+    console.log(output.toString());
+});
+writer.startDocument()
+    .then(() => writer.startElement("document"))
+    .then(() => writer.startElement("child"))
+    .then(() => writer.startElement("b"))
+    .then(() => writer.endElement())
+    .then(() => writer.endElement())
+    .then(() => writer.startElement("c"))
+    .then(() => writer.endElement())
+    .then(() => writer.endElement())
+    .then(() => writer.endDocument());
+`
+
+Since all the methods returns a promise, the syntax might become quite annoying. Hence, for the tests, I created a
+wrapper that may be adapted for any interface.
+
+### Quality improvement
+
+
+## Lessons learned
+
+I learned a lot on SourceMaps (https://www.html5rocks.com/en/tutorials/developertools/sourcemaps/)
+Most of the duplicates and code smells  raised by codeclimate were interesting to solve
+
+
+## Next release
+
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/16) is not yet clearly defined.
+For the next months, I will focus on a side project that requires all my attention.
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
