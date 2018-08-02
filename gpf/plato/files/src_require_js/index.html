@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">78.33</p>
+      <p class="stat">79.19</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">249</p>
+      <p class="stat">257</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">27.56</p>
+      <p class="stat">29.28</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.76</p>
+      <p class="stat">0.82</p>
     </div>
   </div>
 </div>
@@ -134,6 +134,7 @@ _gpfErrorDeclare(&quot;require&quot;, {
  * @property {String} [base] Base path used to resolve names
  * @property {Object} [cache] Inject names into the require cache
  * @property {Boolean} [clearCache=false] When set, the require cache is first cleared
+ * @property {Object} [preload] Inject names into the loading cache
  * @since 0.2.2
  */
 
@@ -177,6 +178,12 @@ var _gpfRequireOptionHandler = {
 
     clearCache: function () {
         this.cache = {};
+    },
+
+    preload: function (cache) {
+        _gpfArrayForEach(Object.keys(cache), function (name) {
+            this.preload[name] = cache[name];
+        }, this);
     }
 
 };
@@ -298,7 +305,8 @@ function _gpfRequireAllocate (parentContext, options) {
 
 gpf.require = _gpfRequireAllocate({
     base: &quot;&quot;,
-    cache: {}
+    cache: {},
+    preload: {}
 });
 
 /**

@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">85.08</p>
+      <p class="stat">84.01</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">86</p>
+      <p class="stat">107</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">9.12</p>
+      <p class="stat">10.35</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.21</p>
+      <p class="stat">0.27</p>
     </div>
   </div>
 </div>
@@ -98,6 +98,7 @@
 /*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
 /*global _gpfRegExpForEach*/ // Executes the callback for each match of the regular expression
 /*exported _GPF_HTTP_METHODS*/ // HTTP Methods
+/*exported _gpfHttpGenGetResponse*/ // Generates a function that extracts response from the http object
 /*exported _gpfHttpGenSend*/ // Generates a function that implements the http send logic
 /*exported _gpfHttpGenSetHeaders*/ // Generates a function that transmit headers to the http object
 /*exported _gpfHttpParseHeaders*/ // Parse HTTP response headers
@@ -173,6 +174,26 @@ function _gpfHttpGenSend (methodName) {
         } else {
             httpObj[methodName]();
         }
+    };
+}
+
+/**
+ * Generates a function that extracts response from the http object
+ *
+ * @param {String} status Name of the status property
+ * @param {String} getAllResponseHeaders Name of the getAllResponseHeaders method
+ * @param {String} responseText Name of the responseText property
+ * @return {Function} Method to generate response
+ * @gpf:closure
+ * @since 0.2.7
+ */
+function _gpfHttpGenGetResponse (status, getAllResponseHeaders, responseText) {
+    return function (httpObj) {
+        return {
+            status: httpObj[status],
+            headers: _gpfHttpParseHeaders(httpObj[getAllResponseHeaders]()),
+            responseText: httpObj[responseText]
+        };
     };
 }</textarea>
   </div>

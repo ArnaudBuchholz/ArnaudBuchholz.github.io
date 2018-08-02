@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">78.53</p>
+      <p class="stat">82.35</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">61</p>
+      <p class="stat">97</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">7.02</p>
+      <p class="stat">6.30</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.12</p>
+      <p class="stat">0.16</p>
     </div>
   </div>
 </div>
@@ -104,8 +104,31 @@
 /*#endif*/
 
 _gpfErrorDeclare(&quot;define/class/constructor&quot;, {
-    &quot;classConstructorFunction&quot;:
-        &quot;This is a class constructor function, use with new&quot;
+
+    /**
+     * ### Summary
+     *
+     * This is a class constructor function, use with new
+     *
+     * ### Description
+     *
+     * Class constructors are not designed to be called without `new`
+     *
+     * @since 0.1.6
+     */
+    classConstructorFunction: &quot;This is a class constructor function, use with new&quot;,
+
+    /**
+     * ### Summary
+     *
+     * Abstract Class
+     *
+     * ### Description
+     *
+     * An abstract class can not be instantiated
+     * @since 0.2.7
+     */
+    abstractClass: &quot;Abstract Class&quot;
 });
 
 
@@ -121,13 +144,26 @@ Object.assign(_GpfClassDefinition.prototype, {
 
 });
 
+
+function _gpfDefineGetClassSecuredConstructorAbstractCheck (classDefinition) {
+    if (classDefinition._abstract) {
+        return &quot;if (this.constructor === _classDef_._instanceBuilder) gpf.Error.abstractClass();&quot;;
+    }
+}
+
+function _gpfDefineGetClassSecuredConstructorBody (classDefinition) {
+    return [
+        &quot;if (!(this instanceof _classDef_._instanceBuilder)) gpf.Error.classConstructorFunction();&quot;,
+        _gpfDefineGetClassSecuredConstructorAbstractCheck(classDefinition),
+        &quot;_classDef_._resolvedConstructor.apply(this, arguments);&quot;
+    ].join(&quot;\n&quot;);
+}
+
 function _gpfDefineGetClassSecuredConstructorDefinition (classDefinition) {
-    var name = classDefinition._name;
     return {
-        name: name,
+        name: classDefinition._name,
         parameters: _gpfFunctionDescribe(classDefinition._resolvedConstructor).parameters,
-        body: &quot;if (!(this instanceof _classDef_._instanceBuilder)) gpf.Error.classConstructorFunction();\n&quot;
-            + &quot;_classDef_._resolvedConstructor.apply(this, arguments);&quot;
+        body: _gpfDefineGetClassSecuredConstructorBody(classDefinition)
     };
 }
 

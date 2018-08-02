@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/xml/check.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/xml/check.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">78.84</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">225</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">20.34</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.53</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file XML Validation helpers
+ * @since 0.2.7
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*exported _gpfXmlCheckDefinableNamespacePrefixName*/ // Check if the given XML namespace prefix name can be defined
+/*exported _gpfXmlCheckQualifiedAttributeName*/ // Check XML qualified attribute name
+/*exported _gpfXmlCheckQualifiedElementName*/ // Check XML qualified element name
+/*exported _gpfXmlCheckValidAttributeName*/ // Check XML attribute name
+/*exported _gpfXmlCheckValidElementName*/ // Check XML element name
+/*exported _gpfXmlCheckValidNamespacePrefixName*/ // Check XML namespace prefix name
+/*#endif*/
+
+_gpfErrorDeclare(&quot;xml/check&quot;, {
+
+    /**
+    * ### Summary
+    *
+    * Invalid XML element name
+    *
+    * ### Description
+    *
+    * Invalid XML element name
+    * @since 0.2.7
+    */
+    invalidXmlElementName: &quot;Invalid XML element name&quot;,
+
+    /**
+    * ### Summary
+    *
+    * Invalid XML attribute name
+    *
+    * ### Description
+    *
+    * Invalid XML attribute name
+    * @since 0.2.7
+    */
+    invalidXmlAttributeName: &quot;Invalid XML attribute name&quot;,
+
+    /**
+    * ### Summary
+    *
+    * Invalid XML namespace prefix
+    *
+    * ### Description
+    *
+    * Invalid XML namespace prefix
+    * @since 0.2.7
+    */
+    invalidXmlNamespacePrefix: &quot;Invalid XML namespace prefix&quot;,
+
+    /**
+    * ### Summary
+    *
+    * Invalid use of XML namespace prefix xmlns
+    *
+    * ### Description
+    *
+    * Invalid use of XML namespace prefix xmlns: startPrefixMapping should be used instead
+    * @since 0.2.7
+    */
+    invalidXmlUseOfPrefixXmlns: &quot;Invalid use of XML namespace prefix xmlns&quot;,
+
+    /**
+    * ### Summary
+    *
+    * Invalid use of XML namespace prefix xml
+    *
+    * ### Description
+    *
+    * Invalid use of XML namespace prefix xml: only xml:space=&quot;preserve&quot; is allowed
+    * @since 0.2.7
+    */
+    invalidXmlUseOfPrefixXml: &quot;Invalid use of XML namespace prefix xml&quot;,
+
+    /**
+    * ### Summary
+    *
+    * Unknown XML namespace prefix
+    *
+    * ### Description
+    *
+    * This error is triggered when an element or an attribute is prefixed with an unknown namespace prefix
+    * @since 0.2.7
+    */
+    unknownXmlNamespacePrefix: &quot;Unknown XML namespace prefix&quot;
+
+});
+
+function _gpfXmlCheckBuildSimple (regexp, exception) {
+    return function (name) {
+        if (!name.match(regexp)) {
+            gpf.Error[&quot;invalidXml&quot; + exception]();
+        }
+    };
+}
+
+var
+    _gpfXmlCheckNameRegExp = new RegExp(&quot;^[a-zA-Z_][a-zA-Z0-9_\\-\\.]*$&quot;),
+    _gpfXmlNamespacePrefixRegExp = new RegExp(&quot;^(|[a-z_][a-zA-Z0-9_]*)$&quot;),
+
+    /**
+     * Check XML element name
+     *
+     * @param {String} name Element name to check
+     * @throws {gpf.Error.InvalidXmlElementName}
+     * @since 0.2.7
+     */
+    _gpfXmlCheckValidElementName = _gpfXmlCheckBuildSimple(_gpfXmlCheckNameRegExp, &quot;ElementName&quot;),
+
+    /**
+     * Check XML attribute name
+     *
+     * @param {String} name Attribute name to check
+     * @throws {gpf.Error.InvalidXmlAttributeName}
+     * @since 0.2.7
+     */
+    _gpfXmlCheckValidAttributeName = _gpfXmlCheckBuildSimple(_gpfXmlCheckNameRegExp, &quot;AttributeName&quot;),
+
+    /**
+    * Check XML namespace prefix name
+    *
+    * @param {String} name Namespace prefix name to check
+    * @throws {gpf.Error.InvalidXmlNamespacePrefix}
+    * @since 0.2.7
+    */
+    _gpfXmlCheckValidNamespacePrefixName = _gpfXmlCheckBuildSimple(_gpfXmlNamespacePrefixRegExp, &quot;NamespacePrefix&quot;);
+
+function _gpfXmlCheckNoXmlns (prefix) {
+    if (&quot;xmlns&quot; === prefix) {
+        gpf.Error.invalidXmlUseOfPrefixXmlns();
+    }
+}
+
+function _gpfXmlCheckQualifiedNameAndPrefix (name, prefix) {
+    _gpfXmlCheckValidElementName(name);
+    _gpfXmlCheckValidNamespacePrefixName(prefix);
+    _gpfXmlCheckNoXmlns(prefix);
+}
+
+function _gpfXmlCheckIfKnownPrefix (prefix, knownPrefixes) {
+    if (knownPrefixes.indexOf(prefix) === -1) {
+        gpf.Error.unknownXmlNamespacePrefix();
+    }
+}
+
+function _gpfXmlCheckQualifiedElementNameAndPrefix (name, prefix, knownPrefixes) {
+    _gpfXmlCheckQualifiedNameAndPrefix(name, prefix);
+    if (&quot;xml&quot; === prefix) {
+        gpf.Error.invalidXmlUseOfPrefixXml();
+    } else {
+        _gpfXmlCheckIfKnownPrefix(prefix, knownPrefixes);
+    }
+}
+
+function _gpfXmlCheckGetQualified (noPrefixCheck, nameAndPrefixCheck) {
+    return function (qName, knownPrefixes) {
+        var sep = qName.indexOf(&quot;:&quot;);
+        if (-1 === sep) {
+            noPrefixCheck(qName);
+        } else {
+            nameAndPrefixCheck(qName.substr(sep + 1), qName.substr(0, sep), knownPrefixes);
+        }
+    };
+}
+
+/**
+ * Check XML qualified element name
+ *
+ * @param {String} qName Element qualified name to check
+ * @param {String[]} knownPrefixes Known namespaces prefixes
+ *
+ * @throws {gpf.Error.InvalidXmlElementName}
+ * @throws {gpf.Error.invalidXmlNamespacePrefix}
+ * @since 0.2.7
+ */
+var _gpfXmlCheckQualifiedElementName = _gpfXmlCheckGetQualified(_gpfXmlCheckValidElementName,
+    _gpfXmlCheckQualifiedElementNameAndPrefix);
+
+function _gpfXmlCheckOnlyXmlSpace (name) {
+    if (&quot;space&quot; !== name) {
+        gpf.Error.invalidXmlUseOfPrefixXml();
+    }
+}
+
+function _gpfXmlCheckQualifiedAttributeNameAndPrefix (name, prefix, knownPrefixes) {
+    _gpfXmlCheckQualifiedNameAndPrefix(name, prefix);
+    if (&quot;xml&quot; === prefix) {
+        _gpfXmlCheckOnlyXmlSpace(name);
+    } else {
+        _gpfXmlCheckIfKnownPrefix(prefix, knownPrefixes);
+    }
+}
+
+/**
+ * Check XML qualified attribute name
+ *
+ * @param {String} qName Attribute qualified name to check
+ * @param {String[]} knownPrefixes Known namespaces prefixes
+ *
+ * @throws {gpf.Error.InvalidXmlElementName}
+ * @since 0.2.7
+ */
+var _gpfXmlCheckQualifiedAttributeName = _gpfXmlCheckGetQualified(_gpfXmlCheckValidAttributeName,
+    _gpfXmlCheckQualifiedAttributeNameAndPrefix);
+
+
+/**
+ * Check if the given XML namespace prefix name can be defined
+ *
+ * @param {String} name Namespace prefix name to check
+ * @throws {gpf.Error.InvalidXmlNamespacePrefix}
+ * @throws {gpf.Error.InvalidXmlUseOfPrefixXmlns}
+ * @throws {gpf.Error.InvalidXmlUseOfPrefixXml}
+ * @since 0.2.7
+ */
+function _gpfXmlCheckDefinableNamespacePrefixName (name) {
+    _gpfXmlCheckValidNamespacePrefixName(name);
+    _gpfXmlCheckNoXmlns(name);
+    if (&quot;xml&quot; === name) {
+        gpf.Error.invalidXmlUseOfPrefixXml();
+    }
+}</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

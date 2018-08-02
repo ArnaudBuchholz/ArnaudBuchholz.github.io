@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">76.30</p>
+      <p class="stat">79.92</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">42</p>
+      <p class="stat">39</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">8.38</p>
+      <p class="stat">6.38</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.16</p>
+      <p class="stat">0.14</p>
     </div>
   </div>
 </div>
@@ -96,9 +96,9 @@
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
 /*global _GPF_HOST*/ // Host types
+/*global _gpfHttpGenGetResponse*/ // Generates a function that extracts response from the http object
 /*global _gpfHttpGenSend*/ // Generates a function that implements the http send logic
 /*global _gpfHttpGenSetHeaders*/ // Generates a function that transmit headers to the http object
-/*global _gpfHttpParseHeaders*/ // Parse HTTP response headers
 /*global _gpfHttpSetRequestImplIf*/ // Set the http request implementation if the host matches
 /*#endif*/
 
@@ -107,7 +107,8 @@
 /*eslint-disable new-cap*/
 
 var _gpfHttpWScriptSetHeaders = _gpfHttpGenSetHeaders(&quot;setRequestHeader&quot;),
-    _gpfHttpWScriptSend = _gpfHttpGenSend(&quot;Send&quot;);
+    _gpfHttpWScriptSend = _gpfHttpGenSend(&quot;Send&quot;),
+    _gpfHttpWScriptGetResponse = _gpfHttpGenGetResponse(&quot;Status&quot;, &quot;GetAllResponseHeaders&quot;, &quot;ResponseText&quot;);
 
 function _gpfHttpWScriptAllocate (request) {
     var winHttp = new ActiveXObject(&quot;WinHttp.WinHttpRequest.5.1&quot;);
@@ -116,11 +117,7 @@ function _gpfHttpWScriptAllocate (request) {
 }
 
 function _gpfHttpWScriptResolve (winHttp, resolve) {
-    resolve({
-        status: winHttp.Status,
-        headers: _gpfHttpParseHeaders(winHttp.GetAllResponseHeaders()),
-        responseText: winHttp.ResponseText
-    });
+    resolve(_gpfHttpWScriptGetResponse(winHttp));
 }
 
 function _gpfHttpWscriptRequestImpl (request, resolve) {

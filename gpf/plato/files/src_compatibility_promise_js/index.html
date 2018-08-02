@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">74.46</p>
+      <p class="stat">76.16</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">216</p>
+      <p class="stat">251</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">55.73</p>
+      <p class="stat">58.19</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.16</p>
+      <p class="stat">1.40</p>
     </div>
   </div>
 </div>
@@ -139,18 +139,33 @@ function _gpfPromiseReject (newValue) {
     _gpfPromiseFinale.call(me);
 }
 
+var _gpfPromiseResolve;
+
+function _gpfPromiseResolveChainIfFunction (newValue, then) {
+    /*jshint validthis:true*/
+    var me = this; //eslint-disable-line no-invalid-this
+    if (&quot;function&quot; === typeof then) {
+        _gpfPromiseSafeResolve(then.bind(newValue), _gpfPromiseResolve.bind(me), _gpfPromiseReject.bind(me));
+        return true;
+    }
+}
+
+function _gpfPromiseResolveChain (newValue) {
+    /*jshint validthis:true*/
+    var me = this; //eslint-disable-line no-invalid-this
+    if (newValue &amp;&amp; [&quot;object&quot;, &quot;function&quot;].indexOf(typeof newValue) !== -1) {
+        return _gpfPromiseResolveChainIfFunction.call(me, newValue, newValue.then);
+    }
+}
+
 //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-function _gpfPromiseResolve (newValue) {
+_gpfPromiseResolve = function (newValue) {
     /*jshint validthis:true*/
     var me = this; //eslint-disable-line no-invalid-this
     try {
         _gpfAssert(newValue !== me, &quot;A promise cannot be resolved with itself.&quot;);
-        if (newValue &amp;&amp; (typeof newValue === &quot;object&quot; || typeof newValue === &quot;function&quot;)) {
-            var then = newValue.then;
-            if (&quot;function&quot; === typeof then) {
-                _gpfPromiseSafeResolve(then.bind(newValue), _gpfPromiseResolve.bind(me), _gpfPromiseReject.bind(me));
-                return;
-            }
+        if (_gpfPromiseResolveChain.call(me, newValue)) {
+            return;
         }
         me._state = true;
         me._value = newValue;
@@ -159,13 +174,45 @@ function _gpfPromiseResolve (newValue) {
         /* istanbul ignore next */ // compability.promise.1
         _gpfPromiseReject.call(me, e);
     }
-}
+};
 
 var _GpfPromise = gpf.Promise = function (fn) {
     _gpfPromiseSafeResolve(fn, _gpfPromiseResolve.bind(this), _gpfPromiseReject.bind(this));
 };
 
 function _gpfPromiseHandler () {
+}
+
+function _gpfPromiseGetCallbackFromState (handler, promise) {
+    if (promise._state) {
+        return handler.onFulfilled;
+    }
+    return handler.onRejected;
+}
+
+function _gpfPromiseSettleFromState (handler, promise) {
+    if (promise._state) {
+        handler.resolve(promise._value);
+    } else {
+        handler.reject(promise._value);
+    }
+}
+
+function _gpfPromiseAsyncProcess (promise) {
+    /*jshint validthis:true*/
+    var me = this; //eslint-disable-line no-invalid-this
+    var callback = _gpfPromiseGetCallbackFromState(me, promise),
+        result;
+    if (null === callback) {
+        return _gpfPromiseSettleFromState(me, promise);
+    }
+    try {
+        result = callback(promise._value);
+    }  catch (e) {
+        me.reject(e);
+        return;
+    }
+    me.resolve(result);
 }
 
 _gpfPromiseHandler.prototype = {
@@ -189,30 +236,7 @@ _gpfPromiseHandler.prototype = {
             promise._handlers.push(me);
             return;
         }
-        setTimeout(function () {
-            var callback,
-                result;
-            if (promise._state) {
-                callback = me.onFulfilled;
-            } else {
-                callback = me.onRejected;
-            }
-            if (null === callback) {
-                if (promise._state) {
-                    me.resolve(promise._value);
-                } else {
-                    me.reject(promise._value);
-                }
-                return;
-            }
-            try {
-                result = callback(promise._value);
-            }  catch (e) {
-                me.reject(e);
-                return;
-            }
-            me.resolve(result);
-        }, 0);
+        setTimeout(_gpfPromiseAsyncProcess.bind(me, promise), 0);
     }
 
 };
@@ -263,30 +287,41 @@ _GpfPromise.reject = function (value) {
     });
 };
 
+function _gpfPromiseAllAssign (state, index, result) {
+    state.promises[index] = result;
+    if (--state.remaining === 0) {
+        state.resolve(state.promises);
+    }
+}
+
+function _gpfPromiseAllHandle (result, index) {
+    /*jshint validthis:true*/
+    var me = this; //eslint-disable-line no-invalid-this
+    try {
+        if (result instanceof _GpfPromise) {
+            result.then(function (value) {
+                _gpfPromiseAllHandle.call(me, value, index);
+            }, me.reject);
+            return;
+        }
+        _gpfPromiseAllAssign(me, index, result);
+    } catch (e) {
+        /* istanbul ignore next */ // compability.promise.1
+        me.reject(e);
+    }
+}
+
 _GpfPromise.all = function (promises) {
     if (0 === promises.length) {
         return _GpfPromise.resolve([]);
     }
     return new _GpfPromise(function (resolve, reject) {
-        var remaining = promises.length;
-        function handle (result, index) {
-            try {
-                if (result &amp;&amp; result instanceof _GpfPromise) {
-                    result.then(function (value) {
-                        handle(value, index);
-                    }, reject);
-                    return;
-                }
-                promises[index] = result;
-                if (--remaining === 0) {
-                    resolve(promises);
-                }
-            } catch (e) {
-                /* istanbul ignore next */ // compability.promise.1
-                reject(e);
-            }
-        }
-        promises.forEach(handle);
+        promises.forEach(_gpfPromiseAllHandle.bind({
+            resolve: resolve,
+            reject: reject,
+            remaining: promises.length,
+            promises: promises
+        }));
     });
 };
 

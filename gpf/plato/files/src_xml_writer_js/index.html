@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/xml/writer.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/xml/writer.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">76.25</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">226</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">23.58</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.15</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file XML Writer
+ * @since 0.2.7
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _GpfStreamBufferedRead*/ // gpf.stream.BufferedRead
+/*global _gpfDefine*/ // Shortcut for gpf.define
+/*global _gpfEmptyFunc*/ // An empty function
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*global _gpfIgnore*/ // Helper to remove unused parameter warning
+/*global _gpfObjectForEach*/ // Similar to [].forEach but for objects
+/*global _gpfStringEscapeFor*/ // Make the string content compatible with lang
+/*global _gpfXmlCheckDefinableNamespacePrefixName*/ // Check if the given XML namespace prefix name can be defined
+/*global _gpfXmlCheckQualifiedAttributeName*/ // Check XML qualified attribute name
+/*global _gpfXmlCheckQualifiedElementName*/ // Check XML qualified element name
+/*exported _GpfXmlWriter*/ // gpf.xml.Writer
+/*#endif*/
+
+_gpfErrorDeclare(&quot;xml/writer&quot;, {
+
+    /**
+     * ### Summary
+     *
+     * Invalid XML Writer state
+     *
+     * ### Description
+     *
+     * This error is used when a method can not be called due to the current XML writer state
+     * @since 0.2.7
+     */
+    invalidXmlWriterState: &quot;Invalid XML Writer state&quot;
+
+});
+
+var
+    _GpfXmlWriter = _gpfDefine({
+        $class: &quot;gpf.xml.Writer&quot;,
+        $extend: _GpfStreamBufferedRead,
+
+        /**
+         * XML writer
+         *
+         * @constructor gpf.xml.Writer
+         * @implements {gpf.interfaces.IReadableStream}
+         * @implements {gpf.interfaces.IXmlContentHandler}
+         * @extends gpf.stream.BufferedRead
+         * @since 0.2.7
+         */
+        constructor: function () {
+            this._elements = [];
+            this._nextNamespaces = {};
+            this._checkIfStarted = gpf.Error.invalidXmlWriterState;
+        },
+
+        _elements: [],
+        _nextNamespaces: {},
+
+        _checkIfElementsExist: function (hasElements) {
+            if (hasElements !== (this._elements.length !== 0)) {
+                gpf.Error.invalidXmlWriterState();
+            }
+        },
+
+        _checkState: function (hasElements) {
+            this._checkIfStarted();
+            if (undefined !== hasElements) {
+                this._checkIfElementsExist(hasElements);
+            }
+        },
+
+        _addContentToElement: function (element) {
+            if (!element.content) {
+                this._appendToReadBuffer(&quot;&gt;&quot;);
+                element.content = true;
+            }
+        },
+
+        _addContentToLastElement: function () {
+            var element = this._elements[0];
+            if (element) {
+                return this._addContentToElement(element);
+            }
+        },
+
+        _writeAttribute: function (qName, value) {
+            this._appendToReadBuffer(&quot; &quot; + qName + &quot;=\&quot;&quot;);
+            this._appendToReadBuffer(_gpfStringEscapeFor(value.toString(), &quot;xml&quot;));
+            this._appendToReadBuffer(&quot;\&quot;&quot;);
+        },
+
+        _getNamespacePrefixes: function () {
+            return this._elements.reduce(function (namespaces, element) {
+                return namespaces.concat(Object.keys(element.namespaces));
+            }, []);
+        },
+
+        _processAttributes: function (attributes) {
+            _gpfObjectForEach(attributes, function (value, qName) {
+                /*jshint validthis:true*/
+                var me = this; //eslint-disable-line no-invalid-this
+                _gpfXmlCheckQualifiedAttributeName(qName, me._getNamespacePrefixes());
+                me._writeAttribute(qName, value);
+            }, this);
+        },
+
+        _processNamespaces: function (namespaces) {
+            _gpfObjectForEach(namespaces, function (value, name) {
+                /*jshint validthis:true*/
+                var me = this; //eslint-disable-line no-invalid-this
+                if (name) {
+                    me._writeAttribute(&quot;xmlns:&quot; + name, value);
+                } else {
+                    me._writeAttribute(&quot;xmlns&quot;, value);
+                }
+            }, this);
+        },
+
+        // region gpf.interfaces.IXmlContentHandler
+
+        /**
+         * @gpf:sameas gpf.interfaces.IXmlContentHandler#characters
+         * @since 0.2.7
+         */
+        characters: function (buffer) {
+            this._checkState(true);
+            this._addContentToLastElement();
+            this._appendToReadBuffer(_gpfStringEscapeFor(buffer.toString(), &quot;xml&quot;));
+            return Promise.resolve();
+        },
+
+        /**
+         * @gpf:sameas gpf.interfaces.IXmlContentHandler#endDocument
+         * @since 0.2.7
+         */
+        endDocument: function () {
+            this._checkState(false);
+            this._checkIfStarted = gpf.Error.invalidXmlWriterState;
+            this._completeReadBuffer();
+            return Promise.resolve();
+        },
+
+        /**
+         * @gpf:sameas gpf.interfaces.IXmlContentHandler#endElement
+         * @since 0.2.7
+         */
+        endElement: function () {
+            this._checkState(true);
+            var element = this._elements.shift();
+            if (element.content) {
+                this._appendToReadBuffer(&quot;&lt;/&quot; + element.qName + &quot;&gt;&quot;);
+            } else {
+                this._appendToReadBuffer(&quot;/&gt;&quot;);
+            }
+            return Promise.resolve();
+        },
+
+        /**
+         * @gpf:sameas gpf.interfaces.IXmlContentHandler#endPrefixMapping
+         * @since 0.2.7
+         */
+        endPrefixMapping: function (prefix) {
+            // Actually this call is ignored since closing the element owning the namespaces will do the same.
+            this._checkState();
+            _gpfIgnore(prefix);
+            return Promise.resolve();
+        },
+
+        /**
+         * @gpf:sameas gpf.interfaces.IXmlContentHandler#processingInstruction
+         * @since 0.2.7
+         */
+        processingInstruction: function (target, data) {
+            this._checkState(false);
+            this._appendToReadBuffer(&quot;&lt;?&quot; + target + &quot; &quot; + data + &quot;?&gt;\n&quot;);
+            return Promise.resolve();
+        },
+
+        /**
+         * @gpf:sameas gpf.interfaces.IXmlContentHandler#startDocument
+         * @since 0.2.7
+         */
+        startDocument: function () {
+            this._checkIfStarted = _gpfEmptyFunc;
+            this.startDocument = gpf.Error.invalidXmlWriterState;
+            this._checkState(false);
+            return Promise.resolve();
+        },
+
+        /**
+         * @gpf:sameas gpf.interfaces.IXmlContentHandler#startElement
+         * @since 0.2.7
+         */
+        startElement: function (qName, attributes) {
+            var namespaces = this._nextNamespaces;
+            this._checkState();
+            this._addContentToLastElement();
+            this._elements.unshift({
+                qName: qName,
+                namespaces: namespaces
+            });
+            this._nextNamespaces = {};
+            _gpfXmlCheckQualifiedElementName(qName, this._getNamespacePrefixes());
+            this._appendToReadBuffer(&quot;&lt;&quot; + qName);
+            if (attributes) {
+                this._processAttributes(attributes);
+            }
+            this._processNamespaces(namespaces);
+        },
+
+        /**
+         * @gpf:sameas gpf.interfaces.IXmlContentHandler#startPrefixMapping
+         * @since 0.2.7
+         */
+        startPrefixMapping: function (prefix, uri) {
+            this._checkState();
+            _gpfXmlCheckDefinableNamespacePrefixName(prefix);
+            if (this._nextNamespaces[prefix]) {
+                gpf.Error.invalidXmlWriterState();
+            }
+            this._nextNamespaces[prefix] = uri;
+        }
+
+        //endregion
+
+    });</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
