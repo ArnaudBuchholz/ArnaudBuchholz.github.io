@@ -9,7 +9,6 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
@@ -17,9 +16,8 @@
     code review services.
 </div>
 <code class="markdown">
-## New version
+## Release 0.2.7: Quality and XML
 
-Here comes the version 0.2.7:
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/15?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.7)
 * [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
@@ -35,20 +33,24 @@ to support the [UICon'18 conference](https://youtu.be/HiZq-kuIbt0).
 
 Unexpectedly, another interesting project emerged from this development but this will be detailled later on the blog.
 
-In the end, I had limited bandwidth to work on this release.
+In the end, the bandwidth was limited to work on this release.
 
 ### XML Serialization
 
-This release introduces the
+This version introduces the
 [IXmlContentHandler](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IXmlContentHandler.html) interface as well
-as the [gpf.xml.Writer](https://arnaudbuchholz.github.io/gpf/doc/gpf.xml.Writer.html) class to enable XML writing.
+as the [gpf.xml.Writer](https://arnaudbuchholz.github.io/gpf/doc/gpf.xml.Writer.html) class to enable
+[XML](https://en.wikipedia.org/wiki/XML) writing.
 
 If you are not familiar with the [Simple API for XML](https://en.wikipedia.org/wiki/Simple_API_for_XML), there are tons
 of existing implementation in different languages.
+The [Java](https://docs.oracle.com/javase/tutorial/jaxp/sax/parsing.html) one is considered to be normative.
 
-Here is an example of XML generation (piped to a string buffer):
-`
-const
+To put it in a nutshell, SAX proposes an event-based interface to parse XML.
+
+Here is an example of an XML generation piped to a string buffer:
+
+`const
     writer = new gpf.xml.Writer(),
     output = new gpf.stream.WritableString();
 gpf.stream.pipe(writer, output).then(() => {
@@ -63,23 +65,66 @@ writer.startDocument()
     .then(() => writer.startElement("c"))
     .then(() => writer.endElement())
     .then(() => writer.endElement())
-    .then(() => writer.endDocument());
-`
+    .then(() => writer.endDocument());`
 
 Which leads to the following output:
 <pre>&lt;document&gt;&lt;a&gt;&lt;b/&gt;&lt;/a&gt;&lt;c/&gt;&lt;/document&gt;</pre>
 
+Representing the following structure:
+<pre>document
+|
++- a
+|  |
+|  +- b
+|
++- c</pre>
+
 Since all the methods returns a promise, the syntax is quite tedious.
 When writing the [first tests](https://github.com/ArnaudBuchholz/gpf-js/blob/
-f506c20d2ad16bffc33f188d94a1151aa5705f50/test/xml/writer.js), I quickly realized that I could greatly reduce this
-complexity by wrapping the interface.
+f506c20d2ad16bffc33f188d94a1151aa5705f50/test/xml/writer.js), I quickly realized that its complexity could be greatly
+reduced by augmenting the result promise with the interface methods.
 
 As a result, a [wrapper](https://github.com/ArnaudBuchholz/gpf-js/blob/6478d94ebfe547c3df5a4e4c4ab83966591781f8/test/
-xml/writer.js#L6-L26) was designed to simplify the tests.
+xml/writer.js#L6-L26) was designed to simplify the tests leading to this improved syntax:
+
+`const
+    writer = new gpf.xml.Writer(),
+    output = new gpf.stream.WritableString();
+gpf.stream.pipe(writer, output).then(() => {
+    console.log(output.toString());
+});
+wrap(writer).startDocument()
+    .startElement("document")
+    .startElement("a")
+    .startElement("b")
+    .endElement()
+    .endElement()
+    .startElement("c")
+    .endElement()
+    .endElement()
+    .endDocument();`
 
 This will [surely](https://github.com/ArnaudBuchholz/gpf-js/issues/272) be standardized in a future version.
 
+### Improved gpf.require
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+#### Preloading
+
+Since I am planning to build an application on top of the library, I started to think about the bundling of it.
+As explained in the article [My own require implementation](http://gpf-js.blogspot.com/2018/01/my-own-require-implementation.html)
+
+#### Modern browsers
+
 ### Quality improvement
+
+#### Debugging with sources
+
+#### Abstract classes
+
+#### Hosted automated code review
+
 
 
 ## Lessons learned
