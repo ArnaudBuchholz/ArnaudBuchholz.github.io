@@ -31,7 +31,8 @@ As announced during the release of [version 0.2.6](http://gpf-js.blogspot.com/20
 the month of June was busy developing a [sample application](https://github.com/ArnaudBuchholz/training-ui5con18-opa)
 to support the [UICon'18 conference](https://youtu.be/HiZq-kuIbt0).
 
-Unexpectedly, another interesting project emerged from this development but this will be detailled later on the blog.
+Unexpectedly, another **interesting project** emerged from this development but this will be detailled later on the
+blog.
 
 In the end, the bandwidth was limited to work on this release.
 
@@ -39,14 +40,16 @@ In the end, the bandwidth was limited to work on this release.
 
 This version introduces the
 [IXmlContentHandler](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IXmlContentHandler.html) interface as well
-as the [gpf.xml.Writer](https://arnaudbuchholz.github.io/gpf/doc/gpf.xml.Writer.html) class to enable
-[XML](https://en.wikipedia.org/wiki/XML) writing.
+as the [gpf.xml.Writer](https://arnaudbuchholz.github.io/gpf/doc/gpf.xml.Writer.html) class to **enable
+[XML](https://en.wikipedia.org/wiki/XML) writing**.
 
 If you are not familiar with the [Simple API for XML](https://en.wikipedia.org/wiki/Simple_API_for_XML), there are tons
 of existing implementation in different languages.
 The [Java](https://docs.oracle.com/javase/tutorial/jaxp/sax/parsing.html) one is considered to be normative.
 
-To put it in a nutshell, SAX proposes an event-based interface to parse XML.
+To put it in a nutshell, **SAX proposes an interface to parse  and generate XML**.
+
+(...) The parsing part might be implemented later, only the generation one is required today.
 
 Here is an example of an XML generation piped to a string buffer:
 
@@ -79,13 +82,13 @@ Representing the following structure:
 |
 +- c</pre>
 
-Since all the methods returns a promise, the syntax is quite tedious.
+Since all the methods returns a promise, the syntax is quite **tedious**.
 When writing the [first tests](https://github.com/ArnaudBuchholz/gpf-js/blob/
 f506c20d2ad16bffc33f188d94a1151aa5705f50/test/xml/writer.js), I quickly realized that its complexity could be greatly
 reduced by augmenting the result promise with the interface methods.
 
 As a result, a [wrapper](https://github.com/ArnaudBuchholz/gpf-js/blob/6478d94ebfe547c3df5a4e4c4ab83966591781f8/test/
-xml/writer.js#L6-L26) was designed to simplify the tests leading to this improved syntax:
+xml/writer.js#L6-L26) was designed to **simplify the tests** leading to this improved syntax:
 
 `const
     writer = new gpf.xml.Writer(),
@@ -108,20 +111,95 @@ This will [surely](https://github.com/ArnaudBuchholz/gpf-js/issues/272) be stand
 
 ### Improved gpf.require
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 #### Preloading
 
-Since I am planning to build an application on top of the library, I started to think about the bundling of it.
-As explained in the article [My own require implementation](http://gpf-js.blogspot.com/2018/01/my-own-require-implementation.html)
+The goal of the library is to support application development. As explained in the article
+[My own require implementation](http://gpf-js.blogspot.com/2018/01/my-own-require-implementation.html), splitting the
+code into **modules enforces better code**. However, at some point, all these modules must be consolidated to **speed up
+the application loading**.
+
+This versions offers the possibility to **preload** the sources by passing a dictionary mapping the resources path
+to their textual content. As a result, when the resource is required, it does not need to be loaded.
+
+Here is the proposed bootstrap implementation:
+
+`gpf.http.get("preload.json")
+    .then(function (response) {
+        if (response.status === 200) {
+            return JSON.parse(response.responseText);
+        }
+        return Promise.reject();
+    })
+    .then(function (preload) {
+        gpf.require.configure({
+            preload: preload
+        });
+    })
+    .catch(function (reason) {
+        // Document and/or absorb errors
+    })
+    .then(function () {
+        gpf.require.define({
+            app: "app.js" // Might be preloaded
+        }, function (require) {
+            require.app.start();
+        });
+    });`
 
 #### Modern browsers
 
+One of the challenges of building a feature-specific version of the library (a.k.a. flavor) is to test it with **modern
+browsers**. The [compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) of the
+library takes a **significant part** of it and is useless if the flavor's target is NodeJS or any recent browser.
+
+Worst, while building the release, the tests were failing when 'old' browsers were configured.
+
+So, the concurrent task was [modified](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/grunt/concurrent.js#L12-L15)
+to include a [condition](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/grunt/concurrent.js#L75) on modern
+browsers.
+
+These are considered modern:
+* Chrome
+* Firefox
+* Safari (if on Mac)
+
 ### Quality improvement
+
+#### Abstract classes
+
+Quality is also about providing tools to make sure that developers don't make mistake. Abstract classes is one of them.
+This version offers the possibility to create **abstract classes** by adding
+[$abstract](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/test/define.js#L313-L373) in their definition.
+
+(...) If one wants to deal with abstract methods, they can defined with gpf.Error.abstractMethod. However, this won't
+prevent class instantiation.
 
 #### Debugging with sources
 
-#### Abstract classes
+Debugging the library can be laborious. I am more familiar with Chrome development tools and I sometimes use them
+with [NodeJS](https://nodejs.org/en/docs/guides/debugging-getting-started/).
+Because the sources are loading through the [evilish](http://linterrors.com/js/eval-is-evil)
+use of [eval](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/eval), they **don't appear
+in the debugger sources tab**.
+
+![No sources](http://arnaudbuchholz.github.io/blog/post/Release%200.2.7/before.png)
+
+To solve that problem, [source maps](https://www.html5rocks.com/en/tutorials/developertools/sourcemaps/) were applied.
+
+To put it in a nutshell:
+* Test files loading [injects
+sourceURL](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/test/host/web_loader.js#L48) before evaluation
+* A special version of the [boot.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/test/host/web_loader.js#L207)
+file is handled by a [new
+middelware](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/grunt/connect-middleware/sources.js). It generates a
+unique source file (sources.js) with its corresponding source map thanks to
+[uglify-js](https://github.com/mishoo/UglifyJS2).
+
+As a result, sources appear:
+
+![With sources](http://arnaudbuchholz.github.io/blog/post/Release%200.2.7/after.png)
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 #### Hosted automated code review
 
