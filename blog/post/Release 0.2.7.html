@@ -9,6 +9,7 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
@@ -199,16 +200,56 @@ As a result, sources appear:
 
 ![With sources](http://arnaudbuchholz.github.io/blog/post/Release%200.2.7/after.png)
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 #### Hosted automated code review
 
+[GitHub](https://github.com/) is a huge source of information. While browsing some repositories, I discovered two code
+review services that integrates nicely.
 
+* [Code Climate](https://codeclimate.com/github/ArnaudBuchholz/gpf-js)
+* [Codacy](https://app.codacy.com/project/ArnaudBuchholz/gpf-js/dashboard)
+
+They both focus on code quality (based on static checks) and propose detailled report on potential issues or code smells
+found in your code.
+
+Today, only the [src](https://github.com/ArnaudBuchholz/gpf-js/tree/master/src) folder of the repository is submitted
+for review.
+
+It revealed some interesting issues such as:
+* Code similarities, i.e. opportunity for code refactoring
+
+* Code complexity
+
+Some were already known and has been addressed in this version (in particular
+[src/compatibility/promise.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/src/compatibility/promise.js) where
+plato was giving a little
+[74.46](https://arnaudbuchholz.github.io/gpf/plato/files/src_compatibility_promise_js/index.html)).
+
+The surprise came from a class definition with more than 20 methods as it was considered an issue
+([src/xml/writer.js](https://github.com/ArnaudBuchholz/gpf-js/blob/ebee2a06417401cbbaabd89f8fa65a43bb7ec943/
+src/xml/writer.js)).
+After having diligently improved the code, by isolating the
+[XML validation helpers](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/src/xml/check.js), one must admit that it
+makes things more [readable](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/src/xml/writer.js) !
+
+Last but not least, these tools rank the overall quality with a score that can be inserted in the project readme.
+
+![Quality scores](http://arnaudbuchholz.github.io/blog/post/Release%200.2.7/quality.png)
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ## Lessons learned
 
-I learned a lot on SourceMaps (https://www.html5rocks.com/en/tutorials/developertools/sourcemaps/)
-Most of the duplicates and code smells  raised by codeclimate were interesting to solve
+From a pure development prospective, a lot was done in a very limited time. It's all because the
+
+
+This is because the co thanks to TDD and the code quality enforcement.
+It pays a lot.
+
+I learned a lot on [JavaScript source mappings](https://www.html5rocks.com/en/tutorials/developertools/sourcemaps/) as
+I wanted to be able to debug in the browser.
+
+I was also surprised by the relevance of the problems raised by the Code Climate tool: the overall project quality
+benefited from this integration.
 
 
 ## Next release
