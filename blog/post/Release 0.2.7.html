@@ -13,8 +13,8 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
-    This small release introduces XML serialization and focus on quality measurement by integrating hosted automated
-    code review services.
+    This small release focuses on quality by integrating hosted automated code review services and introduces XML
+    serialization.
 </div>
 <code class="markdown">
 ## Release 0.2.7: Quality and XML
@@ -32,10 +32,9 @@ As announced during the release of [version 0.2.6](http://gpf-js.blogspot.com/20
 the month of June was busy developing a [sample application](https://github.com/ArnaudBuchholz/training-ui5con18-opa)
 to support the [UICon'18 conference](https://youtu.be/HiZq-kuIbt0).
 
-Unexpectedly, another **interesting project** emerged from this development but this will be detailled later on the
-blog.
+Unexpectedly, another **interesting project** emerged from this development but this will be detailed later on the blog.
 
-In the end, the bandwidth was limited to work on this release.
+In the end, the **bandwidth was limited** to work on this release.
 
 ### XML Serialization
 
@@ -46,7 +45,7 @@ as the [gpf.xml.Writer](https://arnaudbuchholz.github.io/gpf/doc/gpf.xml.Writer.
 
 If you are not familiar with the [Simple API for XML](https://en.wikipedia.org/wiki/Simple_API_for_XML), there are tons
 of existing implementation in different languages.
-The [Java](https://docs.oracle.com/javase/tutorial/jaxp/sax/parsing.html) one is considered to be normative.
+The [Java](https://docs.oracle.com/javase/tutorial/jaxp/sax/parsing.html) one is considered to be **normative**.
 
 To put it in a nutshell, **SAX proposes an interface to parse  and generate XML**.
 
@@ -85,8 +84,8 @@ Representing the following structure:
 
 Since all the methods returns a promise, the syntax is quite **tedious**.
 When writing the [first tests](https://github.com/ArnaudBuchholz/gpf-js/blob/
-f506c20d2ad16bffc33f188d94a1151aa5705f50/test/xml/writer.js), I quickly realized that its complexity could be greatly
-reduced by augmenting the result promise with the interface methods.
+f506c20d2ad16bffc33f188d94a1151aa5705f50/test/xml/writer.js), it quickly became clear that its complexity could be
+greatly reduced by augmenting the result promise with the interface methods.
 
 As a result, a [wrapper](https://github.com/ArnaudBuchholz/gpf-js/blob/6478d94ebfe547c3df5a4e4c4ab83966591781f8/test/
 xml/writer.js#L6-L26) was designed to **simplify the tests** leading to this improved syntax:
@@ -119,7 +118,7 @@ The goal of the library is to support application development. As explained in t
 code into **modules enforces better code**. However, at some point, all these modules must be consolidated to **speed up
 the application loading**.
 
-This versions offers the possibility to **preload** the sources by passing a dictionary mapping the resources path
+This version offers the possibility to **preload** the sources by passing a dictionary mapping the resources path
 to their textual content. As a result, when the resource is required, it does not need to be loaded.
 
 Here is the proposed bootstrap implementation:
@@ -150,7 +149,7 @@ Here is the proposed bootstrap implementation:
 #### Modern browsers
 
 One of the challenges of building a feature-specific version of the library (a.k.a. flavor) is to test it with **modern
-browsers**. The [compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) of the
+browsers** only. The [compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) of the
 library takes a **significant part** of it and is useless if the flavor's target is NodeJS or any recent browser.
 
 Worst, while building the release, the tests were failing when 'old' browsers were configured.
@@ -168,18 +167,18 @@ These are considered modern:
 
 #### Abstract classes
 
-Quality is also about providing tools to make sure that developers don't make mistake. Abstract classes is one of them.
-This version offers the possibility to create **abstract classes** by adding
+Quality is also about providing tools to make sure that developers don't make mistake. Abstract classes concept is one
+of them. This version offers the possibility to create **abstract classes** by adding
 [$abstract](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/test/define.js#L313-L373) in their definition.
 
-(...) If one wants to deal with abstract methods, they can defined with gpf.Error.abstractMethod. However, this won't
+(...) If one wants to deal with abstract methods, they can be defined with gpf.Error.abstractMethod. However, this won't
 prevent class instantiation.
 
 #### Debugging with sources
 
 Debugging the library can be laborious. I am more familiar with Chrome development tools and I sometimes use them
 with [NodeJS](https://nodejs.org/en/docs/guides/debugging-getting-started/).
-Because the sources are loading through the [evilish](http://linterrors.com/js/eval-is-evil)
+Because the sources are loading through the [evil-ish](http://linterrors.com/js/eval-is-evil)
 use of [eval](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/eval), they **don't appear
 in the debugger sources tab**.
 
@@ -192,7 +191,7 @@ To put it in a nutshell:
 sourceURL](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/test/host/web_loader.js#L48) before evaluation
 * A special version of the [boot.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/test/host/web_loader.js#L207)
 file is handled by a [new
-middelware](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/grunt/connect-middleware/sources.js). It generates a
+middleware](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/grunt/connect-middleware/sources.js). It generates a
 unique source file (sources.js) with its corresponding source map thanks to
 [uglify-js](https://github.com/mishoo/UglifyJS2).
 
@@ -208,53 +207,48 @@ review services that integrates nicely.
 * [Code Climate](https://codeclimate.com/github/ArnaudBuchholz/gpf-js)
 * [Codacy](https://app.codacy.com/project/ArnaudBuchholz/gpf-js/dashboard)
 
-They both focus on code quality (based on static checks) and propose detailled report on potential issues or code smells
-found in your code.
+They both focus on **code quality** (based on static checks) and propose exhaustive report on potential issues or code
+smells found in your code.
 
-Today, only the [src](https://github.com/ArnaudBuchholz/gpf-js/tree/master/src) folder of the repository is submitted
-for review.
+Today, **only the [src](https://github.com/ArnaudBuchholz/gpf-js/tree/master/src) folder of the repository is submitted
+for review**.
 
 It revealed some interesting issues such as:
 * Code similarities, i.e. opportunity for code refactoring
 
-* Code complexity
+* Code complexities:
 
-Some were already known and has been addressed in this version (in particular
+Some were already known and have been addressed in this version (in particular
 [src/compatibility/promise.js](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/src/compatibility/promise.js) where
 plato was giving a little
 [74.46](https://arnaudbuchholz.github.io/gpf/plato/files/src_compatibility_promise_js/index.html)).
 
-The surprise came from a class definition with more than 20 methods as it was considered an issue
+The surprise came from a **class definition with more than 20 methods** as it was considered an issue
 ([src/xml/writer.js](https://github.com/ArnaudBuchholz/gpf-js/blob/ebee2a06417401cbbaabd89f8fa65a43bb7ec943/
 src/xml/writer.js)).
-After having diligently improved the code, by isolating the
-[XML validation helpers](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/src/xml/check.js), one must admit that it
-makes things more [readable](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/src/xml/writer.js) !
+After having diligently improved the code, by **isolating the
+[XML validation helpers](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/src/xml/check.js)**, one must admit that
+it makes things more [readable](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.7/src/xml/writer.js) !
 
-Last but not least, these tools rank the overall quality with a score that can be inserted in the project readme.
+Finally, these tools **rank the overall quality** with a score that can be inserted in the project readme.
 
 ![Quality scores](http://arnaudbuchholz.github.io/blog/post/Release%200.2.7/quality.png)
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ## Lessons learned
 
-From a pure development prospective, a lot was done in a very limited time. It's all because the
+From a pure development prospective, **a lot was done in a very limited time**.
+Since the quality of the code is **enforced** by the usual best practices (TDD, static code validation) but also
+**measured** (with plato), modifications are safe and immediately validated.
 
+A lot was learned on [JavaScript source mappings](https://www.html5rocks.com/en/tutorials/developertools/sourcemaps/)
+since it was required to enable debugging in the browser.
 
-This is because the co thanks to TDD and the code quality enforcement.
-It pays a lot.
-
-I learned a lot on [JavaScript source mappings](https://www.html5rocks.com/en/tutorials/developertools/sourcemaps/) as
-I wanted to be able to debug in the browser.
-
-I was also surprised by the relevance of the problems raised by the Code Climate tool: the overall project quality
-benefited from this integration.
-
+The relevance of the problems raised by the Code Climate tool was quit surprising: the **overall project
+quality benefited from this integration**.
 
 ## Next release
 
-The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/16) is not yet clearly defined.
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/16) is not even defined.
 For the next months, I will focus on a side project that requires all my attention.
 
 </code>
