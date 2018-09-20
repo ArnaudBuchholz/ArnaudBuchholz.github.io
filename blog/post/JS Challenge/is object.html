@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <script src="http://arnaudbuchholz.github.io/gpf/0.2.5/gpf.js"></script>
+        <script src="challenge.js"></script>
+        <style>.definition {display: none;}</style>
+    </head>
+    <body>
+        <div class="definition description">
+In the code below, we want to build a function that validates that the parameter is a valid object.
+The constraints are:
+* It must be an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
+* It must not be [null](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null)
+* The [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity) must be 1
+        </div>
+        <div class="definition source">
+  "use strict";
+
+(function () {
+
+    function isObject (any) { return your_solution_here; }
+
+    assert(isObject(0) === false);
+    assert(isObject(true) === false);
+    assert(isObject("Hello World") === false);
+    assert(isObject(null) === false); // null is *not* an object
+    assert(isObject(isObject) === true); // a function is an object
+    assert(isObject({}) === true);
+    assert(isObject([]) === true);
+    assert(isObject(/regexp/) === true);
+    assert_complexity_of_1(isObject);
+
+}());
+
+        </div>
+    </body>
+</html>
