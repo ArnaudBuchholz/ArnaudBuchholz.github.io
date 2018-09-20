@@ -16,8 +16,41 @@ gpf.require.define({
         description = $("div.definition.description").text(),
         source = $("div.definition.source").text().trim(),
         converter = new showdown.Converter(),
-        allowedGlobals = ["assert"]
+        globals = {
+            assert: function (condition, message) {
+                if (!condition) {
+                    if (message) {
+                        throw new Error("Assertion failed: " + message);
+                    }
+                    throw new Error("An assertion failed");
+                }
+            },
+
+            onerror: function (e) {
+                $("#error").text(e.toString());
+                $(".alert-danger").show();
+                $(".alert-success").hide();
+            },
+
+            assert_complexity_of_1: function (code) {
+                if (!JSHINT(code.toString(), {
+                    maxcomplexity: 1
+                })) {
+                    var messages = JSHINT.data().errors.filter(function (error) {
+                        return error.code === "W074";
+                    });
+                    if (messages.length) {
+                        throw new Error("Assertion failed: " + messages[0].reason);
+                    }
+                }
+            }
+        },
+        allowedGlobals = Object.keys(globals)
     ;
+
+    allowedGlobals.forEach(function (name) {
+        window[name] = globals[name];
+    });
 
     if (window.allowedGlobals) {
         allowedGlobals = allowedGlobals.concat(window.allowedGlobals);
@@ -27,21 +60,6 @@ gpf.require.define({
     document.title = title;
     $("#title").text(title);
     $("#content").html(converter.makeHtml(description));
-
-    window.assert = function (condition, message) {
-        if (!condition) {
-            if (message) {
-                throw new Error("Assertion failed: " + message);
-            }
-            throw new Error("An assertion failed");
-        }
-    }
-
-    window.onerror = function (e) {
-        $("#error").text(e.toString());
-        $(".alert-danger").show();
-        $(".alert-success").hide();
-    }
 
     $("#proposal").keypress(function (e) {
         if(13 === e.which) {
