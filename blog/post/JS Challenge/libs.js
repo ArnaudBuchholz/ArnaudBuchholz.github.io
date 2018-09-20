@@ -12,13 +12,20 @@ var jQueryAndBootstrap = waitForScript({
 
     }).then(function () {
 
-        // jQuery is required for bootstrap
-        return waitForScript({
-            src: "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js",
-            integrity: "sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M",
-            crossorigin: "anonymous"
+        return Promise.all([
 
-        });
+            // jQuery is required for bootstrap
+            waitForScript({
+                src: "https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js",
+                integrity: "sha384-lZmvU/TzxoIQIOD9yQDEpvxp6wEU32Fy0ckUgOH4EIlMOCdR823rg4+3gWRwnX1M",
+                crossorigin: "anonymous"
+            }),
+
+            waitForScript({
+                src: "../../jshint.js"
+            })
+
+        ]);
 
     });
 
