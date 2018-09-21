@@ -22,7 +22,7 @@ var jQueryAndBootstrap = waitForScript({
             }),
 
             waitForScript({
-                src: "../../jshint.js"
+                src: "../../eslint.js"
             })
 
         ]);
