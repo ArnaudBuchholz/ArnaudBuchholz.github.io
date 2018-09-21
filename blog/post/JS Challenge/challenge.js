@@ -33,15 +33,16 @@ gpf.require.define({
             },
 
             assert_complexity_of_1: function (code) {
-                if (!JSHINT(code.toString(), {
-                    maxcomplexity: 1
-                })) {
-                    var messages = JSHINT.data().errors.filter(function (error) {
-                        return error.code === "W074";
+                var linter = new eslint(),
+                    messages = linter.verify(code.toString(), {
+                        rules: {
+                            complexity: [2, 1]
+                        }
+                    }).filter(function (message) {
+                        return message.ruleId === "complexity";
                     });
-                    if (messages.length) {
-                        throw new Error("Assertion failed: " + messages[0].reason);
-                    }
+                if (messages.length) {
+                    throw new Error("Assertion failed: " + messages[0].message);
                 }
             }
         },
@@ -76,7 +77,7 @@ gpf.require.define({
             + encodeURIComponent("[JS-Challenge:" + id + "] I solved it with: " + proposal));
         jQuery.globalEval([
             // Disable all global symbols but assert
-            "(function (__proto__, " + Object.keys(window).filter(function (name) { return -1 === allowedGlobals.indexOf(name); }).join(", ") + "){",
+            "(function (__proto__, " + Object.keys(window).filter(function (name) { return -1 === allowedGlobals.indexOf(name) && -1 === name.indexOf("-"); }).join(", ") + "){",
             modifiedSource.replace(/[^."]assert\((.*)\);/g, function (match, condition) {
                 return match.substr(0, match.length - 2) + ", \"" + condition.split("\\").join("\\\\").split("\"").join("\\\"") + "\");";
             }),
