@@ -41,7 +41,7 @@
          * GPF Version
          * @since 0.1.5
          */
-        _gpfVersion = "0.2.8-alpha", _GPF_NOT_FOUND = -1, _GPF_START = 0, _GPF_FS_WSCRIPT_READING = 1,
+        _gpfVersion = "0.2.8", _GPF_NOT_FOUND = -1, _GPF_START = 0, _GPF_FS_WSCRIPT_READING = 1,
         /**
          * Host constants
          * @since 0.1.5
@@ -1660,7 +1660,7 @@
      * - when not specified, it returns the current host main context object
      * - when `"gpf"`, it **always** returns the GPF object
      * - when it leads to nothing, `undefined` is returned
-    
+
      * @typedef {*} gpf.typedef.contextResult
      * @since 0.1.5
      */
