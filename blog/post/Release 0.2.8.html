@@ -17,7 +17,7 @@
     serialization.
 </div>
 <code class="markdown">
-## Release 0.2.7: Quality and XML
+## Release 0.2.8: Serialization attributes
 
 * [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/16?closed=1) implemented
 * [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.8)
@@ -28,29 +28,48 @@
 
 ### A longer release
 
-As explained in the last release notes, I am concentrating on a side project and the library
-evolved mostly to support its development.
+As explained in the [last release notes](http://gpf-js.blogspot.com/2018/08/release-027-quality-and-xml.html), I am
+concentrating on a [side project](https://github.com/ArnaudBuchholz/bubu-cms) and the library evolved mostly to support
+its development.
 
-Also, other projects were started since interesting challenges were submitted over the last months.
+Also, [other projects](https://www.npmjs.com/package/node-ui5) were started since interesting challenges were submitted
+over the last month.
+
+As a consequence, this release took more time than usual (around 4 months).
 
 ### Asynchronous helpers
+
+#### Interface wrappers
+
+As described when introducing XML serialization, a
+[generic wrapper](https://github.com/ArnaudBuchholz/gpf-js/issues/272) was required to simplify the use of known
+interfaces. But also, it is necessary to be able to chain these calls with custom handlers
+
+The best example is the [metadata handler](https://github.com/ArnaudBuchholz/bubu-cms/blob/77240f29513b359cd22ba15f46adfa5ad67be1b9/api/metadata.js)
+
 
 The library offers new helpers to handle promises the right way.
 
 #### gpf.forEachAsync
 
-When you need to iterate over an array but the callback function is asynchronous.
+When mixing loops and promises, things can quickly become a mess
+https://stackoverflow.com/questions/40328932/javascript-es6-promise-for-loop
 
-#### Interface wrappers
-
-As described when introducing XML serialization, a way to insert custom promises while calling an interface
-was necessary. This is done with...
+Since the library offers iteration helpers
+([gpf.forEach](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.forEach__anchor)), it made sense to provide the
+equivalent for asynchronous callbacks:
+[gpf.forEachAsync](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.forEachAsync__anchor)
 
 ### $singleton
 
-As for $abstract, $singleton now allows to declare a class as
+Among the design patterns, the [singleton](https://en.wikipedia.org/wiki/Singleton_pattern) is probably the most easy
+to describe and implement. There are many ways to create a singleton in JavaScript.
+
+I decided to go with the class property []$singleton](https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html)
 
 ### Serialization attributes
+
+The side
 
 #### gpf.serial
 
@@ -58,7 +77,19 @@ As for $abstract, $singleton now allows to declare a class as
 
 ### Project metrics reporting
 
+![sources](http://arnaudbuchholz.github.io/blog/post/Release%200.2.8/sources.png)
+
+![plato](http://arnaudbuchholz.github.io/blog/post/Release%200.2.8/plato.png)
+
+![coverage](http://arnaudbuchholz.github.io/blog/post/Release%200.2.8/coverage.png)
+
+![tests](http://arnaudbuchholz.github.io/blog/post/Release%200.2.8/tests.png)
+
 ### Documentation of ESLint rules
+
+https://arnaudbuchholz.github.io/gpf/doc/tutorial-LINTING.html
+
+Spent almost one monthn refactoring to enable no-magic-numbers !
 
 ## Lessons learned
 
