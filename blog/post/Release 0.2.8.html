@@ -1,0 +1,84 @@
+<script language="javascript" src="../include.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.2.8: Serialization attributes
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+<!-- Copy from the next line -->
+<div class="summary">
+    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This release focuses on quality by integrating hosted automated code review services and introduces XML
+    serialization.
+</div>
+<code class="markdown">
+## Release 0.2.7: Quality and XML
+
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/16?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.8)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
+* [NPM package](https://www.npmjs.com/package/gpf-js)
+
+## Release content
+
+### A longer release
+
+As explained in the last release notes, I am concentrating on a side project and the library
+evolved mostly to support its development.
+
+Also, other projects were started since interesting challenges were submitted over the last months.
+
+### Asynchronous helpers
+
+The library offers new helpers to handle promises the right way.
+
+#### gpf.forEachAsync
+
+When you need to iterate over an array but the callback function is asynchronous.
+
+#### Interface wrappers
+
+As described when introducing XML serialization, a way to insert custom promises while calling an interface
+was necessary. This is done with...
+
+### $singleton
+
+As for $abstract, $singleton now allows to declare a class as
+
+### Serialization attributes
+
+#### gpf.serial
+
+#### attributes restrictions
+
+### Project metrics reporting
+
+### Documentation of ESLint rules
+
+## Lessons learned
+
+Huge refactoring due to no-magic-numbers forced me to reconsider some of the patterns I was using regularly.
+For instance:
+`if (string.indexOf(otherString) === 0)`
+was in fact
+`if (string.startsWith(otherString))`
+
+or
+`if (string.indexOf(otherString) !== -1)`
+was in fact
+`if (string.includes(otherString))`
+
+## Next release
+
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/17) is not even defined.
+For the next months, I will focus on a side project that requires all my attention.
+
+</code>
+<!-- Drop those two lines -->
+</div>
+</div>
