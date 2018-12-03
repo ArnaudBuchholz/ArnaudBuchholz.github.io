@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">226</p>
+      <p class="stat">227</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,7 +62,7 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">23.58</p>
+      <p class="stat">23.31</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
@@ -95,6 +95,7 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _GPF_START*/ // 0
 /*global _GpfStreamBufferedRead*/ // gpf.stream.BufferedRead
 /*global _gpfDefine*/ // Shortcut for gpf.define
 /*global _gpfEmptyFunc*/ // An empty function
@@ -148,7 +149,7 @@ var
         _nextNamespaces: {},
 
         _checkIfElementsExist: function (hasElements) {
-            if (hasElements !== (this._elements.length !== 0)) {
+            if (hasElements !== Boolean(this._elements.length)) {
                 gpf.Error.invalidXmlWriterState();
             }
         },
@@ -168,7 +169,7 @@ var
         },
 
         _addContentToLastElement: function () {
-            var element = this._elements[0];
+            var element = this._elements[_GPF_START];
             if (element) {
                 return this._addContentToElement(element);
             }

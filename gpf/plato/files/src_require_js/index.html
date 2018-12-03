@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">79.19</p>
+      <p class="stat">79.20</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">257</p>
+      <p class="stat">260</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">29.28</p>
+      <p class="stat">28.90</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.82</p>
+      <p class="stat">0.84</p>
     </div>
   </div>
 </div>
@@ -145,6 +145,9 @@ _gpfErrorDeclare(&quot;require&quot;, {
  * @since 0.2.2
  */
 
+var _GPF_REQUIRE_OPTION_PRIORITY_HIGH = -1,
+    _GPF_REQUIRE_OPTION_PRIORITY_LOW = 1;
+
 /**
  * Valuate the option priority to have them executed in the proper order
  *
@@ -153,10 +156,10 @@ _gpfErrorDeclare(&quot;require&quot;, {
  * @since 0.2.2
  */
 function _gpfRequireOptionPriority (name) {
-    if (&quot;clearCache&quot; === name) {
-        return -1;
+    if (name === &quot;clearCache&quot;) {
+        return _GPF_REQUIRE_OPTION_PRIORITY_HIGH;
     }
-    return 1;
+    return _GPF_REQUIRE_OPTION_PRIORITY_LOW;
 }
 
 /**
@@ -270,7 +273,7 @@ function _gpfRequireDefine (dependencies, factory) {
         .then(function (resources) {
             var result,
                 require;
-            if (&quot;function&quot; === typeof factory) {
+            if (typeof factory === &quot;function&quot;) {
                 require = {};
                 _gpfArrayForEach(keys, function (key, index) {
                     require[key] = resources[index];

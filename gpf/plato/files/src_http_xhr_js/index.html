@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">45</p>
+      <p class="stat">46</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">8.32</p>
+      <p class="stat">8.34</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.18</p>
+      <p class="stat">0.19</p>
     </div>
   </div>
 </div>
@@ -105,7 +105,8 @@
 /*jshint browser: true*/
 /*eslint-env browser*/
 
-var _gpfHttpXhrSetHeaders = _gpfHttpGenSetHeaders(&quot;setRequestHeader&quot;),
+var _GPF_HTTP_XHR_READYSTATE_DONE = 4,
+    _gpfHttpXhrSetHeaders = _gpfHttpGenSetHeaders(&quot;setRequestHeader&quot;),
     _gpfHttpXhrSend = _gpfHttpGenSend(&quot;send&quot;),
     _gpfHttpXhrGetResponse = _gpfHttpGenGetResponse(&quot;status&quot;, &quot;getAllResponseHeaders&quot;, &quot;responseText&quot;);
 
@@ -117,7 +118,7 @@ function _gpfHttpXhrOpen (request) {
 
 function _gpfHttpXhrWaitForCompletion (xhr, callback) {
     xhr.onreadystatechange = function () {
-        if (4 === xhr.readyState) {
+        if (xhr.readyState === _GPF_HTTP_XHR_READYSTATE_DONE) {
             callback();
         }
     };

@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">80.31</p>
+      <p class="stat">79.55</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">78</p>
+      <p class="stat">81</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">12.00</p>
+      <p class="stat">13.00</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.26</p>
+      <p class="stat">0.27</p>
     </div>
   </div>
 </div>
@@ -95,6 +95,7 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _GPF_START*/ // 0
 /*global _gpfFunc*/ // Create a new function using the source
 /*exported _gpfBuildFunctionParameterList*/ // Builds an array of parameters
 /*exported _gpfNewApply*/ // Apply new operator with an array of parameters
@@ -103,12 +104,12 @@
 /**
  * Builds an array of parameters
  *
- * @param {Number} count Number of parameters to generate
+ * @param {Number} [count=0] Number of parameters to generate
  * @return {Array} Parameters named p0, p1, ...
  * @since 0.1.5
  */
 function _gpfBuildFunctionParameterList (count) {
-    if (0 === count) {
+    if (!count) {
         return [];
     }
     return new Array(count).join(&quot; &quot;).split(&quot; &quot;).map(function (value, index) {
@@ -122,8 +123,9 @@ function _gpfGenerateGenericFactorySource (parameters) {
         &quot;if (0 === l) { return new C();}&quot;
     ];
     parameters.forEach(function (value, index) {
-        var count = index + 1;
-        src.push(&quot;if (&quot; + count + &quot; === l) { return new C(&quot; + parameters.slice(0, count).join(&quot;, &quot;) + &quot;);}&quot;);
+        var count = 1;
+        count += index;
+        src.push(&quot;if (&quot; + count + &quot; === l) { return new C(&quot; + parameters.slice(_GPF_START, count).join(&quot;, &quot;) + &quot;);}&quot;);
     });
     return src.join(&quot;\n&quot;);
 }
@@ -139,7 +141,8 @@ function _gpfGenerateGenericFactory (maxParameters) {
  * @this {Function} constructor to invoke
  * @since 0.1.5
  */
-var _gpfGenericFactory = _gpfGenerateGenericFactory(10);
+var _GPF_FACTORY_DEFAULT_PARAMETERS_COUNT = 10,
+    _gpfGenericFactory = _gpfGenerateGenericFactory(_GPF_FACTORY_DEFAULT_PARAMETERS_COUNT);
 
 /**
  * Call a constructor with an array of parameters.

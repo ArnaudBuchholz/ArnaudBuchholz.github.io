@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>GPF Library Tutorial: Linting</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.spacelab.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">GPF Library</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.html">gpf</a></li><li><a href="gpf.attributes.html">gpf.attributes</a></li><li><a href="gpf.fs.html">gpf.fs</a></li><li><a href="gpf.http.html">gpf.http</a></li><li><a href="gpf.interfaces.html">gpf.interfaces</a></li><li><a href="gpf.java.html">gpf.java</a></li><li><a href="gpf.node.html">gpf.node</a></li><li><a href="gpf.path.html">gpf.path</a></li><li><a href="gpf.require.html">gpf.require</a></li><li><a href="gpf.rhino.html">gpf.rhino</a></li><li><a href="gpf.serial.html">gpf.serial</a></li><li><a href="gpf.stream.html">gpf.stream</a></li><li><a href="gpf.stream.csv.html">gpf.stream.csv</a></li><li><a href="gpf.typedef.html">gpf.typedef</a></li><li><a href="gpf.web.html">gpf.web</a></li><li><a href="gpf.wscript.html">gpf.wscript</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.attributes.Attribute.html">gpf.attributes.Attribute</a></li><li><a href="gpf.attributes.AttributeForInstanceOf.html">gpf.attributes.AttributeForInstanceOf</a></li><li><a href="gpf.attributes.ClassAttribute.html">gpf.attributes.ClassAttribute</a></li><li><a href="gpf.attributes.MemberAttribute.html">gpf.attributes.MemberAttribute</a></li><li><a href="gpf.attributes.Serializable.html">gpf.attributes.Serializable</a></li><li><a href="gpf.attributes.UniqueAttribute.html">gpf.attributes.UniqueAttribute</a></li><li><a href="gpf.Error.html">gpf.Error</a></li><li><a href="gpf.Error.AbstractClass.html">gpf.Error.AbstractClass</a></li><li><a href="gpf.Error.AbstractMethod.html">gpf.Error.AbstractMethod</a></li><li><a href="gpf.Error.AssertionFailed.html">gpf.Error.AssertionFailed</a></li><li><a href="gpf.Error.ClassAttributeOnly.html">gpf.Error.ClassAttributeOnly</a></li><li><a href="gpf.Error.ClassConstructorFunction.html">gpf.Error.ClassConstructorFunction</a></li><li><a href="gpf.Error.IncompatibleStream.html">gpf.Error.IncompatibleStream</a></li><li><a href="gpf.Error.InterfaceExpected.html">gpf.Error.InterfaceExpected</a></li><li><a href="gpf.Error.InvalidAttributesSpecification.html">gpf.Error.InvalidAttributesSpecification</a></li><li><a href="gpf.Error.InvalidClass$AbstractSpecification.html">gpf.Error.InvalidClass$AbstractSpecification</a></li><li><a href="gpf.Error.InvalidClass$SingletonSpecification.html">gpf.Error.InvalidClass$SingletonSpecification</a></li><li><a href="gpf.Error.InvalidClassConstructor.html">gpf.Error.InvalidClassConstructor</a></li><li><a href="gpf.Error.InvalidClassExtend.html">gpf.Error.InvalidClassExtend</a></li><li><a href="gpf.Error.InvalidClassName.html">gpf.Error.InvalidClassName</a></li><li><a href="gpf.Error.InvalidClassOverride.html">gpf.Error.InvalidClassOverride</a></li><li><a href="gpf.Error.InvalidClassProperty.html">gpf.Error.InvalidClassProperty</a></li><li><a href="gpf.Error.InvalidClassSuper.html">gpf.Error.InvalidClassSuper</a></li><li><a href="gpf.Error.InvalidClassSuperMember.html">gpf.Error.InvalidClassSuperMember</a></li><li><a href="gpf.Error.InvalidCSV.html">gpf.Error.InvalidCSV</a></li><li><a href="gpf.Error.InvalidEntity$Property.html">gpf.Error.InvalidEntity$Property</a></li><li><a href="gpf.Error.InvalidEntityNamespace.html">gpf.Error.InvalidEntityNamespace</a></li><li><a href="gpf.Error.InvalidEntityType.html">gpf.Error.InvalidEntityType</a></li><li><a href="gpf.Error.InvalidInterfaceName.html">gpf.Error.InvalidInterfaceName</a></li><li><a href="gpf.Error.InvalidInterfaceProperty.html">gpf.Error.InvalidInterfaceProperty</a></li><li><a href="gpf.Error.InvalidParameter.html">gpf.Error.InvalidParameter</a></li><li><a href="gpf.Error.InvalidRequireConfigureOption.html">gpf.Error.InvalidRequireConfigureOption</a></li><li><a href="gpf.Error.InvalidSerialName.html">gpf.Error.InvalidSerialName</a></li><li><a href="gpf.Error.InvalidSerialRequired.html">gpf.Error.InvalidSerialRequired</a></li><li><a href="gpf.Error.InvalidSerialType.html">gpf.Error.InvalidSerialType</a></li><li><a href="gpf.Error.InvalidStreamState.html">gpf.Error.InvalidStreamState</a></li><li><a href="gpf.Error.InvalidXmlAttributeName.html">gpf.Error.InvalidXmlAttributeName</a></li><li><a href="gpf.Error.InvalidXmlElementName.html">gpf.Error.InvalidXmlElementName</a></li><li><a href="gpf.Error.InvalidXmlNamespacePrefix.html">gpf.Error.InvalidXmlNamespacePrefix</a></li><li><a href="gpf.Error.InvalidXmlUseOfPrefixXml.html">gpf.Error.InvalidXmlUseOfPrefixXml</a></li><li><a href="gpf.Error.InvalidXmlUseOfPrefixXmlns.html">gpf.Error.InvalidXmlUseOfPrefixXmlns</a></li><li><a href="gpf.Error.InvalidXmlWriterState.html">gpf.Error.InvalidXmlWriterState</a></li><li><a href="gpf.Error.MemberAttributeOnly.html">gpf.Error.MemberAttributeOnly</a></li><li><a href="gpf.Error.MissingEntityName.html">gpf.Error.MissingEntityName</a></li><li><a href="gpf.Error.MissingNodeName.html">gpf.Error.MissingNodeName</a></li><li><a href="gpf.Error.NoCommonJSDynamicRequire.html">gpf.Error.NoCommonJSDynamicRequire</a></li><li><a href="gpf.Error.NotImplemented.html">gpf.Error.NotImplemented</a></li><li><a href="gpf.Error.PathNotExplorable.html">gpf.Error.PathNotExplorable</a></li><li><a href="gpf.Error.ReadInProgress.html">gpf.Error.ReadInProgress</a></li><li><a href="gpf.Error.RestrictedBaseClassAttribute.html">gpf.Error.RestrictedBaseClassAttribute</a></li><li><a href="gpf.Error.UnableToUseNamespaceInString.html">gpf.Error.UnableToUseNamespaceInString</a></li><li><a href="gpf.Error.UniqueAttributeUsedTwice.html">gpf.Error.UniqueAttributeUsedTwice</a></li><li><a href="gpf.Error.UnknownAttributesSpecification.html">gpf.Error.UnknownAttributesSpecification</a></li><li><a href="gpf.Error.UnknownNamespacePrefix.html">gpf.Error.UnknownNamespacePrefix</a></li><li><a href="gpf.Error.UnknownXmlNamespacePrefix.html">gpf.Error.UnknownXmlNamespacePrefix</a></li><li><a href="gpf.Error.UnreachablePath.html">gpf.Error.UnreachablePath</a></li><li><a href="gpf.Error.WriteInProgress.html">gpf.Error.WriteInProgress</a></li><li><a href="gpf.java.BaseStream.html">gpf.java.BaseStream</a></li><li><a href="gpf.java.ReadableStream.html">gpf.java.ReadableStream</a></li><li><a href="gpf.java.WritableStream.html">gpf.java.WritableStream</a></li><li><a href="gpf.node.BaseStream.html">gpf.node.BaseStream</a></li><li><a href="gpf.node.ReadableStream.html">gpf.node.ReadableStream</a></li><li><a href="gpf.node.WritableStream.html">gpf.node.WritableStream</a></li><li><a href="gpf.stream.AbstractOperator.html">gpf.stream.AbstractOperator</a></li><li><a href="gpf.stream.BufferedRead.html">gpf.stream.BufferedRead</a></li><li><a href="gpf.stream.csv.Parser.html">gpf.stream.csv.Parser</a></li><li><a href="gpf.stream.Filter.html">gpf.stream.Filter</a></li><li><a href="gpf.stream.LineAdapter.html">gpf.stream.LineAdapter</a></li><li><a href="gpf.stream.Map.html">gpf.stream.Map</a></li><li><a href="gpf.stream.ReadableArray.html">gpf.stream.ReadableArray</a></li><li><a href="gpf.stream.ReadableString.html">gpf.stream.ReadableString</a></li><li><a href="gpf.stream.WritableArray.html">gpf.stream.WritableArray</a></li><li><a href="gpf.stream.WritableString.html">gpf.stream.WritableString</a></li><li><a href="gpf.typedef.Tag.html">gpf.typedef.Tag</a></li><li><a href="gpf.wscript.BaseStream.html">gpf.wscript.BaseStream</a></li><li><a href="gpf.wscript.ReadableStream.html">gpf.wscript.ReadableStream</a></li><li><a href="gpf.wscript.WritableStream.html">gpf.wscript.WritableStream</a></li><li><a href="gpf.xml.Writer.html">gpf.xml.Writer</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="interfaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Interfaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.interfaces.IEnumerator.html">gpf.interfaces.IEnumerator</a></li><li><a href="gpf.interfaces.IFileStorage.html">gpf.interfaces.IFileStorage</a></li><li><a href="gpf.interfaces.IFlushableStream.html">gpf.interfaces.IFlushableStream</a></li><li><a href="gpf.interfaces.IReadableStream.html">gpf.interfaces.IReadableStream</a></li><li><a href="gpf.interfaces.IThenable.html">gpf.interfaces.IThenable</a></li><li><a href="gpf.interfaces.IUnknown.html">gpf.interfaces.IUnknown</a></li><li><a href="gpf.interfaces.IWritableStream.html">gpf.interfaces.IWritableStream</a></li><li><a href="gpf.interfaces.IXmlContentHandler.html">gpf.interfaces.IXmlContentHandler</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-CODESTYLE.html">Code style</a></li><li><a href="tutorial-COMPATIBILITY.html">Compatibility layer</a></li><li><a href="tutorial-COVERAGE.html">Code coverage exceptions</a></li><li><a href="tutorial-DEFINE.html">Entity definition</a></li><li><a href="tutorial-INTERFACES.html">Standard interfaces</a></li><li><a href="tutorial-LINTING.html">Linting</a></li><li><a href="tutorial-LOADING.html">Loading GPF Library</a></li><li><a href="tutorial-REQUIRE.html">Modularization</a></li><li><a href="tutorial-TESTME.html">Library testing</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			<section class="tutorial-section">
+
+<header>
+    
+
+    <h2>Linting</h2>
+</header>
+
+<article>
+    <p>This documentation details the <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc">configuration</a> of
+<a href="https://eslint.org/">eslint</a>.</p>
+<h2>Configuration</h2><p>Recommended rules (if not ignored) appear as <em>error</em>.</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Fixable</th>
+<th>Level</th>
+<th>Parameters</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Possible Errors</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/for-direction">for-direction</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/getter-return">getter-return</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-async-promise-executor">no-async-promise-executor</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-await-in-loop">no-await-in-loop</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-compare-neg-zero">no-compare-neg-zero</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-cond-assign">no-cond-assign</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-console">no-console</a></td>
+<td></td>
+<td><strong>ignore</strong></td>
+<td></td>
+<td>The library offers a <a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html">compatibility layer</a> that includes <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/warn">console.warn</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/error">console.error</a>. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-constant-condition">no-constant-condition</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-control-regex">no-control-regex</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-debugger">no-debugger</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-dupe-args">no-dupe-args</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-dupe-keys">no-dupe-keys</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-duplicate-case">no-duplicate-case</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-empty">no-empty</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-empty-character-class">no-empty-character-class</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-ex-assign">no-ex-assign</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-extra-boolean-cast">no-extra-boolean-cast</a></td>
+<td>&check;</td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-extra-parens">no-extra-parens</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-extra-semi">no-extra-semi</a></td>
+<td>&check;</td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-func-assign">no-func-assign</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-inner-declarations">no-inner-declarations</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-invalid-regexp">no-invalid-regexp</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-irregular-whitespace">no-irregular-whitespace</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-misleading-character-class">no-misleading-character-class</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-negated-in-lhs">no-negated-in-lhs</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-obj-calls">no-obj-calls</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-prototype-builtins">no-prototype-builtins</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-regex-spaces">no-regex-spaces</a></td>
+<td>&check;</td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-sparse-arrays">no-sparse-arrays</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-template-curly-in-string">no-template-curly-in-string</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-unexpected-multiline">no-unexpected-multiline</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-unreachable">no-unreachable</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-unsafe-finally">no-unsafe-finally</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-unsafe-negation">no-unsafe-negation</a></td>
+<td>&check;</td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/require-atomic-updates">require-atomic-updates</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/use-isnan">use-isnan</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/valid-jsdoc">valid-jsdoc</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L7"><em>.eslintrc</em></a></td>
+<td>Rule parameters are used to normalize the <a href="http://usejsdoc.org/">jsdoc</a> tags. Also, The rule was also <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/valid-jsdoc.js">customized</a> to match <code>@gpf</code> tags. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/valid-typeof">valid-typeof</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Best Practices</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/accessor-pairs">accessor-pairs</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/array-callback-return">array-callback-return</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/block-scoped-var">block-scoped-var</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td>This limits misuse of <a href="https://developer.mozilla.org/en-US/docs/Glossary/Hoisting">hoisting</a> that leads to obscure code. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/class-methods-use-this">class-methods-use-this</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/complexity">complexity</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td>6</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/consistent-return">consistent-return</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td>The API extensively uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a> value to represent no value. Since a method with no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return"><code>return</code></a> statement returns <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a>, many functions are not consistent. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/curly">curly</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;all&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/default-case">default-case</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/dot-location">dot-location</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;property&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/dot-notation">dot-notation</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L31"><em>.eslintrc</em></a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/eqeqeq">eqeqeq</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/guard-for-in">guard-for-in</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-classes-per-file">max-classes-per-file</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-alert">no-alert</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-caller">no-caller</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-case-declarations">no-case-declarations</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-div-regex">no-div-regex</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-else-return">no-else-return</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-empty-function">no-empty-function</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-empty-pattern">no-empty-pattern</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-eq-null">no-eq-null</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-eval">no-eval</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-extend-native">no-extend-native</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td>Since the library implements <a href="https://developer.mozilla.org/en-US/docs/Glossary/Polyfill">polyfills</a> to provide a <a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html">compatibility layer</a>, this rule is turned off. However, the general rule is to not extend native classes with non standard methods. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-extra-bind">no-extra-bind</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-extra-label">no-extra-label</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-fallthrough">no-fallthrough</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-floating-decimal">no-floating-decimal</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-global-assign">no-global-assign</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-implicit-coercion">no-implicit-coercion</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-implicit-globals">no-implicit-globals</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-implied-eval">no-implied-eval</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-invalid-this">no-invalid-this</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-iterator">no-iterator</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-labels">no-labels</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td>Really? </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-lone-blocks">no-lone-blocks</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-loop-func">no-loop-func</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-magic-numbers">no-magic-numbers</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td>Disabled for test files. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-multi-spaces">no-multi-spaces</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-multi-str">no-multi-str</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-native-reassign">no-native-reassign</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-new">no-new</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-new-func">no-new-func</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-new-wrappers">no-new-wrappers</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-octal">no-octal</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-octal-escape">no-octal-escape</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-param-reassign">no-param-reassign</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-proto">no-proto</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-redeclare">no-redeclare</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-restricted-properties">no-restricted-properties</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-return-assign">no-return-assign</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-return-await">no-return-await</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-script-url">no-script-url</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-self-assign">no-self-assign</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-self-compare">no-self-compare</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-sequences">no-sequences</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-throw-literal">no-throw-literal</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-unmodified-loop-condition">no-unmodified-loop-condition</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-unused-expressions">no-unused-expressions</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-unused-labels">no-unused-labels</a></td>
+<td>&check;</td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-useless-call">no-useless-call</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-useless-concat">no-useless-concat</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-useless-escape">no-useless-escape</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-useless-return">no-useless-return</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-void">no-void</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-warning-comments">no-warning-comments</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-with">no-with</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td>Extracted from the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with">MDN description</a>: Use of the with statement is not recommended, as it may be the source of confusing bugs and compatibility issues. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/prefer-promise-reject-errors">prefer-promise-reject-errors</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/radix">radix</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/require-await">require-await</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/require-unicode-regexp">require-unicode-regexp</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/vars-on-top">vars-on-top</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td>Unless you don't understand hoisting, it is useless to put all vars on top. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/wrap-iife">wrap-iife</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;outside&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/yoda">yoda</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td>Do or do not, there is no try. </td>
+</tr>
+<tr>
+<td><strong>Strict Mode</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/strict">strict</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;global&quot;</td>
+<td>Required for all GPF-JS modules. </td>
+</tr>
+<tr>
+<td><strong>Variables</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/init-declarations">init-declarations</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td>As GPF-JS uses <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a>, variables are not necessarily initialized with a value. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-catch-shadow">no-catch-shadow</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-delete-var">no-delete-var</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-label-var">no-label-var</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-restricted-globals">no-restricted-globals</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-shadow">no-shadow</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-shadow-restricted-names">no-shadow-restricted-names</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-undef">no-undef</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-undef-init">no-undef-init</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-undefined">no-undefined</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a> is a value. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-unused-vars">no-unused-vars</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L79"><em>.eslintrc</em></a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-use-before-define">no-use-before-define</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L80"><em>.eslintrc</em></a></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Node.js and CommonJS</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/callback-return">callback-return</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/global-require">global-require</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/handle-callback-err">handle-callback-err</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-buffer-constructor">no-buffer-constructor</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-mixed-requires">no-mixed-requires</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-new-require">no-new-require</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-path-concat">no-path-concat</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td>GPF-JS handles path separator the proper way </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-process-env">no-process-env</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-process-exit">no-process-exit</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-restricted-modules">no-restricted-modules</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-sync">no-sync</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Stylistic Issues</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/array-bracket-newline">array-bracket-newline</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/array-bracket-spacing">array-bracket-spacing</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;never&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/array-element-newline">array-element-newline</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/block-spacing">block-spacing</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;never&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/brace-style">brace-style</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;1tbs&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/camelcase">camelcase</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/capitalized-comments">capitalized-comments</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/comma-dangle">comma-dangle</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;never&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/comma-spacing">comma-spacing</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L90"><em>.eslintrc</em></a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/comma-style">comma-style</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;last&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/computed-property-spacing">computed-property-spacing</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/consistent-this">consistent-this</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td>&quot;me&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/eol-last">eol-last</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/func-call-spacing">func-call-spacing</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>&quot;never&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/func-name-matching">func-name-matching</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/func-names">func-names</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/func-style">func-style</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td>&quot;declaration&quot;</td>
+<td>Enforced on purpose. </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/function-paren-newline">function-paren-newline</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/id-blacklist">id-blacklist</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/id-length">id-length</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/id-match">id-match</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td>A special rule will be developed to validate the IDs. From a general point of view, <a href="https://en.wikipedia.org/wiki/Camel_case">lowerCamelCase</a> is preferred. <a href="https://en.wikipedia.org/wiki/Constant_%28computer_programming%29">Constants</a> must be uppercase with _ to separate words. Finally, 'global' variables must start with _GPF or _gpf, they usually start with the module name (ex: <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/stream/csv/parser.js#L49">_GpfStreamCsvParser</a>) </td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/implicit-arrow-linebreak">implicit-arrow-linebreak</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/indent">indent</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/indent-legacy">indent-legacy</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/jsx-quotes">jsx-quotes</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/key-spacing">key-spacing</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L97"><em>.eslintrc</em></a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/keyword-spacing">keyword-spacing</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L121"><em>.eslintrc</em></a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/line-comment-position">line-comment-position</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/linebreak-style">linebreak-style</a></td>
+<td>&check;</td>
+<td><strong>warning</strong></td>
+<td>&quot;unix&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/lines-around-comment">lines-around-comment</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/lines-around-directive">lines-around-directive</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/lines-between-class-members">lines-between-class-members</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-depth">max-depth</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-len">max-len</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td>120</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-lines">max-lines</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-lines-per-function">max-lines-per-function</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-nested-callbacks">max-nested-callbacks</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-params">max-params</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-statements">max-statements</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td>15</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/max-statements-per-line">max-statements-per-line</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/multiline-comment-style">multiline-comment-style</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/multiline-ternary">multiline-ternary</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/new-cap">new-cap</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/new-parens">new-parens</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/newline-after-var">newline-after-var</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/newline-before-return">newline-before-return</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/newline-per-chained-call">newline-per-chained-call</a></td>
+<td>&check;</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-array-constructor">no-array-constructor</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-bitwise">no-bitwise</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-continue">no-continue</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-inline-comments">no-inline-comments</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-lonely-if">no-lonely-if</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-mixed-operators">no-mixed-operators</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-mixed-spaces-and-tabs">no-mixed-spaces-and-tabs</a></td>
+<td></td>
+<td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-multi-assign">no-multi-assign</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-multiple-empty-lines">no-multiple-empty-lines</a></td>
+<td>&check;</td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-negated-condition">no-negated-condition</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-nested-ternary">no-nested-ternary</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-new-object">no-new-object</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-plusplus">no-plusplus</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-restricted-syntax">no-restricted-syntax</a></td>
+<td></td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L108"><em>.eslintrc</em></a></td>
+<td>Forbids the use of</td>
+</tr>
+</tbody>
+</table>
+<p> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch">switch</a>
+ and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with">with</a></p>
+<p><a href="https://eslint.org/docs/rules/no-spaced-func">no-spaced-func</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-tabs">no-tabs</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-ternary">no-ternary</a> |   | <strong>error</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-trailing-spaces">no-trailing-spaces</a> | &check; | <strong>error</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-underscore-dangle">no-underscore-dangle</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-unneeded-ternary">no-unneeded-ternary</a> | &check; | <strong>error</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-whitespace-before-property">no-whitespace-before-property</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/nonblock-statement-body-position">nonblock-statement-body-position</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/object-curly-newline">object-curly-newline</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/object-curly-spacing">object-curly-spacing</a> | &check; | <strong>error</strong> | &quot;never&quot; | 
+<a href="https://eslint.org/docs/rules/object-property-newline">object-property-newline</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/one-var">one-var</a> | &check; | <strong>-</strong> |  | Following <a href="https://blog.cleancoder.com/">clean code</a> principles, variables are declared close to their related functions. 
+<a href="https://eslint.org/docs/rules/one-var-declaration-per-line">one-var-declaration-per-line</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/operator-assignment">operator-assignment</a> | &check; | <strong>error</strong> | &quot;always&quot; | 
+<a href="https://eslint.org/docs/rules/operator-linebreak">operator-linebreak</a> | &check; | <strong>error</strong> | &quot;before&quot; | 
+<a href="https://eslint.org/docs/rules/padded-blocks">padded-blocks</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/padding-line-between-statements">padding-line-between-statements</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-object-spread">prefer-object-spread</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/quote-props">quote-props</a> | &check; | <strong>warning</strong> | <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L115"><em>.eslintrc</em></a> | 
+<a href="https://eslint.org/docs/rules/quotes">quotes</a> | &check; | <strong>error</strong> | &quot;double&quot; | 
+<a href="https://eslint.org/docs/rules/require-jsdoc">require-jsdoc</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/semi">semi</a> | &check; | <strong>error</strong> | &quot;always&quot; | 
+<a href="https://eslint.org/docs/rules/semi-spacing">semi-spacing</a> | &check; | <strong>error</strong> | <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L117"><em>.eslintrc</em></a> | 
+<a href="https://eslint.org/docs/rules/semi-style">semi-style</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/sort-keys">sort-keys</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/sort-vars">sort-vars</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/space-before-blocks">space-before-blocks</a> | &check; | <strong>error</strong> | <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L119"><em>.eslintrc</em></a> | 
+<a href="https://eslint.org/docs/rules/space-before-function-paren">space-before-function-paren</a> | &check; | <strong>error</strong> | &quot;always&quot; | 
+<a href="https://eslint.org/docs/rules/space-in-parens">space-in-parens</a> | &check; | <strong>error</strong> | &quot;never&quot; | 
+<a href="https://eslint.org/docs/rules/space-infix-ops">space-infix-ops</a> | &check; | <strong>error</strong> | <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L123"><em>.eslintrc</em></a> | 
+<a href="https://eslint.org/docs/rules/space-unary-ops">space-unary-ops</a> | &check; | <strong>error</strong> |  | 
+<a href="https://eslint.org/docs/rules/spaced-comment">spaced-comment</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/switch-colon-spacing">switch-colon-spacing</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/template-tag-spacing">template-tag-spacing</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/unicode-bom">unicode-bom</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/wrap-regex">wrap-regex</a> | &check; | <strong>error</strong> |  | 
+<strong>ECMAScript 6</strong> | | | |
+<a href="https://eslint.org/docs/rules/arrow-body-style">arrow-body-style</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/arrow-parens">arrow-parens</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/arrow-spacing">arrow-spacing</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/constructor-super">constructor-super</a> |   | <em>error</em> |  | 
+<a href="https://eslint.org/docs/rules/generator-star-spacing">generator-star-spacing</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-class-assign">no-class-assign</a> |   | <em>error</em> |  | 
+<a href="https://eslint.org/docs/rules/no-confusing-arrow">no-confusing-arrow</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-const-assign">no-const-assign</a> |   | <em>error</em> |  | 
+<a href="https://eslint.org/docs/rules/no-dupe-class-members">no-dupe-class-members</a> |   | <em>error</em> |  | 
+<a href="https://eslint.org/docs/rules/no-duplicate-imports">no-duplicate-imports</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-new-symbol">no-new-symbol</a> |   | <em>error</em> |  | 
+<a href="https://eslint.org/docs/rules/no-restricted-imports">no-restricted-imports</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-this-before-super">no-this-before-super</a> |   | <em>error</em> |  | 
+<a href="https://eslint.org/docs/rules/no-useless-computed-key">no-useless-computed-key</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-useless-constructor">no-useless-constructor</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-useless-rename">no-useless-rename</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/no-var">no-var</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/object-shorthand">object-shorthand</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-arrow-callback">prefer-arrow-callback</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-const">prefer-const</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-destructuring">prefer-destructuring</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-numeric-literals">prefer-numeric-literals</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-reflect">prefer-reflect</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-rest-params">prefer-rest-params</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-spread">prefer-spread</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/prefer-template">prefer-template</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/require-yield">require-yield</a> |   | <em>error</em> |  | 
+<a href="https://eslint.org/docs/rules/rest-spread-spacing">rest-spread-spacing</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/sort-imports">sort-imports</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/symbol-description">symbol-description</a> |   | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/template-curly-spacing">template-curly-spacing</a> | &check; | <strong>-</strong> |  | 
+<a href="https://eslint.org/docs/rules/yield-star-spacing">yield-star-spacing</a> | &check; | <strong>-</strong> |  | </p>
+<p>Use <code>grunt eslint</code> to apply linter.</p>
+</article>
+
+</section>
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	
+		on 2018-12-02T22:23:22-05:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

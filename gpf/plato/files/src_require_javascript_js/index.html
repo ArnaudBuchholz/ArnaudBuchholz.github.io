@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">79.68</p>
+      <p class="stat">79.97</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">158</p>
+      <p class="stat">160</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">18.56</p>
+      <p class="stat">18.65</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.76</p>
+      <p class="stat">0.75</p>
     </div>
   </div>
 </div>
@@ -96,6 +96,7 @@
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
 /*global _GPF_HOST*/ // Host types
+/*global _gpfArraySlice*/ // [].slice.call
 /*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*global _gpfFunc*/ // Create a new function using the source
 /*global _gpfHost*/ // Host type
@@ -126,15 +127,16 @@ _gpfErrorDeclare(&quot;require/javascript&quot;, {
 
 });
 
-var _gpfRequireJsModuleRegEx = /[^.]\brequire\b\s*\(\s*(?:[&#039;|&quot;]([^&quot;&#039;]+)[&#039;|&quot;]|[^)]+)\s*\)/g;
+var _gpfRequireJsModuleRegEx = /[^.]\brequire\b\s*\(\s*(?:[&#039;|&quot;]([^&quot;&#039;]+)[&#039;|&quot;]|[^)]+)\s*\)/g,
+    _GPF_REQUIRE_MATCH_MODULE_NAME = 1;
 
 function _gpfRequireJSGetStaticDependencies (resourceName, content) {
     /*jshint validthis:true*/
     var requires = _gpfRegExpForEach(_gpfRequireJsModuleRegEx, content);
     if (requires.length) {
-        return _gpfRequireWrapGpf(this, resourceName).gpf.require.define(requires  //eslint-disable-line no-invalid-this
+        return _gpfRequireWrapGpf(this, resourceName).gpf.require.define(requires //eslint-disable-line no-invalid-this
             .map(function (match) {
-                return match[1]; // may be undefined if dynamic
+                return match[_GPF_REQUIRE_MATCH_MODULE_NAME]; // may be undefined if dynamic
             })
             .filter(function (require) {
                 return require;
@@ -152,24 +154,24 @@ function _gpfRequireJSGetStaticDependencies (resourceName, content) {
 
 //region AMD define wrapper
 
-function _gpfRequireAmdDefineParamsFactoryOnly (params) {
+function _gpfRequireAmdDefineParamsFactoryOnly (factory) {
     return {
         dependencies: [],
-        factory: params[0]
+        factory: factory
     };
 }
 
-function _gpfRequireAmdDefineParamsDependenciesAndFactory (params) {
+function _gpfRequireAmdDefineParamsDependenciesAndFactory (dependencies, factory) {
     return {
-        dependencies: params[0],
-        factory: params[1]
+        dependencies: dependencies,
+        factory: factory
     };
 }
 
-function _gpfRequireAmdDefineParamsAll (params) {
+function _gpfRequireAmdDefineParamsAll (any, dependencies, factory) {
     return {
-        dependencies: params[1],
-        factory: params[2]
+        dependencies: dependencies,
+        factory: factory
     };
 }
 
@@ -191,10 +193,10 @@ function _gpfRequireAmdDefine (name, dependencies, factory) {
     /*jshint validthis:true*/
     _gpfIgnore(name, dependencies, factory);
     var myGpf = this, //eslint-disable-line
-        params = _gpfRequireAmdDefineParamsMapping[arguments.length](arguments);
+        params = _gpfRequireAmdDefineParamsMapping[arguments.length].apply(null, arguments);
     myGpf.require.define(params.dependencies, function (require) {
         require.length = params.dependencies.length;
-        return params.factory.apply(null, [].slice.call(require));
+        return params.factory.apply(null, _gpfArraySlice(require));
     });
 }
 

@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">79.84</p>
+      <p class="stat">79.08</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">148</p>
+      <p class="stat">169</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">23.20</p>
+      <p class="stat">25.48</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.47</p>
+      <p class="stat">0.62</p>
     </div>
   </div>
 </div>
@@ -100,7 +100,7 @@
 /*global _gpfAttribute*/ // Shortcut for gpf.attributes.Attribute
 /*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*global _gpfIsArrayLike*/ // Return true if the parameter looks like an array
-/*exported _GPF_DEFINE_CLASS_ATTRIBUTES_SPECIFICATION*/ // $attributes
+/*exported _GPF_DEFINE_CLASS_ATTRIBUTES_NAME*/ // $attributes
 /*exported _gpfDefClassAttrIsAttributeSpecification*/ // Check if member name is an attribute
 /*#endif*/
 
@@ -135,11 +135,19 @@ _gpfErrorDeclare(&quot;define/class/attributes&quot;, {
 });
 
 var _GPF_DEFINE_CLASS_ATTRIBUTES_SPECIFICATION = &quot;attributes&quot;,
+    _GPF_DEFINE_CLASS_ATTRIBUTES_NAME = &quot;$&quot; + _GPF_DEFINE_CLASS_ATTRIBUTES_SPECIFICATION,
     // If matching the capturing group returns the member name or undefined (hence the |.)
     _gpfDefClassAttrIsAttributeRegExp = new RegExp(&quot;^\\[([^\\]]+)\\]$|.&quot;),
+    _GPF_DEFINE_CLASS_ATTRIBUTE_MATCH_NAME = 1,
     _gpfDefClassAttrClassCheckMemberName = _GpfClassDefinition.prototype._checkMemberName,
     _gpfDefClassAttrClassCheckMemberValue = _GpfClassDefinition.prototype._checkMemberValue,
-    _gpfDefClassAttrClassCheck$Property = _GpfClassDefinition.prototype._check$Property;
+    _gpfDefClassAttrClassCheck$Property = _GpfClassDefinition.prototype._check$Property,
+    _gpfDefClassAttrClassCheck = _GpfClassDefinition.prototype.check;
+
+function _gpfDefClassAttrCheck (member, attribute) {
+    /*jshint validthis:true*/
+    attribute._check(member, this); //eslint-disable-line no-invalid-this
+}
 
 /**
  * Given the member name, tells if the property introduces attributes
@@ -148,8 +156,8 @@ var _GPF_DEFINE_CLASS_ATTRIBUTES_SPECIFICATION = &quot;attributes&quot;,
  * @return {String|undefined} Real property name if attributes specification, undefined otherwise
  * @since 0.2.4
  */
-function _gpfDefClassAttrIsAttributeSpecification (name)  {
-    return _gpfDefClassAttrIsAttributeRegExp.exec(name)[1];
+function _gpfDefClassAttrIsAttributeSpecification (name) {
+    return _gpfDefClassAttrIsAttributeRegExp.exec(name)[_GPF_DEFINE_CLASS_ATTRIBUTE_MATCH_NAME];
 }
 
 Object.assign(_GpfClassDefinition.prototype, {
@@ -215,8 +223,10 @@ Object.assign(_GpfClassDefinition.prototype, {
      * @since 0.2.4
      */
     _checkMemberValue: function (name, value) {
-        if (_gpfDefClassAttrIsAttributeSpecification(name)) {
+        var attributeName = _gpfDefClassAttrIsAttributeSpecification(name);
+        if (attributeName) {
             this._checkAttributesSpecification(value);
+            this._addAttributesFor(attributeName, value);
         } else {
             _gpfDefClassAttrClassCheckMemberValue.call(this, name, value);
         }
@@ -229,9 +239,20 @@ Object.assign(_GpfClassDefinition.prototype, {
     _check$Property: function (name, value) {
         if (_GPF_DEFINE_CLASS_ATTRIBUTES_SPECIFICATION === name) {
             this._checkAttributesSpecification(value);
+            this._addAttributesFor(_GPF_DEFINE_CLASS_ATTRIBUTES_NAME, value);
         } else {
             _gpfDefClassAttrClassCheck$Property.call(this, name, value);
         }
+    },
+
+    /**
+     * @inheritdoc
+     * @since 0.2.8
+     */
+    check: function () {
+        this._attributes = {};
+        _gpfDefClassAttrClassCheck.call(this);
+        this._forOwnAttributes(_gpfDefClassAttrCheck);
     }
 
 });

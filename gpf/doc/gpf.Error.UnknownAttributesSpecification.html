@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>GPF Library Class: UnknownAttributesSpecification</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.spacelab.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">GPF Library</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.html">gpf</a></li><li><a href="gpf.attributes.html">gpf.attributes</a></li><li><a href="gpf.fs.html">gpf.fs</a></li><li><a href="gpf.http.html">gpf.http</a></li><li><a href="gpf.interfaces.html">gpf.interfaces</a></li><li><a href="gpf.java.html">gpf.java</a></li><li><a href="gpf.node.html">gpf.node</a></li><li><a href="gpf.path.html">gpf.path</a></li><li><a href="gpf.require.html">gpf.require</a></li><li><a href="gpf.rhino.html">gpf.rhino</a></li><li><a href="gpf.serial.html">gpf.serial</a></li><li><a href="gpf.stream.html">gpf.stream</a></li><li><a href="gpf.stream.csv.html">gpf.stream.csv</a></li><li><a href="gpf.typedef.html">gpf.typedef</a></li><li><a href="gpf.web.html">gpf.web</a></li><li><a href="gpf.wscript.html">gpf.wscript</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.attributes.Attribute.html">gpf.attributes.Attribute</a></li><li><a href="gpf.attributes.AttributeForInstanceOf.html">gpf.attributes.AttributeForInstanceOf</a></li><li><a href="gpf.attributes.ClassAttribute.html">gpf.attributes.ClassAttribute</a></li><li><a href="gpf.attributes.MemberAttribute.html">gpf.attributes.MemberAttribute</a></li><li><a href="gpf.attributes.Serializable.html">gpf.attributes.Serializable</a></li><li><a href="gpf.attributes.UniqueAttribute.html">gpf.attributes.UniqueAttribute</a></li><li><a href="gpf.Error.html">gpf.Error</a></li><li><a href="gpf.Error.AbstractClass.html">gpf.Error.AbstractClass</a></li><li><a href="gpf.Error.AbstractMethod.html">gpf.Error.AbstractMethod</a></li><li><a href="gpf.Error.AssertionFailed.html">gpf.Error.AssertionFailed</a></li><li><a href="gpf.Error.ClassAttributeOnly.html">gpf.Error.ClassAttributeOnly</a></li><li><a href="gpf.Error.ClassConstructorFunction.html">gpf.Error.ClassConstructorFunction</a></li><li><a href="gpf.Error.IncompatibleStream.html">gpf.Error.IncompatibleStream</a></li><li><a href="gpf.Error.InterfaceExpected.html">gpf.Error.InterfaceExpected</a></li><li><a href="gpf.Error.InvalidAttributesSpecification.html">gpf.Error.InvalidAttributesSpecification</a></li><li><a href="gpf.Error.InvalidClass$AbstractSpecification.html">gpf.Error.InvalidClass$AbstractSpecification</a></li><li><a href="gpf.Error.InvalidClass$SingletonSpecification.html">gpf.Error.InvalidClass$SingletonSpecification</a></li><li><a href="gpf.Error.InvalidClassConstructor.html">gpf.Error.InvalidClassConstructor</a></li><li><a href="gpf.Error.InvalidClassExtend.html">gpf.Error.InvalidClassExtend</a></li><li><a href="gpf.Error.InvalidClassName.html">gpf.Error.InvalidClassName</a></li><li><a href="gpf.Error.InvalidClassOverride.html">gpf.Error.InvalidClassOverride</a></li><li><a href="gpf.Error.InvalidClassProperty.html">gpf.Error.InvalidClassProperty</a></li><li><a href="gpf.Error.InvalidClassSuper.html">gpf.Error.InvalidClassSuper</a></li><li><a href="gpf.Error.InvalidClassSuperMember.html">gpf.Error.InvalidClassSuperMember</a></li><li><a href="gpf.Error.InvalidCSV.html">gpf.Error.InvalidCSV</a></li><li><a href="gpf.Error.InvalidEntity$Property.html">gpf.Error.InvalidEntity$Property</a></li><li><a href="gpf.Error.InvalidEntityNamespace.html">gpf.Error.InvalidEntityNamespace</a></li><li><a href="gpf.Error.InvalidEntityType.html">gpf.Error.InvalidEntityType</a></li><li><a href="gpf.Error.InvalidInterfaceName.html">gpf.Error.InvalidInterfaceName</a></li><li><a href="gpf.Error.InvalidInterfaceProperty.html">gpf.Error.InvalidInterfaceProperty</a></li><li><a href="gpf.Error.InvalidParameter.html">gpf.Error.InvalidParameter</a></li><li><a href="gpf.Error.InvalidRequireConfigureOption.html">gpf.Error.InvalidRequireConfigureOption</a></li><li><a href="gpf.Error.InvalidSerialName.html">gpf.Error.InvalidSerialName</a></li><li><a href="gpf.Error.InvalidSerialRequired.html">gpf.Error.InvalidSerialRequired</a></li><li><a href="gpf.Error.InvalidSerialType.html">gpf.Error.InvalidSerialType</a></li><li><a href="gpf.Error.InvalidStreamState.html">gpf.Error.InvalidStreamState</a></li><li><a href="gpf.Error.InvalidXmlAttributeName.html">gpf.Error.InvalidXmlAttributeName</a></li><li><a href="gpf.Error.InvalidXmlElementName.html">gpf.Error.InvalidXmlElementName</a></li><li><a href="gpf.Error.InvalidXmlNamespacePrefix.html">gpf.Error.InvalidXmlNamespacePrefix</a></li><li><a href="gpf.Error.InvalidXmlUseOfPrefixXml.html">gpf.Error.InvalidXmlUseOfPrefixXml</a></li><li><a href="gpf.Error.InvalidXmlUseOfPrefixXmlns.html">gpf.Error.InvalidXmlUseOfPrefixXmlns</a></li><li><a href="gpf.Error.InvalidXmlWriterState.html">gpf.Error.InvalidXmlWriterState</a></li><li><a href="gpf.Error.MemberAttributeOnly.html">gpf.Error.MemberAttributeOnly</a></li><li><a href="gpf.Error.MissingEntityName.html">gpf.Error.MissingEntityName</a></li><li><a href="gpf.Error.MissingNodeName.html">gpf.Error.MissingNodeName</a></li><li><a href="gpf.Error.NoCommonJSDynamicRequire.html">gpf.Error.NoCommonJSDynamicRequire</a></li><li><a href="gpf.Error.NotImplemented.html">gpf.Error.NotImplemented</a></li><li><a href="gpf.Error.PathNotExplorable.html">gpf.Error.PathNotExplorable</a></li><li><a href="gpf.Error.ReadInProgress.html">gpf.Error.ReadInProgress</a></li><li><a href="gpf.Error.RestrictedBaseClassAttribute.html">gpf.Error.RestrictedBaseClassAttribute</a></li><li><a href="gpf.Error.UnableToUseNamespaceInString.html">gpf.Error.UnableToUseNamespaceInString</a></li><li><a href="gpf.Error.UniqueAttributeUsedTwice.html">gpf.Error.UniqueAttributeUsedTwice</a></li><li><a href="gpf.Error.UnknownAttributesSpecification.html">gpf.Error.UnknownAttributesSpecification</a></li><li><a href="gpf.Error.UnknownNamespacePrefix.html">gpf.Error.UnknownNamespacePrefix</a></li><li><a href="gpf.Error.UnknownXmlNamespacePrefix.html">gpf.Error.UnknownXmlNamespacePrefix</a></li><li><a href="gpf.Error.UnreachablePath.html">gpf.Error.UnreachablePath</a></li><li><a href="gpf.Error.WriteInProgress.html">gpf.Error.WriteInProgress</a></li><li><a href="gpf.java.BaseStream.html">gpf.java.BaseStream</a></li><li><a href="gpf.java.ReadableStream.html">gpf.java.ReadableStream</a></li><li><a href="gpf.java.WritableStream.html">gpf.java.WritableStream</a></li><li><a href="gpf.node.BaseStream.html">gpf.node.BaseStream</a></li><li><a href="gpf.node.ReadableStream.html">gpf.node.ReadableStream</a></li><li><a href="gpf.node.WritableStream.html">gpf.node.WritableStream</a></li><li><a href="gpf.stream.AbstractOperator.html">gpf.stream.AbstractOperator</a></li><li><a href="gpf.stream.BufferedRead.html">gpf.stream.BufferedRead</a></li><li><a href="gpf.stream.csv.Parser.html">gpf.stream.csv.Parser</a></li><li><a href="gpf.stream.Filter.html">gpf.stream.Filter</a></li><li><a href="gpf.stream.LineAdapter.html">gpf.stream.LineAdapter</a></li><li><a href="gpf.stream.Map.html">gpf.stream.Map</a></li><li><a href="gpf.stream.ReadableArray.html">gpf.stream.ReadableArray</a></li><li><a href="gpf.stream.ReadableString.html">gpf.stream.ReadableString</a></li><li><a href="gpf.stream.WritableArray.html">gpf.stream.WritableArray</a></li><li><a href="gpf.stream.WritableString.html">gpf.stream.WritableString</a></li><li><a href="gpf.typedef.Tag.html">gpf.typedef.Tag</a></li><li><a href="gpf.wscript.BaseStream.html">gpf.wscript.BaseStream</a></li><li><a href="gpf.wscript.ReadableStream.html">gpf.wscript.ReadableStream</a></li><li><a href="gpf.wscript.WritableStream.html">gpf.wscript.WritableStream</a></li><li><a href="gpf.xml.Writer.html">gpf.xml.Writer</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="interfaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Interfaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="gpf.interfaces.IEnumerator.html">gpf.interfaces.IEnumerator</a></li><li><a href="gpf.interfaces.IFileStorage.html">gpf.interfaces.IFileStorage</a></li><li><a href="gpf.interfaces.IFlushableStream.html">gpf.interfaces.IFlushableStream</a></li><li><a href="gpf.interfaces.IReadableStream.html">gpf.interfaces.IReadableStream</a></li><li><a href="gpf.interfaces.IThenable.html">gpf.interfaces.IThenable</a></li><li><a href="gpf.interfaces.IUnknown.html">gpf.interfaces.IUnknown</a></li><li><a href="gpf.interfaces.IWritableStream.html">gpf.interfaces.IWritableStream</a></li><li><a href="gpf.interfaces.IXmlContentHandler.html">gpf.interfaces.IXmlContentHandler</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-CODESTYLE.html">Code style</a></li><li><a href="tutorial-COMPATIBILITY.html">Compatibility layer</a></li><li><a href="tutorial-COVERAGE.html">Code coverage exceptions</a></li><li><a href="tutorial-DEFINE.html">Entity definition</a></li><li><a href="tutorial-INTERFACES.html">Standard interfaces</a></li><li><a href="tutorial-LINTING.html">Linting</a></li><li><a href="tutorial-LOADING.html">Loading GPF Library</a></li><li><a href="tutorial-REQUIRE.html">Modularization</a></li><li><a href="tutorial-TESTME.html">Library testing</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Class: UnknownAttributesSpecification</h1>
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="gpf.html">gpf</a><a href="gpf.Error.html">.Error</a>.</span>
+        
+        UnknownAttributesSpecification
+        </h2>
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+<hr>
+<dt>
+    <h4 class="name" id="UnknownAttributesSpecification"><span class="type-signature"></span>new UnknownAttributesSpecification()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <h3>Summary</h3><p>The attributes are set on an unknwon member</p>
+<h3>Description</h3><p>Attributes are allowed only on existing members or at the class level using $attributes</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+	<dt class="tag-since method-doc-label method-doc-details-label">Since:</dt>
+	<dd class="tag-since">
+		<ul class="dummy">
+			<li>0.2.4</li>
+		</ul>
+	</dd>
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="gpf.Error.html#.unknownAttributesSpecification">gpf.Error.unknownAttributesSpecification</a></li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	
+		on 2018-12-02T22:23:22-05:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : false,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">79.54</p>
+      <p class="stat">79.47</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">304</p>
+      <p class="stat">307</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">25.73</p>
+      <p class="stat">21.04</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.87</p>
+      <p class="stat">0.86</p>
     </div>
   </div>
 </div>
@@ -144,16 +144,17 @@ _gpfErrorDeclare(&quot;define/check&quot;, {
 });
 
 function _gpfDefineEntityCheck$PropertyInAllowed$Properties (name, allowedList) {
-    if (-1 === allowedList.indexOf(name)) {
+    if (!allowedList.includes(name)) {
         gpf.Error.invalidEntity$Property();
     }
 }
 
+var _GPF_DEFINE_SPECIAL_PROPERTY_PREFIX = &quot;$&quot;;
+
 function _gpfDefineEntityCheckProperty (value, name) {
-    _gpfIgnore(value);
     /*jshint -W040*/ /*eslint-disable no-invalid-this*/ // bound through thisArg
-    if (name.charAt(0) === &quot;$&quot;) {
-        this._check$Property(name.substr(1), value);
+    if (name.startsWith(_GPF_DEFINE_SPECIAL_PROPERTY_PREFIX)) {
+        this._check$Property(name.substring(_GPF_DEFINE_SPECIAL_PROPERTY_PREFIX.length), value);
     } else {
         this._checkProperty(name, value);
     }
@@ -200,7 +201,7 @@ Object.assign(_GpfEntityDefinition.prototype, {
      * @protected
      * @since 0.1.8
      */
-    _throwInvalidProperty: _gpfCreateAbstractFunction(0),
+    _throwInvalidProperty: _gpfCreateAbstractFunction(),
 
     /**
      * Regular expression used to validate member name
@@ -241,7 +242,7 @@ Object.assign(_GpfEntityDefinition.prototype, {
      * @since 0.1.6
      */
     _checkReservedMemberName: function (name) {
-        if (-1 !== this._reservedNames.indexOf(name)) {
+        if (this._reservedNames.includes(name)) {
             this._throwInvalidProperty();
         }
     },
@@ -312,7 +313,7 @@ Object.assign(_GpfEntityDefinition.prototype, {
      * @protected
      * @since 0.1.8
      */
-    _throwInvalidName: _gpfCreateAbstractFunction(0),
+    _throwInvalidName: _gpfCreateAbstractFunction(),
 
     /**
      * Regular expression used to validate entity name
@@ -348,10 +349,12 @@ Object.assign(_GpfEntityDefinition.prototype, {
      * @since 0.1.6
      */
     _extractRelativeNamespaceFromName: function () {
-        var parts = new RegExp(&quot;(.*)\\.([^\\.]+)$&quot;).exec(this._name);
+        var parts = new RegExp(&quot;(.*)\\.([^\\.]+)$&quot;).exec(this._name),
+            NAME_PART = 2,
+            NAMESPACE_PART = 1;
         if (parts) {
-            this._name = parts[2];
-            return parts[1];
+            this._name = parts[NAME_PART];
+            return parts[NAMESPACE_PART];
         }
     },
 
@@ -366,7 +369,7 @@ Object.assign(_GpfEntityDefinition.prototype, {
         ].filter(function (namespacePart) {
             return namespacePart;
         });
-        if (namespaces.length &gt; 0) {
+        if (namespaces.length) {
             this._namespace = namespaces.join(&quot;.&quot;);
         }
     },

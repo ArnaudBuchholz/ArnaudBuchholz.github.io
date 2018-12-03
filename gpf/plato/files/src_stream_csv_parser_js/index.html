@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">75.71</p>
+      <p class="stat">75.33</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">398</p>
+      <p class="stat">402</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">33.13</p>
+      <p class="stat">30.37</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">1.43</p>
+      <p class="stat">1.45</p>
     </div>
   </div>
 </div>
@@ -95,6 +95,7 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _GPF_START*/ // 0
 /*global _GpfStreamBufferedRead*/ // gpf.stream.BufferedRead
 /*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
 /*global _gpfArrayForEachFalsy*/ // _gpfArrayForEach that returns first truthy value computed by the callback
@@ -215,10 +216,10 @@ var
         _deduceSeparator: function () {
             var header = this._header;
             this._separator = _gpfArrayForEachFalsy(_gpfCsvSeparators, function (separator) {
-                if (-1 !== header.indexOf(separator)) {
+                if (header.includes(separator)) {
                     return separator;
                 }
-            }) || _gpfCsvSeparators[0];
+            }) || _gpfCsvSeparators[_GPF_START];
         },
 
         /**
@@ -314,10 +315,12 @@ var
          * @since 0.2.3
          */
         _addValue: function (match) {
-            if (match[1]) {
-                this._values.push(match[1]);
-            } else /* if (match[2]) */ {
-                this._values.push(this._unescapeQuoted(match[2]));
+            var UNQUOTED = 1,
+                QUOTED = 2;
+            if (match[UNQUOTED]) {
+                this._values.push(match[UNQUOTED]);
+            } else /* if (match[QUOTED]) */ {
+                this._values.push(this._unescapeQuoted(match[QUOTED]));
             }
         },
 
@@ -330,7 +333,7 @@ var
          */
         _nextValue: function (index) {
             this._content = this._content.substr(index);
-            return this._content.length &gt; 0;
+            return Boolean(this._content.length);
         },
 
         /**
@@ -341,10 +344,11 @@ var
          * @since 0.2.3
          */
         _checkAfterValue: function (match) {
-            var charAfterValue = this._content.charAt(match[0].length);
+            var lengthOfMatchedString = match[_GPF_START].length,
+                charAfterValue = this._content.charAt(lengthOfMatchedString);
             if (charAfterValue) {
                 _gpfAssert(charAfterValue === this._separator, &quot;Positive lookahead works&quot;);
-                return this._nextValue(match[0].length + 1);
+                return this._nextValue(++lengthOfMatchedString);
             }
             delete this._content;
             return false; // No value means end of content
@@ -372,9 +376,9 @@ var
          * @since 0.2.3
          */
         _checkForValue: function () {
-            if (this._content.charAt(0) === this._separator) {
+            if (this._content.startsWith(this._separator)) {
                 this._values.push(&quot;&quot;); // Separator here means empty value
-                return this._nextValue(1);
+                return this._nextValue(this._separator.length);
             }
             return this._extractValue();
         },

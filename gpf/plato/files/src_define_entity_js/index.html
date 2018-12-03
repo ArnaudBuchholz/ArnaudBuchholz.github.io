@@ -110,7 +110,7 @@
  * @since 0.1.6
  */
 function _GpfEntityDefinition (definition) {
-    _gpfAssert(definition &amp;&amp; &quot;object&quot; === typeof definition, &quot;Expected an entity definition&quot;);
+    _gpfAssert(definition &amp;&amp; typeof definition === &quot;object&quot;, &quot;Expected an entity definition&quot;);
     /*jshint validthis:true*/ // constructor
     /*eslint-disable no-invalid-this*/
     this._initialDefinition = definition;

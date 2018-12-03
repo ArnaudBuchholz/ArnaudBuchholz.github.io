@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.61</p>
+      <p class="stat">78.05</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">180</p>
+      <p class="stat">201</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">28.57</p>
+      <p class="stat">27.32</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.87</p>
+      <p class="stat">1.02</p>
     </div>
   </div>
 </div>
@@ -95,6 +95,7 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _GPF_START*/ // 0
 /*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
 /*global _gpfCompatibilityInstallMethods*/ // Define and install compatible methods on standard objects
 /*global _gpfMainContext*/ // Main context object
@@ -102,27 +103,28 @@
 /*exported _gpfIsISO8601String*/ // Check if the string is an ISO 8601 representation of a date
 /*#endif*/
 
-function _pad (number) {
-    if (10 &gt; number) {
-        return &quot;0&quot; + number;
-    }
-    return number;
+var _GPF_COMPATIBILITY_DATE_MONTH_OFFSET = 1,
+    _GPF_COMPATIBILITY_DATE_2_DIGITS = 2,
+    _GPF_COMPATIBILITY_DATE_3_DIGITS = 3;
+
+function _gpfDatePad (value, count) {
+    return value.toString().padStart(count, &quot;0&quot;);
 }
 
 function _gpfDateToISOString (date) {
     return date.getUTCFullYear()
         + &quot;-&quot;
-        + _pad(date.getUTCMonth() + 1)
+        + _gpfDatePad(date.getUTCMonth() + _GPF_COMPATIBILITY_DATE_MONTH_OFFSET, _GPF_COMPATIBILITY_DATE_2_DIGITS)
         + &quot;-&quot;
-        + _pad(date.getUTCDate())
+        + _gpfDatePad(date.getUTCDate(), _GPF_COMPATIBILITY_DATE_2_DIGITS)
         + &quot;T&quot;
-        + _pad(date.getUTCHours())
+        + _gpfDatePad(date.getUTCHours(), _GPF_COMPATIBILITY_DATE_2_DIGITS)
         + &quot;:&quot;
-        + _pad(date.getUTCMinutes())
+        + _gpfDatePad(date.getUTCMinutes(), _GPF_COMPATIBILITY_DATE_2_DIGITS)
         + &quot;:&quot;
-        + _pad(date.getUTCSeconds())
+        + _gpfDatePad(date.getUTCSeconds(), _GPF_COMPATIBILITY_DATE_2_DIGITS)
         + &quot;.&quot;
-        + (date.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5)
+        + _gpfDatePad(date.getUTCMilliseconds(), _GPF_COMPATIBILITY_DATE_3_DIGITS)
         + &quot;Z&quot;;
 }
 
@@ -151,14 +153,27 @@ _gpfCompatibilityInstallMethods(&quot;Date&quot;, {
 //region Date override
 
 var _gpfISO8601RegExp = new RegExp(&quot;^([0-9][0-9][0-9][0-9])\\-([0-9][0-9])\\-([0-9][0-9])&quot;
-    + &quot;(?:T([0-9][0-9])\\:([0-9][0-9])\\:([0-9][0-9])(?:\\.([0-9][0-9][0-9])Z)?)?$&quot;);
+    + &quot;(?:T([0-9][0-9])\\:([0-9][0-9])\\:([0-9][0-9])(?:\\.([0-9][0-9][0-9])Z)?)?$&quot;),
+    _GPF_COMPATIBILITY_DATE_MONTH_PART = 1,
+    _GPF_COMPATIBILITY_DATE_MAX_MONTH = 11,
+    _GPF_COMPATIBILITY_DATE_DATE_PART = 2,
+    _GPF_COMPATIBILITY_DATE_MAX_DATE = 31,
+    _GPF_COMPATIBILITY_DATE_HOURS_PART = 3,
+    _GPF_COMPATIBILITY_DATE_MAX_HOURS = 23,
+    _GPF_COMPATIBILITY_DATE_MINUTES_PART = 4,
+    _GPF_COMPATIBILITY_DATE_MAX_MINUTES = 59,
+    _GPF_COMPATIBILITY_DATE_SECONDS_PART = 5,
+    _GPF_COMPATIBILITY_DATE_MAX_SECONDS = 59;
 
 function _gpfIsValidDateInDateArray (dateArray) {
-    return dateArray[1] &lt; 12 &amp;&amp; dateArray[2] &lt; 32;
+    return dateArray[_GPF_COMPATIBILITY_DATE_MONTH_PART] &lt;= _GPF_COMPATIBILITY_DATE_MAX_MONTH
+        &amp;&amp; dateArray[_GPF_COMPATIBILITY_DATE_DATE_PART] &lt;= _GPF_COMPATIBILITY_DATE_MAX_DATE;
 }
 
 function _gpfIsValidTimeInDateArray (dateArray) {
-    return dateArray[3] &lt; 24 &amp;&amp; dateArray[4] &lt; 60 &amp;&amp; dateArray[5] &lt; 60;
+    return dateArray[_GPF_COMPATIBILITY_DATE_HOURS_PART] &lt;= _GPF_COMPATIBILITY_DATE_MAX_HOURS
+        &amp;&amp; dateArray[_GPF_COMPATIBILITY_DATE_MINUTES_PART] &lt;= _GPF_COMPATIBILITY_DATE_MAX_MINUTES
+        &amp;&amp; dateArray[_GPF_COMPATIBILITY_DATE_SECONDS_PART] &lt;= _GPF_COMPATIBILITY_DATE_MAX_SECONDS;
 }
 
 function _gpfCheckDateArray (dateArray) {
@@ -167,34 +182,37 @@ function _gpfCheckDateArray (dateArray) {
     }
 }
 
+var _GPF_COMPATIBILITY_DATE_PART_NOT_SET = 0;
+
 function _gpfAddDatePartToArray (dateArray, datePart) {
     if (datePart) {
         dateArray.push(parseInt(datePart, 10));
     } else {
-        dateArray.push(0);
+        dateArray.push(_GPF_COMPATIBILITY_DATE_PART_NOT_SET);
     }
 }
 
 function _gpfToDateArray (matchResult) {
     var dateArray = [],
         len = matchResult.length, // 0 is the recognized string
-        idx;
-    for (idx = 1; idx &lt; len; ++idx) {
+        idx = 1;
+    for (; idx &lt; len; ++idx) {
         _gpfAddDatePartToArray(dateArray, matchResult[idx]);
     }
     return dateArray;
 }
+
+var _GPF_COMPATIBILITY_DATE_MONTH_INDEX = 1;
 
 function _gpfProcessISO8601MatchResult (matchResult) {
     var dateArray;
     if (matchResult) {
         dateArray = _gpfToDateArray(matchResult);
         // Month must be corrected (0-based)
-        --dateArray[1];
+        --dateArray[_GPF_COMPATIBILITY_DATE_MONTH_INDEX];
         // Some validation
         return _gpfCheckDateArray(dateArray);
     }
-
 }
 
 /**
@@ -208,7 +226,7 @@ function _gpfProcessISO8601MatchResult (matchResult) {
  * @since 0.1.5
  */
 function _gpfIsISO8601String (value) {
-    if (&quot;string&quot; === typeof value) {
+    if (typeof value === &quot;string&quot;) {
         _gpfISO8601RegExp.lastIndex = 0;
         return _gpfProcessISO8601MatchResult(_gpfISO8601RegExp.exec(value));
     }
@@ -224,7 +242,7 @@ var _GpfGenuineDate = _gpfMainContext.Date;
  * @since 0.1.5
  */
 function _GpfDate () {
-    var firstArgument = arguments[0],
+    var firstArgument = arguments[_GPF_START],
         values = _gpfIsISO8601String(firstArgument);
     if (values) {
         return new _GpfGenuineDate(_GpfGenuineDate.UTC.apply(_GpfGenuineDate.UTC, values));
@@ -243,17 +261,20 @@ function _gpfCopyDateStatics () {
     });
 }
 
+var _GPF_COMPATIBILITY_DATE_ISO_TEST = &quot;2003-01-22T22:45:34.075Z&quot;,
+    _GPF_COMPATIBILITY_DATE_SHORT_TEST = &quot;2003-01-22&quot;;
+
 function _gpfInstallCompatibleDate () {
     _gpfCopyDateStatics();
     // Test if ISO 8601 format variations are supported
     var longDateAsString,
         shortDateAsString;
     try {
-        longDateAsString = _gpfDateToISOString(new Date(&quot;2003-01-22T22:45:34.075Z&quot;));
-        shortDateAsString = _gpfDateToISOString(new Date(&quot;2003-01-22&quot;));
+        longDateAsString = _gpfDateToISOString(new Date(_GPF_COMPATIBILITY_DATE_ISO_TEST));
+        shortDateAsString = _gpfDateToISOString(new Date(_GPF_COMPATIBILITY_DATE_SHORT_TEST));
     } catch (e) {} //eslint-disable-line no-empty
-    if (longDateAsString !== &quot;2003-01-22T22:45:34.075Z&quot;
-        || shortDateAsString !== &quot;2003-01-22T00:00:00.000Z&quot;) {
+    if (longDateAsString !== _GPF_COMPATIBILITY_DATE_ISO_TEST
+        || shortDateAsString !== _GPF_COMPATIBILITY_DATE_SHORT_TEST + &quot;T00:00:00.000Z&quot;) {
         // Replace constructor with new one
         _gpfMainContext.Date = _GpfDate;
     }

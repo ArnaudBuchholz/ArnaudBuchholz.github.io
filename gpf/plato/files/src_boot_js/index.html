@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">307</p>
+      <p class="stat">314</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">22.22</p>
+      <p class="stat">23.22</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.89</p>
+      <p class="stat">0.92</p>
     </div>
   </div>
 </div>
@@ -95,7 +95,10 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*exported _GPF_FS_WSCRIPT_READING*/ // WScript OpenTextFile for reading value
 /*exported _GPF_HOST*/ // Host types
+/*exported _GPF_NOT_FOUND*/ // -1
+/*exported _GPF_START*/ // 0
 /*exported _GpfFunc*/ // Function
 /*exported _gpfDosPath*/ // DOS-like path
 /*exported _gpfEmptyFunc*/ // An empty function
@@ -123,7 +126,11 @@ var
      * GPF Version
      * @since 0.1.5
      */
-    _gpfVersion = &quot;0.2.7&quot;,
+    _gpfVersion = &quot;0.2.8-alpha&quot;,
+
+    _GPF_NOT_FOUND = -1,
+    _GPF_START = 0,
+    _GPF_FS_WSCRIPT_READING = 1,
 
     /**
      * Host constants
@@ -238,7 +245,7 @@ var _gpfSyncReadForBoot;
 /* Host detection */
 
 // Microsoft cscript / wscript
-if (&quot;undefined&quot; !== typeof WScript) {
+if (typeof WScript !== &quot;undefined&quot;) {
     _gpfHost = _GPF_HOST.WSCRIPT;
 
     /*#ifndef(UMD)*/
@@ -247,7 +254,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
     _gpfMsFSO = new ActiveXObject(&quot;Scripting.FileSystemObject&quot;);
 
     _gpfSyncReadForBoot = function (srcFileName) {
-        var srcFile = _gpfMsFSO.OpenTextFile(srcFileName, 1),
+        var srcFile = _gpfMsFSO.OpenTextFile(srcFileName, _GPF_FS_WSCRIPT_READING),
             srcContent = srcFile.ReadAll();
         srcFile.Close();
         return srcContent;
@@ -256,9 +263,9 @@ if (&quot;undefined&quot; !== typeof WScript) {
     /*eslint-enable new-cap*/
     /*#endif*/
 
-} else if (&quot;undefined&quot; !== typeof print &amp;&amp; &quot;undefined&quot; !== typeof java) {
+} else if (typeof print !== &quot;undefined&quot; &amp;&amp; typeof java !== &quot;undefined&quot;) {
 
-    if (&quot;undefined&quot; === typeof readFile) {
+    if (typeof readFile === &quot;undefined&quot;) {
         _gpfHost = _GPF_HOST.NASHORN;
 
         /*#ifndef(UMD)*/
@@ -281,13 +288,13 @@ if (&quot;undefined&quot; !== typeof WScript) {
     }
 
 // PhantomJS - When used as a command line (otherwise considered as a browser)
-} else if (&quot;undefined&quot; !== typeof phantom &amp;&amp; phantom.version &amp;&amp; !document.currentScript) {
+} else if (typeof phantom !== &quot;undefined&quot; &amp;&amp; phantom.version &amp;&amp; !document.currentScript) {
     _gpfHost = _GPF_HOST.PHANTOMJS;
     _gpfMainContext = window;
 
     /*#ifndef(UMD)*/
 
-    _gpfNodeFs =  require(&quot;fs&quot;);
+    _gpfNodeFs = require(&quot;fs&quot;);
 
     _gpfSyncReadForBoot = function (srcFileName) {
         return _gpfNodeFs.read(srcFileName);
@@ -296,14 +303,14 @@ if (&quot;undefined&quot; !== typeof WScript) {
     /*#endif*/
 
 // Nodejs
-} else if (&quot;undefined&quot; !== typeof module &amp;&amp; module.exports) {
+} else if (typeof module !== &quot;undefined&quot; &amp;&amp; module.exports) {
     _gpfHost = _GPF_HOST.NODEJS;
     _gpfMainContext = global;
 
     /*#ifndef(UMD)*/
     /*eslint-disable no-sync*/ // Simpler this way
 
-    _gpfNodeFs =  require(&quot;fs&quot;);
+    _gpfNodeFs = require(&quot;fs&quot;);
 
     _gpfSyncReadForBoot = function (srcFileName) {
         return _gpfNodeFs.readFileSync(srcFileName).toString();
@@ -313,7 +320,7 @@ if (&quot;undefined&quot; !== typeof WScript) {
 
 // Browser
 /* istanbul ignore else */ // unknown.1
-} else if (&quot;undefined&quot; !== typeof window) {
+} else if (typeof window !== &quot;undefined&quot;) {
     _gpfHost = _GPF_HOST.BROWSER;
     _gpfMainContext = window;
 

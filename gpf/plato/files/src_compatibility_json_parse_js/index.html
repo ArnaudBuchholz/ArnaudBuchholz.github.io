@@ -101,7 +101,7 @@
 /*#endif*/
 
 function _gpfJsonParseApplyReviver (value, name, reviver) {
-    if (&quot;object&quot; === typeof value) {
+    if (typeof value === &quot;object&quot;) {
         _gpfObjectForEach(value, function (propertyValue, propertyName) {
             value[propertyName] = _gpfJsonParseApplyReviver(propertyValue, propertyName, reviver);
         });

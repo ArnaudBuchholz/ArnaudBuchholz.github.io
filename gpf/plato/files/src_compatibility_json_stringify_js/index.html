@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.42</p>
+      <p class="stat">77.51</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">134</p>
+      <p class="stat">136</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">28.37</p>
+      <p class="stat">23.64</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.68</p>
+      <p class="stat">0.67</p>
     </div>
   </div>
 </div>
@@ -150,7 +150,7 @@ function _gpfJsonStringifyObjectMembers (object, replacer, space) {
 }
 
 function _gpfJsonStringifyObject (object, replacer, space) {
-    if (null === object) {
+    if (object === null) {
         return &quot;null&quot;;
     }
     return _gpfJsonStringifyObjectMembers(object, replacer, space);
@@ -173,7 +173,7 @@ _gpfJsonStringifyMapping = {
 };
 
 function _gpfJsonStringifyGetReplacerFunction (replacer) {
-    if (&quot;function&quot; === typeof replacer) {
+    if (typeof replacer === &quot;function&quot;) {
         return replacer;
     }
     return function (key, value) {
@@ -185,7 +185,7 @@ function _gpfJsonStringifyCheckReplacer (replacer) {
     if (_gpfIsArray(replacer)) {
         // whitelist
         return function (key, value) {
-            if (replacer.indexOf(key) !== -1) {
+            if (replacer.includes(key)) {
                 return value;
             }
         };
@@ -193,9 +193,11 @@ function _gpfJsonStringifyCheckReplacer (replacer) {
     return _gpfJsonStringifyGetReplacerFunction(replacer);
 }
 
+var _GPF_COMPATIBILITY_JSON_STRINGIFY_MAX_SPACE = 10;
+
 function _gpfJsonStringifyCheckSpaceValue (space) {
-    if (&quot;number&quot; === typeof space) {
-        return new Array(Math.min(space, 10) + 1).join(&quot; &quot;);
+    if (typeof space === &quot;number&quot;) {
+        return &quot;&quot;.padEnd(Math.min(space, _GPF_COMPATIBILITY_JSON_STRINGIFY_MAX_SPACE), &quot; &quot;);
     }
     return space || &quot;&quot;;
 }

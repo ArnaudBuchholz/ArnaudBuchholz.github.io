@@ -124,7 +124,7 @@ _gpfErrorDeclare(&quot;interfaces&quot;, {
 });
 
 function _gpfInterfaceIsInvalidMethod (referenceMethod, method) {
-    return &quot;function&quot; !== typeof method || referenceMethod.length !== method.length;
+    return typeof method !== &quot;function&quot; || referenceMethod.length !== method.length;
 }
 
 /**
@@ -159,7 +159,7 @@ function _gpfInterfaceIsImplementedBy (interfaceSpecifier, inspectedObject) {
  */
 function _gpfInterfaceQueryThroughIUnknown (interfaceSpecifier, queriedObject) {
     var result = queriedObject.queryInterface(interfaceSpecifier);
-    _gpfAssert(null === result || _gpfInterfaceIsImplementedBy(interfaceSpecifier, result),
+    _gpfAssert(result === null || _gpfInterfaceIsImplementedBy(interfaceSpecifier, result),
         &quot;Invalid result of queryInterface (must be null or an object implementing the interface)&quot;);
     return result;
 }
@@ -198,7 +198,7 @@ function _gpfInterfaceQuery (interfaceSpecifier, queriedObject) {
 }
 
 function _gpfInterfaceResolveSpecifier (interfaceSpecifier) {
-    if (&quot;string&quot; === typeof interfaceSpecifier) {
+    if (typeof interfaceSpecifier === &quot;string&quot;) {
         return _gpfContext(interfaceSpecifier.split(&quot;.&quot;));
     }
     return interfaceSpecifier;

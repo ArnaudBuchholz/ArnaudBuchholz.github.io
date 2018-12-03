@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">78.88</p>
+      <p class="stat">79.10</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">277</p>
+      <p class="stat">247</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">19.33</p>
+      <p class="stat">16.76</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.68</p>
+      <p class="stat">0.56</p>
     </div>
   </div>
 </div>
@@ -164,19 +164,7 @@ _gpfErrorDeclare(&quot;define/class/check&quot;, {
      *
      * @since 0.1.7
      */
-    invalidClassOverride: &quot;Invalid class override&quot;,
-
-    /**
-     * ### Summary
-     *
-     * Invalid Class $abstract specification
-     *
-     * ### Description
-     *
-     * The property $abstract only accepts the value true
-     * @since 0.2.7
-     */
-    invalidClass$AbstractSpecification: &quot;Invalid class $abstract specification&quot;
+    invalidClassOverride: &quot;Invalid class override&quot;
 
 });
 
@@ -188,7 +176,7 @@ _gpfErrorDeclare(&quot;define/class/check&quot;, {
  * @since 0.1.6
  */
 function _gpfDefineClassDecontextifyExtend (extend) {
-    if (&quot;string&quot; === typeof extend) {
+    if (typeof extend === &quot;string&quot;) {
         return _gpfContext(extend.split(&quot;.&quot;));
     }
     return extend;
@@ -200,25 +188,7 @@ Object.assign(_GpfClassDefinition.prototype, {
      * @inheritdoc
      * @since 0.1.6
      */
-    _allowed$Properties: _GpfEntityDefinition.prototype._allowed$Properties.concat([&quot;extend&quot;, &quot;abstract&quot;]),
-
-    _check$abstract: function (value) {
-        if (true !== value) {
-            gpf.Error.invalidClass$AbstractSpecification();
-        }
-    },
-
-    /**
-     * @inheritdoc
-     * @since 0.2.7
-     */
-    _check$Property: function (name, value) {
-        _GpfEntityDefinition.prototype._check$Property.call(this, name, value);
-        if (name === &quot;abstract&quot;) {
-            this._check$abstract(value);
-            this._abstract = true;
-        }
-    },
+    _allowed$Properties: _GpfEntityDefinition.prototype._allowed$Properties.concat([&quot;extend&quot;]),
 
     /**
      * @iheritdoc
@@ -240,7 +210,7 @@ Object.assign(_GpfClassDefinition.prototype, {
      * @since 0.1.7
      */
     _checkConstructorMember: function (constructorValue) {
-        if (&quot;function&quot; !== typeof constructorValue) {
+        if (typeof constructorValue !== &quot;function&quot;) {
             gpf.Error.invalidClassConstructor();
         }
     },
@@ -283,7 +253,7 @@ Object.assign(_GpfClassDefinition.prototype, {
      * @since 0.1.7
      */
     _checkMemberValue: function (name, value) {
-        if (&quot;constructor&quot; === name) {
+        if (name === &quot;constructor&quot;) {
             this._checkConstructorMember(value);
         } else {
             this._checkIfOverriddenMember(name, value);
@@ -337,7 +307,7 @@ Object.assign(_GpfClassDefinition.prototype, {
      * @since 0.1.8
      */
     _checkExtendIsNotAnInterface: function () {
-        if (-1 !== _gpfEmptyFunc.toString.call(this._extend).indexOf(&quot;interfaceConstructorFunction&quot;)) {
+        if (_gpfEmptyFunc.toString.call(this._extend).includes(&quot;interfaceConstructorFunction&quot;)) {
             gpf.Error.invalidClassExtend();
         }
     },
@@ -349,7 +319,7 @@ Object.assign(_GpfClassDefinition.prototype, {
      * @since 0.1.6
      */
     _checkExtend: function () {
-        if (&quot;function&quot; !== typeof this._extend) {
+        if (typeof this._extend !== &quot;function&quot;) {
             gpf.Error.invalidClassExtend();
         }
         this._checkExtendIsNotAnInterface();

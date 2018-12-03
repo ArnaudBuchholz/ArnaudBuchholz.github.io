@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">78.84</p>
+      <p class="stat">77.67</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">225</p>
+      <p class="stat">231</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">20.34</p>
+      <p class="stat">20.53</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.53</p>
+      <p class="stat">0.54</p>
     </div>
   </div>
 </div>
@@ -90,11 +90,13 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="col-md-12">/**
- * @file XML Validation helpers
+ * @file XML validation helpers
  * @since 0.2.7
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _GPF_NOT_FOUND*/ // -1
+/*global _GPF_START*/ // 0
 /*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*exported _gpfXmlCheckDefinableNamespacePrefixName*/ // Check if the given XML namespace prefix name can be defined
 /*exported _gpfXmlCheckQualifiedAttributeName*/ // Check XML qualified attribute name
@@ -220,7 +222,7 @@ var
     _gpfXmlCheckValidNamespacePrefixName = _gpfXmlCheckBuildSimple(_gpfXmlNamespacePrefixRegExp, &quot;NamespacePrefix&quot;);
 
 function _gpfXmlCheckNoXmlns (prefix) {
-    if (&quot;xmlns&quot; === prefix) {
+    if (prefix === &quot;xmlns&quot;) {
         gpf.Error.invalidXmlUseOfPrefixXmlns();
     }
 }
@@ -232,14 +234,14 @@ function _gpfXmlCheckQualifiedNameAndPrefix (name, prefix) {
 }
 
 function _gpfXmlCheckIfKnownPrefix (prefix, knownPrefixes) {
-    if (knownPrefixes.indexOf(prefix) === -1) {
+    if (!knownPrefixes.includes(prefix)) {
         gpf.Error.unknownXmlNamespacePrefix();
     }
 }
 
 function _gpfXmlCheckQualifiedElementNameAndPrefix (name, prefix, knownPrefixes) {
     _gpfXmlCheckQualifiedNameAndPrefix(name, prefix);
-    if (&quot;xml&quot; === prefix) {
+    if (prefix === &quot;xml&quot;) {
         gpf.Error.invalidXmlUseOfPrefixXml();
     } else {
         _gpfXmlCheckIfKnownPrefix(prefix, knownPrefixes);
@@ -248,11 +250,15 @@ function _gpfXmlCheckQualifiedElementNameAndPrefix (name, prefix, knownPrefixes)
 
 function _gpfXmlCheckGetQualified (noPrefixCheck, nameAndPrefixCheck) {
     return function (qName, knownPrefixes) {
-        var sep = qName.indexOf(&quot;:&quot;);
-        if (-1 === sep) {
+        var sep = qName.indexOf(&quot;:&quot;),
+            name,
+            prefix;
+        if (sep === _GPF_NOT_FOUND) {
             noPrefixCheck(qName);
         } else {
-            nameAndPrefixCheck(qName.substr(sep + 1), qName.substr(0, sep), knownPrefixes);
+            prefix = qName.substring(_GPF_START, sep);
+            name = qName.substring(++sep);
+            nameAndPrefixCheck(name, prefix, knownPrefixes);
         }
     };
 }
@@ -271,14 +277,14 @@ var _gpfXmlCheckQualifiedElementName = _gpfXmlCheckGetQualified(_gpfXmlCheckVali
     _gpfXmlCheckQualifiedElementNameAndPrefix);
 
 function _gpfXmlCheckOnlyXmlSpace (name) {
-    if (&quot;space&quot; !== name) {
+    if (name !== &quot;space&quot;) {
         gpf.Error.invalidXmlUseOfPrefixXml();
     }
 }
 
 function _gpfXmlCheckQualifiedAttributeNameAndPrefix (name, prefix, knownPrefixes) {
     _gpfXmlCheckQualifiedNameAndPrefix(name, prefix);
-    if (&quot;xml&quot; === prefix) {
+    if (prefix === &quot;xml&quot;) {
         _gpfXmlCheckOnlyXmlSpace(name);
     } else {
         _gpfXmlCheckIfKnownPrefix(prefix, knownPrefixes);
@@ -310,7 +316,7 @@ var _gpfXmlCheckQualifiedAttributeName = _gpfXmlCheckGetQualified(_gpfXmlCheckVa
 function _gpfXmlCheckDefinableNamespacePrefixName (name) {
     _gpfXmlCheckValidNamespacePrefixName(name);
     _gpfXmlCheckNoXmlns(name);
-    if (&quot;xml&quot; === name) {
+    if (name === &quot;xml&quot;) {
         gpf.Error.invalidXmlUseOfPrefixXml();
     }
 }</textarea>

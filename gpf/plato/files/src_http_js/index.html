@@ -173,7 +173,7 @@ function _gpfHttpRequest (request) {
  * @since 0.2.1
  */
 function _gpfProcessAlias (method, url, data) {
-    if (&quot;string&quot; === typeof url) {
+    if (typeof url === &quot;string&quot;) {
         return _gpfHttpRequest({
             method: method,
             url: url,

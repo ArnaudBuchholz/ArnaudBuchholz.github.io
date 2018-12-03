@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">76.91</p>
+      <p class="stat">77.28</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">161</p>
+      <p class="stat">163</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">29.40</p>
+      <p class="stat">24.83</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.75</p>
+      <p class="stat">0.72</p>
     </div>
   </div>
 </div>
@@ -95,6 +95,8 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _GPF_START*/ // 0
+/*global _gpfArrayTail*/ // [].slice.call(,1)
 /*global _gpfEmptyFunc*/ // An empty function
 /*global _gpfIFlushableStream*/ // gpf.interfaces.IFlushableStream
 /*global _gpfIgnore*/ // Helper to remove unused parameter warning
@@ -207,19 +209,19 @@ function _gpfStreamPipeToFlushableWrite (intermediate, destination) {
 }
 
 function _gpfStreamPipeReduce (streams) {
-    var idx = streams.length - 1,
-        iWritableStream = streams[idx];
-    while (idx &gt; 0) {
+    var idx = streams.length,
+        iWritableStream = streams[--idx];
+    while (idx) {
         iWritableStream = _gpfStreamPipeToFlushableWrite(streams[--idx], iWritableStream);
     }
     return iWritableStream;
 }
 
 function _gpfStreamPipeToWritable (streams) {
-    if (streams.length &gt; 1) {
+    if (_gpfArrayTail(streams).length) {
         return _gpfStreamPipeReduce(streams);
     }
-    return _gpfStreamQueryWritable(streams[0]);
+    return _gpfStreamQueryWritable(streams[_GPF_START]);
 }
 
 /**
@@ -233,7 +235,7 @@ function _gpfStreamPipeToWritable (streams) {
 function _gpfStreamPipe (source, destination) {
     _gpfIgnore(destination);
     var iReadableStream = _gpfStreamQueryReadable(source),
-        iWritableStream = _gpfStreamPipeToWritable([].slice.call(arguments, 1)),
+        iWritableStream = _gpfStreamPipeToWritable(_gpfArrayTail(arguments)),
         iFlushableStream = _gpfStreamPipeToFlushable(iWritableStream);
     try {
         return iReadableStream.read(iWritableStream)

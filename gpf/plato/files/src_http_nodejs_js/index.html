@@ -137,7 +137,7 @@ function _gpfHttpNodeBuildRequestSettings (request) {
 }
 
 function _gpfHttpNodeGetMessageHandler (settings) {
-    if (&quot;https:&quot; === settings.protocol) {
+    if (settings.protocol === &quot;https:&quot;) {
         return _gpfNodeHttps;
     }
     return _gpfNodeHttp;

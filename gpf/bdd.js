@@ -7,11 +7,11 @@
     var safeFunction = Function,
         context = (function () {
             /*global global*/ // NodeJS global
-            if ("object" === typeof global) {
+            if (typeof global === "object") {
                 return global;
             }
             /*global window*/ // Browser global
-            if ("undefined" !== typeof window) {
+            if (typeof window !== "undefined") {
                 return window;
             }
             return safeFunction("return this;")();
@@ -39,7 +39,7 @@
     function _toClass (Constructor, BaseClass, members) {
         Constructor.prototype = new BaseClass();
         _objectForEach(members, function (memberValue, memberName) {
-            if ("statics" === memberName) {
+            if (memberName === "statics") {
                 _objectForEach(memberValue, _addMember, Constructor);
             } else {
                 Constructor.prototype[memberName] = memberValue;
@@ -194,10 +194,8 @@
 
     //region BDD public interface
 
-    function _output (text, level) {
-        if (undefined === level) {
-            level = "log";
-        }
+    function _output (text, optionalLevel) {
+        var level = optionalLevel || "log";
         // Console can be mocked up to check outputs
         if (console.expects) {
             console.expects(level, text, true);
@@ -208,7 +206,7 @@
     _objectForEach({
 
         describe: function (label, callback) {
-            if (null === BDDDescribe.root) {
+            if (BDDDescribe.root === null) {
                 BDDDescribe.current = BDDDescribe.root = new BDDDescribe();
             }
             BDDDescribe.current = new BDDDescribe(label, BDDDescribe.current);
@@ -258,7 +256,7 @@
          * @param {Number} code Exit code
          */
         exit: function (code) {
-            if (0 === code) {
+            if (code === 0) {
                 _output("exit(0)", "log");
             } else {
                 _output("exit(" + code + ")", "error");
@@ -312,10 +310,10 @@
             var line = new Array(data.depth + 1).join("\t") + _getItLineStart(data);
             line += data.label;
             _output(line);
-            if (false === data.result && data.exception) {
+            if (data.result === false && data.exception) {
                 _output("Exception: " + data.exception.message);
                 for (var key in data.exception) {
-                    if ("message" !== key && data.exception.hasOwnProperty(key)) {
+                    if (key !== "message" && data.exception.hasOwnProperty(key)) {
                         _output("Exception." + key + ": " + data.exception[key]);
                     }
                 }
@@ -469,7 +467,7 @@
         _monitorCallback: function (callback, callbackCompleted, callbackContext) {
             var monitorContext = {
                     runner: this,
-                    doneExpected: 0 < callback.length,
+                    doneExpected: callback.length > 0,
                     callbackCompleted: callbackCompleted,
                     callbackContext: callbackContext,
                     error: null,
@@ -491,21 +489,24 @@
 
         // done function, is bound to a monitorContext
         _done: function (error) {
+            var finalError;
             ++this.numberOfCall;
-            if (1 < this.numberOfCall) {
+            if (this.numberOfCall > 1) {
                 // Whatever the situation, done MUST be called only once, so overwrite any error here
-                error = {
+                finalError = {
                     message: "Done function called " + this.numberOfCall + " times"
                 };
+            } else {
+                finalError = error;
             }
-            if (1 < this.numberOfCall || this.timeoutId) {
+            if (this.numberOfCall > 1 || this.timeoutId) {
                 // More than one call (i.e. error) or asynchronous
-                this.complete(error);
+                this.complete(finalError);
             } else {
                 // Can still be processed as synchronous, keep track of error parameter
-                this.error = error;
+                this.error = finalError;
             }
-            if (1 === this.numberOfCall && this.timeoutId) {
+            if (this.numberOfCall === 1 && this.timeoutId) {
                 // First call in asynchronous mode, prevent timeout execution (no more necessary)...
                 clearTimeout(this.timeoutId);
                 // ...then, trigger the next step execution (required to continue the test)
@@ -538,10 +539,10 @@
                 return false;
             }
             // Was done already called?
-            if (1 === monitorContext.numberOfCall) {
+            if (monitorContext.numberOfCall === 1) {
                 monitorContext.complete(monitorContext.error);
                 return false;
-            } else if (0 < monitorContext.numberOfCall) {
+            } else if (monitorContext.numberOfCall > 0) {
                 return false;
             }
             // From there, the callback is asynchronous!
@@ -565,14 +566,11 @@
             function fulfilled () {
                 done(); // Must have no parameter
             }
-            function rejected (reason) {
-                if (!reason) {
-                    reason = {
-                        message: "Promise rejected with no reason"
-                    };
-                }
-                _rejectionReason = reason;
-                done(reason);
+            function rejected (optionalReason) {
+                _rejectionReason = optionalReason || {
+                    message: "Promise rejected with no reason"
+                };
+                done(_rejectionReason);
             }
             function caught (reason) {
                 if (reason !== _rejectionReason) {
@@ -597,18 +595,19 @@
         },
 
         // IT Callback completion function (see _monitorCallback)
-        _itCallbackCompleted: function (it, startDate, e) {
+        _itCallbackCompleted: function (it, startDate, optionalError) {
+            var error;
             if (it.failureExpected) {
-                if (e) {
-                    e = null;
-                } else {
-                    e = {
+                if (!optionalError) {
+                    error = {
                         message: "Failure was expected"
                     };
                 }
+            } else {
+                error = optionalError;
             }
-            if (e) {
-                this._fail(it.label, startDate, e);
+            if (error) {
+                this._fail(it.label, startDate, error);
             } else {
                 this._success(it.label, startDate);
             }
@@ -774,7 +773,7 @@
 
         // STATE_DESCRIBE_DONE
         _onDescribeDone: function () {
-            if (0 < this._describes.length) {
+            if (this._describes.length > 0) {
                 // What's in the describe stack
                 this._unstackDescribe();
                 return true;
@@ -815,7 +814,7 @@
 
             // Test if the provided parameter looks like a promise
             isPromise: function (obj) {
-                return null !== obj && "object" === typeof obj && "function" === typeof obj.then;
+                return obj !== null && typeof obj === "object" && typeof obj.then === "function";
             }
         }
     });

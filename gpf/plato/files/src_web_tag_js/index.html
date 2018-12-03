@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.71</p>
+      <p class="stat">77.75</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">389</p>
+      <p class="stat">391</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,7 +62,7 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">26.44</p>
+      <p class="stat">24.73</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
@@ -95,6 +95,7 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _gpfArraySlice*/ // [].slice.call
 /*global _gpfDefine*/ // Shortcut for gpf.define
 /*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*global _gpfIsArray*/ // Return true if the parameter is an array
@@ -249,11 +250,14 @@ function _gpfWebGetNamespace (prefix) {
  * @since 0.2.2
  */
 function _gpfWebGetNamespaceAndName (name) {
-    var parts = name.split(&quot;:&quot;);
-    if (parts.length === 2) {
+    var EXPECTED_PARTS_COUNT = 2,
+        NAMESPACE_PREFIX = 0,
+        NAME = 1,
+        parts = name.split(&quot;:&quot;);
+    if (parts.length === EXPECTED_PARTS_COUNT) {
         return {
-            namespace: _gpfWebGetNamespace(parts[0]),
-            name: parts[1]
+            namespace: _gpfWebGetNamespace(parts[NAMESPACE_PREFIX]),
+            name: parts[NAME]
         };
     }
 }
@@ -266,7 +270,7 @@ function _gpfWebGetNamespaceAndName (name) {
  * @since 0.2.2
  */
 function _gpfWebCheckNamespaceSafe (name) {
-    if (-1 !== name.indexOf(&quot;:&quot;)) {
+    if (name.includes(&quot;:&quot;)) {
         gpf.Error.unableToUseNamespaceInString();
     }
 }
@@ -441,15 +445,13 @@ function _gpfWebTagCreateFunction (nodeName) {
         gpf.Error.missingNodeName();
     }
     return function (firstParam) {
-        var sliceFrom,
+        var sliceFrom = 0,
             attributes;
         if (_gpfIsLiteralObject(firstParam)) {
             attributes = firstParam;
-            sliceFrom = 1;
-        } else {
-            sliceFrom = 0;
+            ++sliceFrom;
         }
-        return new _GpfWebTag(nodeName, attributes, [].slice.call(arguments, sliceFrom));
+        return new _GpfWebTag(nodeName, attributes, _gpfArraySlice(arguments, sliceFrom));
     };
 }
 

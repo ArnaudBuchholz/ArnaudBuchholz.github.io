@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.29</p>
+      <p class="stat">77.58</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">277</p>
+      <p class="stat">281</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">31.82</p>
+      <p class="stat">21.31</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.82</p>
+      <p class="stat">0.79</p>
     </div>
   </div>
 </div>
@@ -95,7 +95,10 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _GPF_NOT_FOUND*/ // -1
+/*global _GPF_START*/ // 0
 /*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
+/*global _gpfArrayTail*/ // [].slice.call(,1)
 /*global _gpfEmptyFunc*/ // An empty function
 /*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*exported _gpfPathDecompose*/ // Normalize path and returns an array of parts
@@ -127,7 +130,7 @@ _gpfErrorDeclare(&quot;path&quot;, {
 //region _gpfPathDecompose
 
 function _gpfPathSplit (path) {
-    if (-1 &lt; path.indexOf(&quot;\\&quot;)) {
+    if (path.includes(&quot;\\&quot;)) {
         // DOS path is case insensitive, hence lowercase it
         return path.toLowerCase().split(&quot;\\&quot;);
     }
@@ -136,8 +139,9 @@ function _gpfPathSplit (path) {
 }
 
 function _gpfPathRemoveTrailingBlank (splitPath) {
-    if (!splitPath[splitPath.length - 1]) {
-        splitPath.pop();
+    var last = splitPath.pop();
+    if (last) {
+        splitPath.push(last); // Put it back
     }
 }
 
@@ -200,7 +204,7 @@ function _gpfPathName (path) {
 function _gpfPathExtension (path) {
     var name = _gpfPathName(path),
         pos = name.lastIndexOf(&quot;.&quot;);
-    if (-1 === pos) {
+    if (pos === _GPF_NOT_FOUND) {
         return &quot;&quot;;
     }
     return name.substr(pos);
@@ -243,12 +247,12 @@ function _gpfPathAppend (splitPath, relativePath) {
  */
 function _gpfPathJoin (path) {
     var splitPath = _gpfPathDecompose(path);
-    [].slice.call(arguments, 1).forEach(_gpfPathAppend.bind(null, splitPath));
+    _gpfArrayTail(arguments).forEach(_gpfPathAppend.bind(null, splitPath));
     return splitPath.join(&quot;/&quot;);
 }
 
 function _gpfPathSafeShiftIdenticalBeginning (splitFromPath, splitToPath) {
-    while (splitFromPath[0] === splitToPath[0]) {
+    while (splitFromPath[_GPF_START] === splitToPath[_GPF_START]) {
         splitFromPath.shift();
         splitToPath.shift();
     }
@@ -269,9 +273,9 @@ function _gpfPathShiftIdenticalBeginning (splitFromPath, splitToPath) {
  * @since 0.1.9
  */
 function _gpfPathParent (path) {
-    path = _gpfPathDecompose(path);
-    _gpfPathUp(path);
-    return path.join(&quot;/&quot;);
+    var splitPath = _gpfPathDecompose(path);
+    _gpfPathUp(splitPath);
+    return splitPath.join(&quot;/&quot;);
 }
 
 /**
@@ -288,8 +292,8 @@ function _gpfPathRelative (from, to) {
         splitTo = _gpfPathDecompose(to);
     _gpfPathShiftIdenticalBeginning(splitFrom, splitTo);
     // For each remaining part in from, unshift .. in to
-    length = splitFrom.length + 1;
-    while (--length) {
+    length = splitFrom.length;
+    while (length--) {
         splitTo.unshift(&quot;..&quot;);
     }
     return splitTo.join(&quot;/&quot;);
@@ -341,10 +345,10 @@ gpf.path = {
     nameOnly: function (path) {
         var name = _gpfPathName(path),
             pos = name.lastIndexOf(&quot;.&quot;);
-        if (-1 === pos) {
+        if (pos === _GPF_NOT_FOUND) {
             return name;
         }
-        return name.substr(0, pos);
+        return name.substring(_GPF_START, pos);
     },
 
     /**

@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">79.23</p>
+      <p class="stat">78.47</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">85</p>
+      <p class="stat">91</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,7 +62,7 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">11.43</p>
+      <p class="stat">11.63</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
@@ -95,6 +95,8 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
+/*global _gpfArraySlice*/ // [].slice.call
+/*global _gpfArrayTail*/ // [].slice.call(,1)
 /*global _gpfBuildFunctionParameterList*/ // Builds an array of parameters
 /*global _gpfCompatibilityInstallMethods*/ // Define and install compatible methods on standard objects
 /*global _gpfEmptyFunc*/ // An empty function
@@ -102,15 +104,15 @@
 /*global _gpfJsCommentsRegExp*/ // Find all JavaScript comments
 /*#endif*/
 
-var _gpfArrayPrototypeSlice = Array.prototype.slice;
-
 function _generateBindBuilderSource (length) {
     return &quot;var me = this;\n&quot;
         + &quot;return function (&quot; + _gpfBuildFunctionParameterList(length).join(&quot;, &quot;) + &quot;) {\n&quot;
-        + &quot;   var args = _gpfArrayPrototypeSlice.call(arguments, 0);\n&quot;
+        + &quot;    var args = _gpfArraySlice(arguments);\n&quot;
         + &quot;    return me.apply(thisArg, prependArgs.concat(args));\n&quot;
         + &quot;};&quot;;
 }
+
+var _GPF_COMPATIBILITY_FUNCTION_MIN_LENGTH = 0;
 
 _gpfCompatibilityInstallMethods(&quot;Function&quot;, {
     on: Function,
@@ -120,10 +122,11 @@ _gpfCompatibilityInstallMethods(&quot;Function&quot;, {
         // Introduced with JavaScript 1.8.5
         bind: function (thisArg) {
             var me = this,
-                prependArgs = _gpfArrayPrototypeSlice.call(arguments, 1),
-                builderSource = _generateBindBuilderSource(Math.max(this.length - prependArgs.length, 0));
-            return _gpfFunc([&quot;thisArg&quot;, &quot;prependArgs&quot;, &quot;_gpfArrayPrototypeSlice&quot;], builderSource)
-                .call(me, thisArg, prependArgs, _gpfArrayPrototypeSlice);
+                prependArgs = _gpfArrayTail(arguments),
+                length = Math.max(this.length - prependArgs.length, _GPF_COMPATIBILITY_FUNCTION_MIN_LENGTH),
+                builderSource = _generateBindBuilderSource(length);
+            return _gpfFunc([&quot;thisArg&quot;, &quot;prependArgs&quot;, &quot;_gpfArraySlice&quot;], builderSource)
+                .call(me, thisArg, prependArgs, _gpfArraySlice);
         }
 
     }
@@ -132,14 +135,17 @@ _gpfCompatibilityInstallMethods(&quot;Function&quot;, {
 
 //region Function name
 
+var _GPF_COMPATIBILITY_FUNCTION_KEYWORD = &quot;function&quot;;
+
 function _gpfGetFunctionName () {
     // Use simple parsing
     /*jshint validthis:true*/
     var functionSource = _gpfEmptyFunc.toString.call(this), //eslint-disable-line no-invalid-this
-        functionKeywordPos = functionSource.indexOf(&quot;function&quot;),
+        functionKeywordPos = functionSource.indexOf(_GPF_COMPATIBILITY_FUNCTION_KEYWORD)
+            + _GPF_COMPATIBILITY_FUNCTION_KEYWORD.length,
         parameterListStartPos = functionSource.indexOf(&quot;(&quot;, functionKeywordPos);
     return functionSource
-        .substr(functionKeywordPos + 9, parameterListStartPos - functionKeywordPos - 9)
+        .substr(functionKeywordPos, parameterListStartPos - functionKeywordPos)
         .replace(_gpfJsCommentsRegExp, &quot;&quot;) // remove comments
         .trim();
 }

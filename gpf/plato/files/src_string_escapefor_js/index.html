@@ -105,7 +105,7 @@
 var _gpfStringEscapes = {};
 
 function _gpfStringEscapePostProcessFor (that, language) {
-    if (&quot;javascript&quot; === language) {
+    if (language === &quot;javascript&quot;) {
         return &quot;\&quot;&quot; + that + &quot;\&quot;&quot;;
     }
     return that;
