@@ -13,8 +13,9 @@
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
-    This release focuses on quality by integrating hosted automated code review services and introduces XML
-    serialization.
+    This release took longer as it was developped in parallel with several side projects.
+    It includes new asynchronous helpers, new classes designed to validate attributes usage and
+    a brand new mechanism to serialize classes.
 </div>
 <code class="markdown">
 ## Release 0.2.8: Serialization attributes
@@ -29,11 +30,13 @@
 ### A longer release
 
 As explained in the [last release notes](http://gpf-js.blogspot.com/2018/08/release-027-quality-and-xml.html), I am
-concentrating on a [side project](https://github.com/ArnaudBuchholz/bubu-cms) and the library evolved mostly to support
+concentrating on a [side project](https://github.com/ArnaudBuchholz/bubu-cms) and the library evolved to support
 its development.
 
-Also, [other projects](https://www.npmjs.com/package/node-ui5) were started since interesting challenges were submitted
-over the last month.
+In the meantime, other projects ([mockserver-server](https://github.com/ArnaudBuchholz/mockserver-server) and
+[node-ui5](https://www.npmjs.com/package/node-ui5)) were started since interesting challenges were
+submitted over the last month. Not to mention that more documentation was requested on the linting rules but also on the
+evolution of the library statistics.
 
 As a consequence, this release took more time than usual (around 4 months).
 
@@ -41,9 +44,10 @@ As a consequence, this release took more time than usual (around 4 months).
 
 #### Interface wrappers
 
-As described when introducing XML serialization, a
-[generic wrapper](https://github.com/ArnaudBuchholz/gpf-js/issues/272) was required to simplify the use of known
-interfaces. But also, it is necessary to be able to chain these calls with custom handlers
+When the XML serialization was introduced, a [generic wrapper](https://github.com/ArnaudBuchholz/gpf-js/issues/272) was
+required to simplify the use of the [IXmlContentHandler interface](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IXmlContentHandler.html).
+
+known interfaces. But also, it is necessary to be able to chain these calls with custom handlers
 
 The best example is the [metadata handler](https://github.com/ArnaudBuchholz/bubu-cms/blob/77240f29513b359cd22ba15f46adfa5ad67be1b9/api/metadata.js)
 
