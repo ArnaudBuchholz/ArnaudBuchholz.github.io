@@ -30,46 +30,132 @@
 ### A longer release
 
 As explained in the [last release notes](http://gpf-js.blogspot.com/2018/08/release-027-quality-and-xml.html), I am
-concentrating on a [side project](https://github.com/ArnaudBuchholz/bubu-cms) and the library evolved to support
-its development.
+concentrating on a [side project](https://github.com/ArnaudBuchholz/bubu-cms) and the library evolved to **support
+its development**.
 
 In the meantime, other projects ([mockserver-server](https://github.com/ArnaudBuchholz/mockserver-server) and
-[node-ui5](https://www.npmjs.com/package/node-ui5)) were started since interesting challenges were
-submitted over the last month. Not to mention that more documentation was requested on the linting rules but also on the
-evolution of the library statistics.
+[node-ui5](https://www.npmjs.com/package/node-ui5)) were started since **interesting challenges** were
+submitted over the last month. Not to mention that **more documentation** was requested on the linting rules but also on
+the evolution of the library statistics.
 
-As a consequence, this release took more time than usual (around 4 months).
+As a consequence, this release took **more time than usual** (around 4 months).
 
 ### Asynchronous helpers
 
 #### Interface wrappers
 
 When the XML serialization was introduced, a [generic wrapper](https://github.com/ArnaudBuchholz/gpf-js/issues/272) was
-required to simplify the use of the [IXmlContentHandler interface](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IXmlContentHandler.html).
+**required to simplify** the use of the
+[IXmlContentHandler interface](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.IXmlContentHandler.html).
 
-known interfaces. But also, it is necessary to be able to chain these calls with custom handlers
+The new function
+[gpf.interfaces.promisify](https://arnaudbuchholz.github.io/gpf/doc/gpf.interfaces.html#.promisify__anchor)
+builds a **factory method** that takes an object implementing the given interface. This method returns a wrapper
+exposing the interface methods but returning **chainable
+[promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)**.
 
-The best example is the [metadata handler](https://github.com/ArnaudBuchholz/bubu-cms/blob/77240f29513b359cd22ba15f46adfa5ad67be1b9/api/metadata.js)
+To put it in a nutshell, it converts this code:
 
+`const
+    writer = new gpf.xml.Writer(),
+    output = new gpf.stream.WritableString();
+gpf.stream.pipe(writer, output).then(() => {
+    console.log(output.toString());
+});
+writer.startDocument()
+    .then(() => writer.startElement("document"))
+    .then(() => writer.startElement("a"))
+    .then(() => writer.startElement("b"))
+    .then(() => writer.endElement())
+    .then(() => writer.endElement())
+    .then(() => writer.startElement("c"))
+    .then(() => writer.endElement())
+    .then(() => writer.endElement())
+    .then(() => writer.endDocument());`
 
-The library offers new helpers to handle promises the right way.
+into this code:
+
+`const
+    writer = new gpf.xml.Writer(),
+    output = new gpf.stream.WritableString(),
+    IXmlContentHandler = gpf.interfaces.IXmlContentHandler,
+    xmlContentHandler = gpf.interfaces.promisify(IXmlContentHandler),
+    promisifiedWriter = xmlContentHandler(writer);
+gpf.stream.pipe(writer, output).then(() => {
+    console.log(output.toString());
+});
+promisifiedWriter.startDocument()
+    .startElement("document")
+    .startElement("a")
+    .startElement("b")
+    .endElement()
+    .endElement()
+    .startElement("c")
+    .endElement()
+    .endElement()
+    .endDocument();`
+
+When using this wrapper, it quickly appeared that **something was missing**.
+It sometimes happens that the chain is broken by a **normal promise**.
+The wrapper was modified to deal with it.
+
+`/*...*/
+promisifiedWriter.startDocument()
+    .startElement("document")
+    .startElement("a")
+    .startElement("b")
+    .then(() => anyMethodReturningAPromise())
+    .endElement()
+    .endElement()
+    .startElement("c")
+    .endElement()
+    .endElement()
+    .endDocument();`
+
+The best example of use is
+[$metadata implementation](https://github.com/ArnaudBuchholz/bubu-cms/blob/77240f29513b359cd22ba15f46adfa5ad67be1b9/
+api/metadata.js) of the side project.
 
 #### gpf.forEachAsync
 
-When mixing loops and promises, things can quickly become a mess
-https://stackoverflow.com/questions/40328932/javascript-es6-promise-for-loop
+There are many [solutions](https://stackoverflow.com/questions/40328932/javascript-es6-promise-for-loop) to handle
+**loops with promises**.
 
-Since the library offers iteration helpers
+Since the library offers **iteration helpers**
 ([gpf.forEach](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.forEach__anchor)), it made sense to provide the
 equivalent for asynchronous callbacks:
-[gpf.forEachAsync](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.forEachAsync__anchor)
+[gpf.forEachAsync](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.forEachAsync__anchor).
+It obviously returns a promise **resolved when the loop is over**.
 
 ### $singleton
 
-Among the design patterns, the [singleton](https://en.wikipedia.org/wiki/Singleton_pattern) is probably the most easy
-to describe and implement. There are many ways to create a singleton in JavaScript.
+Among the [design patterns](https://en.wikipedia.org/wiki/Software_design_pattern),
+the **[singleton](https://en.wikipedia.org/wiki/Singleton_pattern)** is probably the most easy
+to describe and implement.
 
-I decided to go with the class property []$singleton](https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html)
+Here again, there are many ways to create a singleton in JavaScript.
+
+In the library, an entity definition may include the
+**[$singleton](https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html) property**.
+When used, any attempt to instantiate a new instance of the entity will return the same instance.
+
+The singleton is allocated the **first time it is instantiated**.
+
+For instance:
+`var counter = 0,
+    Singleton = gpf.define({
+        $class: "mySingleton",
+        $singleton: true,
+
+        constructor: function () {
+            this.value = ++counter;
+        }
+    });
+var instance1 = new Singleton();
+var instance2 = new Singleton();
+assert(instance1.value === 1); // true
+assert(instance2.value === 1); // true
+assert(instance1 === instance2); // true`
 
 ### Serialization attributes
 
