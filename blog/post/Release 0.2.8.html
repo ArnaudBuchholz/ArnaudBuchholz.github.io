@@ -9,7 +9,6 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
@@ -159,13 +158,26 @@ assert(instance1 === instance2); // true`
 
 ### Serialization attributes
 
-The side
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 #### gpf.serial
 
 #### attributes restrictions
 
 ### Project metrics reporting
+
+Two years ago, the [release 0.1.5 named "The new core"](http://gpf-js.blogspot.com/2016/12/release-015.html) marked the
+beginning of **a new development start for the library**. There are few traces of what happened before as the project
+was **not structured**. Since then, the project metrics were **systematically** added to the
+[Readme](https://github.com/ArnaudBuchholz/gpf-js#metrics).
+
+With [release 0.2.3](https://gpf-js.blogspot.com/2017/12/release-023-streams-and-pipes.html), all these metrics were
+**consolidated into one single file**:
+[releases.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/build/releases.json). This file is **automatically
+updated** by the [release script](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/release.js).
+
+Using [chartist.js](https://gionkunz.github.io/chartist-js/), the dashboard tiles were modified to render a chart
+showing the **progression of the metrics over the releases**.
 
 ![sources](http://arnaudbuchholz.github.io/blog/post/Release%200.2.8/sources.png)
 
@@ -177,9 +189,42 @@ The side
 
 ### Documentation of ESLint rules
 
-https://arnaudbuchholz.github.io/gpf/doc/tutorial-LINTING.html
+#### Automated documentation
 
-Spent almost one monthn refactoring to enable no-magic-numbers !
+[Linting](https://en.wikipedia.org/wiki/Lint_%28software%29) is used to **statically validate the source code** since
+the beginning of the project. The set of [eslint](https://eslint.org/) rules has been **refined over the releases** and
+**critical settings** framed the way the sources look like.
+
+Furthermore, the linter also evolves with time (and feedback) and **some rules become obsolete as new ones are
+introduced**.
+
+In the end, it is really challenging to **stay up-to-date** and provide **clear and complete explanations** on the
+different rules that are configured (and why they are configured this way).
+
+These are the problems that were adressed with the [task #280](https://github.com/ArnaudBuchholz/gpf-js/issues/280).
+
+As a result, a [script](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/linting.js) leverages
+eslint's [rules documentation](https://eslint.org/docs/rules/) to **extract and validate** the library settings.
+When needed, some [details](https://github.com/ArnaudBuchholz/gpf-js/tree/master/doc/linting) are provided.
+
+The final result appears in the documentation in the
+[Tutorials\Linting](https://arnaudbuchholz.github.io/gpf/doc/tutorial-LINTING.html) menu
+
+#### no-magic-numbers
+
+While documenting the rules, the [no-magic-numbers](https://eslint.org/docs/rules/no-magic-numbers). one stood out.
+
+I wanted to understand how this rule would **improve the code** so it was enabled to see how many magic numbers were
+used. Realizing that this generates a **huge amount of errors**, the check was turned off for test files *(to start
+with)*.
+
+(...) Some people like to distinguish warnings and errors. However warnings **do not call for action**. As a result,
+they tend to last forever leading to the [broken window](https://en.wikipedia.org/wiki/Broken_windows_theory) effect. I
+prefer a binary approach meaning it is either OK or not OK.
+
+It took almost one month of refactoring to remove magic numbers.
+
+(...) This also demonstrated the value of having 100% of test coverage.
 
 ## Lessons learned
 
