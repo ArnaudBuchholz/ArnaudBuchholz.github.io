@@ -160,9 +160,37 @@ assert(instance1 === instance2); // true`
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
+It is pretty hard to describe the feature without giving a high level view of what is achieved in the side project.
+Simply put, an [ODATA](https://www.odata.org/) server where the schema is based on given classes.
+
+It means that the class must also describe what is exposed through ODATA.
+
+#### gpf.attributes.Serializable
+
+[gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html)
+
+[gpf.typedef.serializableProperty](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.serializableProperty)
+
+[types](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.types__anchor):
+* string
+* integer
+* date/time
+
 #### gpf.serial
 
+Helpers to list Serializable attributes of a class definition
+
+[gpf.serial.fromRaw](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.fromRaw__anchor)
+and [gpf.serial.toRaw](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.toRaw__anchor)
+
 #### attributes restrictions
+
+Checking again the [gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html)
+atttribute definition, it comes with **Usage restriction**
+* Only for member level (see [gpf.attributes.MemberAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.MemberAttribute.html))
+* Only once (see [gpf.attributes.UniqueAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.UniqueAttribute.html))
+
+This means that some attributes were designed to qualify attributes
 
 ### Project metrics reporting
 
@@ -228,6 +256,9 @@ It took almost one month of refactoring to remove magic numbers.
 
 ## Lessons learned
 
+Using the library as a support for a new application gives immediate feedback on how the API are developped.
+
+
 Huge refactoring due to no-magic-numbers forced me to reconsider some of the patterns I was using regularly.
 For instance:
 `if (string.indexOf(otherString) === 0)`
@@ -236,7 +267,7 @@ was in fact
 
 or
 `if (string.indexOf(otherString) !== -1)`
-was in fact
+was indeed
 `if (string.includes(otherString))`
 
 ## Next release
