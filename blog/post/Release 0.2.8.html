@@ -187,15 +187,12 @@ updated to declare it
 
 In this project, the main entity is a [Record](https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js).
 
+Since a class is defined to handle the instances, it makes sense to rely on its definition to determine what is exposed.
+However, we might need a bit of control on **which members are exposed and how**.
 
-However, all the class properties might not be exposed.
+This is a **perfect use case for attributes**.
 
-The simplest way consists in putting all the necessary information directly inside the entity definition.
-It means that the class also includes information about **which members are exposed and how**.
-
-This is a perfect use case for attributes.
-
-For instance, on the #L30) class, the
+For instance, on the [_name property](https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js#L30)
 _name property is qualified with a
 [gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute.
 It describes the name, type and indicates that the property is required.
