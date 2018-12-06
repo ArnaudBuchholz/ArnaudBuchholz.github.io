@@ -192,14 +192,15 @@ However, we might need a bit of control on **which members are exposed and how**
 
 This is a **perfect use case for attributes**.
 
+The [gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute
+**describes the name and type** as well as indicates if the property is required.
+
 For instance, on the [_name property](https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js#L30)
-_name property is qualified with a
-[gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute.
-It describes the name, type and indicates that the property is required.
+_name property is exposed as the string field named "name".
 
-(...)  The required part is actually not used yet.
+(...)  The required part is not yet leveraged but it will be used to validate the entities.
 
-These members are defined in the type
+This definition is documented in the structure
 [gpf.typedef.serializableProperty](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.serializableProperty).
 
 Today, only three [types](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.types__anchor) are supported:
@@ -209,17 +210,53 @@ Today, only three [types](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.ht
 
 #### gpf.serial
 
-Helpers to list Serializable attributes of a class definition
+Once the members are flagged with the Serializable attribute, some helpers were created to leverage this information.
 
-[gpf.serial.fromRaw](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.fromRaw__anchor)
-and [gpf.serial.toRaw](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.toRaw__anchor)
+[gpf.serial.get](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.get__anchor) will return a dictionary
+indexing the Serializable attributes per the member name.
+
+But also, two methods were created to convert/read the instance into/from a simpler object containing only the
+serializable properties:
+
+* [gpf.serial.fromRaw](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.fromRaw__anchor)
+* [gpf.serial.toRaw](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.toRaw__anchor)
+
+These methods includes converter to simplify value conversion.
+For instance:
+
+`raw = gpf.serial.toRaw(entity, (value, property) => {
+  if (gpf.serial.types.datetime === property.type) {
+    if (value) {
+      return '/Date(' + value.getTime() + ')/'
+    } else {
+      return null
+    }
+  }
+  if (property.name === 'tags') {
+    return value.join(' ')
+  }
+  return value
+})`
 
 #### attributes restrictions
 
-Checking again the [gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html)
-atttribute definition, it comes with **Usage restriction**
+If you read carefully the documentation of the
+[gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute
+definition, you may notice the section named **Usage restriction**.
+It mention:
 * Only for member level (see [gpf.attributes.MemberAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.MemberAttribute.html))
 * Only once (see [gpf.attributes.UniqueAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.UniqueAttribute.html))
+
+If you check the [code](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.8/src/attributes/serializable.js#L18):
+
+`var _gpfAttributesSerializable = _gpfDefine({
+    $class: "gpf.attributes.Serializable",
+    $extend: _gpfAttribute,
+    $attributes: [new _gpfAttributesMemberAttribute(), new _gpfAttributesUniqueAttribute()],
+
+    /* ... */`
+
+This means that attributes were designed to 
 
 This means that some attributes were designed to qualify attributes
 
