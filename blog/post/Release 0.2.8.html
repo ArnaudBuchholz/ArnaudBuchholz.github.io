@@ -160,25 +160,42 @@ assert(instance1 === instance2); // true`
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
-It is pretty hard to describe these new features without giving a high level view of what the side project is made of.
+A good way to describe these features is to start with the **use case**. As explained before, this release was made to
+support the development of a side project. Simply put, it consists in a **JavaScript full stack** application with:
+* An [OpenUI5](https://openui5.org/) interface
+* A NodeJS server exposing an [ODATA](https://www.odata.org/) service
 
-Simply put, it consists in a full stack application with an [OpenUI5](https://openui5.org/) interface and a custom made
-[ODATA](https://www.odata.org/) server where the
-[schema](https://www.odata.org/documentation/odata-version-2-0/overview/#MetadataForODataServices) is
-**extracted from classes defining
-[entities](https://www.odata.org/documentation/odata-version-2-0/overview/#EntityDataModel)**.
+(...) There are many [UI frameworks](https://raygun.com/blog/popular-javascript-frameworks/) out there. I decided to go
+with OpenUI5 for two reasons: the user interface is fairly simple and I want it to be responsive and look professional.
+Furthermore, it comes with [OPA](https://youtu.be/HiZq-kuIbt0) that will allow - in this particular case - **end 2 end**
+test automation.
 
-Indeed, since I am a [lazy developer](https://www.linkedin.com/pulse/lazy-arnaud-buchholz/) prototyping a backend,
-flexibility is mandatory so that adding a new entity / property does not need changes all across the project.
+Since I am a [lazy developer](https://www.linkedin.com/pulse/lazy-arnaud-buchholz/) building a backend from scratch on
+top of [express](https://expressjs.com/), **flexibility** is mandatory so that adding a new entity / property **does not
+imply changes all across the project**.
+
+Indeed, a new property means that:
+* The **[schema](https://www.odata.org/documentation/odata-version-2-0/overview/#MetadataForODataServices)** must be
+updated to declare it
+* **Serialization** *(reading from / writing to client)* must be adapted to handle the new property
+* Depending on the property type, the value might be **converted** *(in particular for date/time)*
+
+* It may *(or may not)* support **filtering / sorting**
+* ...
 
 #### gpf.attributes.Serializable
+
+In this project, the main entity is a [Record](https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js).
+
+
+However, all the class properties might not be exposed.
 
 The simplest way consists in putting all the necessary information directly inside the entity definition.
 It means that the class also includes information about **which members are exposed and how**.
 
 This is a perfect use case for attributes.
 
-For instance, on the [Record](https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js#L30) class, the
+For instance, on the #L30) class, the
 _name property is qualified with a
 [gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute.
 It describes the name, type and indicates that the property is required.
