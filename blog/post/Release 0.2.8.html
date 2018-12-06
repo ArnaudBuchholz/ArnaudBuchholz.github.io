@@ -156,28 +156,39 @@ assert(instance1.value === 1); // true
 assert(instance2.value === 1); // true
 assert(instance1 === instance2); // true`
 
-### Serialization attributes
+### Serialization and validation attributes
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
-It is pretty hard to describe the feature without giving a high level view of what the side project is made of.
+It is pretty hard to describe these new features without giving a high level view of what the side project is made of.
 
 Simply put, it consists in a full stack application with an [OpenUI5](https://openui5.org/) interface and a custom made
 [ODATA](https://www.odata.org/) server where the
 [schema](https://www.odata.org/documentation/odata-version-2-0/overview/#MetadataForODataServices) is
-**extracted from classes used to define
+**extracted from classes defining
 [entities](https://www.odata.org/documentation/odata-version-2-0/overview/#EntityDataModel)**.
+
+Indeed, since I am a [lazy developer](https://www.linkedin.com/pulse/lazy-arnaud-buchholz/) prototyping a backend,
+flexibility is mandatory so that adding a new entity / property does not need changes all across the project.
 
 #### gpf.attributes.Serializable
 
-https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js
+The simplest way consists in putting all the necessary information directly inside the entity definition.
+It means that the class also includes information about **which members are exposed and how**.
 
+This is a perfect use case for attributes.
 
-[gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html)
+For instance, on the [Record](https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js#L30) class, the
+_name property is qualified with a
+[gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute.
+It describes the name, type and indicates that the property is required.
 
-[gpf.typedef.serializableProperty](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.serializableProperty)
+(...)  The required part is actually not used yet.
 
-[types](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.types__anchor):
+These members are defined in the type
+[gpf.typedef.serializableProperty](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.serializableProperty).
+
+Today, only three [types](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.types__anchor) are supported:
 * string
 * integer
 * date/time
