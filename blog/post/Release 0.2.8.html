@@ -9,12 +9,13 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <!-- Copy from the next line -->
 <div class="summary">
     <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
-    This release took longer as it was developped in parallel with several side projects.
-    It includes new asynchronous helpers, new classes designed to validate attributes usage and
-    a brand new mechanism to serialize classes.
+    This release took longer as it was developed in parallel with several side projects.
+    It includes new asynchronous helpers, a brand new mechanism to serialize classes
+    and new classes designed to validate attributes usage.
 </div>
 <code class="markdown">
 ## Release 0.2.8: Serialization attributes
@@ -122,7 +123,7 @@ There are many [solutions](https://stackoverflow.com/questions/40328932/javascri
 
 Since the library offers **iteration helpers**
 ([gpf.forEach](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.forEach__anchor)), it made sense to provide the
-equivalent for asynchronous callbacks:
+equivalent for asynchronous callback:
 [gpf.forEachAsync](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.forEachAsync__anchor).
 It obviously returns a promise **resolved when the loop is over**.
 
@@ -132,11 +133,11 @@ Among the [design patterns](https://en.wikipedia.org/wiki/Software_design_patter
 the **[singleton](https://en.wikipedia.org/wiki/Singleton_pattern)** is probably the most easy
 to describe and implement.
 
-Here again, there are many ways to create a singleton in JavaScript.
+Here again, there are many ways to implement a singleton in JavaScript.
 
 In the library, an entity definition may include the
 **[$singleton](https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html) property**.
-When used, any attempt to instantiate a new instance of the entity will return the same instance.
+When used, any attempt to create a new instance of the entity will return the same instance.
 
 The singleton is allocated the **first time it is instantiated**.
 
@@ -158,10 +159,9 @@ assert(instance1 === instance2); // true`
 
 ### Serialization and validation attributes
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 A good way to describe these features is to start with the **use case**. As explained before, this release was made to
-support the development of a side project. Simply put, it consists in a **JavaScript full stack** application with:
+support the development of a side project. Simply put, it consists in a **JavaScript full stack** application composed
+of:
 * An [OpenUI5](https://openui5.org/) interface
 * A NodeJS server exposing an [ODATA](https://www.odata.org/) service
 
@@ -170,13 +170,13 @@ with OpenUI5 for two reasons: the user interface is fairly simple and I want it 
 Furthermore, it comes with [OPA](https://youtu.be/HiZq-kuIbt0) that will allow - in this particular case - **end 2 end**
 test automation.
 
-Since I am a [lazy developer](https://www.linkedin.com/pulse/lazy-arnaud-buchholz/) building a backend from scratch on
+Since I am a [lazy developer](https://www.linkedin.com/pulse/lazy-arnaud-buchholz/) building a backend on
 top of [express](https://expressjs.com/), **flexibility** is mandatory so that adding a new entity / property **does not
 imply changes all across the project**.
 
 Indeed, a new property means that:
 * The **[schema](https://www.odata.org/documentation/odata-version-2-0/overview/#MetadataForODataServices)** must be
-updated to declare it
+updated so that the UI is aware of it
 * **Serialization** *(reading from / writing to client)* must be adapted to handle the new property
 * Depending on the property type, the value might be **converted** *(in particular for date/time)*
 
@@ -195,12 +195,12 @@ This is a **perfect use case for attributes**.
 The [gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute
 **describes the name and type** as well as indicates if the property is required.
 
-For instance, on the [_name property](https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js#L30)
-_name property is exposed as the string field named "name".
+For instance, the [_name property](https://github.com/ArnaudBuchholz/bubu-cms/blob/master/api/Record.js#L30)
+is exposed as the string field named "name".
 
 (...)  The required part is not yet leveraged but it will be used to validate the entities.
 
-This definition is documented in the structure
+This definition is **documented** in the structure
 [gpf.typedef.serializableProperty](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.serializableProperty).
 
 Today, only three [types](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.types__anchor) are supported:
@@ -210,21 +210,19 @@ Today, only three [types](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.ht
 
 #### gpf.serial
 
-Once the members are flagged with the Serializable attribute, some helpers were created to leverage this information.
+Once the members are flagged with the Serializable attribute, some helpers were created to **utilize this information**.
 
-[gpf.serial.get](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.get__anchor) will return a dictionary
-indexing the Serializable attributes per the member name.
+[gpf.serial.get](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.get__anchor) returns a dictionary
+indexing the Serializable attributes per the class member name.
 
-But also, two methods were created to convert/read the instance into/from a simpler object containing only the
-serializable properties:
-
+Also, two methods **convert/read the instance into/from a simpler object** containing only the serializable properties:
 * [gpf.serial.fromRaw](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.fromRaw__anchor)
 * [gpf.serial.toRaw](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.toRaw__anchor)
 
-These methods includes converter to simplify value conversion.
-For instance:
+These methods include a converter callback **to enable value conversion**.
 
-`raw = gpf.serial.toRaw(entity, (value, property) => {
+For instance:
+`var raw = gpf.serial.toRaw(entity, (value, property) => {
   if (gpf.serial.types.datetime === property.type) {
     if (value) {
       return '/Date(' + value.getTime() + ')/'
@@ -241,9 +239,10 @@ For instance:
 #### attributes restrictions
 
 If you read carefully the documentation of the
-[gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute
-definition, you may notice the section named **Usage restriction**.
-It mention:
+[gpf.attributes.Serializable](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html) attribute,
+you may notice the section named **Usage restriction**.
+
+It mentions:
 * Only for member level (see [gpf.attributes.MemberAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.MemberAttribute.html))
 * Only once (see [gpf.attributes.UniqueAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.UniqueAttribute.html))
 
@@ -252,13 +251,34 @@ If you check the [code](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.8/src
 `var _gpfAttributesSerializable = _gpfDefine({
     $class: "gpf.attributes.Serializable",
     $extend: _gpfAttribute,
-    $attributes: [new _gpfAttributesMemberAttribute(), new _gpfAttributesUniqueAttribute()],
+    $attributes: [
+      new _gpfAttributesMemberAttribute(),
+      new _gpfAttributesUniqueAttribute()
+    ],
 
     /* ... */`
 
-This means that attributes were designed to 
+This means that the Serializable attribute can be used only on class members and only once *(per class member)*.
 
-This means that some attributes were designed to qualify attributes
+This also means that **new attribute classes were designed to secure the use of attributes**. This will facilitate the
+**adoption** of the mechanism since any **misuse of an attribute will generate an error**. It is a better approach than
+having no effect and not letting the developer know.
+
+The validation attributes are:
+
+* [gpf.attributes.AttributeForInstanceOf](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.AttributeForInstanceOf.html)
+which checks that the attribute is applied to the right class.
+* [gpf.attributes.ClassAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.ClassAttribute.html) to
+restrict the use of an attribute to the class level (i.e. in the $attributes entity property)
+* [gpf.attributes.MemberAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.MemberAttribute.html) to
+restrict the use of an attribute to a member
+* [gpf.attributes.UniqueAttribute](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.UniqueAttribute.html) to
+enforce the uniqueness of the attribute (including through inheritance)
+
+(...) Actually, ClassAttribute, MemberAttribute and UniqueAttribute are singletons.
+
+Obviously, **these attributes are also validated**, check their documentation and
+[implementation](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.8/src/attributes).
 
 ### Project metrics reporting
 
@@ -297,7 +317,7 @@ introduced**.
 In the end, it is really challenging to **stay up-to-date** and provide **clear and complete explanations** on the
 different rules that are configured (and why they are configured this way).
 
-These are the problems that were adressed with the [task #280](https://github.com/ArnaudBuchholz/gpf-js/issues/280).
+These are the problems that were addressed with the [task #280](https://github.com/ArnaudBuchholz/gpf-js/issues/280).
 
 As a result, a [script](https://github.com/ArnaudBuchholz/gpf-js/blob/master/doc/linting.js) leverages
 eslint's [rules documentation](https://eslint.org/docs/rules/) to **extract and validate** the library settings.
@@ -308,40 +328,67 @@ The final result appears in the documentation in the
 
 #### no-magic-numbers
 
-While documenting the rules, the [no-magic-numbers](https://eslint.org/docs/rules/no-magic-numbers). one stood out.
+While documenting the rules, the [no-magic-numbers](https://eslint.org/docs/rules/no-magic-numbers) one stood out.
 
-I wanted to understand how this rule would **improve the code** so it was enabled to see how many magic numbers were
-used. Realizing that this generates a **huge amount of errors**, the check was turned off for test files *(to start
-with)*.
+I wanted to understand how this rule would (could?) **improve the code**. It was enabled to see how many magic numbers
+existed. Realizing that this generates a **huge amount of errors**, the check was turned off for test files
+*(to start with)*.
 
 (...) Some people like to distinguish warnings and errors. However warnings **do not call for action**. As a result,
 they tend to last forever leading to the [broken window](https://en.wikipedia.org/wiki/Broken_windows_theory) effect. I
 prefer a binary approach meaning it is either OK or not OK.
 
-It took almost one month of refactoring to remove magic numbers.
+It took almost one month of refactoring to remove them but, in the end, it did improve the code and lessons were
+learned.
 
 (...) This also demonstrated the value of having 100% of test coverage.
 
 ## Lessons learned
 
-Using the library as a support for a new application gives immediate feedback on how the API are developped.
+### Library + application
 
+This may sound obvious but using the library as a support for an application gives **immediate feedback** on how the
+**API is appropriate**. It helps to keep the focus on how practical the methods are.
 
-Huge refactoring due to no-magic-numbers forced me to reconsider some of the patterns I was using regularly.
+For instance, the helper [gpf.serial.get](https://arnaudbuchholz.github.io/gpf/doc/gpf.serial.html#.get__anchor) was
+integrated in the library because its
+[10 little lines of code](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.8/src/serial/get.js#L21) were repeated in
+the application.
+
+### Refactoring
+
+It is not the first time that the whole library requires refactoring. And I actually **like the exercise** because it
+gives the opportunity to **come back on old code** that hasn't been touched in a while. Since the project started
+several years ago, my **knowledge and skill have evolved** and it gives a new look on the sources.
+Furthermore, the code being fully tested, there are very **little risks**.
+
+When dealing with [magic numbers](https://eslint.org/docs/rules/no-magic-numbers), I realized that some patterns were
+**obsolete** because of JavaScript methods I was not used to. As the library offers a
+[compatibility layer](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html), it has been enriched
+with these new methods and the code modified consequently.
+
 For instance:
 `if (string.indexOf(otherString) === 0)`
-was in fact
+is better replaced with:
 `if (string.startsWith(otherString))`
 
-or
+The same way:
 `if (string.indexOf(otherString) !== -1)`
-was indeed
+should be using:
 `if (string.includes(otherString))`
+
+Last example,
+[regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+are widely used with **capturing groups**. Their value is available in the array-like result through indexes.
+**Using constants rather than numbers to get these values improves the code readability**.
 
 ## Next release
 
-The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/17) is not even defined.
-For the next months, I will focus on a side project that requires all my attention.
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/17) is not completely defined.
+There are plans to expand **the use of attributes to ES6 classes** and to integrate
+[graaljs](https://github.com/graalvm/graaljs).
+
+For the rest, it will depend on the side project since **it needs all my attention**.
 
 </code>
 <!-- Drop those two lines -->
