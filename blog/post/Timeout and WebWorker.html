@@ -1,4 +1,5 @@
 <script language="javascript" src="../include.js"></script>
+<script language="javascript" src="../export.js"></script>
 <link rel="stylesheet" type="text/css" href="../file.css" />
 <div class="post">
 <h3 class="post-title entry-title">
@@ -8,7 +9,7 @@
     <div class="post-header-line-1"></div>
 </div>
 <div class="post-body">
-<!-- Copy from the next line -->
+
 <code class="markdown">
 
 ## The context
@@ -57,10 +58,10 @@ register the callback function **before** it signals the completion.
 Hence, to work appropriately, a promise must defer its completion execution to
 let the caller build first the chain of callbacks.
 
-![Promise asynchronous](http://arnaudbuchholz.github.io/blog/post/
+![Promise asynchronous](https://arnaudbuchholz.github.io/blog/post/
 Timeout and WebWorker/Promise asynchronous.png)
 
-![Promise synchronous](http://arnaudbuchholz.github.io/blog/post/
+![Promise synchronous](https://arnaudbuchholz.github.io/blog/post/
 Timeout and WebWorker/Promise synchronous.png)
 
 The only reliable way to implement such a code sequence is to use the
@@ -77,10 +78,10 @@ It means that long JavaScript operations are split into chunks and sequenced
 using setTimeout to prevent any interface freeze and get rid of the annoying
 long-script running message.
 
-![Long running example in Chrome](http://arnaudbuchholz.github.io/blog/post/
+![Long running example in Chrome](https://arnaudbuchholz.github.io/blog/post/
 Timeout and WebWorker/Chrome long running script.png)
 
-This [long running sampler](http://arnaudbuchholz.github.io/blog/post/
+This [long running sampler](https://arnaudbuchholz.github.io/blog/post/
 Timeout and WebWorker/long running.html) will allow you to see this dialog.
 Enter a number of seconds to wait for (usually 100s) and click go!
 
@@ -252,7 +253,7 @@ On timeout, the worker [sends](https://github.com/ArnaudBuchholz/timeout/blob/
 the key to the main thread which retrieves the parameters and executes the
 callback.
 
-![setTimeout sequence](http://arnaudbuchholz.github.io/blog/post/
+![setTimeout sequence](https://arnaudbuchholz.github.io/blog/post/
 Timeout and WebWorker/setTimeout sequence.png)
 
 ## Possible improvements
@@ -276,6 +277,6 @@ arnaudbuchholz.github.io/blog/post/Timeout and WebWorker/timeout.html?fix)
 (and don't forget to switch tab).
 
 </code>
-<!-- Drop those two lines -->
+
 </div>
 </div>
