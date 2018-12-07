@@ -8,7 +8,7 @@ window.addEventListener("load", function () {
     var input = document.body.appendChild(document.createElement("textarea"));
     // input.className = "hidden";
     button.addEventListener("click", function () {
-        input.value = document.querySelector(".post-body").innerHTML;
+        input.value = document.querySelector(".post-body").innerHTML.trim();
         input.select();
         document.execCommand("copy");
     });
