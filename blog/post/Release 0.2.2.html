@@ -1,4 +1,5 @@
 <script language="javascript" src="../include.js"></script>
+<script language="javascript" src="../export.js"></script>
 <link rel="stylesheet" type="text/css" href="../file.css" />
 <div class="post">
 <h3 class="post-title entry-title">
@@ -8,9 +9,9 @@
     <div class="post-header-line-1"></div>
 </div>
 <div class="post-body">
-<!-- Copy from the next line -->
+
 <div class="summary">
-    <img src="http://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    <img src="https://ArnaudBuchholz.github.io/blog/release.png" align="left">
     This new release includes a modularization helper as well as feedback from a side project.
     It also includes fixes for some annoying bugs and quality improvement.
 </div>
@@ -44,7 +45,7 @@ I will later write an article about it as it was my first HTML mobile app experi
 seriously. Some tests were failing on a regular basis but not frequently enough to represent a real threat.
 This problem was prioritized and tackled once for all but it brought many time-consuming challenges.
 
-Oh, and I also designed a ![logo](http://arnaudbuchholz.github.io/gpf/gpf_320x200.svg)
+Oh, and I also designed a ![logo](https://arnaudbuchholz.github.io/gpf/gpf_320x200.svg)
 
 ## Release content
 
@@ -100,7 +101,7 @@ And it comes with a way to alter the require cache to simplify testing by inject
 
 ### Improved gpf.web.createTagFunction
 
-To develop the [mobile app](http://arnaudbuchholz.github.io/bubu-timer/index.html#about),
+To develop the [mobile app](https://arnaudbuchholz.github.io/bubu-timer/index.html#about),
 [Scalable Vector Graphics](https://developer.mozilla.org/en-US/docs/Web/SVG) were extensively leveraged.
 In order to create the appropriate markup, some specific DOM APIs must be used (such as
 [createElementNS](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElementNS)).
@@ -162,9 +163,9 @@ problem down to the place where the assertion failed:
 as deviation on the execution time
 * Error occurring in the testing command line are now documented to help locating the issue
 
-![Failure example 1](http://ArnaudBuchholz.github.io/blog/post/Release%200.2.2/timeout1.png)
+![Failure example 1](https://ArnaudBuchholz.github.io/blog/post/Release%200.2.2/timeout1.png)
 
-![Failure example 2](http://ArnaudBuchholz.github.io/blog/post/Release%200.2.2/timeout2.png)
+![Failure example 2](https://ArnaudBuchholz.github.io/blog/post/Release%200.2.2/timeout2.png)
 
 (...) This highlights the fact that tests should be small and clear enough to immediately spot a problem when
 it happens.
@@ -188,7 +189,7 @@ saved after each release and they should remain untouched to ensure backward com
 But then, how do you handle tests that were badly designed? You can't just drop the legacy test suites (more than 600
 tests) just because some of them are invalid.
 
-![Legacy code](http://ArnaudBuchholz.github.io/blog/post/Release%200.2.2/legacy.png)
+![Legacy code](https://ArnaudBuchholz.github.io/blog/post/Release%200.2.2/legacy.png)
 
 That's why the idea of a legacy management came out. With the help of the
 [legacy.json](https://github.com/ArnaudBuchholz/gpf-js/blob/master/test/legacy/legacy.json) file, the library offers a
@@ -226,6 +227,6 @@ The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/11
 * Doing some cleaning
 
 </code>
-<!-- Drop those two lines -->
+
 </div>
 </div>
