@@ -1,4 +1,5 @@
 <script language="javascript" src="../include.js"></script>
+<script language="javascript" src="../export.js"></script>
 <link rel="stylesheet" type="text/css" href="../file.css" />
 <div class="post">
 <h3 class="post-title entry-title">
@@ -8,9 +9,9 @@
     <div class="post-header-line-1"></div>
 </div>
 <div class="post-body">
-<!-- Copy from the next line -->
+
 <div class="summary">
-    <img src="http://ArnaudBuchholz.github.io/blog/ninja.png" align="left">
+    <img src="https://ArnaudBuchholz.github.io/blog/ninja.png" align="left">
     How do you secure an asynchronous method to make sure that the code is executed only once?
     Here is an example using promises.
 </div>
@@ -210,7 +211,7 @@ This leads to this wrapper:
 ### Final solution
 
 If you want this trick to be reusable, here is a function that wraps any function or method to ensure that it can be
-called only once. This [sample page](http://arnaudbuchholz.github.io/blog/post/Sneaky%20JavaScript%20Technics%20II/
+called only once. This [sample page](https://arnaudbuchholz.github.io/blog/post/Sneaky%20JavaScript%20Technics%20II/
 test.html) will allow you to see it in action.
 
 `/*global intializeApi*//*gpf:apply-jshint*/
@@ -257,6 +258,6 @@ function onceWrapper (callback) {
 var safeInitializeApi = onceWrapper(intializeApi);`
 
 </code>
-<!-- Drop those two lines -->
+
 </div>
 </div>
