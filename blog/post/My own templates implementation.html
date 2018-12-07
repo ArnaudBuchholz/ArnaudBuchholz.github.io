@@ -1,4 +1,5 @@
 <script language="javascript" src="../include.js"></script>
+<script language="javascript" src="../export.js"></script>
 <link rel="stylesheet" type="text/css" href="../file.css" />
 <div class="post">
 <h3 class="post-title entry-title">
@@ -8,9 +9,9 @@
     <div class="post-header-line-1"></div>
 </div>
 <div class="post-body">
-<!-- Copy from the next line -->
+
 <div class="summary">
-    <img src="http://ArnaudBuchholz.github.io/blog/student.png" align="left">
+    <img src="https://ArnaudBuchholz.github.io/blog/student.png" align="left">
     What do you do when you need HTML templates but you don't want to include any heavy library or framework?
     You experiment and write your own implementation... Welcome to a journey within DOM, regular expressions and
     function builders.
@@ -99,7 +100,7 @@ It allows you to programmatically fill the page the same way you would do with s
 * Code is quite cryptic and hard to evolve
 * Not easily maintainable
 
-[Code sample](http://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Code.html)
+[Code sample](https://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Code.html)
 `var data = {
     title: "Code sample",
     id: "test",
@@ -138,7 +139,7 @@ typing, transformation...).
 * Each engine has its conventions and API
 * Debugging
 
-[Mustache sample](http://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Mustache.html)
+[Mustache sample](https://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Mustache.html)
 `var html = Mustache.to_html(document.getElementById("tpl").innerHTML, {
     title: "Mustache sample",
     id: "test",
@@ -187,7 +188,7 @@ Building the interface can be done either through static descriptions (such as X
 * May become a nightmare to debug if anything goes wrong
 * Design may look rigid
 
-[Angular sample](http://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Angular.html)
+[Angular sample](https://arnaudbuchholz.github.io/blog/post/My%20own%20templates%20implementation/Angular.html)
 `var myApp = angular.module('myApp',[]);
 
 myApp.controller('SampleController', ['$scope', function($scope) {
@@ -591,6 +592,6 @@ But there would be lots to add to it, such as:
 
 
 </code>
-<!-- Drop those two lines -->
+
 </div>
 </div>
