@@ -5,7 +5,7 @@
   "main": "gpf.js",
   "dependencies": {},
   "devDependencies": {
-    "grunt": "^1.0.2",
+    "grunt": "^1.0.3",
     "grunt-serve": "^0.1.6"
   },
   "scripts": {
