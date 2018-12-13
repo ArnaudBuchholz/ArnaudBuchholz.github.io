@@ -1,7 +1,12 @@
 "use strict";
 
 function processIncludes () {
-  return Promise.resolve();
+  return Promise.all([].slice.call(document.querySelectorAll("*[include]")).map(function (include) {
+    return gpf.http.get(include.getAttribute("include"))
+      .then(function (response) {
+        include.innerHTML = response.responseText;
+      })
+  }));
 }
 
 function removeHiddenElements () {
@@ -35,6 +40,20 @@ function reformatCodeSamples () {
   });
 }
 
+function processMeInfo () {
+  var
+    year = new Date().getFullYear(),
+    years = {
+      software: 1998,
+      js: 2008,
+      fe: 2013,
+      ui5: 2015
+    };
+  Object.keys(years).forEach(function (id) {
+    document.getElementById(id + "_years").innerHTML = year - years[id];
+  });
+}
+
 function loadReveal () {
   gpf.require.define({Reveal: "reveal.js"}, function (require) {
     "use strict";
@@ -54,5 +73,6 @@ window.addEventListener("load", function () {
     .then(buildTitle)
     .then(buildAgenda)
     .then(reformatCodeSamples)
+    .then(processMeInfo)
     .then(loadReveal);
 });
