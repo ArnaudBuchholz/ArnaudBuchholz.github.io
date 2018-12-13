@@ -1,0 +1,43 @@
+<h3>Arnaud <strong>Buchholz</strong></h3>
+<table>
+  <tr>
+    <td width="25%">
+      <img src="/gfx/me40.png" />
+    </td>
+    <td  style="vertical-align: top;">
+      <small>
+        <ul>
+          <li>Development Expert @ SAP</li>
+          <li>In the software industry for <strong><span id="software_years"></span> years</strong></li>
+          <li><strong><span id="js_years"></span> years</strong> of experience with <strong>JavaScript</strong>
+            <ul>
+              <li>Front-End development: <span id="fe_years"></span> years</li>
+              <li>SapUI5: <span id="ui5_years"></span> years</li>
+            </ul>
+          </li>
+          <li>Passionate, curious &amp; experimenting</li>
+          <li>French and almost <strong>Canadian</strong></li>
+        </ul>
+      </small>
+      <script>
+        var year = new Date().getFullYear(),
+          years = {
+            software: 1998,
+            js: 2008,
+            fe: 2013,
+            ui5: 2015
+          };
+        Object.keys(years).forEach(function (id) {
+          document.getElementById(id + "_years").innerHTML = year - years[id];
+        });
+      </script>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="border: 0;">
+      <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" style="border: 0; box-shadow: unset;" /></a>
+      <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" style="border: 0; box-shadow: unset;" /></a>
+      <a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" style="border: 0; box-shadow: unset;" /></a>
+    </td>
+  </tr>
+</table>
