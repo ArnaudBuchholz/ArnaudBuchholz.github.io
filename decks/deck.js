@@ -69,6 +69,21 @@ function readDeckMeta(name, defaultValue) {
     return defaultValue;
 }
 
+function updateLinks () {
+    [].slice.call(document.querySelectorAll("a")).forEach(function (a) {
+        a.setAttribute("target", "_blank");
+/* TODO implements with a special attribute telling which URL to test
+        if (a.getAttribute("href").indexOf("http://localhost") === 0) {
+            if (!isSampleAppAvailable) {
+                a.setAttribute("title", missingSampleAppMsg);
+                a.setAttribute("href", "javascript:missingSampleApp()");
+                a.className = "missingSampleApp";
+            }
+        }
+*/
+    });
+}
+
 function loadReveal() {
     var
         deckLength = readDeckMeta("duration", 0),
@@ -98,5 +113,6 @@ window.addEventListener("load", function() {
         .then(buildAgenda)
         .then(reformatCodeSamples)
         .then(processMeInfo)
+        .then(updateLinks)
         .then(loadReveal);
 });
