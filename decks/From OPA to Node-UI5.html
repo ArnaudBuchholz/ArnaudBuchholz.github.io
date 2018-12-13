@@ -31,28 +31,53 @@
 						<ul id="agenda"></ul>
 					</section>
 					<section>
-						<h4>Presented <strong>projects</strong></h4>
+						<h4>Presented <img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" /><strong>projects</strong></h4>
 						<ul>
-							<li>A simple  <a href="http://localhost:8080"><strong>todo list</strong></a></li>
-							<li>Developed to <a href="http://localhost:8080/test/integration/opaTests.qunit.html"><strong>illustrate</strong></a> the OPA concepts</li>
+							<li>
+								<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
+									training-ui5con18-opa
+								</a>: A simple  <strong>todo list</strong> developed with <strong>OpenUI5</strong> to <strong>illustrate</strong></a> the OPA concepts
+							</li>
+							<li>
+								<a href="https://github.com/ArnaudBuchholz/mockserver-server">
+									mockserver-server
+								</a>: An <strong>ODATA</strong> server built with <strong>OPA's MockServer</strong>
+							</li>
+							<li>
+								<a href="https://github.com/ArnaudBuchholz/node-ui5">
+									node-ui5
+								</a>: An <strong>OpenUI5 wrapper</strong> for <strong>NodeJS</strong></strong>
+							</li>
 						</ul>
 						<p>
-							<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
-								<img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" />training-ui5con18-opa
-							</a>
 						</p>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3>Act I: UI5Con'18</h3>
+						<h3>Act I: <strong>UI5Con</strong>'18</h3>
 					</section>
+					<section>
+Present UI5Con event,
+Present topic
+
+
+Demo the app, Demo the OPA
+If you want to know more... introduce recording of the session
+					</section>
+					<section>
+						<a href="https://youtu.be/HiZq-kuIbt0">
+							<img src="From%20OPA%20to%20Node-UI5/UI5con@SAP%202018%20-%20A%20journey%20with%20OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						</a>
+					</section>
+<!--
 					<section>
 						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
 						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
 						<p><strong>Maximize</strong> unit testing: they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.</p>
 						<p><strong>Leverage</strong> integration testing: check the <strong>happy path</strong> then <strong>edge cases</strong>.</p>
 					</section>
+-->
 					<section>
 						<h4><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h4>
 						<ul>
@@ -119,12 +144,27 @@
 				</section>
 				<section>
 					<section>
-						<h3>Act II: MockServer as a server</h3>
+						<h3>Act II: MockServer as a <strong>server</strong></h3>
+					</section>
+					<section>
+Got a request to use MockServer as a real server
+Someone started to create a NodeJS service with pupetter to manipulate chrome headerless and instantiate mockserver
+Complex and risky
+Explain solution
+Challenges
+Demo with PostMan
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3>Act III: OpenUI5 inside NodeJS</h3>
+						<h3>Act III: OpenUI5 <strong>inside</strong> NodeJS</h3>
+					</section>
+					<section>
+Now that I was able to load OpenUI5 in NodeJS
+I thought what if I use the ODataModel to test OData backend
+Created asynchronous helpers (and authentication helpers)
+Show the final code
+Test in conjunction with MockServer
 					</section>
 				</section>
 				<section>
