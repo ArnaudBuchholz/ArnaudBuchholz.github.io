@@ -5,11 +5,10 @@
   "main": "gpf.js",
   "dependencies": {},
   "devDependencies": {
-    "grunt": "^1.0.3",
-    "grunt-serve": "^0.1.6"
+    "serve": "^10.1.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "serve"
   },
   "repository": {
     "type": "git",
