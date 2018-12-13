@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="From OPA to Node-UI5">
+		<meta name="author" content="Arnaud Buchholz">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h3 data-agenda="no">From <strong>OPA</strong> to <strong>Node-UI5</strong></h3>
+						<p>
+							<small>
+								Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+								<br/>
+								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+							</small>
+						</p>
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
+					</section>
+					<section include="me.html" />
+					<section>
+						<h3 data-agenda="no"><strong>Agenda</strong></h3>
+						<ul id="agenda"></ul>
+					</section>
+					<section>
+						<h4>Presented <strong>projects</strong></h4>
+						<ul>
+							<li>A simple  <a href="http://localhost:8080"><strong>todo list</strong></a></li>
+							<li>Developed to <a href="http://localhost:8080/test/integration/opaTests.qunit.html"><strong>illustrate</strong></a> the OPA concepts</li>
+						</ul>
+						<p>
+							<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
+								<img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" />training-ui5con18-opa
+							</a>
+						</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Act I: UI5Con'18</h3>
+					</section>
+					<section>
+						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
+						<p><strong>Maximize</strong> unit testing: they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.</p>
+						<p><strong>Leverage</strong> integration testing: check the <strong>happy path</strong> then <strong>edge cases</strong>.</p>
+					</section>
+					<section>
+						<h4><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h4>
+						<ul>
+							<li><strong>UI behavior</strong> testing</li>
+							<li><strong>JavaScript</strong> based</li>
+							<li>Tightly <strong>integrated</strong> with UI5</li>
+							<li><strong>Asynchronous</strong> with <strong>active polling</strong> mechanisms</li>
+							<li>Enables <strong>T</strong>est-<strong>D</strong>riven <strong>D</strong>evelopment through <strong>abstractions</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h4>Compared to other <strong>automation frameworks</strong></h4>
+						<p>Selenium, Marionette or Puppetter are <strong>framework agnostic</strong>,
+							one must rely on the <strong>generated HTML</strong> to code automation (IDs, CSS selectors...).</p>
+						<br/>
+						<p>OPA is designed <strong>by and for</strong> UI5 developers: one manipulates <strong>UI5 controls</strong>.</p>
+					</section>
+					<section>
+						<h4>What is <strong>OPA</strong>?</h4>
+						<p>OPA is a set of tools used to <strong>automate</strong> and <strong>validate</strong> UI
+							<i>(and it comes with backend mocking)</i>.</p>
+						<br/>
+						<p>Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong> to abstract the UI,
+							and <strong>readable</strong>.</p>
+					</section>
+					<section>
+						<h4><strong>Limits</strong> of OPA</h4>
+						<ul>
+							<li>Designed to test <strong>one UI5</strong> application</li>
+							<li><strong>Not designed</strong> to test backend</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Mocking</strong> Backend</h4>
+					</section>
+					<section>
+						<h4>The <strong>need</strong> for a backend</h4>
+						<p>When the application has a backend counterpart, it <strong>can't run</strong> without being connected to it.</p>
+						<p>However, tests have to rely on a <strong>stable dataset</strong> and some features might be <strong>dangerous</strong>.</p>
+					</section>
+					<section>
+						<h4>Introducing the <strong>MockServer</strong></h4>
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 40%; max-height: 40%;" align="left"/>
+						<br/>
+						<p>The MockServer is a software component that <strong>captures</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
+					</section>
+					<section>
+						<h4><strong>Configuring</strong> the MockServer</h4>
+						<ul>
+							<li>It <strong>requires the metadata</strong> to know the entities and relationships exposed by the ODATA service</li>
+							<li>It <strong>initializes the entity sets</strong> by generating them or loading JSON files</li>
+						</ul>
+						<small>Check the documentation of <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer"><strong><span class="pre">sap.ui.core.util.MockServer</span></strong></a></small>
+					</section>
+					<section>
+						<h4>MockServer hooks <strong>Tips & Tricks</strong></h4>
+						<ul>
+							<li>The MockServer does <strong>not</strong> need to be <strong>100% equivalent</strong> to the backend</li>
+							<li>Newly added hooks are <strong>executed first</strong> (LIFO)</li>
+							<li>You may also use <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/attachBefore"><strong><span class="pre">attachBefore</span></strong></a>
+								 or <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/attachAfter"><strong><span class="pre">attachAfter</span></strong></a> callbacks triggered before or after request processing</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Act II: MockServer as a server</h3>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Act III: OpenUI5 inside NodeJS</h3>
+					</section>
+				</section>
+				<section>
+					<h3>Key <strong>Take-Aways</strong></h3>
+					<ul>
+						<li><q>If it's not tested, it doesn't work</q></li>
+						<li>OPA is designed to <strong>automate</strong> and <strong>validate</strong> UI5 applications</li>
+						<li><strong>Asynchronous</strong> with <strong>active polling</strong></li>
+						<li>Define pages to <strong>abstract</strong> and <strong>componentize</strong> UI</li>
+						<li>Keep the journeys <strong>readable</strong></li>
+						<li>Use MockServer <strong>to simulate</strong> the backend</li>
+						<li>
+							<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
+								<img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" />training-ui5con18-opa
+							</a>
+						</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+		<script src="/gpf/0.2.8/gpf.js"></script>
+		<script src="deck.js"></script>
+	</body>
+</html>
