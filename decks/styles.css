@@ -1,0 +1,65 @@
+.reveal h3, .reveal h4 {
+	padding-bottom: 5rem;
+}
+
+.reveal cite {
+	font-size: 50%;
+	font-style: italic;
+}
+
+.reveal cite::before {
+	content: "🗣"
+}
+
+.reveal a::before {
+	content: "🔗"
+}
+
+.reveal a.missingSampleApp::before {
+	content: "🛈"
+}
+
+.reveal span.pre {
+	font-family: monospace;
+	white-space: pre;
+}
+
+.reveal .split {
+	display: inline-block;
+}
+
+.reveal .left {
+	float: left;
+	width: 50%;
+}
+
+.reveal .right {
+	float: right;
+	width: 50%;
+}
+
+strong {
+	color: rgb(253, 164, 44);
+}
+
+q {
+	quotes: "\00AB" "\00BB"
+}
+
+.TODO {
+	background-color: #FFFFA5;
+}
+
+.TODO::before {
+	content: "TODO";
+	font-size: small;
+}
+
+.reveal .screenshot {
+ 	max-height: 70%;
+	max-width: 70%;
+}
+
+.reveal pre {
+	width: unset;
+}
