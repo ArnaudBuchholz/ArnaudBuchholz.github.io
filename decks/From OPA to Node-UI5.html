@@ -23,7 +23,6 @@
 								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
 							</small>
 						</p>
-						<img src="UI5Con'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
 					</section>
 					<section include="me.html"></section>
 					<section>
@@ -34,6 +33,11 @@
 						<h4>Presented <img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" /><strong>projects</strong></h4>
 						<ul>
 							<li>
+								<a href="https://openui5.org/">
+									OpenUI5
+								</a>: A enterprise-grade, responsive &amp; open source <strong>UI framework</strong>
+							</li>
+							<li>
 								<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
 									training-ui5con18-opa
 								</a>: A simple  <strong>todo list</strong> developed with <strong>OpenUI5</strong> to <strong>illustrate</strong></a> the OPA concepts
@@ -41,7 +45,7 @@
 							<li>
 								<a href="https://github.com/ArnaudBuchholz/mockserver-server">
 									mockserver-server
-								</a>: An <strong>ODATA</strong> server built with <strong>OPA's MockServer</strong>
+								</a>: An <strong>ODATA</strong> server built on top of <strong>OPA's MockServer</strong>
 							</li>
 							<li>
 								<a href="https://github.com/ArnaudBuchholz/node-ui5">
@@ -56,30 +60,62 @@
 				<section>
 					<section>
 						<h3>Act I: <strong>UI5Con</strong>'18</h3>
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/UI5Con.png" height="100px" style="border: 0;" />
 					</section>
 					<section>
-Present UI5Con event,
-Present topic
-
-
-Demo the app, Demo the OPA
-If you want to know more... introduce recording of the session
+						<img src="From%20OPA%20to%20Node-UI5/UI5con18.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<br />
+						<small><a href="https://openui5.org/ui5con/">https://openui5.org/ui5con</a></small>
+						<br />
+						In July 2018, I was invited to <strong>present</strong>
+						<br />
+ 					  at UI5Con'18 in Germany
 					</section>
 					<section>
-						<a href="https://youtu.be/HiZq-kuIbt0">
-							<img src="From%20OPA%20to%20Node-UI5/UI5con@SAP%202018%20-%20A%20journey%20with%20OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-						</a>
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
+						<br />
+						<small><a href="https://openui5.org/">https://openui5.org</a></small>
+						<br />
+						<small><a href="https://github.com/SAP/openui5">https://github.com/SAP/openui5</a></small>
+						<ul>
+							<li>Enterprise-Grade
+								<small>OpenUI5 follows <strong>open standards</strong> and includes powerful development concepts, efficient tools, as well as a rich set of UI controls.</small>
+							</li>
+							<li>Responsive on All Devices
+								<small>No need to worry about device specifics! <strong>UI5 apps and controls</strong> run on smartphones, tablets and desktop browsers.</small>
+							</li>
+							<li>Free and Open Source
+								<small>OpenUI5 is a <strong>JavaScript UI Framework</strong> released by SAP under the Apache 2.0 license. It's open for contributions and feedback!</small>
+							</li>
+						</ul>
 					</section>
-<!--
 					<section>
-						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
-						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
-						<p><strong>Maximize</strong> unit testing: they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.</p>
-						<p><strong>Leverage</strong> integration testing: check the <strong>happy path</strong> then <strong>edge cases</strong>.</p>
+						<h4><strong>OpenUI5</strong> In a nutshell</h4>
+						<ul>
+							<li>Released and updated <strong>frequently</strong></li>
+							<li><strong>Widget</strong> based framework
+								<small>Controls offers <strong>normalized</strong> properties, aggregation and events</small>
+							</li>
+							<li><strong>M</strong>odel <strong>V</strong>iew <strong>C</strong>ontroller architectural pattern
+								<small>Data binding, Routing, EventBus, Translation and internationalization, ...</small>
+							</li>
+							<li>Offers <strong>ODATA</strong> integration<br/>
+								<small>JSON, XML and other data formats</small>
+							</li>
+						</ul>
 					</section>
--->
 					<section>
-						<h4><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h4>
+						<h4><strong>ODATA</strong></h4>
+						<small><a href="https://www.odata.org/">https://www.odata.org</a></small>
+						<br />
+						An open protocol to allow the creation and consumption of queryable and interoperable <strong>RESTful APIs</strong>
+						in a simple and <strong>standard</strong> way.
+					</section>
+					<section>
+						<h4>TODO list sample application</h4>
+					</section>
+					<section>
+						<h4>A journey with <strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance</h4>
 						<ul>
 							<li><strong>UI behavior</strong> testing</li>
 							<li><strong>JavaScript</strong> based</li>
@@ -104,16 +140,6 @@ If you want to know more... introduce recording of the session
 							and <strong>readable</strong>.</p>
 					</section>
 					<section>
-						<h4><strong>Limits</strong> of OPA</h4>
-						<ul>
-							<li>Designed to test <strong>one UI5</strong> application</li>
-							<li><strong>Not designed</strong> to test backend</li>
-						</ul>
-					</section>
-					<section>
-						<h4><strong>Mocking</strong> Backend</h4>
-					</section>
-					<section>
 						<h4>The <strong>need</strong> for a backend</h4>
 						<p>When the application has a backend counterpart, it <strong>can't run</strong> without being connected to it.</p>
 						<p>However, tests have to rely on a <strong>stable dataset</strong> and some features might be <strong>dangerous</strong>.</p>
@@ -125,21 +151,19 @@ If you want to know more... introduce recording of the session
 						<p>The MockServer is a software component that <strong>captures</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
 					</section>
 					<section>
-						<h4><strong>Configuring</strong> the MockServer</h4>
+						<h4>Automated tests samples</h4>
 						<ul>
-							<li>It <strong>requires the metadata</strong> to know the entities and relationships exposed by the ODATA service</li>
-							<li>It <strong>initializes the entity sets</strong> by generating them or loading JSON files</li>
+							<li>qUnit</li>
+							<li>OPA</li>
+							<li>karma</li>
 						</ul>
-						<small>Check the documentation of <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer"><strong><span class="pre">sap.ui.core.util.MockServer</span></strong></a></small>
 					</section>
 					<section>
-						<h4>MockServer hooks <strong>Tips & Tricks</strong></h4>
-						<ul>
-							<li>The MockServer does <strong>not</strong> need to be <strong>100% equivalent</strong> to the backend</li>
-							<li>Newly added hooks are <strong>executed first</strong> (LIFO)</li>
-							<li>You may also use <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/attachBefore"><strong><span class="pre">attachBefore</span></strong></a>
-								 or <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/attachAfter"><strong><span class="pre">attachAfter</span></strong></a> callbacks triggered before or after request processing</li>
-						</ul>
+						If you want to <strong>learn</strong> more...
+						<br/>
+						<a href="https://youtu.be/HiZq-kuIbt0">
+							<img src="From%20OPA%20to%20Node-UI5/UI5con@SAP%202018%20-%20A%20journey%20with%20OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						</a>
 					</section>
 				</section>
 				<section>
