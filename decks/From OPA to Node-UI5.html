@@ -77,10 +77,10 @@
 						<small><a href="https://openui5.org/">https://openui5.org</a></small>
 						<ul>
 							<li>Enterprise-Grade
-								<small>OpenUI5 follows <strong>open standards</strong> and includes powerful development concepts, efficient tools, as well as a rich set of UI controls.</small>
+								<small>OpenUI5 follows <strong>open standards</strong> and includes powerful development concepts, efficient tools, as well as a rich set of UI controls</small>
 							</li>
 							<li>Responsive on All Devices
-								<small>No need to worry about device specifics! <strong>UI5 apps and controls</strong> run on smartphones, tablets and desktop browsers.</small>
+								<small>No need to worry about device specifics! <strong>UI5 apps and controls</strong> run on smartphones, tablets and desktop browsers</small>
 							</li>
 							<li>Free and Open Source
 								<small>OpenUI5 is a <strong>JavaScript UI Framework</strong> released by SAP under the Apache 2.0 license. It's open for contributions and feedback!</small>
@@ -111,7 +111,7 @@
 						in a simple and <strong>standard</strong> way.
 					</section>
 					<section>
-						<h4>TODO list sample application</h4>
+						<h4><strong>DEMO</strong> TODO list sample application</h4>
 					</section>
 					<section>
 						<h4>A journey with <strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance</h4>
@@ -133,7 +133,7 @@
 					<section>
 						<h4>What is <strong>OPA</strong>?</h4>
 						<p>OPA is a set of tools used to <strong>automate</strong> and <strong>validate</strong> UI
-							<i>(and it comes with backend mocking)</i>.</p>
+							and it comes with <strong>backend mocking</strong>.</p>
 						<br/>
 						<p>Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong> to abstract the UI,
 							and <strong>readable</strong>.</p>
@@ -150,7 +150,7 @@
 						<p>The MockServer is a software component that <strong>captures</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
 					</section>
 					<section>
-						<h4>Automated tests samples</h4>
+						<h4><strong>DEMO</strong> Automated tests samples</h4>
 						<ul>
 							<li>qUnit</li>
 							<li>OPA</li>
@@ -172,12 +172,50 @@
 						<h3>Act II: MockServer as a <strong>server</strong></h3>
 					</section>
 					<section>
-Got a request to use MockServer as a real server
-Someone started to create a NodeJS service with pupetter to manipulate chrome headerless and instantiate mockserver
-Complex and risky
-Explain solution
-Challenges
-Demo with PostMan
+						3 months later, a german colleague found the presentation and contacted me for a strange request.
+						Since he has an ODATA server that is behind a special network configuration, he wanted to assess
+						that his settings were working fine by having an ODATA server answering the requests
+					</section>
+					<section>
+						He created a prototype with
+						* NodeJS running express and Puppetter
+						* Chrome header less (manipulated with Pupetter)
+						* A special web page containing the MockServer
+					</section>
+					<section>
+						<q>There must be a better way !</q>
+					</section>
+					<section>
+						<h4>Introducing <strong>jsdom</strong></h4>
+						<small><a href="https://github.com/jsdom/jsdom">https://github.com/jsdom/jsdom</a></small>
+						<br />
+						jsdom simulates a browser <strong>inside</strong> NodeJS
+						<pre><code>const dom = new JSDOM(``, {
+  url: "https://example.org/",
+  referrer: "https://example.com/",
+  contentType: "text/html",
+  includeNodeLocations: true,
+  storageQuota: 10000000
+});</pre></code>
+					</section>
+					<section>
+						<h4>Challenges</h4>
+						<ul>
+							<li>OpenUI5 uses <strong>synchronous</strong> AJAX requests to load <strong>dependencies</strong></li>
+							<li>jsdom implements <strong>C</strong>ross-<strong>o</strong>rigin <strong>r</strong>esource <strong>s</strong>haring</li>
+							<li>jsdom <strong>isolates</strong> environments <i>(not able to run NodeJS code in loaded scripts)</i></li>
+						</ul>
+					</section>
+					<section>
+						<h4>Rewriting <strong>XMLHttpRequest</strong></h4>
+						<ul>
+							<li><strong>Local</strong> resources handled from file system through <strong>ResourceLoader</strong></li>
+							<li>Remote ones handled with <a href="https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html"><strong>gpf-js http helper</strong></a></li>
+							<li>Synchronous requests handled with <a href="https://www.npmjs.com/package/sync-request"><strong>sync-request</strong></a></li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>DEMO</strong> Standalone mock server</h4>
 					</section>
 				</section>
 				<section>
@@ -185,27 +223,34 @@ Demo with PostMan
 						<h3>Act III: OpenUI5 <strong>inside</strong> NodeJS</h3>
 					</section>
 					<section>
-Now that I was able to load OpenUI5 in NodeJS
-I thought what if I use the ODataModel to test OData backend
-Created asynchronous helpers (and authentication helpers)
-Show the final code
-Test in conjunction with MockServer
+						The server experiment demonstrated that it is possible to <strong>load OpenUI5 in NodeJs</strong>
+					</section>
+					<section>
+						<q>What else can we do ?</q>
+						<br />
+						<q class="fragment">Anything !</q>
+					</section>
+					<section>
+						<h4>Introducing <strong>node-ui5</strong></h4>
+						<small><a href="https://www.npmjs.com/package/node-ui5">https://www.npmjs.com/package/node-ui5</a></small>
+						<br />
+						node-ui5 gives you access to OpenUI5 in NodeJS
+						<pre><code>require('node-ui5').then(({sap}) => {
+  // use sap...
+})</pre></code>
+					</section>
+					<section>
+						<h4><strong>DEMO</strong> Show mock server implementation</h4>
 					</section>
 				</section>
 				<section>
 					<h3>Key <strong>Take-Aways</strong></h3>
 					<ul>
-						<li><q>If it's not tested, it doesn't work</q></li>
-						<li>OPA is designed to <strong>automate</strong> and <strong>validate</strong> UI5 applications</li>
-						<li><strong>Asynchronous</strong> with <strong>active polling</strong></li>
+						<li><strong>OpenUI5</strong> is a powerfull UI framework</li>
+						<li><strong>jsdom</strong> is a powerfull UI framework</li>
 						<li>Define pages to <strong>abstract</strong> and <strong>componentize</strong> UI</li>
 						<li>Keep the journeys <strong>readable</strong></li>
 						<li>Use MockServer <strong>to simulate</strong> the backend</li>
-						<li>
-							<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">
-								<img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" />training-ui5con18-opa
-							</a>
-						</li>
 					</ul>
 				</section>
 			</div>
