@@ -41,12 +41,12 @@
 								<small>A simple  <strong>todo list</strong> developed with <strong>OpenUI5</strong> to <strong>illustrate</strong></a> the <strong>OPA</strong> concepts</small>
 							</li>
 							<li>
-								<a href="https://github.com/ArnaudBuchholz/mockserver-server">mockserver-server</a><br />
-								<small>An <strong>ODATA</strong> server built on top of <strong>OPA's MockServer</strong></small>
-							</li>
-							<li>
 								<a href="https://github.com/jsdom/jsdom">jsdom</a><br />
 								<small>A JavaScript implementation of the <strong>WHATWG DOM and HTML standards</strong>, for use with <strong>node.js</strong></small>
+							</li>
+							<li>
+								<a href="https://github.com/ArnaudBuchholz/mockserver-server">mockserver-server</a><br />
+								<small>An <strong>ODATA</strong> server built on top of <strong>OPA's MockServer</strong></small>
 							</li>
 							<li>
 								<a href="https://github.com/ArnaudBuchholz/node-ui5">node-ui5</a><br />
@@ -66,10 +66,7 @@
 						<img src="From%20OPA%20to%20Node-UI5/UI5con18.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<br />
 						<small><a href="https://openui5.org/ui5con/">https://openui5.org/ui5con</a></small>
-						<br />
-						In July 2018, I was invited to present
-						<br />
- 					  at <strong>UI5Con'18</strong> in Germany
+						<p>In July 2018, I was invited to present<br />at <strong>UI5Con'18</strong> in Germany</p>
 					</section>
 					<section>
 						<img src="UI5Con'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
@@ -107,8 +104,8 @@
 						<h4><strong>ODATA</strong></h4>
 						<small><a href="https://www.odata.org/">https://www.odata.org</a></small>
 						<br />
-						An open protocol to allow the creation and consumption of queryable and interoperable <strong>RESTful APIs</strong>
-						in a simple and <strong>standard</strong> way.
+						<p>An open protocol to allow the creation and consumption of queryable and interoperable <strong>RESTful APIs</strong>
+						in a simple and <strong>standard</strong> way.</p>
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> TODO list sample application</h4>
@@ -173,9 +170,9 @@
 						<h3>Act II: MockServer as a <strong>server</strong></h3>
 					</section>
 					<section>
-						3 months later, a german colleague found the presentation and contacted me for a strange request.
-						Since he has an ODATA server that is behind a special network configuration, he wanted to assess
-						that his settings were working fine by having an ODATA server answering the requests
+						<h4>The <strong>request</strong></h4>
+						<p>3 months later, a German <strong>colleague</strong> contacted me with a strange <strong>request</strong>.<p>
+						<p>His team needed a <strong>fake ODATA server</strong> to validate an unusual network configuration.</p>
 					</section>
 					<section>
 						<h4>The <strong>prototype</strong></h4>
@@ -187,8 +184,7 @@
 					<section>
 						<h4>Introducing <strong>jsdom</strong></h4>
 						<small><a href="https://github.com/jsdom/jsdom">https://github.com/jsdom/jsdom</a></small>
-						<br />
-						jsdom simulates a browser <strong>inside</strong> NodeJS
+						<p>jsdom simulates a browser <strong>inside</strong> NodeJS.</p>
 						<pre><code>const dom = new JSDOM(``, {
   url: "https://example.org/",
   referrer: "https://example.com/",
@@ -222,7 +218,7 @@
 						<h3>Act III: OpenUI5 <strong>inside</strong> NodeJS</h3>
 					</section>
 					<section>
-						The server experiment demonstrated that it is possible to <strong>load OpenUI5 in NodeJs</strong>
+						<p>The server experiment demonstrated that it is possible to <strong>load OpenUI5 in NodeJs</strong>.</p>
 					</section>
 					<section>
 						<q>What else can we do ?</q>
@@ -232,14 +228,13 @@
 					<section>
 						<h4>Introducing <strong>node-ui5</strong></h4>
 						<small><a href="https://www.npmjs.com/package/node-ui5">https://www.npmjs.com/package/node-ui5</a></small>
-						<br />
-						node-ui5 gives you access to OpenUI5 in NodeJS
+						<p>node-ui5 gives you access to OpenUI5 <strong>in</strong> NodeJS.</p>
 						<pre><code>require('node-ui5').then(({sap}) => {
   // use sap...
 })</pre></code>
 					</section>
 					<section>
-						<h4><strong>DEMO</strong> Show mock server implementation</h4>
+						<h4><strong>DEMO</strong> MockServer server implementation</h4>
 					</section>
 				</section>
 				<section>
