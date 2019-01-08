@@ -1,0 +1,18 @@
+Presentation:
+npm start
+http://localhost:5000/decks/From OPA to Node-UI5?offline#/
+
+OpenUI5:
+set OPENUI5_SRV_PORT=8088
+npm start
+
+Training UI5Con18 OPA
+npm start
+    Use ?randomize=1000 to generate items
+    Use ?read-only to prevent modifications (show implementation?)
+    USe ?empty=true to remove all data
+npm test
+
+MockServer server
+node . ..\training-ui5con18-opa\dist
+    Use ?no-mock to connect to the 'backend'
