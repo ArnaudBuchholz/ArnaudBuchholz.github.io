@@ -1,0 +1,196 @@
+{
+	"info": {
+		"_postman_id": "199f86a8-7d9d-4b62-8eec-14da429f307a",
+		"name": "From OPA to Node-UI5",
+		"description": "OData request examples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List existing TODO items",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/odata/TODO_SRV/TodoItemSet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"TodoItemSet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get late TODO items (with paging)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/odata/TODO_SRV/TodoItemSet?$skip=0&$top=5&$orderby=DueDate%20asc&$filter=DueDate%20le%20datetime%272019-01-08T14%3a24%3a44.019%27%20and%20Completed%20eq%20false&$inlinecount=allpages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"TodoItemSet"
+					],
+					"query": [
+						{
+							"key": "$skip",
+							"value": "0"
+						},
+						{
+							"key": "$top",
+							"value": "5"
+						},
+						{
+							"key": "$orderby",
+							"value": "DueDate%20asc"
+						},
+						{
+							"key": "$filter",
+							"value": "DueDate%20le%20datetime%272019-01-08T14%3a24%3a44.019%27%20and%20Completed%20eq%20false"
+						},
+						{
+							"key": "$inlinecount",
+							"value": "allpages"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get one specific TODO item",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/odata/TODO_SRV/TodoItemSet(guid'0MOCKSVR-TODO-MKII-MOCK-00000002')",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"TodoItemSet(guid'0MOCKSVR-TODO-MKII-MOCK-00000002')"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a new TODO item",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"Title\":\"Present at JS montreal\",\r\n\t\"DueDate\":\"\\/Date(1547009999999)\\/\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://localhost:8080/odata/TODO_SRV/TodoItemSet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"TodoItemSet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Complete new TODO item",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Title\": \"Present at JS montreal\",\n    \"DueDate\": \"/Date(1547009999999)/\",\n    \"Completed\": true\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8080/odata/TODO_SRV/TodoItemSet(guid'f3e90896-0a5e-4c86-86ea-cf9424f75486')",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"TodoItemSet(guid'f3e90896-0a5e-4c86-86ea-cf9424f75486')"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete new TODO item",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/odata/TODO_SRV/TodoItemSet(guid'f3e90896-0a5e-4c86-86ea-cf9424f75486')",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"TodoItemSet(guid'f3e90896-0a5e-4c86-86ea-cf9424f75486')"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
