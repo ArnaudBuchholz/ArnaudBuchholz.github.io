@@ -1,0 +1,92 @@
+<script language="javascript" src="../include.js"></script>
+<script language="javascript" src="../export.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    How I learned from a crazy idea
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+<div class="summary">
+    <img src="https://ArnaudBuchholz.github.io/blog/student.png" align="left">
+</div>
+<code class="markdown">
+    Inherit from ES6 class
+
+    Problems
+
+    Constructor can't be call without the keyword new
+    Reflect.construct => returns a new object
+    Tried to create a new class and use super
+
+Working code:
+
+window.onerror = e => alert(e)
+
+class A {
+  constructor () {
+    this._a = "A"
+  }
+}
+
+class B extends A {
+  constructor (param) {
+    super()
+    this._b = "B"
+    this._param = param
+  }
+}
+
+alert(B.toString())
+
+function constructorOfC (param2) {
+  this.$super("test")
+  this._c = "C"
+  this._param2 = param2
+}
+
+const C = (function () {
+  function C () {
+    let instance
+    const $super = function () {
+        instance = Reflect.construct(B, arguments, C)
+    }
+    const proxy = new Proxy({}, {
+    	get: function (obj, property) {
+        if (property === '$super') {
+          return $super
+        }
+        return instance[property]
+      },
+      set: function (obj, property, value) {
+        instance[property] = value
+      }
+    })
+    constructorOfC.apply(proxy, arguments)
+    return instance
+  }
+  C.prototype = Object.create(B.prototype)
+  return C
+}())
+
+var c = new C("test2");
+
+alert([
+  "OK",
+  "_a: " + c._a,
+  "is A: " + (c instanceof A),
+  "_b: " + c._b,
+  "is B: " + (c instanceof B),
+  "_c: " + c._c,
+  "is C: " + (c instanceof C),
+  "_param: " + c._param,
+  "_param2: " + c._param2
+].join("\n\t"))
+
+</code>
+</div>
+</div>
