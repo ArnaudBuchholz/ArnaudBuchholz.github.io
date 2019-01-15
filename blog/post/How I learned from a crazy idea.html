@@ -15,7 +15,56 @@
     <img src="https://ArnaudBuchholz.github.io/blog/student.png" align="left">
 </div>
 <code class="markdown">
-    Inherit from ES6 class
+
+## The idea
+
+I am currently working on a side project that requires that I integrate ES6 code with the GPF-JS library.
+However, the library is designed to support many hosts (and some of them are deprecated) so I sticked to pretty 'old'
+JavaScript.
+
+The library offers many tools and some of them require a new class to be created.
+The main entry point is gpf.define and one can specify the base class using the $extend property.
+
+It even offers a $super member to facilitate calling the base class whenever it makes sense.
+
+So far so good.
+
+Back to the project, it is implementing a backend API with NodeJS so I decided to stick to ES6.
+But then I want to subclass an ES6 class using gpf.define.
+
+This means I need to be able to create an JavaScript class (or function) that inherits from an ES6 class.
+
+DISCLAIMER: this obviously does not make sense and I will clearly NOT do that in production but I wanted to check if it
+was possible.
+
+## How do we build a JavaScript class
+
+There are many ways to build a class and implement inheritance in JavaScript but
+here is the pattern used in GPF-JS
+function NewClass () {}
+NewClass.prototype = Object.create(BaseClass.prototype)
+
+calling base class: BaseClass.apply(this, arguments)
+or make use of GPF-JS $super
+
+This leverages prototype inheritance and ensures proper results when using instanceof operator
+
+## How do we build an ES6 class
+
+class NewClass extends BaseClass {
+}
+
+calling base class: super()
+
+NewClass is actually a function
+
+## How do we build an ES6 class extending a JavaScript class
+
+Very simply
+
+Does super works?
+
+## How do we build a JavaScript class extending an ES6 class
 
     Problems
 
