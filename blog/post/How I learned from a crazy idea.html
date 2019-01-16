@@ -102,8 +102,8 @@ OldA.prototype.a = method () {
 };
 
 var a = new OldA();
-console.log(a instanceof OldA); // true
-console.log(a.a()); // A`
+assert(a instanceof OldA, "a instanceof OldA");
+assert(a.a() === "A", "a.a() === \"A\"");`
 
 To create a subclass, a new function is required.
 
@@ -162,9 +162,26 @@ console.log(b.b()); // B`
 
 As a result, A and B are also functions.
 
-## How do we build an ES6 class extending a JavaScript class
+### Extanding an 'old' class in an ES6 class
 
-Very simply
+Based on the previous examples, the following code works like a charm:
+
+`class ExtendOldEs6B extends OldA {
+    constructor () {
+      super()
+      this._b = "B"
+    }
+
+    b () {
+      return this._b
+    }
+}
+
+var b = new ExtendOldEs6B();
+console.log(b instanceof OldA); // true
+console.log(b.a()); // A
+console.log(b instanceof ExtendOldEs6B); // true
+console.log(b.b()); // B`
 
 Does super works?
 
