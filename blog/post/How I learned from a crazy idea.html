@@ -18,24 +18,68 @@
 
 ## The idea
 
-I am currently working on a side project that requires that I integrate ES6 code with the GPF-JS library.
-However, the library is designed to support many hosts (and some of them are deprecated) so I sticked to pretty 'old'
-JavaScript.
+I have **millions of ideas**: some are stupid *(and it's ok)* and some may be interesting.
+Sadly, for most of them, **time and resources are missing** to shape them properly.
+Somehow, we all have to **choose our battles**.
 
-The library offers many tools and some of them require a new class to be created.
-The main entry point is gpf.define and one can specify the base class using the $extend property.
+But, from time to time, **that crazy idea which doesn't make sense** comes up and it would be really **cool to try** it.
 
-It even offers a $super member to facilitate calling the base class whenever it makes sense.
+This is more or less **how the [GPF-JS library](https://github.com/ArnaudBuchholz/gpf-js) project started**.
+Building a library supporting most of the hosts existing at that time and that would allow experimenting some cool
+concepts with JavaScript was appealing (classes, interfaces, streams, documentation generation, TDD, code
+coverage, backward compatibility testing...).
+
+So far, it is a success since **a lot was learned from that experience**.
+
+Today, I am working on a side project that requires a backend to publish data. Obviously, the
+implementation started with NodeJS and it was and good opportunity to push my ES6 knowledge a little bit further.
+
+The project reached the point where **some features of the library could be leveraged**.
+
+This means that it needs to **[support ES6 code](https://github.com/ArnaudBuchholz/gpf-js/issues/303)**.
+
+However, since the library is designed to support many hosts (and some of them are deprecated), it somehow
+sets the language support to quite a low standard (some may say 'old' JavaScript).
+
+(...) [Transpiling](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) could have been
+an option but some hosts are not even supporting the resulting code.
+
+Among the [exposed api](https://arnaudbuchholz.github.io/gpf/doc/index.html), there is an entry point to **define
+classes: [gpf.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.define__anchor)**.
+Inheritance is specified by setting the $extend property in the
+[entity definition](https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html).
+
+The library even offers a [$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html) helper to
+**facilitate calling the base class method** whenever it makes sense.
 
 So far so good.
 
-Back to the project, it is implementing a backend API with NodeJS so I decided to stick to ES6.
-But then I want to subclass an ES6 class using gpf.define.
+But what would happen if one applies this helper with an ES6 class?
 
-This means I need to be able to create an JavaScript class (or function) that inherits from an ES6 class.
+`const gpf = require("gpf-js")
 
-DISCLAIMER: this obviously does not make sense and I will clearly NOT do that in production but I wanted to check if it
-was possible.
+class A {
+  constructor () {
+    this._a = "A"
+  }
+}
+
+const B = gpf.define({
+  $class: "B",
+  $extend: A,
+  constructor: function () {
+    this.$super()
+    this._b = "B"
+  }
+})
+
+const b = new B();`
+
+The result is: TypeError: Class constructor A cannot be invoked without 'new'
+
+[See it on runkit](https://runkit.com/arnaudbuchholz/5c3f75a55e78ac001246366b)
+
+And then starts the journey...
 
 ## How do we build a JavaScript class
 
