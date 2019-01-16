@@ -79,28 +79,88 @@ The result is: TypeError: Class constructor A cannot be invoked without 'new'
 
 [See it on runkit](https://runkit.com/arnaudbuchholz/5c3f75a55e78ac001246366b)
 
-And then starts the journey...
+And there starts the journey...
 
-## How do we build a JavaScript class
+## Building JavaScript classes
 
-There are many ways to build a class and implement inheritance in JavaScript but
-here is the pattern used in GPF-JS
-function NewClass () {}
-NewClass.prototype = Object.create(BaseClass.prototype)
+### The 'old' way
 
-calling base class: BaseClass.apply(this, arguments)
-or make use of GPF-JS $super
+There are many ways to build a class and leverage
+[prototype inheritance](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance) in JavaScript but
+here is the pattern used in GPF-JS.
 
-This leverages prototype inheritance and ensures proper results when using instanceof operator
+A class is represented by its **constructor function**.
+Every function exposes the **prototype object** which members will be inherited by all instances created with this
+function.
 
-## How do we build an ES6 class
-
-class NewClass extends BaseClass {
+`function OldA () {
+  this._a = "A";
 }
 
-calling base class: super()
+OldA.prototype.a = method () {
+  return this._a;
+};
 
-NewClass is actually a function
+var a = new OldA();
+console.log(a instanceof OldA); // true
+console.log(a.a()); // A`
+
+To create a subclass, a new function is required.
+
+Calling the base constructor requires a manual use of the base class function like in the next example
+Also the prototype must be initialized with a new object that 'inherits' from the base class.
+
+`function OldB () {
+  OldA.apply(this, arguments);
+  this._b = "B"
+}
+
+OldB.prototype = Object.create(OldA.prototype);
+
+OldB.prototype.b = method () {
+  return this._b;
+};
+
+var b = new OldB();
+console.log(b instanceof OldA); // true
+console.log(b.a()); // A
+console.log(b instanceof OldB); // true
+console.log(b.b()); // B`
+
+The GPF-JS library facilitates calling the base class using the syntax this.$super().
+
+### The ES6 way
+
+The class keyword was introduced and the syntax is self explanatory.
+
+`class Es6A {
+  constructor () {
+    this._a = "A"
+  }
+
+  a () {
+    return this._a
+  }
+}
+
+class Es6B extends Es6A {
+    constructor () {
+      super()
+      this._b = "B"
+    }
+
+    b () {
+      return this._b
+    }
+}
+
+var b = new Es6B();
+console.log(b instanceof Es6A); // true
+console.log(b.a()); // A
+console.log(b instanceof Es6B); // true
+console.log(b.b()); // B`
+
+As a result, A and B are also functions.
 
 ## How do we build an ES6 class extending a JavaScript class
 
