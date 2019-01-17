@@ -1,3 +1,7 @@
+window.onerror = function (error) {
+    assert(false, error.toString());
+};
+
 function assert(condition, message) {
     var line = document.createElement("div"),
         status = line.appendChild(document.createElement("span")),
