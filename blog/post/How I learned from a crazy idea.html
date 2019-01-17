@@ -75,7 +75,9 @@ const B = gpf.define({
 
 const b = new B();`
 
-The result is: TypeError: Class constructor A cannot be invoked without 'new'
+The result is:
+
+`TypeError: Class constructor A cannot be invoked without 'new'`
 
 [See it on runkit](https://runkit.com/arnaudbuchholz/5c3f75a55e78ac001246366b)
 
@@ -87,53 +89,77 @@ And there starts the journey...
 
 There are many ways to build a class and leverage
 [prototype inheritance](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance) in JavaScript but
-here is the pattern used in GPF-JS.
+here is **the pattern used in GPF-JS**.
 
 A class is represented by its **constructor function**.
 Every function exposes the **prototype object** which members will be inherited by all instances created with this
 function.
 
-`function OldA () {
+<!-- How I learned from a crazy idea / The 'old' way
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+function OldA () {
   this._a = "A";
 }
 
-OldA.prototype.a = method () {
+OldA.prototype.a = function () {
   return this._a;
 };
 
 var a = new OldA();
-assert(a instanceof OldA, "a instanceof OldA");
-assert(a.a() === "A", "a.a() === \"A\"");`
+assert(() => a instanceof OldA);
+assert(() => a.a() === "A");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/embed/js,result/"></script>
 
-To create a subclass, a new function is required.
+To create a subclass, **a new function is needed**.
 
-Calling the base constructor requires a manual use of the base class function like in the next example
-Also the prototype must be initialized with a new object that 'inherits' from the base class.
+Calling the base constructor requires the **base function to be
+[applied](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)** on the
+newly created instance.
+Also the prototype must be initialized with a **new object that 'inherits' from the base class prototype**.
 
-`function OldB () {
+<!-- How I learned from a crazy idea / The 'old' way
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+function OldA () {
+  this._a = "A";
+}
+
+OldA.prototype.a = function () {
+  return this._a;
+};
+
+var a = new OldA();
+assert(() => a instanceof OldA);
+assert(() => a.a() === "A");
+
+function OldB () {
   OldA.apply(this, arguments);
   this._b = "B"
 }
 
 OldB.prototype = Object.create(OldA.prototype);
 
-OldB.prototype.b = method () {
+OldB.prototype.b = function () {
   return this._b;
 };
 
 var b = new OldB();
-console.log(b instanceof OldA); // true
-console.log(b.a()); // A
-console.log(b instanceof OldB); // true
-console.log(b.b()); // B`
+assert(() => b instanceof OldA);
+assert(() => b.a() === "A");
+assert(() => b instanceof OldB);
+assert(() => b.b() === "B");-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/3/embed/js,result/"></script>
 
-The GPF-JS library facilitates calling the base class using the syntax this.$super().
+The GPF-JS library facilitates calling the base class using
+[this.$super()]([$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html).
 
 ### The ES6 way
 
 The class keyword was introduced and the syntax is self explanatory.
 
-`class Es6A {
+<!-- How I learned from a crazy idea / The ES6 way
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+class Es6A {
   constructor () {
     this._a = "A"
   }
@@ -144,29 +170,40 @@ The class keyword was introduced and the syntax is self explanatory.
 }
 
 class Es6B extends Es6A {
-    constructor () {
-      super()
-      this._b = "B"
-    }
+  constructor () {
+    super()
+    this._b = "B"
+  }
 
-    b () {
-      return this._b
-    }
+  b () {
+    return this._b
+  }
 }
 
 var b = new Es6B();
-console.log(b instanceof Es6A); // true
-console.log(b.a()); // A
-console.log(b instanceof Es6B); // true
-console.log(b.b()); // B`
+assert(() => b instanceof Es6A);
+assert(() => b.a() === "A");
+assert(() => b instanceof Es6B);
+assert(() => b.b() === "B");-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/b81aesr5/embed/js,result"></script>
 
-As a result, A and B are also functions.
+It is interesting to note that **Es6A and Es6B are also functions**.
 
 ### Extanding an 'old' class in an ES6 class
 
 Based on the previous examples, the following code works like a charm:
 
-`class ExtendOldEs6B extends OldA {
+<!-- How I learned from a crazy idea / Extanding an 'old' class in an ES6 class
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+function OldA () {
+  this._a = "A";
+}
+
+OldA.prototype.a = function () {
+  return this._a;
+};
+
+class ExtendOldWithEs6B extends OldA {
     constructor () {
       super()
       this._b = "B"
@@ -177,13 +214,13 @@ Based on the previous examples, the following code works like a charm:
     }
 }
 
-var b = new ExtendOldEs6B();
-console.log(b instanceof OldA); // true
-console.log(b.a()); // A
-console.log(b instanceof ExtendOldEs6B); // true
-console.log(b.b()); // B`
-
-Does super works?
+var b = new ExtendOldWithEs6B();
+assert(() => b instanceof OldA);
+assert(() => b.a() === "A");
+assert(() => b instanceof ExtendOldWithEs6B);
+assert(() => b.b() === "B");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/hqb490wL/embed/js,result"></script>
 
 ## How do we build a JavaScript class extending an ES6 class
 
