@@ -116,7 +116,7 @@ To create a subclass, **a new function is needed**.
 Calling the base constructor requires the **base function to be
 [applied](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)** on the
 newly created instance.
-Also the prototype must be initialized with a **new object that 'inherits' from the base class prototype**.
+Also the new prototype is initialized with a **new object that 'inherits' from the base class prototype**.
 
 <!-- How I learned from a crazy idea / The 'old' way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -147,7 +147,8 @@ var b = new OldB();
 assert(() => b instanceof OldA);
 assert(() => b.a() === "A");
 assert(() => b instanceof OldB);
-assert(() => b.b() === "B");-->
+assert(() => b.b() === "B");
+-->
 <script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/3/embed/js,result/"></script>
 
 The GPF-JS library facilitates calling the base class using
@@ -155,7 +156,8 @@ The GPF-JS library facilitates calling the base class using
 
 ### The ES6 way
 
-The class keyword was introduced and the syntax is self explanatory.
+The [class keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/class) was introduced
+and the syntax is **self explanatory**.
 
 <!-- How I learned from a crazy idea / The ES6 way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -189,11 +191,29 @@ assert(() => b.b() === "B");-->
 
 It is interesting to note that **Es6A and Es6B are also functions**.
 
-### Extanding an 'old' class in an ES6 class
+<!-- How I learned from a crazy idea / The ES6 way (2)
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+class Es6A {
+  constructor (value) {
+    this._a = value;
+  }
 
-Based on the previous examples, the following code works like a charm:
+  a () {
+    return this._a;
+  }
+}
 
-<!-- How I learned from a crazy idea / Extanding an 'old' class in an ES6 class
+assert(() => typeof Es6A === "function");
+assert(() => Es6A.length === 1);
+assert(() => typeof Es6A.apply === "function");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/dtrayepf/embed/js,result"></script>
+
+### Subclassing an 'old' class in an ES6 class
+
+Based on the previous examples, the following code **works smoothly**.
+
+<!-- How I learned from a crazy idea / Subclassing an 'old' class in an ES6 class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
 function OldA () {
   this._a = "A";
@@ -221,6 +241,139 @@ assert(() => b instanceof ExtendOldWithEs6B);
 assert(() => b.b() === "B");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/hqb490wL/embed/js,result"></script>
+
+### Subclassing an ES6 class in an 'old' class
+
+So the code presented in the introduction almost **looks like the following**.
+It obviously leads to the same error.
+
+<!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+class Es6A {
+  constructor () {
+    this._a = "A"
+  }
+
+  a () {
+    return this._a
+  }
+}
+
+function ExtendEs6WithOldB () {
+  Es6A.apply(this, arguments);
+  this._b = "B"
+}
+
+ExtendEs6WithOldB.prototype = Object.create(Es6A.prototype);
+
+ExtendEs6WithOldB.prototype.b = function () {
+  return this._b;
+};
+
+var b = new ExtendEs6WithOldB();
+assert(() => b instanceof Es6A);
+assert(() => b.a() === "A");
+assert(() => b instanceof ExtendEs6WithOldB);
+assert(() => b.b() === "B");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/1kbozc3w/embed/js,result"></script>
+
+## Class constructor cannot be invoked without 'new'
+
+Since the resulting function is designed to create instances, it expects the 'new' keyword.
+JavaScript doesn't expect you to call it / apply it without applying the construction pattern.
+
+So what is so special with this class function?
+
+### Detecting such a constructor
+
+.toString().startsWith("class")
+
+### Reproduce the behavior
+
+if (!(this instanceof C)) {
+    throw...
+}
+
+### Other particularities
+
+Default values in ES6 changes the length property
+
+Particularities with super must be called before any access to this (which makes sens)
+
+
+## Subclassing an ES6 class in an 'old' class
+
+### ConstructorOfB
+
+Let's assume that we have a JavaScript function we will use as a constructor.
+Let's assume the code relies on the GPF-JS syntax to call super.
+To validate the implementation, we will define the following statements:
+
+class A {
+  constructor () {
+    this._a = "A"
+  }
+}
+
+class B extends A {
+  constructor (param) {
+    super()
+    this._b = "B"
+    this._param = param
+  }
+}
+
+We want to be able to create a class C where the constructor would look like the function below
+
+function constructorOfC (param2) {
+  this.$super("test")
+  this._c = "C"
+  this._param2 = param2
+}
+
+### Non-sense idea
+
+'convert' constructorOfC into a class definition and replace this.$super(...) with super(...)
+
+Could have worked *but* we loose the enclosed context of constructorOfC
+
+### Attempt number 1
+
+class C extends B {
+    $super () {
+        super
+    }
+    constructor (param2) {
+        constructorOfC.apply(this, arguments)
+    }
+}
+
+
+So basically we need to find a way
+
+
+
+function Ces6 () {
+  var that;
+  function $super() {
+    that = Reflect.construct(B, arguments, C)
+  }
+  var newC = Object.create(C.prototype);
+  newC.$super = $super;
+  Object.defineProperty(newC, "_c", {
+    get: function () {
+      return that._c
+    },
+    set: function (value) {
+      that._c = value
+    }
+  })
+  C.apply(newC, arguments);
+  return that;
+}
+
+
 
 ## How do we build a JavaScript class extending an ES6 class
 
