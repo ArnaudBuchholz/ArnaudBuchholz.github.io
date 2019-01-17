@@ -2,6 +2,14 @@ function assert(condition, message) {
     var line = document.createElement("div"),
         status = line.appendChild(document.createElement("span")),
         color;
+    if (typeof condition === "function") {
+        message = condition.toString().match(/(?:=>|{)([^}]*)\}?/)[1].toString();
+        try {
+            condition = condition();
+        } catch (e) {
+            condition = false;
+        }
+    }
     line.appendChild(document.createTextNode(message));
     if (condition) {
         status.innerHTML = "&check;";
