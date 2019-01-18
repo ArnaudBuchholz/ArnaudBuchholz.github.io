@@ -45,7 +45,6 @@ So far, it is a success since **a lot was learned from that experience**:
 * [My own templates implementation](https://gpf-js.blogspot.com/2016/08/my-own-templates-implementation.html)
 * [Date override](https://gpf-js.blogspot.com/2016/02/date-override.html)
 * [My own BDD implementation](https://gpf-js.blogspot.com/2015/10/my-own-bdd-implementation.html)
-* [Timeout and WebWorker](https://gpf-js.blogspot.com/2015/01/timeout-and-webworker.html)
 * And all the [release notes](https://github.com/ArnaudBuchholz/gpf-js/releases) of the library
 
 Today, I am working on a side project that requires **a backend to hold the data**. Obviously, the
@@ -71,7 +70,7 @@ The library even offers a [$super](https://gpf-js.blogspot.com/2017/02/my-own-su
 
 So far so good.
 
-But what would happen if one applies this helper with an ES6 class?
+But **what would happen if** one applies this helper with an ES6 class?
 
 `const gpf = require("gpf-js");
 
@@ -181,22 +180,22 @@ and the syntax is **self explanatory**.
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
 class Es6A {
   constructor () {
-    this._a = "A"
+    this._a = "A";
   }
 
   a () {
-    return this._a
+    return this._a;
   }
 }
 
 class Es6B extends Es6A {
   constructor () {
-    super()
-    this._b = "B"
+    super();
+    this._b = "B";
   }
 
   b () {
-    return this._b
+    return this._b;
   }
 }
 
@@ -204,7 +203,8 @@ var b = new Es6B();
 assert(() => b instanceof Es6A);
 assert(() => b.a() === "A");
 assert(() => b instanceof Es6B);
-assert(() => b.b() === "B");-->
+assert(() => b.b() === "B");
+-->
 <script async src="//jsfiddle.net/ArnaudBuchholz/b81aesr5/embed/js,result"></script>
 
 It is interesting to verify that **Es6A and Es6B are also functions**.
@@ -243,12 +243,12 @@ OldA.prototype.a = function () {
 
 class ExtendOldWithEs6B extends OldA {
     constructor () {
-      super()
-      this._b = "B"
+      super();
+      this._b = "B";
     }
 
     b () {
-      return this._b
+      return this._b;
     }
 }
 
@@ -263,23 +263,23 @@ assert(() => b.b() === "B");
 ### Subclassing an ES6 class in an 'old' class
 
 So the code presented in the introduction almost **looks like the following**.
-It obviously leads to the same error.
+It obviously leads to the **same error**.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
 class Es6A {
   constructor () {
-    this._a = "A"
+    this._a = "A";
   }
 
   a () {
-    return this._a
+    return this._a;
   }
 }
 
 function ExtendEs6WithOldB () {
   Es6A.apply(this, arguments);
-  this._b = "B"
+  this._b = "B";
 }
 
 ExtendEs6WithOldB.prototype = Object.create(Es6A.prototype);
@@ -316,7 +316,7 @@ const instance = new substring();
 <script async src="//jsfiddle.net/ArnaudBuchholz/a96gfdm1/embed/js,result"></script>
 
 When it comes to the new syntax, **the intention of the developper** is to build a function that will be used to create
-instances. As a consequence, **the language doesn't expect this function to be invoked without the new keyword**.
+instances. As a consequence, **the language doesn't expect this function to be invoked for a simple function call**.
 
 ### Reproduce the behavior in the 'old' way
 
@@ -355,7 +355,7 @@ OldB.prototype.b = function () {
   return this._b;
 };
 
-var b = new OldB();
+var b = new OldB();cd
 assert(() => b instanceof OldA);
 assert(() => b.a() === "A");
 assert(() => b instanceof OldB);
@@ -363,28 +363,138 @@ assert(() => b.b() === "B");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/tauek0pL/embed/js,result/"></script>
 
+Note that, in this case, the base constructor call works since **any instance of OldB is also an instance of OldA**.
+
+(...) This behavior is already
+[implemented](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.8/src/define/class/constructor.js#L59) in GPF-JS.
+
+(...) Again, there were many ways to create classes before the introduction of the class keyword. Some may disagree with
+the use of instanceof. To be fair and complete, I invite you to check the article [JavaScript Factory Functions vs
+Constructor Functions vs Classes](https://medium.com/javascript-scene/javascript-factory-functions-vs-constructor
+-functions-vs-classes-2f22ceddf33e) from Eric Elliott.
+
+### Notable differences between the two ways of creating class
+
+As explained previously in the 'Old' way of creating classes, the base constructor is called by applying the base
+function on this. However, there is **no limitation on when the base constructor can be applied**. Actually, you can
+start leveraging the newly created instance even **before it was properly built**.
+
+<!-- How I learned from a crazy idea / Notable differences (Old way)
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+function OldA () {
+  this._a = "A";
+}
+
+OldA.prototype.a = function () {
+  return this._a;
+};
+
+var a = new OldA();
+assert(() => a instanceof OldA);
+assert(() => a.a() === "A");
+
+function OldB () {
+  this._b = "B"; // Use this before it was properly built
+  OldA.apply(this, arguments);
+}
+
+OldB.prototype = Object.create(OldA.prototype);
+
+OldB.prototype.b = function () {
+  return this._b;
+};
+
+var b = new OldB();
+assert(() => b instanceof OldA);
+assert(() => b.a() === "A");
+assert(() => b instanceof OldB);
+assert(() => b.b() === "B");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/t8ef1p5y/embed/js,result/"></script>
+
+That's something that has been enforced in ES6 since **it is not possible to use this before calling the
+[super](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super) constructor**.
+
+<!-- How I learned from a crazy idea / Notable differences (ES6 way)
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+class Es6A {
+  constructor () {
+    this._a = "A";
+  }
+
+  a () {
+    return this._a;
+  }
+}
+
+class Es6B extends Es6A {
+  constructor () {
+    this._b = "B";  // Use this before it was properly built
+    super();
+  }
+
+  b () {
+    return this._b;
+  }
+}
+
+var b = new Es6B();
+assert(() => b instanceof Es6A);
+assert(() => b.a() === "A");
+assert(() => b instanceof Es6B);
+assert(() => b.b() === "B");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/wxa30178/embed/js,result"></script>
+
+The result shows:
+`Uncaught ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor`
+
+### Detecting an ES6 class constructor
+
+Since the library will have to deal with ES6, it needs **a safe way to detect such constructors**.
+Actually, this is done by **converting the function to string and by checking it contains the class keyword**.
+
+<!-- How I learned from a crazy idea / Detecting an ES6 class constructor
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+function OldA () {
+  this._a = "A";
+}
+
+OldA.prototype.a = function () {
+  return this._a;
+};
+
+class Es6A {
+  constructor () {
+    this._a = "A";
+  }
+
+  a () {
+    return this._a;
+  }
+}
+
+function isES6Constructor (constructor) {
+  return constructor.toString().startsWith("class");
+}
+
+assert(() => !isES6Constructor(OldA));
+assert(() => isES6Constructor(Es6A));
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/prg4L5mk/embed/js,result"></script>
+
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
-Note that, in this case, the base constructor call works since any instance of OldB is also an instance of OldA.
-
-### Detecting such a constructor
-
-.toString().startsWith("class")
-
-
-### Other particularities
-
-Default values in ES6 changes the length property
-
-Particularities with super must be called before any access to this (which makes sens)
-
-
 ## Subclassing an ES6 class in an 'old' class
+
+Now that we understand why it does not work, let's **try to find a way to make it work** anyway.
 
 ### ConstructorOfB
 
 Let's assume that we have a JavaScript function we will use as a constructor.
 Let's assume the code relies on the GPF-JS syntax to call super.
+We actually expects that if super is not called first, the implementation should fail.
+
 To validate the implementation, we will define the following statements:
 
 class A {
@@ -409,6 +519,19 @@ function constructorOfC (param2) {
   this._param2 = param2
 }
 
+What we want to validate:
+
+var c = new C("test2");
+
+assert(() => c instanceof A);
+assert(() => c._a === "A");
+assert(() => c instanceof B);
+assert(() => c._b === "B");
+assert(() => c._param === "test");
+assert(() => c instanceof C);
+assert(() => c._c === "C");
+assert(() => c._param2 === "test2");
+
 ### Non-sense idea
 
 'convert' constructorOfC into a class definition and replace this.$super(...) with super(...)
@@ -426,10 +549,19 @@ class C extends B {
     }
 }
 
+## Attempt number 2
 
-So basically we need to find a way
+Since we can dynamically build a class, we could simply inject the content of the constructor in the class constructor.
 
+Pr
 
+## Attempt number 3
+
+Wait for $super to be evaluated, throw an exception and re-execute the constructor with the proper this
+
+## Attempt number 4
+
+Create a wrapper that
 
 function Ces6 () {
   var that;
@@ -452,15 +584,10 @@ function Ces6 () {
 
 
 
-## How do we build a JavaScript class extending an ES6 class
 
-    Problems
+## Attempt number 5
 
-    Constructor can't be call without the keyword new
-    Reflect.construct => returns a new object
-    Tried to create a new class and use super
-
-Working code:
+The Proxy object
 
 window.onerror = e => alert(e)
 
