@@ -487,15 +487,17 @@ assert(() => isES6Constructor(Es6A));
 
 ## Subclassing an ES6 class in an 'old' class
 
-Now that we understand why it does not work, let's **try to find a way to make it work** anyway.
+Now that we understand why it does not work, let's **try to find a way to make it work in the GPF-JS**.
 
 ### ConstructorOfB
 
-Let's assume that we have a JavaScript function we will use as a constructor.
-Let's assume the code relies on the GPF-JS syntax to call super.
-We actually expects that if super is not called first, the implementation should fail.
+Let start by setting the right expectations, we will assume that:
+* gpf.define will be used with a dictionary specifying the $extend property pointing to a class constructor
+* a constructor property will be provided implemented in 'Old' JavaScript
+* this.$super will be called to invoke the base constructor
+* If this.$super is not called before any use of this, the construction should fail
 
-To validate the implementation, we will define the following statements:
+To validate the implementation, we will start with the following statements:
 
 class A {
   constructor () {
@@ -511,18 +513,18 @@ class B extends A {
   }
 }
 
-We want to be able to create a class C where the constructor would look like the function below
-
+// This is the constructor that would be provided in the gpf.define dictionary
 function constructorOfC (param2) {
   this.$super("test")
   this._c = "C"
   this._param2 = param2
 }
 
-What we want to validate:
+// We need a way to create a class C that inherits from B calling constructorOfC
+function C () { }
 
+// Validation
 var c = new C("test2");
-
 assert(() => c instanceof A);
 assert(() => c._a === "A");
 assert(() => c instanceof B);
