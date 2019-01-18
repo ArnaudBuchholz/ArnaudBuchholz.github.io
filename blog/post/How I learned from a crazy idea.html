@@ -10,15 +10,13 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <div class="summary">
     <img src="https://ArnaudBuchholz.github.io/blog/student.png" align="left">
     According to wikipedia, a particle accelerator is a machine that uses eletromagnetic fields to propel charged
     particles to very high speed and energies. A collider accelerator causes them to collide head-on, creating
     observable results scientists can learn from.
     <br/>
-    Sometimes, I feel like an idea collider accelerator producing interesting experiments
-    I can learn from.
+    Sometimes, I feel like an idea collider accelerator producing interesting experiments I can learn from.
 </div>
 <code class="markdown">
 
@@ -50,18 +48,18 @@ So far, it is a success since **a lot was learned from that experience**:
 * [Timeout and WebWorker](https://gpf-js.blogspot.com/2015/01/timeout-and-webworker.html)
 * And all the [release notes](https://github.com/ArnaudBuchholz/gpf-js/releases) of the library
 
-Today, I am working on a side project that requires a backend to publish data. Obviously, the
-implementation started with NodeJS and it was and good opportunity to push my ES6 knowledge a little bit further.
+Today, I am working on a side project that requires **a backend to hold the data**. Obviously, the
+implementation started with NodeJS as it is good opportunity to push my **ES6 knowledge** a little bit further.
 
 The project reached the point where **some features of the library could be leveraged**.
 
 This means that it needs to **[support ES6 code](https://github.com/ArnaudBuchholz/gpf-js/issues/303)**.
 
-However, since the library is designed to support many hosts (and some of them are deprecated), it somehow
+However, since the library is designed to be compatible with so many hosts (and some of them are deprecated), it somehow
 sets the language support to quite a low standard (some may say 'old' JavaScript).
 
 (...) [Transpiling](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) could have been
-an option but some hosts are not even supporting the resulting code.
+an option but some hosts are not even supporting the resulting ES5 code.
 
 Among the [exposed api](https://arnaudbuchholz.github.io/gpf/doc/index.html), there is an entry point to **define
 classes: [gpf.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.define__anchor)**.
@@ -75,11 +73,11 @@ So far so good.
 
 But what would happen if one applies this helper with an ES6 class?
 
-`const gpf = require("gpf-js")
+`const gpf = require("gpf-js");
 
 class A {
   constructor () {
-    this._a = "A"
+    this._a = "A";
   }
 }
 
@@ -87,8 +85,8 @@ const B = gpf.define({
   $class: "B",
   $extend: A,
   constructor: function () {
-    this.$super()
-    this._b = "B"
+    this.$super();
+    this._b = "B";
   }
 })
 
@@ -108,12 +106,12 @@ Let see what we can **learn** from that observable result.
 ### The 'old' way
 
 There are many ways to build a class and leverage
-[prototype inheritance](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance) in JavaScript but
-here is **the pattern used in GPF-JS**.
+**[prototype inheritance](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance)** in JavaScript
+but here is **the pattern used in GPF-JS**.
 
 A class is represented by its **constructor function**.
-Every function exposes the **prototype object** which members will be inherited by all instances created with this
-function.
+Every function exposes the **prototype property**, an object which members will be inherited by all instances created
+with this function.
 
 <!-- How I learned from a crazy idea / The 'old' way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -129,7 +127,7 @@ var a = new OldA();
 assert(() => a instanceof OldA);
 assert(() => a.a() === "A");
 -->
-<script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/embed/js,result/"></script>
+<script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/7/embed/js,result/"></script>
 
 To create a subclass, **a new function is needed**.
 
@@ -154,7 +152,7 @@ assert(() => a.a() === "A");
 
 function OldB () {
   OldA.apply(this, arguments);
-  this._b = "B"
+  this._b = "B";
 }
 
 OldB.prototype = Object.create(OldA.prototype);
@@ -169,10 +167,10 @@ assert(() => b.a() === "A");
 assert(() => b instanceof OldB);
 assert(() => b.b() === "B");
 -->
-<script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/3/embed/js,result/"></script>
+<script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/embed/js,result/"></script>
 
-The GPF-JS library facilitates calling the base class using
-[this.$super()]([$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html).
+As mentionned previously, The **GPF-JS library facilitates calling the base class using
+[this.$super()]([$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html)**.
 
 ### The ES6 way
 
@@ -209,7 +207,7 @@ assert(() => b instanceof Es6B);
 assert(() => b.b() === "B");-->
 <script async src="//jsfiddle.net/ArnaudBuchholz/b81aesr5/embed/js,result"></script>
 
-It is interesting to note that **Es6A and Es6B are also functions**.
+It is interesting to verify that **Es6A and Es6B are also functions**.
 
 <!-- How I learned from a crazy idea / The ES6 way (2)
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -300,20 +298,79 @@ assert(() => b.b() === "B");
 
 ## Class constructor cannot be invoked without 'new'
 
-Since the resulting function is designed to create instances, it expects the 'new' keyword.
-JavaScript doesn't expect you to call it / apply it without applying the construction pattern.
+If you think twice about the old way of creating classes, this error fully makes sense.
+Indeed, in the old way, there is **no difference between a normal function and a class constructor**.
+As a result, both could be either invoked or called with the
+[new keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new).
 
-So what is so special with this class function?
+However, all JavaScript functions are not **constructors**.
+
+Indeed, most **native methods** are secured:
+
+<!-- How I learned from a crazy idea / all functions are not constructors
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+const substring = String.prototype.substring;
+assert(() => typeof substring === "function");
+const instance = new substring();
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/a96gfdm1/embed/js,result"></script>
+
+When it comes to the new syntax, **the intention of the developper** is to build a function that will be used to create
+instances. As a consequence, **the language doesn't expect this function to be invoked without the new keyword**.
+
+### Reproduce the behavior in the 'old' way
+
+Actually, it is possible to reproduce this behavior with the 'old' syntax.
+The new operator will instantiate a new object and pass it to the function invocation.
+This means that **testing [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) with
+[instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) will do the
+trick**.
+
+<!-- How I learned from a crazy idea / Reproduce the behavior in the 'old' way
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+function OldA () {
+  if (!(this instanceof OldA)) {
+    throw new TypeError("Class constructor cannot be invoked without 'new'");
+  }
+  this._a = "A";
+}
+
+OldA.prototype.a = function () {
+  return this._a;
+};
+
+var a = new OldA();
+assert(() => a instanceof OldA);
+assert(() => a.a() === "A");
+assert(() => OldA());
+
+function OldB () {
+  OldA.apply(this, arguments);
+  this._b = "B";
+}
+
+OldB.prototype = Object.create(OldA.prototype);
+
+OldB.prototype.b = function () {
+  return this._b;
+};
+
+var b = new OldB();
+assert(() => b instanceof OldA);
+assert(() => b.a() === "A");
+assert(() => b instanceof OldB);
+assert(() => b.b() === "B");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/tauek0pL/embed/js,result/"></script>
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+Note that, in this case, the base constructor call works since any instance of OldB is also an instance of OldA.
 
 ### Detecting such a constructor
 
 .toString().startsWith("class")
 
-### Reproduce the behavior
-
-if (!(this instanceof C)) {
-    throw...
-}
 
 ### Other particularities
 
