@@ -16,7 +16,7 @@
     particles to very high speed and energies. A collider accelerator causes them to collide head-on, creating
     observable results scientists can learn from.
     <br/>
-    Sometimes, I feel like an idea collider accelerator producing interesting experiments I can learn from.
+    Sometimes, I feel like an idea collider accelerator producing experiments I can learn from.
 </div>
 <code class="markdown">
 
@@ -25,7 +25,7 @@
 
 ## The idea
 
-I have **millions of ideas**: some are stupid *(and it's ok)* and some may be interesting.
+I have **millions of ideas**: some are stupid *(and it's ok)* and some *may* be interesting.
 Sadly, for most of them, **time and resources are missing** to shape them properly.
 Somehow, we all have to **choose our battles**.
 
@@ -55,14 +55,14 @@ The project reached the point where **some features of the library could be leve
 This means that it needs to **[support ES6 code](https://github.com/ArnaudBuchholz/gpf-js/issues/303)**.
 
 However, since the library is designed to be compatible with so many hosts (and some of them are deprecated), it somehow
-sets the language support to quite a low standard (some may say 'old' JavaScript).
+sets the language support to quite a **low standard (some may say 'old' JavaScript)**.
 
 (...) [Transpiling](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) could have been
 an option but some hosts are not even supporting the resulting ES5 code.
 
 Among the [exposed api](https://arnaudbuchholz.github.io/gpf/doc/index.html), there is an entry point to **define
 classes: [gpf.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.define__anchor)**.
-Inheritance is specified by setting the $extend property in the
+Inheritance is specified by setting the *$extend* property in the
 [entity definition](https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html).
 
 The library even offers a [$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html) helper to
@@ -98,7 +98,7 @@ The result is:
 [See it on runkit](https://runkit.com/arnaudbuchholz/5c3f75a55e78ac001246366b)
 
 Two **colliding ways of creating classes** producing sparks...
-Let see what we can **learn** from that observable result.
+Let see what we can **learn** from that.
 
 ## Building JavaScript classes
 
@@ -376,7 +376,7 @@ Constructor Functions vs Classes](https://medium.com/javascript-scene/javascript
 ### Notable differences between the two ways of creating class
 
 As explained previously in the 'Old' way of creating classes, the base constructor is called by applying the base
-function on this. However, there is **no limitation on when the base constructor can be applied**. Actually, you can
+function on *this*. However, there is **no limitation on when the base constructor can be applied**. Actually, you can
 start leveraging the newly created instance even **before it was properly built**.
 
 <!-- How I learned from a crazy idea / Notable differences (Old way)
@@ -593,6 +593,11 @@ assert(() => c._param2 === "test2");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/13/embed/js,result"></script>
 
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+(...) ES6 template literal has been used to build the constructor string. This syntax would not be allowed in the
+library because it would
+
 **It works !**
 
 But...
@@ -710,8 +715,6 @@ assert(() => c._param2 === "test2");
 
 However, we come back to the error:
 `Uncaught TypeError: Class constructor B cannot be invoked without 'new'`
-
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ## Attempt number 4
 
