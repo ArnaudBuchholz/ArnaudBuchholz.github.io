@@ -16,7 +16,7 @@
     particles to very high speed and energies. A collider accelerator causes them to collide head-on, creating
     observable results scientists can learn from.
     <br/>
-    Sometimes, I feel like an idea collider accelerator producing experiments I can learn from.
+    Sometimes, I feel like an idea collider producing experiments I can learn from.
 </div>
 <code class="markdown">
 
@@ -50,11 +50,11 @@ So far, it is a success since **a lot was learned from that experience**:
 Today, I am working on a side project that requires **a backend to hold the data**. Obviously, the
 implementation started with NodeJS as it is good opportunity to push my **ES6 knowledge** a little bit further.
 
-The project reached the point where **some features of the library could be leveraged**.
+The project reached the point where **some features of the GPF-JS library could be leveraged**.
 
-This means that it needs to **[support ES6 code](https://github.com/ArnaudBuchholz/gpf-js/issues/303)**.
+This means that the library needs to **[support ES6 code](https://github.com/ArnaudBuchholz/gpf-js/issues/303)**.
 
-However, since the library is designed to be compatible with so many hosts (and some of them are deprecated), it somehow
+However, since it is designed to be compatible with so many hosts *(and some of them are deprecated)*, it somehow
 sets the language support to quite a **low standard (some may say 'old' JavaScript)**.
 
 (...) [Transpiling](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) could have been
@@ -95,10 +95,13 @@ The result is:
 
 `TypeError: Class constructor A cannot be invoked without 'new'`
 
+(...) Before going any further, it is important to check that your browser supports the ES6 syntax. If you are using
+Internet Explorer please switch to a different application.
+
 [See it on runkit](https://runkit.com/arnaudbuchholz/5c3f75a55e78ac001246366b)
 
 Two **colliding ways of creating classes** producing sparks...
-Let see what we can **learn** from that.
+Let see what can be **learned** from that.
 
 ## Building JavaScript classes
 
@@ -133,7 +136,8 @@ To create a subclass, **a new function is needed**.
 Calling the base constructor requires the **base function to be
 [applied](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)** on the
 newly created instance.
-Also the new prototype is initialized with a **new object that 'inherits' from the base class prototype**.
+The new prototype is initialized with an **object that 'inherits' from the base class prototype** thanks
+to [Object.create](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create).
 
 <!-- How I learned from a crazy idea / The 'old' way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -207,7 +211,7 @@ assert(() => b.b() === "B");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/b81aesr5/embed/js,result"></script>
 
-It is interesting to verify that **Es6A and Es6B are also functions**.
+It is interesting to observe that **Es6A and Es6B are also functions**.
 
 <!-- How I learned from a crazy idea / The ES6 way (2)
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -229,7 +233,7 @@ assert(() => typeof Es6A.apply === "function");
 
 ### Subclassing an 'old' class in an ES6 class
 
-Based on the previous examples, the following code **works smoothly**.
+Good news, based on the previous examples, the following code **works smoothly**.
 
 <!-- How I learned from a crazy idea / Subclassing an 'old' class in an ES6 class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -262,7 +266,7 @@ assert(() => b.b() === "B");
 
 ### Subclassing an ES6 class in an 'old' class
 
-So the code presented in the introduction almost **looks like the following**.
+So the code presented in the introduction almost **looks like the following snippet**.
 It obviously leads to the **same error**.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
@@ -298,10 +302,10 @@ assert(() => b.b() === "B");
 
 ## Class constructor cannot be invoked without 'new'
 
-If you think twice about the old way of creating classes, this error fully makes sense.
-Indeed, in the old way, there is **no difference between a normal function and a class constructor**.
+If you think about the old way of creating classes, this error fully makes sense.
+Indeed, in the old way, there is **no stntaxic difference between a normal function and a class constructor**.
 As a result, both could be either invoked or called with the
-[new keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new).
+[*new* keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new).
 
 However, all JavaScript functions are not **constructors**.
 
@@ -320,8 +324,8 @@ instances. As a consequence, **the language doesn't expect this function to be i
 
 ### Reproduce the behavior in the 'old' way
 
-Actually, it is possible to reproduce this behavior with the 'old' syntax.
-The new operator will instantiate a new object and pass it to the function invocation.
+It is possible to reproduce this behavior with the 'old' syntax.
+The *new* operator will instantiate an object and pass it during the **function invocation**.
 This means that **testing [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) with
 [instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) will do the
 trick**.
@@ -363,7 +367,8 @@ assert(() => b.b() === "B");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/tauek0pL/embed/js,result/"></script>
 
-Note that, in this case, the base constructor call works since **any instance of OldB is also an instance of OldA**.
+Note that, in this implementation pattern, the base constructor call works because **any instance of OldB is also an
+instance of OldA**.
 
 (...) This behavior is already
 [implemented](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.8/src/define/class/constructor.js#L59) in GPF-JS.
@@ -371,13 +376,15 @@ Note that, in this case, the base constructor call works since **any instance of
 (...) Again, there were many ways to create classes before the introduction of the class keyword. Some may disagree with
 the use of instanceof. To be fair and complete, I invite you to check the article [JavaScript Factory Functions vs
 Constructor Functions vs Classes](https://medium.com/javascript-scene/javascript-factory-functions-vs-constructor
--functions-vs-classes-2f22ceddf33e) from Eric Elliott.
+-functions-vs-classes-2f22ceddf33e) from Eric Elliott who exposes a different point of view.
 
 ### Notable differences between the two ways of creating class
 
 As explained previously in the 'Old' way of creating classes, the base constructor is called by applying the base
-function on *this*. However, there is **no limitation on when the base constructor can be applied**. Actually, you can
-start leveraging the newly created instance even **before it was properly built**.
+function on *this*. However, there is **no limitation on when the base constructor can be applied**. Futhermore, it is
+**not even required to call it**.
+
+Actually, you can start leveraging the newly created instance even **before it was properly built**.
 
 <!-- How I learned from a crazy idea / Notable differences (Old way)
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -412,7 +419,7 @@ assert(() => b.b() === "B");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/t8ef1p5y/embed/js,result/"></script>
 
-That's something that has been enforced in ES6 since **it is not possible to use this before calling the
+It has been enforced in ES6 since **it is not possible to use *this* before calling the
 [super](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super) constructor**.
 
 <!-- How I learned from a crazy idea / Notable differences (ES6 way)
@@ -452,7 +459,8 @@ The result shows:
 ### Detecting an ES6 class constructor
 
 Since the library will have to deal with ES6, it needs **a safe way to detect such constructors**.
-Actually, this is done by **converting the function to string and by checking it contains the class keyword**.
+Actually, this can be done by **converting the function to string and by checking if it starts with the *class*
+keyword**.
 
 <!-- How I learned from a crazy idea / Detecting an ES6 class constructor
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -485,13 +493,14 @@ assert(() => isES6Constructor(Es6A));
 
 ## Subclassing an ES6 class in an 'old' class
 
-Now that we understand why it does not work, let's **try to find a way to make it work in the library**.
+The 'old' pattern does not work because the **ES6 constructor can't be applied like a normal function**.
+What can be done to create an 'old' class that would subclass an ES6 one?
 
 ### ConstructorOfB
 
-Let start by setting the right **expectations**, we will assume that:
+First, let set the right **context and expectations**:
 * *gpf.define* is used with a dictionary having the *$extend* property set to an ES6 class constructor
-* a *constructor* property is provided using the 'Old' JavaScript syntax
+* a *constructor* property points to a JavaScript function
 * *this.$super* is called to invoke the base constructor
 * *this.$super* must be called before any use of this or the construction should fail
 
@@ -540,8 +549,8 @@ assert(() => c._param2 === "test2");
 ### Attempt number 1
 
 Since it is possible to **build a function from a string source**, one option consists in generating a new ES6 class
-with the **constructor being filled from the content of constructorOfC**. In that case, we will obviously replace
-the use of this.$super with super.
+with the **constructor being filled from the content of constructorOfC**. As the constructor function is rewritten, we
+can replace the use of *this.$super* with *super*.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -593,22 +602,20 @@ assert(() => c._param2 === "test2");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/13/embed/js,result"></script>
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
-(...) ES6 template literal has been used to build the constructor string. This syntax would not be allowed in the
-library because it would
+(...) In the previous code, an ES6 template literal has been used to build the constructor string. This syntax would not
+be allowed in the library because it would not compile on older hosts.
 
 **It works !**
 
 But...
 
-You may notice that **we must pass the base class B while evaluating the dynamic function**. This is because the newly
-created function **does not have any context**. And this is the major drawback of this solution: If *constructorOfC* is
+You may notice that **we must pass the base class B while evaluating the dynamically created function**. This is because
+the new function **does not have any context**. And this is the major drawback of this solution: If *constructorOfC* is
 a closure with a specific context (for instance: accessing a global variable), **this context would be lost**.
 
 ### Attempt number 2
 
-Considering we must keep and call constructorOfC as-is, **let's try to see if we can call it directly**.
+Considering we must keep and call constructorOfC as-is, **what happens if we can call it directly ?**.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -657,13 +664,13 @@ assert(() => c._param2 === "test2");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/16/embed/js,result"></script>
 
-But as *this* is called **before** *super*, it fails with:
+As *this* is called **before** *super*, it fails with:
 `Uncaught ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor`
 
 ## Attempt number 3
 
-Let's try a different approach then. Since we must call *super* before using *this*, what happens if we call
-it first with no parameters. This implies that **the base class supports instanciation with no parameters**.
+Assuming that **the base class supports instanciation with no parameters**, since we must call *super* before using
+*this*, what happens if we call it first with no parameters ?
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -718,7 +725,10 @@ However, we come back to the error:
 
 ## Attempt number 4
 
-None of the previous attempts are working. Let's try to find a **different way to call the base ES6 constructor**.
+None of the previous attempts are working.
+
+The major blocker comes from the fact that **the ES6 constructor *must* be called with *new*.**
+Doing so would create a new instance of the base class but we wouldn't be able to transform it to an upper class.
 
 After doing some research on the web, the
 [Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect) object came to my
@@ -727,12 +737,20 @@ attention.
 In particular, the
 [construct method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/construct)
 acts like the new operator, but as a function. **It is equivalent to calling new target(...args)**.
-It gives also the added option to **specify a different prototype**.
+It also gives the added option to **specify a different prototype**.
 
-However, the method **returns a new instance: it can't be applied on an existing one**.
+So not only this helper **solves the problem of forwarding parameters during the construction** but it also allocates
+a **new object with the right prototype chain**.
+
+The method **returns a new instance: it can't be applied on an existing one**.
 
 So I got this idea of creating a **wrapper** that would expose the **same interface than a new instance of C** but would
-redirect all calls to the proper implementation.
+redirect all properties access to the right instance using [Object.defineProperties](https://developer.mozilla.org/
+en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties).
+On the wrapper, a *$super* method is added to call **Reflect.construct**.
+
+As the **real instance is not created unless this.$super has been called**, this validates that super must be called
+first.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -804,11 +822,12 @@ assert(() => c._param2 === "test2");
 
 But...
 
-The problem is that we must use [Object.defineProperties](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
-Reference/Global_Objects/Object/defineProperties) to **redirect calls being made on the wrapper to the instance**.
-In this example, it is easy because we already know the content of the object.
+The problem is that we must **redirect properties access being made on the wrapper to the instance**.
+In this example, it is easy because we already know the content of the object (and its constructors).
 
 In the library, we won't.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ## Attempt number 5
 
