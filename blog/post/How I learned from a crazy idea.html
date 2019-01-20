@@ -483,8 +483,6 @@ assert(() => isES6Constructor(Es6A));
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/prg4L5mk/embed/js,result"></script>
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ## Subclassing an ES6 class in an 'old' class
 
 Now that we understand why it does not work, let's **try to find a way to make it work in the library**.
@@ -492,12 +490,12 @@ Now that we understand why it does not work, let's **try to find a way to make i
 ### ConstructorOfB
 
 Let start by setting the right **expectations**, we will assume that:
-* gpf.define is used with a dictionary having the $extend property set to an ES6 class constructor
-* a constructor property is provided using the 'Old' JavaScript syntax
-* this.$super is called to invoke the base constructor
-* this.$super must be called before any use of this or the construction should fail
+* *gpf.define* is used with a dictionary having the *$extend* property set to an ES6 class constructor
+* a *constructor* property is provided using the 'Old' JavaScript syntax
+* *this.$super* is called to invoke the base constructor
+* *this.$super* must be called before any use of this or the construction should fail
 
-To validate the implementation, we will place it within the following statements:
+**To validate the implementation**, we will place it within the following statements:
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -539,64 +537,14 @@ assert(() => c._param2 === "test2");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/embed/js,result"></script>
 
-### Non-sense idea
-
-'convert' constructorOfC into a class definition and replace this.$super(...) with super(...)
-
-Could have worked *but* we loose the enclosed context of constructorOfC
-
 ### Attempt number 1
 
-class C extends B {
-    $super () {
-        super
-    }
-    constructor (param2) {
-        constructorOfC.apply(this, arguments)
-    }
-}
+Since it is possible to **build a function from a string source**, one option consists in generating a new ES6 class
+with the **constructor being filled from the content of constructorOfC**. In that case, we will obviously replace
+the use of this.$super with super.
 
-## Attempt number 2
-
-Since we can dynamically build a class, we could simply inject the content of the constructor in the class constructor.
-
-Pr
-
-## Attempt number 3
-
-Wait for $super to be evaluated, throw an exception and re-execute the constructor with the proper this
-
-## Attempt number 4
-
-Create a wrapper that
-
-function Ces6 () {
-  var that;
-  function $super() {
-    that = Reflect.construct(B, arguments, C)
-  }
-  var newC = Object.create(C.prototype);
-  newC.$super = $super;
-  Object.defineProperty(newC, "_c", {
-    get: function () {
-      return that._c
-    },
-    set: function (value) {
-      that._c = value
-    }
-  })
-  C.apply(newC, arguments);
-  return that;
-}
-
-
-
-
-## Attempt number 5
-
-The Proxy object
-
-window.onerror = e => alert(e)
+<!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
 
 class A {
   constructor () {
@@ -612,51 +560,330 @@ class B extends A {
   }
 }
 
-alert(B.toString())
-
+// This is the constructor that would be provided in the gpf.define dictionary
 function constructorOfC (param2) {
   this.$super("test")
   this._c = "C"
   this._param2 = param2
 }
 
-const C = (function () {
-  function C () {
-    let instance
-    const $super = function () {
-        instance = Reflect.construct(B, arguments, C)
+// We need a way to create a class C that inherits from B calling constructorOfC
+var C = new Function("B", `
+
+  return class C extends B {
+    constructor ${
+      /\((?:.|\n)*}$/.exec(constructorOfC)
+        .toString()
+        .replace("this.$super", "super")
     }
-    const proxy = new Proxy({}, {
-    	get: function (obj, property) {
-        if (property === '$super') {
-          return $super
-        }
-        return instance[property]
-      },
-      set: function (obj, property, value) {
-        instance[property] = value
-      }
-    })
-    constructorOfC.apply(proxy, arguments)
-    return instance
   }
-  C.prototype = Object.create(B.prototype)
-  return C
-}())
 
+`)(B);
+
+// Validation
 var c = new C("test2");
+assert(() => c instanceof A);
+assert(() => c._a === "A");
+assert(() => c instanceof B);
+assert(() => c._b === "B");
+assert(() => c._param === "test");
+assert(() => c instanceof C);
+assert(() => c._c === "C");
+assert(() => c._param2 === "test2");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/13/embed/js,result"></script>
 
-alert([
-  "OK",
-  "_a: " + c._a,
-  "is A: " + (c instanceof A),
-  "_b: " + c._b,
-  "is B: " + (c instanceof B),
-  "_c: " + c._c,
-  "is C: " + (c instanceof C),
-  "_param: " + c._param,
-  "_param2: " + c._param2
-].join("\n\t"))
+**It works !**
+
+But...
+
+You may notice that **we must pass the base class B while evaluating the dynamic function**. This is because the newly
+created function **does not have any context**. And this is the major drawback of this solution: If *constructorOfC* is
+a closure with a specific context (for instance: accessing a global variable), **this context would be lost**.
+
+### Attempt number 2
+
+Considering we must keep and call constructorOfC as-is, **let's try to see if we can call it directly**.
+
+<!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+
+class A {
+  constructor () {
+    this._a = "A"
+  }
+}
+
+class B extends A {
+  constructor (param) {
+    super()
+    this._b = "B"
+    this._param = param
+  }
+}
+
+// This is the constructor that would be provided in the gpf.define dictionary
+function constructorOfC (param2) {
+  this.$super("test")
+  this._c = "C"
+  this._param2 = param2
+}
+
+// We need a way to create a class C that inherits from B calling constructorOfC
+class C extends B {
+  $super () {
+    super.construtor();
+  }
+  constructor (param2) {
+    constructorOfC.apply(this, arguments);
+  }
+}
+
+// Validation
+var c = new C("test2");
+assert(() => c instanceof A);
+assert(() => c._a === "A");
+assert(() => c instanceof B);
+assert(() => c._b === "B");
+assert(() => c._param === "test");
+assert(() => c instanceof C);
+assert(() => c._c === "C");
+assert(() => c._param2 === "test2");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/16/embed/js,result"></script>
+
+But as *this* is called **before** *super*, it fails with:
+`Uncaught ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor`
+
+## Attempt number 3
+
+Let's try a different approach then. Since we must call *super* before using *this*, what happens if we call
+it first with no parameters. This implies that **the base class supports instanciation with no parameters**.
+
+<!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+
+class A {
+  constructor () {
+    this._a = "A"
+  }
+}
+
+class B extends A {
+  constructor (param) {
+    super()
+    this._b = "B"
+    this._param = param
+  }
+}
+
+// This is the constructor that would be provided in the gpf.define dictionary
+function constructorOfC (param2) {
+  this.$super("test")
+  this._c = "C"
+  this._param2 = param2
+}
+
+// We need a way to create a class C that inherits from B calling constructorOfC
+class C extends B {
+  $super () {
+    super.constructor.apply(this, arguments);
+  }
+  constructor (param2) {
+    super();
+    constructorOfC.apply(this, arguments);
+  }
+}
+
+// Validation
+var c = new C("test2");
+assert(() => c instanceof A);
+assert(() => c._a === "A");
+assert(() => c instanceof B);
+assert(() => c._b === "B");
+assert(() => c._param === "test");
+assert(() => c instanceof C);
+assert(() => c._c === "C");
+assert(() => c._param2 === "test2");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/19/embed/js,result"></script>
+
+However, we come back to the error:
+`Uncaught TypeError: Class constructor B cannot be invoked without 'new'`
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+
+## Attempt number 4
+
+None of the previous attempts are working. Let's try to find a **different way to call the base ES6 constructor**.
+
+After doing some research on the web, the
+[Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect) object came to my
+attention.
+
+In particular, the
+[construct method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/construct)
+acts like the new operator, but as a function. **It is equivalent to calling new target(...args)**.
+It gives also the added option to **specify a different prototype**.
+
+However, the method **returns a new instance: it can't be applied on an existing one**.
+
+So I got this idea of creating a **wrapper** that would expose the **same interface than a new instance of C** but would
+redirect all calls to the proper implementation.
+
+<!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+
+class A {
+  constructor () {
+    this._a = "A"
+  }
+}
+
+class B extends A {
+  constructor (param) {
+    super()
+    this._b = "B"
+    this._param = param
+  }
+}
+
+// This is the constructor that would be provided in the gpf.define dictionary
+function constructorOfC (param2) {
+  this.$super("test")
+  this._c = "C"
+  this._param2 = param2
+}
+
+// We need a way to create a class C that inherits from B calling constructorOfC
+function C () {
+  var newC;
+  function $super() {
+    newC = Reflect.construct(B, arguments, C);
+  }
+  var wrapper = Object.create(C.prototype);
+  wrapper.$super = $super;
+  Object.defineProperty(wrapper, "_c", {
+    get: function () {
+      return newC._c;
+    },
+    set: function (value) {
+      newC._c = value;
+    }
+  });
+  Object.defineProperty(wrapper, "_param2", {
+    get: function () {
+      return newC._param2;
+    },
+    set: function (value) {
+      newC._param2 = value;
+    }
+  });
+  constructorOfC.apply(wrapper, arguments);
+  return newC;
+}
+C.prototype = Object.create(B.prototype);
+
+// Validation
+var c = new C("test2");
+assert(() => c instanceof A);
+assert(() => c._a === "A");
+assert(() => c instanceof B);
+assert(() => c._b === "B");
+assert(() => c._param === "test");
+assert(() => c instanceof C);
+assert(() => c._c === "C");
+assert(() => c._param2 === "test2");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/27/embed/js,result"></script>
+
+**It works !**
+
+But...
+
+The problem is that we must use [Object.defineProperties](https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+Reference/Global_Objects/Object/defineProperties) to **redirect calls being made on the wrapper to the instance**.
+In this example, it is easy because we already know the content of the object.
+
+In the library, we won't.
+
+## Attempt number 5
+
+So I searched again on the web to find a way to define generic properties on the wrapper.
+The [Proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) can be
+used to define custom behavior for fundamental operations (like property lookup).
+
+<!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
+// https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
+
+class A {
+  constructor () {
+    this._a = "A"
+  }
+}
+
+class B extends A {
+  constructor (param) {
+    super()
+    this._b = "B"
+    this._param = param
+  }
+}
+
+// This is the constructor that would be provided in the gpf.define dictionary
+function constructorOfC (param2) {
+  this.$super("test")
+  this._c = "C"
+  this._param2 = param2
+}
+
+// We need a way to create a class C that inherits from B calling constructorOfC
+function C () {
+  let instance;
+  const $super = function () {
+    instance = Reflect.construct(B, arguments, C);
+  }
+  const proxy = new Proxy({}, {
+	  get: function (obj, property) {
+      if (property === '$super') {
+        return $super;
+      }
+      return instance[property];
+    },
+    set: function (obj, property, value) {
+      instance[property] = value;
+    }
+  });
+  constructorOfC.apply(proxy, arguments);
+  return instance;
+}
+C.prototype = Object.create(B.prototype);
+
+// Validation
+var c = new C("test2");
+assert(() => c instanceof A);
+assert(() => c._a === "A");
+assert(() => c instanceof B);
+assert(() => c._b === "B");
+assert(() => c._param === "test");
+assert(() => c instanceof C);
+assert(() => c._c === "C");
+assert(() => c._param2 === "test2");
+-->
+<script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/30/embed/js,result"></script>
+
+**It works !**
+
+And I didn't find any drawback yet.
+
+## Conclusion
+
+As useless as it may sound, the library will not support ES6 class. But besides this feature, this small experience
+introduced me to two objects which, at first sight, had no interest but that are really helpfull to solve the problems
+I faced.
+
+Regarding the support of this objects, they will be used only when an ES6 class is detected. To be able to use an ES6
+class you must be on a host that also support these two objects.
 
 </code>
 </div>
