@@ -26,7 +26,7 @@
 ## The idea
 
 I have **millions of ideas**: some are stupid *(and it's ok)* and some *may* be interesting.
-Sadly, for most of them, **time and resources are missing** to shape them properly.
+Sadly, for most of them, **time and resources are missing** to shape and mature them properly.
 Somehow, we all have to **choose our battles**.
 
 On rare occasions, **that crazy idea which doesn't make sense** comes up... and it would be really **cool to try** it.
@@ -70,7 +70,7 @@ The library even offers a [$super](https://gpf-js.blogspot.com/2017/02/my-own-su
 
 So far so good.
 
-But **what would happen if** one applies this helper with an ES6 class?
+But **what would happen if** one applies this API with an ES6 class?
 
 `const gpf = require("gpf-js");
 
@@ -96,7 +96,7 @@ The result is:
 `TypeError: Class constructor A cannot be invoked without 'new'`
 
 (...) Before going any further, it is important to check that your browser supports the ES6 syntax. If you are using
-Internet Explorer please switch to a different application.
+Internet Explorer please switch to a different one.
 
 [See it on runkit](https://runkit.com/arnaudbuchholz/5c3f75a55e78ac001246366b)
 
@@ -111,9 +111,10 @@ There are many ways to build a class and leverage
 **[prototype inheritance](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance)** in JavaScript
 but here is **the pattern used in GPF-JS**.
 
-A class is represented by its **constructor function**.
-Every function exposes the **prototype property**, an object which members will be inherited by all instances created
-with this function.
+First of all, a class is represented by its **constructor function**.
+Every [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions) object exposes a
+**prototype property**, an object which members will be **inherited by all instances** created
+with this function. This is why the class **members are added to the function prototype**.
 
 <!-- How I learned from a crazy idea / The 'old' way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -136,7 +137,11 @@ To create a subclass, **a new function is needed**.
 Calling the base constructor requires the **base function to be
 [applied](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)** on the
 newly created instance.
-The new prototype is initialized with an **object that 'inherits' from the base class prototype** thanks
+
+(...) As mentionned previously, The GPF-JS library facilitates calling the base class constructor using
+[this.$super()]([$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html).
+
+The new prototype is initialized with an **object that inherits from the base class prototype** thanks
 to [Object.create](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create).
 
 <!-- How I learned from a crazy idea / The 'old' way
@@ -171,9 +176,6 @@ assert(() => b instanceof OldB);
 assert(() => b.b() === "B");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/embed/js,result/"></script>
-
-As mentionned previously, The **GPF-JS library facilitates calling the base class using
-[this.$super()]([$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html)**.
 
 ### The ES6 way
 
@@ -233,7 +235,7 @@ assert(() => typeof Es6A.apply === "function");
 
 ### Subclassing an 'old' class in an ES6 class
 
-Good news, based on the previous examples, the following code **works smoothly**.
+Good news, the following code **works smoothly**.
 
 <!-- How I learned from a crazy idea / Subclassing an 'old' class in an ES6 class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -266,7 +268,7 @@ assert(() => b.b() === "B");
 
 ### Subclassing an ES6 class in an 'old' class
 
-So the code presented in the introduction almost **looks like the following snippet**.
+The code presented in the introduction almost **looks like the following snippet**.
 It obviously leads to the **same error**.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
@@ -305,7 +307,7 @@ assert(() => b.b() === "B");
 If you think about the old way of creating classes, this error fully makes sense.
 Indeed, in the old way, there is **no stntaxic difference between a normal function and a class constructor**.
 As a result, both could be either invoked or called with the
-[*new* keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new).
+[new  keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new).
 
 However, all JavaScript functions are not **constructors**.
 
@@ -547,6 +549,14 @@ assert(() => c._param2 === "test2");
 <script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/embed/js,result"></script>
 
 ### Attempt number 1
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
+
+Functions created with the Function constructor do not create closures to their creation contexts; they always are created in the global scope. When running them, they will only be able to access their own local variables and global ones, not the ones from the scope in which the Function constructor was created. This is different from using eval with code for a function expression.
+
 
 Since it is possible to **build a function from a string source**, one option consists in generating a new ES6 class
 with the **constructor being filled from the content of constructorOfC**. As the constructor function is rewritten, we
@@ -826,8 +836,6 @@ The problem is that we must **redirect properties access being made on the wrapp
 In this example, it is easy because we already know the content of the object (and its constructors).
 
 In the library, we won't.
-
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ## Attempt number 5
 
