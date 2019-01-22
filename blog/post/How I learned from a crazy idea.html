@@ -47,7 +47,7 @@ So far, it is a success since **a lot was learned from that experience**:
 * [My own BDD implementation](https://gpf-js.blogspot.com/2015/10/my-own-bdd-implementation.html)
 * And all the [release notes](https://github.com/ArnaudBuchholz/gpf-js/releases) of the library
 
-Today, I am working on a side project that requires **a backend to hold the data**. Obviously, the
+These days, I am working on a side project that requires **a backend to hold the data**. Obviously, the
 implementation started with NodeJS as it is good opportunity to push my **ES6 knowledge** a little bit further.
 
 The project reached the point where **some features of the GPF-JS library could be leveraged**.
@@ -108,13 +108,16 @@ Let see what can be **learned** from that.
 ### The 'old' way
 
 There are many ways to build a class and leverage
-**[prototype inheritance](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance)** in JavaScript
-but here is **the pattern used in GPF-JS**.
+**[prototype inheritance](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance)** in
+JavaScript. Here is **the pattern used in GPF-JS**.
 
 First of all, a class is represented by its **constructor function**.
+
 Every [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions) object exposes a
-**prototype property**, an object which members will be **inherited by all instances** created
-with this function. This is why the class **members are added to the function prototype**.
+**prototype property**, an object which members are **inherited by all instances** created
+with this function.
+
+This is why the class **members are added to the function prototype**.
 
 <!-- How I learned from a crazy idea / The 'old' way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -132,17 +135,20 @@ assert(() => a.a() === "A");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/8bhgLqt6/7/embed/js,result/"></script>
 
-To create a subclass, **a new function is needed**.
+To create a subclass, **a new constructor function is needed**.
 
-Calling the base constructor requires the **base function to be
-[applied](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)** on the
-newly created instance.
+The base constructor is called by **[applying](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+Global_Objects/Function/apply) the base function** on the newly created instance.
 
 (...) As mentionned previously, The GPF-JS library facilitates calling the base class constructor using
 [this.$super()]([$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html).
 
-The new prototype is initialized with an **object that inherits from the base class prototype** thanks
-to [Object.create](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create).
+On the other hand, the new function prototype is initialized with an **object that inherits from the base class
+prototype** using
+[Object.create](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create).
+
+As a consequence, all members of the base class will be inherited by the subclass. Also, instances will be recognized
+by the [instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) operator.
 
 <!-- How I learned from a crazy idea / The 'old' way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -268,7 +274,7 @@ assert(() => b.b() === "B");
 
 ### Subclassing an ES6 class in an 'old' class
 
-The code presented in the introduction almost **looks like the following snippet**.
+The code presented in the introduction almost **looks like the following example**.
 It obviously leads to the **same error**.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
@@ -305,13 +311,11 @@ assert(() => b.b() === "B");
 ## Class constructor cannot be invoked without 'new'
 
 If you think about the old way of creating classes, this error fully makes sense.
-Indeed, in the old way, there is **no stntaxic difference between a normal function and a class constructor**.
+Indeed, in the old way, there is **no syntaxic difference between a normal function and a class constructor**.
 As a result, both could be either invoked or called with the
 [new  keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new).
 
-However, all JavaScript functions are not **constructors**.
-
-Indeed, most **native methods** are secured:
+However, all JavaScript functions are not **constructors**. Indeed, most **native methods** are secured:
 
 <!-- How I learned from a crazy idea / all functions are not constructors
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -421,7 +425,7 @@ assert(() => b.b() === "B");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/t8ef1p5y/embed/js,result/"></script>
 
-It has been enforced in ES6 since **it is not possible to use *this* before calling the
+It has been enforced with ES6 as **it is not possible to use *this* before calling the
 [super](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super) constructor**.
 
 <!-- How I learned from a crazy idea / Notable differences (ES6 way)
@@ -460,8 +464,9 @@ The result shows:
 
 ### Detecting an ES6 class constructor
 
-Since the library will have to deal with ES6, it needs **a safe way to detect such constructors**.
-Actually, this can be done by **converting the function to string and by checking if it starts with the *class*
+If the library has to deal with ES6 classes, it needs **a safe way to detect such constructors**.
+
+Actually, this can easily be done by **converting the function to string and by checking if it starts with the *class*
 keyword**.
 
 <!-- How I learned from a crazy idea / Detecting an ES6 class constructor
@@ -504,7 +509,7 @@ First, let set the right **context and expectations**:
 * *gpf.define* is used with a dictionary having the *$extend* property set to an ES6 class constructor
 * a *constructor* property points to a JavaScript function
 * *this.$super* is called to invoke the base constructor
-* *this.$super* must be called before any use of this or the construction should fail
+* to respect the ES6 constraints, *this.$super* must be called before any use of this or the construction should fail
 
 **To validate the implementation**, we will place it within the following statements:
 
@@ -552,10 +557,20 @@ assert(() => c._param2 === "test2");
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
 
+The very first attempt exploits a trick that I mastered within the library.
 
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function
+It is possible to create JavaScript functions dynamically using the
+[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function) constructor.
 
-Functions created with the Function constructor do not create closures to their creation contexts; they always are created in the global scope. When running them, they will only be able to access their own local variables and global ones, not the ones from the scope in which the Function constructor was created. This is different from using eval with code for a function expression.
+It looks like an [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) but it
+is more secure since the created function has a restricted access to the current scope.
+
+
+As explained in MDN: *Functions created with the Function constructor do not create closures to their creation contexts;
+they always are created in the global scope. When running them, they will only be able to access their own local
+variables and global ones, not the ones from the scope in which the Function constructor was created.
+This is different from using eval with code for a function expression.*
+
 
 
 Since it is possible to **build a function from a string source**, one option consists in generating a new ES6 class
