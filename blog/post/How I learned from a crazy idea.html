@@ -639,11 +639,9 @@ everything is lost.
 
 This would probably work for some situations but, to keep its context, **we must execute *constructorOfC* as-is**.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+### Attempt number 2: Applying constructorOfC on this
 
-### Attempt number 2
-
-Considering we must keep and call constructorOfC as-is, **what happens if we can call it directly ?**.
+Considering we must keep and call *constructorOfC* as-is, **what happens if we can call it directly ?**.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -692,13 +690,17 @@ assert(() => c._param2 === "test2");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/16/embed/js,result"></script>
 
-As *this* is called **before** *super*, it fails with:
+But *this* is used **before** *super* is called. As a consequence, it fails with:
 `Uncaught ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor`
 
-## Attempt number 3
+## Attempt number 3: Building this
 
-Assuming that **the base class supports instanciation with no parameters**, since we must call *super* before using
-*this*, what happens if we call it first with no parameters ?
+**Assuming that the base class supports instanciation with no parameters** and because we must call *super* before using
+*this*, we start the constructor with a call to *super()* to initialize *this*.
+Then we apply *constructorOfC* on *this* and we make sure that** *this.$super* would call the constructor** again
+(through *super.constructor*).
+
+What will happen?
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -748,8 +750,12 @@ assert(() => c._param2 === "test2");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/19/embed/js,result"></script>
 
-However, we come back to the error:
+It throws the error:
 `Uncaught TypeError: Class constructor B cannot be invoked without 'new'`
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+
+Let stop a second to understand this error better.
 
 ## Attempt number 4
 
