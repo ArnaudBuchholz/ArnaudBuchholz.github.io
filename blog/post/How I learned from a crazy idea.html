@@ -799,6 +799,19 @@ An additional method of the wrapper, named *$super*, would call **Reflect.constr
 As the **real instance is not created unless this.$super has been called**, any call forward would fail and this
 validates that *super* must be called first.
 
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+
+One last problem remains. The whole purpose of this is to create a subclass which constructor will be invoked with new
+and that must return an instance of the proper class. Usually, when new is invoked with a constructor, the JS engine
+is responsible of allocating a new instance and it will invoke the constructor with this.
+
+In our case, Reflect.construct will allocate a new instance. How can we 'replace' the default allocated with the new one?
+
+We will use a feature of JavaScript that supports replacing the allocated object by a new one using the return statement
+at the end of the constructor code
+
+
+
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
 
@@ -869,18 +882,22 @@ assert(() => c._param2 === "test2");
 
 But...
 
-The problem is that **accessed properties must be redirected from the wrapper to the instance**.
+The problem is that **all the accessed properties must be redirected from the wrapper to the instance**.
 In this example, it is easy because the content of the object and its constructors is **already known**.
 
 In the library, it won't be true.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+## Attempt number 5: Shadowing the object
 
-## Attempt number 5
+Digging furter in the same [stackoverflow
+thread](https://stackoverflow.com/questions/30689817/es6-call-class-constructor-without-new-keyword), some proposed
+the use of **proxies** but for a different purpose.
 
-So I searched again on the web to find a way to define generic properties on the wrapper.
-The [Proxy object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) can be
-used to define custom behavior for fundamental operations (like property lookup).
+Checking the documentation again, I realized that the the **[Proxy
+object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)** can be
+used to define **custom behavior for fundamental operations**... like property lookup.
+
+This last piece of the information leaded to the **final solution below**.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -908,21 +925,22 @@ function constructorOfC (param2) {
 
 // We need a way to create a class C that inherits from B calling constructorOfC
 function C () {
-  let instance;
-  const $super = function () {
-    instance = Reflect.construct(B, arguments, C);
-  }
-  const proxy = new Proxy({}, {
-	  get: function (obj, property) {
-      if (property === '$super') {
-        return $super;
-      }
-      return instance[property];
+  var
+    instance,
+    $super = function () {
+      instance = Reflect.construct(B, arguments, C);
     },
-    set: function (obj, property, value) {
-      instance[property] = value;
-    }
-  });
+    proxy = new Proxy({}, {
+      get: function (obj, property) {
+        if (property === '$super') {
+          return $super;
+        }
+        return instance[property];
+      },
+      set: function (obj, property, value) {
+        instance[property] = value;
+      }
+    });
   constructorOfC.apply(proxy, arguments);
   return instance;
 }
@@ -939,16 +957,16 @@ assert(() => c instanceof C);
 assert(() => c._c === "C");
 assert(() => c._param2 === "test2");
 -->
-<script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/30/embed/js,result"></script>
+<script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/32/embed/js,result"></script>
 
 **It works !**
 
-And I didn't find any drawback yet.
+I didn't find any drawback yet *(but it is still under study)*.
 
 ## Conclusion
 
-As useless as it may sound, the library will not support ES6 class. But besides this feature, this small experience
-introduced me to two objects which, at first sight, had no interest but that are really helpfull to solve the problems
+As useless as it may sound, **the library will not support ES6 class**. But besides this feature, this small experience
+introduced me to new objects which, at first sight, had no interest but that are really helpfull to solve the problems
 I faced.
 
 Regarding the support of this objects, they will be used only when an ES6 class is detected. To be able to use an ES6
