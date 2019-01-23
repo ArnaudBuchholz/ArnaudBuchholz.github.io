@@ -553,29 +553,28 @@ assert(() => c._param2 === "test2");
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/zg70m9of/embed/js,result"></script>
 
-### Attempt number 1
+### Attempt number 1: The copycat
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+The very first attempt exploits a trick that I mastered while developing the library.
 
-The very first attempt exploits a trick that I mastered within the library.
-
-It is possible to create JavaScript functions dynamically using the
+It is possible to **create JavaScript functions dynamically** using the
 [Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function) constructor.
 
-It looks like an [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval) but it
-is more secure since the created function has a restricted access to the current scope.
-
+This is **detected as [an issue](https://eslint.org/docs/rules/no-new-func) by most linters** because
+it looks like an [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval).
+However it is more secure since the created function has a **restricted access to the current scope**.
 
 As explained in MDN: *Functions created with the Function constructor do not create closures to their creation contexts;
 they always are created in the global scope. When running them, they will only be able to access their own local
 variables and global ones, not the ones from the scope in which the Function constructor was created.
 This is different from using eval with code for a function expression.*
 
+This reduces the risk of conflicts with existing names.
+But, as a consequence, you need to **pass the values you want to access in the created fucntion**.
 
-
-Since it is possible to **build a function from a string source**, one option consists in generating a new ES6 class
-with the **constructor being filled from the content of constructorOfC**. As the constructor function is rewritten, we
-can replace the use of *this.$super* with *super*.
+To summarize, the first attempt consists in creating a **class factory** function where:
+* the constructor is a copy of *constructorOfC* with *this.$super* being replaced with *super*
+* the base class will be passed as a parameter
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -634,9 +633,13 @@ be allowed in the library because it would not compile on older hosts.
 
 But...
 
-You may notice that **we must pass the base class B while evaluating the dynamically created function**. This is because
-the new function **does not have any context**. And this is the major drawback of this solution: If *constructorOfC* is
-a closure with a specific context (for instance: accessing a global variable), **this context would be lost**.
+As explained previously, the class constructor that is created from the *constructorOfC* function code **does not keep
+the context of its source**. If *constructorOfC* is a **closure accessing names from its local scope**,
+everything is lost.
+
+This would probably work for some situations but, to keep its context, **we must execute *constructorOfC* as-is**.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
 
 ### Attempt number 2
 
