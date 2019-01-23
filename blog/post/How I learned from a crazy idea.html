@@ -788,6 +788,10 @@ a **new object with the right prototype chain**.
 
 However, the method **returns a new instance: it can't be applied on an existing one**.
 
+Provided the construction happens while executing the function *constuctorOfC*, we need to provide an initial value
+for *this* that supports the *$super* method. Then we need to 'substitute' it **after** the proper instance was
+allocated.
+
 Then came second *Aha* moment !
 
 Why not creating a **wrapper** that would expose the **same interface than a new instance of C** but would
@@ -809,8 +813,6 @@ In our case, Reflect.construct will allocate a new instance. How can we 'replace
 
 We will use a feature of JavaScript that supports replacing the allocated object by a new one using the return statement
 at the end of the constructor code
-
-
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
