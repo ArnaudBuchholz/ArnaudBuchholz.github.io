@@ -574,6 +574,7 @@ But, as a consequence, you need to **pass the values you want to access in the c
 
 To summarize, the first attempt consists in creating a **class factory** function where:
 * the constructor is a copy of *constructorOfC* with *this.$super* being replaced with *super*
+
 * the base class will be passed as a parameter
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
@@ -695,8 +696,10 @@ But *this* is used **before** *super* is called. As a consequence, it fails with
 
 ## Attempt number 3: Building this
 
-**Assuming that the base class supports instanciation with no parameters** and because we must call *super* before using
-*this*, we start the constructor with a call to *super()* to initialize *this*.
+Let consider the assumption that the **base class supports instanciation with no parameters**.
+
+Because we must call *super* before using *this*, we start the constructor with a call to *super()* to
+initialize *this*.
 Then we apply *constructorOfC* on *this* and we make sure that** *this.$super* would call the constructor** again
 (through *super.constructor*).
 
@@ -753,38 +756,48 @@ assert(() => c._param2 === "test2");
 It throws the error:
 `Uncaught TypeError: Class constructor B cannot be invoked without 'new'`
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+## Attempt number 4: A different way to invoke a constructor
 
-Let stop a second to understand this error better.
+So far, trying to **apply the base constructor on the newly created instance** appears to be a dead end.
+Indeed, the only way to call the base constructor is to use the *new* keyword.
 
-## Attempt number 4
+But doing so would create a new instance of the base class: it won't **inherit from the right prototype** and prevent
+subclassing.
 
-None of the previous attempts are working.
+Is it really the only way?
 
-The major blocker comes from the fact that **the ES6 constructor *must* be called with *new*.**
-Doing so would create a new instance of the base class but we wouldn't be able to transform it to an upper class.
+After doing some [research on the web](http://lmgtfy.com/?q=JavaScript+How+to+call+an+ES6+constructor), this particular
+[stackoverflow thread](https://stackoverflow.com/questions/30689817/es6-call-class-constructor-without-new-keyword) gave
+the answer.
 
-After doing some research on the web, the
-[Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect) object came to my
-attention.
+A comment from 2015 says:
 
-In particular, the
-[construct method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/construct)
+"*For subclassing Foo (...) with class Bar extends Foo ..., you should use return **Reflect.construct(_Foo, args,
+new.target)** instead (...). Subclassing in ES5 style (with Foo.call(this, ...)) is **not possible**.*"
+
+I got my first *Aha* moment ! And I immediately checked the [Reflect object
+documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect).
+
+In particular, the [Reflect.construct
+method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/construct)
 acts like the new operator, but as a function. **It is equivalent to calling new target(...args)**.
 It also gives the added option to **specify a different prototype**.
 
-So not only this helper **solves the problem of forwarding parameters during the construction** but it also allocates
+This helper not only **solves the problem of forwarding parameters during the construction** but it also allocates
 a **new object with the right prototype chain**.
 
-The method **returns a new instance: it can't be applied on an existing one**.
+However, the method **returns a new instance: it can't be applied on an existing one**.
 
-So I got this idea of creating a **wrapper** that would expose the **same interface than a new instance of C** but would
+Then came second *Aha* moment !
+
+Why not creating a **wrapper** that would expose the **same interface than a new instance of C** but would
 redirect all properties access to the right instance using [Object.defineProperties](https://developer.mozilla.org/
-en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties).
-On the wrapper, a *$super* method is added to call **Reflect.construct**.
+en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) ?
 
-As the **real instance is not created unless this.$super has been called**, this validates that super must be called
-first.
+An additional method of the wrapper, named *$super*, would call **Reflect.construct** to create the real instance.
+
+As the **real instance is not created unless this.$super has been called**, any call forward would fail and this
+validates that *super* must be called first.
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -856,10 +869,12 @@ assert(() => c._param2 === "test2");
 
 But...
 
-The problem is that we must **redirect properties access being made on the wrapper to the instance**.
-In this example, it is easy because we already know the content of the object (and its constructors).
+The problem is that **accessed properties must be redirected from the wrapper to the instance**.
+In this example, it is easy because the content of the object and its constructors is **already known**.
 
-In the library, we won't.
+In the library, it won't be true.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
 
 ## Attempt number 5
 
