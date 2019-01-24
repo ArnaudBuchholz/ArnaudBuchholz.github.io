@@ -17,7 +17,9 @@ window.addEventListener("load", function () {
         remove("a[name='todo']");
         remove("iframe[src^='http://jsfiddle']");
         remove("iframe[src^='https://jsfiddle']");
-        input.value = document.querySelector(".post-body").innerHTML.trim();
+        input.value = document.querySelector(".post-body").innerHTML
+            .trim()
+            .replace(/<!--(?:[^-]|-[^-]|--[^>])*-->/gm, "");
         input.select();
         document.execCommand("copy");
     });
