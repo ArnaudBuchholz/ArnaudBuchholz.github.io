@@ -27,7 +27,7 @@
 
 I have **millions of ideas**: some are stupid *(and it's ok)* and some *may* be interesting.
 Sadly, for most of them, **time and resources are missing** to shape and mature them properly.
-Somehow, we all have to **choose our battles**.
+Somehow, we must **choose our battles**.
 
 On rare occasions, **that crazy idea which doesn't make sense** comes up... and it would be really **cool to try** it.
 
@@ -96,7 +96,7 @@ The result is:
 `TypeError: Class constructor A cannot be invoked without 'new'`
 
 (...) Before going any further, it is important to check that your browser supports the ES6 syntax. If you are using
-Internet Explorer please switch to a different one.
+Internet Explorer, please switch to a different one.
 
 [See it on runkit](https://runkit.com/arnaudbuchholz/5c3f75a55e78ac001246366b)
 
@@ -111,13 +111,13 @@ There are many ways to build a class and leverage
 **[prototype inheritance](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance)** in
 JavaScript. Here is **the pattern used in GPF-JS**.
 
-First of all, a class is represented by its **constructor function**.
+First, a class is represented by its **constructor function**.
 
 Every [function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions) object exposes a
 **prototype property**, an object which members are **inherited by all instances** created
 with this function.
 
-This is why the class **members are added to the function prototype**.
+Therefore, the class **members are added to the function prototype**.
 
 <!-- How I learned from a crazy idea / The 'old' way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -140,14 +140,14 @@ To create a subclass, **a new constructor function is needed**.
 The base constructor is called by **[applying](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
 Global_Objects/Function/apply) the base function** on the newly created instance.
 
-(...) As mentionned previously, The GPF-JS library facilitates calling the base class constructor using
+(...) As mentioned previously, The GPF-JS library facilitates calling the base class constructor using
 [this.$super()]([$super](https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html).
 
 On the other hand, the new function prototype is initialized with an **object that inherits from the base class
 prototype** using
 [Object.create](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create).
 
-As a consequence, all members of the base class will be inherited by the subclass. Also, instances will be recognized
+Consequently, all members of the base class will be inherited by the subclass. Also, instances will be recognized
 by the [instanceof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof) operator.
 
 <!-- How I learned from a crazy idea / The 'old' way
@@ -186,7 +186,7 @@ assert(() => b.b() === "B");
 ### The ES6 way
 
 The [class keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/class) was introduced
-and the syntax is **self explanatory**.
+and the syntax is **self-explanatory**.
 
 <!-- How I learned from a crazy idea / The ES6 way
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -311,7 +311,7 @@ assert(() => b.b() === "B");
 ## Class constructor cannot be invoked without 'new'
 
 If you think about the old way of creating classes, this error fully makes sense.
-Indeed, in the old way, there is **no syntaxic difference between a normal function and a class constructor**.
+Indeed, in the old way, there is **no syntax difference between a normal function and a class constructor**.
 As a result, both could be either invoked or called with the
 [new  keyword](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new).
 
@@ -325,8 +325,8 @@ const instance = new substring();
 -->
 <script async src="//jsfiddle.net/ArnaudBuchholz/a96gfdm1/embed/js,result"></script>
 
-When it comes to the new syntax, **the intention of the developper** is to build a function that will be used to create
-instances. As a consequence, **the language doesn't expect this function to be invoked for a simple function call**.
+When it comes to the new syntax, **the intention of the developer** is to build a function that will be used to create
+instances. Therefore, **the language doesn't expect this function to be invoked for a simple function call**.
 
 ### Reproduce the behavior in the 'old' way
 
@@ -391,10 +391,10 @@ Constructor Functions vs Classes](https://medium.com/javascript-scene/javascript
 ### Notable differences between the two ways of creating class
 
 As explained previously in the 'Old' way of creating classes, the base constructor is called by applying the base
-function on *this*. However, there is **no limitation on when the base constructor can be applied**. Futhermore, it is
+function on *this*. However, there is **no limitation on when the base constructor can be applied**. Furthermore, it is
 **not even required to call it**.
 
-Actually, you can start leveraging the newly created instance even **before it was properly built**.
+As a matter of fact, you can start leveraging the newly created instance even **before it was properly built**.
 
 <!-- How I learned from a crazy idea / Notable differences (Old way)
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -566,7 +566,7 @@ It is possible to **create JavaScript functions dynamically** using the
 
 This is **detected as [an issue](https://eslint.org/docs/rules/no-new-func) by most linters** because
 it looks like an [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval).
-However it is more secure since the created function has a **restricted access to the current scope**.
+However, it is more secure since the created function has a **restricted access to the current scope**.
 
 As explained in MDN: *Functions created with the Function constructor do not create closures to their creation contexts;
 they always are created in the global scope. When running them, they will only be able to access their own local
@@ -574,7 +574,7 @@ variables and global ones, not the ones from the scope in which the Function con
 This is different from using eval with code for a function expression.*
 
 This reduces the risk of conflicts with existing names.
-But, as a consequence, you need to **pass the values you want to access in the created fucntion**.
+But, in consequence, you need to **pass the values you want to access in the created function**.
 
 To summarize, the first attempt consists in creating a **class factory** function where:
 * the constructor is a copy of *constructorOfC* with *this.$super* being replaced with *super*
@@ -700,7 +700,7 @@ But *this* is used **before** *super* is called. As a consequence, it fails with
 
 ## Attempt number 3: Building this
 
-Let consider the assumption that the **base class supports instanciation with no parameters**.
+Let consider the assumption that the **base class supports instantiation with no parameters**.
 
 Because we must call *super* before using *this*, we start the constructor with a call to *super()* to
 initialize *this*.
@@ -760,13 +760,16 @@ assert(() => c._param2 === "test2");
 It throws the error:
 `Uncaught TypeError: Class constructor B cannot be invoked without 'new'`
 
-## Attempt number 4: A different way to invoke a constructor
+## Attempt number 4: An unusual way to invoke a constructor
 
 So far, trying to **apply the base constructor on the newly created instance** appears to be a dead end.
 Indeed, the only way to call the base constructor is to use the *new* keyword.
 
-But doing so would create a new instance of the base class: it won't **inherit from the right prototype** and prevent
-subclassing.
+But doing so would create a new instance of the base class: it won't **be chained to the right prototype**.
+This prevents subclassing.
+
+(...) One ugly hack would consist in switching the base constructor function's prototype value before calling *new* and
+restore it after.
 
 Is it really the only way?
 
@@ -787,42 +790,53 @@ method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global
 acts like the new operator, but as a function. **It is equivalent to calling new target(...args)**.
 It also gives the added option to **specify a different prototype**.
 
-This helper not only **solves the problem of forwarding parameters during the construction** but it also allocates
+This helper not only **solves the problem of calling the base class constructor**, but it also allocates
 a **new object with the right prototype chain**.
 
 However, the method **returns a new instance: it can't be applied on an existing one**.
 
 Considering the construction will happen while executing the function *constuctorOfC*, we need to provide an initial
-value for *this* that supports the *$super* method. Then we need to 'substitute' it **after** the proper instance was
+value for *this* that supports the *$super* method. Then we need to 'substitute' it **after** the final instance was
 allocated.
 
 Then came second *Aha* moment !
 
 Why not creating a **wrapper** that would expose the **same interface than a new instance of C** but would
-redirect all properties access to the right instance using [Object.defineProperties](https://developer.mozilla.org/
-en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) ?
+redirect all properties access to the instance created with *Reflect.construct* using
+[Object.defineProperties](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/
+defineProperties) ?
 
-An additional method of the wrapper, named *$super*, would call **Reflect.construct** to create the real instance.
+An additional method of the wrapper, named *$super*, would call **Reflect.construct** to create the final instance.
 
-As the **real instance is not created unless this.$super has been called**, any call forward would fail and it
+As the **final instance is not created unless this.$super has been called**, any call forward would fail. It
 validates that *super* must be called first.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+One last problem remains.
 
-One last problem remains. The whole purpose is to create a subclass which constructor will be invoked with *new*
-and that must return an instance of the proper class. Usually, when *new* is invoked with a constructor, the JavaScript
-engine is responsible of allocating the new instance and it invokes the constructor with it.
+The whole purpose is to create a subclass which constructor will be invoked with *new*
+and that **must return an instance of the proper class**. By default, when *new* is invoked with a constructor, the
+JavaScript engine is responsible of allocating the new instance and it invokes the constructor with it.
+The result of the new expression is this initially allocated instance.
 
-In our case, *Reflect.construct* will allocate another instance that **must be the result of the construction**.
+In our case, *Reflect.construct* will create another instance that **must be the result of the new expression**.
 
-We will use a feature of JavaScript that supports replacing the allocated object by a new one using the
+Luckily, JavaScript supports replacing the allocated object by another one **using the
 [return statement](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return)
-at the end of the constructor code.
+at the end of the constructor code**.
 
-This is described in the
+This behavior is described in the
 [new operator documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new): *The
 object (not null, false, 3.1415 or other primitive types) returned by the constructor function becomes the result of the
 whole new expression.*
+
+
+(...) This is how [singletons](https://en.wikipedia.org/wiki/Singleton_pattern) are implemented in GPF-JS.
+
+To summarize:
+* Reflect.construct builds an instance of C initialized with constructor of B
+* The initial value of *this* is ignored, a wrapper is used to invoke *constructorOfC*
+
+* The final instance is returned at the end of the class constructor
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
@@ -901,11 +915,11 @@ In the library, it won't be true.
 
 ## Attempt number 5: Shadowing the object
 
-Digging furter in the same [stackoverflow
+Digging further in the same [stackoverflow
 thread](https://stackoverflow.com/questions/30689817/es6-call-class-constructor-without-new-keyword), some proposed
 the use of **proxies** but for a different purpose.
 
-Checking the documentation again, I realized that the the **[Proxy
+Checking the documentation again, I realized that the **[Proxy
 object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)** can be
 used to define **custom behavior for fundamental operations**... like property lookup.
 
@@ -977,12 +991,14 @@ I didn't find any drawback yet *(but it is still under study)*.
 
 ## Conclusion
 
-As useless as it may sound, **the library will not support ES6 class**. But besides this feature, this small experience
-introduced me to new objects which, at first sight, had no interest but that are really helpfull to solve the problems
-I faced.
+As useless as it may sound, **the library will now support ES6 classes**. But besides this feature, this small
+experience (or should I say challenge) **introduced me to new JavaScript objects** which, at first sight,
+had no interest but that are really helpful to solve the problems I faced.
 
-Regarding the support of this objects, they will be used only when an ES6 class is detected. To be able to use an ES6
-class you must be on a host that also support these two objects.
+Regarding the support of the
+[Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)
+[Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
+objects, they will be used only when an ES6 class is detected.
 
 </code>
 </div>
