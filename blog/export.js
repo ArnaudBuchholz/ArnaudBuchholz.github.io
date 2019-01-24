@@ -8,14 +8,15 @@ window.addEventListener("load", function () {
     var input = document.body.appendChild(document.createElement("textarea"));
     // input.className = "hidden";
     function remove (selector) {
-        var node = document.querySelector(selector);
-        if (node) {
+        [].slice.call(document.querySelectorAll(selector)).forEach(function (node) {
             node.parentNode.removeChild(node);
-        }
+        });
     }
     button.addEventListener("click", function () {
         remove("a[href='#todo']");
         remove("a[name='todo']");
+        remove("iframe[src^='http://jsfiddle']");
+        remove("iframe[src^='https://jsfiddle']");
         input.value = document.querySelector(".post-body").innerHTML.trim();
         input.select();
         document.execCommand("copy");
