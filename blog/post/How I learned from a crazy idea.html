@@ -379,6 +379,10 @@ instance of OldA**.
 (...) This behavior is already
 [implemented](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.8/src/define/class/constructor.js#L59) in GPF-JS.
 
+(...) A simpler alternative consists in using
+[new.target](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new.target) but it was defined
+in ECMAScript 2015.
+
 (...) Again, there were many ways to create classes before the introduction of the class keyword. Some may disagree with
 the use of instanceof. To be fair and complete, I invite you to check the article [JavaScript Factory Functions vs
 Constructor Functions vs Classes](https://medium.com/javascript-scene/javascript-factory-functions-vs-constructor
@@ -788,8 +792,8 @@ a **new object with the right prototype chain**.
 
 However, the method **returns a new instance: it can't be applied on an existing one**.
 
-Provided the construction happens while executing the function *constuctorOfC*, we need to provide an initial value
-for *this* that supports the *$super* method. Then we need to 'substitute' it **after** the proper instance was
+Considering the construction will happen while executing the function *constuctorOfC*, we need to provide an initial
+value for *this* that supports the *$super* method. Then we need to 'substitute' it **after** the proper instance was
 allocated.
 
 Then came second *Aha* moment !
@@ -800,19 +804,25 @@ en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) ?
 
 An additional method of the wrapper, named *$super*, would call **Reflect.construct** to create the real instance.
 
-As the **real instance is not created unless this.$super has been called**, any call forward would fail and this
+As the **real instance is not created unless this.$super has been called**, any call forward would fail and it
 validates that *super* must be called first.
 
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
 
-One last problem remains. The whole purpose of this is to create a subclass which constructor will be invoked with new
-and that must return an instance of the proper class. Usually, when new is invoked with a constructor, the JS engine
-is responsible of allocating a new instance and it will invoke the constructor with this.
+One last problem remains. The whole purpose is to create a subclass which constructor will be invoked with *new*
+and that must return an instance of the proper class. Usually, when *new* is invoked with a constructor, the JavaScript
+engine is responsible of allocating the new instance and it invokes the constructor with it.
 
-In our case, Reflect.construct will allocate a new instance. How can we 'replace' the default allocated with the new one?
+In our case, *Reflect.construct* will allocate another instance that **must be the result of the construction**.
 
-We will use a feature of JavaScript that supports replacing the allocated object by a new one using the return statement
-at the end of the constructor code
+We will use a feature of JavaScript that supports replacing the allocated object by a new one using the
+[return statement](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return)
+at the end of the constructor code.
+
+This is described in the
+[new operator documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new): *The
+object (not null, false, 3.1415 or other primitive types) returned by the constructor function becomes the result of the
+whole new expression.*
 
 <!-- How I learned from a crazy idea / Subclassing an ES6 class in an 'old' class
 // https://arnaudbuchholz.github.io/blog/jsfiddle-assert.js
