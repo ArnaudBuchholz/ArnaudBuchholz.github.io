@@ -46,16 +46,135 @@
 				<section>
 					<section>
 						<h3>What the <strong>...</strong> ?</h3>
+						<q class="fragment">motivation</q>
+					</section>
+					<section>
+						<img src="../gpf/gpf_320x200.svg" style="margin: 0; border: 0; box-shadow: unset;" />
+						<ul>
+							<li>A <strong>multi-purpose</strong> JavaScript <strong>library</strong></li>
+							<li>A <strong>common scripting layer</strong> for several hosts <small>(cscript/wscript, NodeJS, Rhino, Nashorn, PhantomJS, most recent browsers)</small></li>
+							<li><strong>Growing</strong> list of features<small>Class system, Interface based, Asynchronous streams, Modularization helper, Attributes...</small></li>
+							<li>Fully <strong>tested</strong> and <strong>documented</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h4>Creating a class</h4>
+						<pre><code>var B = gpf.define({
+	$class: "B",
+	$extend: A,
+	constructor: function () {
+	  this.$super();
+	  this._b = "B";
+	}
+});</pre></code>
+						<small>
+							<a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html">Entity definition</a><br />
+							<a href="https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html">My own super implementation</a>
+						</small>
+					</section>
+					<section>
+						<h4>Subclassing an ES6 class</h4>
+						<pre><code>const gpf = require("gpf-js");
+class A {
+  constructor () {
+    this._a = "A";
+  }
+}
+const B = gpf.define({
+	$class: "B",
+	$extend: A,
+	constructor: function () {
+	  this.$super();
+	  this._b = "B";
+	}
+});</pre></code>
+					</section>
+					<section>
+						<pre><code>TypeError: Class constructor A cannot be invoked without 'new'</code></pre>
+						<small>See it on <a href="https://runkit.com/arnaudbuchholz/5c3f75a55e78ac001246366b">runkit</a></small>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h3>JavaScript <strong>classes</strong></h3>
 					</section>
+					<section>
+						<h4>The <strong>'old'</strong> way</h4>
+						<small>There are <strong>many patterns</strong>, this is the one used in <strong>GPF-JS</strong></small>
+						<div class="split" style="width: 100%;">
+							<div class="left">
+								<h5>Declaration</h5>
+								<pre><code>function OldA () {
+  this._a = "A";
+}
+
+OldA.prototype.a = function () {
+  return this._a;
+};</pre></code>
+							</div>
+							<div class="right">
+								<h5>Subclassing</h5>
+								<pre><code>function OldB () {
+  OldA.apply(this, arguments);
+  this._b = "B";
+}
+
+OldB.prototype =
+	Object.create(OldA.prototype);
+
+OldB.prototype.b = function () {
+  return this._b;
+};</pre></code>
+							</div>
+						</div>
+					</section>
+					<section>
+						<h4>The <strong>ES6</strong> way</h4>
+						<div class="split" style="width: 100%;">
+							<div class="left">
+								<h5>Declaration</h5>
+								<pre><code>class Es6A {
+	constructor () {
+    this._a = "A";
+  }
+
+  a () {
+    return this._a;
+  }
+};</pre></code>
+							</div>
+							<div class="right">
+								<h5>Subclassing</h5>
+								<pre><code>class Es6B extends Es6A {
+  constructor () {
+    super();
+    this._b = "B";
+  }
+
+  b () {
+    return this._b;
+  }
+}</pre></code>
+							</div>
+						</div>
+					</section>
+					<section>
+						<h4><strong>Subclassing</strong> an Old class with ES6</h4>
+								<pre><code>class ExtendOldWithEs6B extends OldA {
+    constructor () {
+      super();
+      this._b = "B";
+    }
+
+    b () {
+      return this._b;
+    }
+}</pre></code>
+					</section>
 				</section>
 				<section>
 					<section>
-						<h3><strong>Combining</strong> classes</h3>
+						<h3><strong>Subclassing</strong> an ES6 class</h3>
 					</section>
 				</section>
 				<section>
