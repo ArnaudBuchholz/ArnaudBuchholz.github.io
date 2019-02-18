@@ -379,6 +379,32 @@ or returning from derived constructor</code></pre>
 					<section>
 						<h4><b>Attempt #5</b>: <strong>Shadowing</strong>  the object</h4>
 					</section>
+					<section>
+						<p>In the same StackOverflow thread, some proposed the use of <strong>proxies</strong> but for a different purpose.</p>
+						<p>With the help of the <strong>Proxy</strong> object, one can <strong>hook and override properties lookup</strong>.</p>
+					</section>
+					<section>
+						<pre><code>function C () {
+  var instance,
+    $super = function () {
+      instance = Reflect.construct(B, arguments, C);
+    },
+    proxy = new Proxy({}, {
+      get: function (obj, property) {
+        if (property === '$super') { return $super; }
+        return instance[property];
+      },
+      set: function (obj, property, value) {
+        instance[property] = value;
+      } });
+  constructorOfC.apply(proxy, arguments);
+  return instance;
+}</code></pre>
+						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/32/embedded">JSFiddle</a>
+					</section>
+					<section>
+						<h4>It <strong>works</strong> !</h4>
+					</section>
 				</section>
 				<section>
 					<h3>Key <strong>Take-Aways</strong></h3>
