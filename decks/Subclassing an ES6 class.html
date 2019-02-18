@@ -38,7 +38,7 @@
 							</li>
               <li>
 								<a href="http://gpf-js.blogspot.com/">JavaScript &amp; Development</a><br />
-								<small>A <strong>blog</strong> documenting the <strong>library development</strong> and my <strong>discoveries</strong></small>
+								<small>A <strong>blog</strong> documenting the <strong>library development</strong> and related <strong>discoveries</strong></small>
 							</li>
 						</ul>
 					</section>
@@ -58,7 +58,7 @@
 						</ul>
 					</section>
 					<section>
-						<h4>Creating a class</h4>
+						<h4>Creating a class the <strong>GPF-JS</strong> way</h4>
 						<pre><code>var B = gpf.define({
 	$class: "B",
 	$extend: A,
@@ -68,8 +68,8 @@
 	}
 });</pre></code>
 						<small>
-							<a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html">Entity definition</a><br />
-							<a href="https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html">My own super implementation</a>
+							<a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html">Documentation: Entity definition</a><br />
+							<a href="https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html">Article: My own super implementation</a>
 						</small>
 					</section>
 					<section>
@@ -161,15 +161,43 @@ OldB.prototype.b = function () {
 					<section>
 						<h4><strong>Subclassing</strong> an Old class with ES6</h4>
 								<pre><code>class ExtendOldWithEs6B extends OldA {
-    constructor () {
-      super();
-      this._b = "B";
-    }
+  constructor () {
+    super();
+    this._b = "B";
+  }
 
-    b () {
-      return this._b;
-    }
+  b () {
+    return this._b;
+  }
 }</pre></code>
+						<small>Works <strong>smoothly</strong></small>
+					</section>
+					<section>
+						<h4><strong>Subclassing</strong> an ES6 class the old way</h4>
+								<pre><code>function ExtendEs6WithOldB () {
+  Es6A.apply(this, arguments);
+  this._b = "B";
+}
+
+ExtendEs6WithOldB.prototype = Object.create(Es6A.prototype);
+
+ExtendEs6WithOldB.prototype.b = function () {
+  return this._b;
+};</pre></code>
+						<small><strong>Fails</strong></small>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Class <strong>constructor</strong> cannot be <strong>invoked</strong> without 'new'</h3>
+					</section>
+					<section>
+						<ul>
+							<li>In the old way, all functions could be constructors</li>
+							<li>With ES6 classes, the class is a constructor</li>
+							<li>You can't access this before calling the parent constructor</li>
+							<li>You can detect an ES6 constructor</li>
+						</ul>
 					</section>
 				</section>
 				<section>
