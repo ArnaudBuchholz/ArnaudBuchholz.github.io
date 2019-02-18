@@ -59,21 +59,22 @@
 					</section>
 					<section>
 						<h4>Creating a class the <strong>GPF-JS</strong> way</h4>
-						<pre><code>var B = gpf.define({
+						<pre><code>// A is an existing JavaScript class, gpf is loaded
+var B = gpf.define({
 	$class: "B",
 	$extend: A,
 	constructor: function () {
 	  this.$super();
 	  this._b = "B";
 	}
-});</pre></code>
+});</code></pre>
 						<small>
 							<a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html">Documentation: Entity definition</a><br />
 							<a href="https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html">Article: My own super implementation</a>
 						</small>
 					</section>
 					<section>
-						<h4>Subclassing an ES6 class</h4>
+						<h4>Subclassing an <strong>ES6 class</strong></h4>
 						<pre><code>const gpf = require("gpf-js");
 class A {
   constructor () {
@@ -87,7 +88,7 @@ const B = gpf.define({
 	  this.$super();
 	  this._b = "B";
 	}
-});</pre></code>
+});</code></pre>
 					</section>
 					<section>
 						<pre><code>TypeError: Class constructor A cannot be invoked without 'new'</code></pre>
@@ -110,7 +111,7 @@ const B = gpf.define({
 
 OldA.prototype.a = function () {
   return this._a;
-};</pre></code>
+};</code></pre>
 							</div>
 							<div class="right">
 								<h5>Subclassing</h5>
@@ -124,7 +125,7 @@ OldB.prototype =
 
 OldB.prototype.b = function () {
   return this._b;
-};</pre></code>
+};</code></pre>
 							</div>
 						</div>
 					</section>
@@ -141,7 +142,7 @@ OldB.prototype.b = function () {
   a () {
     return this._a;
   }
-};</pre></code>
+};</code></pre>
 							</div>
 							<div class="right">
 								<h5>Subclassing</h5>
@@ -154,7 +155,7 @@ OldB.prototype.b = function () {
   b () {
     return this._b;
   }
-}</pre></code>
+}</code></pre>
 							</div>
 						</div>
 					</section>
@@ -169,7 +170,7 @@ OldB.prototype.b = function () {
   b () {
     return this._b;
   }
-}</pre></code>
+}</code></pre>
 						<small>Works <strong>smoothly</strong></small>
 					</section>
 					<section>
@@ -183,7 +184,7 @@ ExtendEs6WithOldB.prototype = Object.create(Es6A.prototype);
 
 ExtendEs6WithOldB.prototype.b = function () {
   return this._b;
-};</pre></code>
+};</code></pre>
 						<small><strong>Fails</strong></small>
 					</section>
 				</section>
@@ -193,26 +194,200 @@ ExtendEs6WithOldB.prototype.b = function () {
 					</section>
 					<section>
 						<ul>
-							<li>In the old way, all functions could be constructors</li>
-							<li>With ES6 classes, the class is a constructor</li>
-							<li>You can't access this before calling the parent constructor</li>
-							<li>You can detect an ES6 constructor</li>
+							<li>Any<sup>*</sup> <strong>function</strong> may be a constructor
+								<small><ul>
+									<li>Syntax is <strong>not</strong> enforced</li>
+									<li><code>this</code> can be accessed <strong>without</strong> calling the parent constructor</li>
+									<li>One may <strong>replace</strong> the allocated object</li>
+								</ul></small>
+							</li>
+							<li>An ES6 class <strong>declares</strong> a constructor
+								<small><ul>
+									<li>Syntax <strong>is</strong> enforced</li>
+									<li><code>this</code> can't be accessed <strong>before</strong> calling the parent constructor</li>
+								</ul></small>
+							</li>
+							<li>ES6 constructor can be <strong>detected</strong></li>
 						</ul>
+						<p />
+						<small><sup>*</sup><strong>Native</strong> functions can't be used with new</small>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h3><strong>Subclassing</strong> an ES6 class</h3>
 					</section>
+					<section>
+						<h4>Context and <strong>expectations</strong></h4>
+						<ul>
+							<li>a <strong>constructor function</strong> initializes the new class instance</li>
+							<li><code>this.$super</code> <strong>invokes</strong> the base constructor</li>
+							<li><code>this.$super</code> <strong>must</strong> be called <strong>before</strong> any use of <code>this</code> or the construction should <strong>fail</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h4>Validation</h4>
+						<pre><code>class A {
+  constructor () { this._a = "A" }
+}
+class B extends A {
+  constructor (param) {
+    super()
+    this._b = "B"
+    this._param = param
+  }
+}
+function constructorOfC (param2) {
+  this.$super("test")
+  this._c = "C"
+  this._param2 = param2
+}</code></pre>
+						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/embedded">JSFiddle</a>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4><b>Attempt #1</b>: The <strong>copycat</strong></h4>
+					</section>
+					<section>
+						<ul>
+							<li><strong>Build</strong> a new class where the constructor function content is a <strong>copy</strong> of <code>constructorOfC</code></li>
+							<li><code>this.$super</code> is <strong>replaced</strong> with <code>super</code>
+								<p/>
+							</li>
+							<li>The result is <strong>evaluated</strong> with a <code>new Function</code>
+								<ul>
+									<li>The base class is passed as a <strong>parameter</strong></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<pre><code>var C = new Function("B", `
+
+  return class C extends B {
+    constructor ${
+      /\((?:.|\n)*}$/.exec(constructorOfC)
+        .toString()
+        .replace("this.$super", "super")
+    }
+  }
+
+`)(B);</code></pre>
+						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/13/embedded">JSFiddle</a>
+					</section>
+					<section>
+						<h4>It works, <strong>but</strong>...</h4>
+						<p class="fragment">The context of <code>constructorOfC</code> is <strong>lost</strong></p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4><b>Attempt #2</b>: <strong>Applying</strong> constructorOfC on <code>this</code></h4>
+					</section>
+					<section>
+						<p>Considering we must keep and call <code>constructorOfC</code> <strong>as-is</strong>,
+							what happens if we invoke it <strong>directly</strong> ?</p>
+					</section>
+					<section>
+						<pre><code>class C extends B {
+  $super () {
+    super.construtor();
+  }
+  constructor (param2) {
+    constructorOfC.apply(this, arguments);
+  }
+}</code></pre>
+						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/16/embedded">JSFiddle</a>
+					</section>
+					<section>
+						<pre><code>Must call super constructor in derived class before accessing 'this'
+or returning from derived constructor</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4><b>Attempt #3</b>: <strong>Building</strong> <code>this</code></h4>
+					</section>
+					<section>
+						<p>Assuming that the base class supports instantiation with <strong>no parameters</strong>,
+							we <strong>initialize</strong> <code>this</code> and invoke <code>constructorOfC</code>.<conde>
+					</section>
+					<section>
+						<pre><code>class C extends B {
+  $super () {
+    super.constructor.apply(this, arguments);
+  }
+  constructor (param2) {
+    super();
+    constructorOfC.apply(this, arguments);
+  }
+}</code></pre>
+						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/19/embedded">JSFiddle</a>
+					</section>
+					<section>
+						<pre><code>Class constructor B cannot be invoked without 'new'</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4><b>Attempt #4</b>: An <strong>unusual</strong> way to invoke a constructor</h4>
+					</section>
+					<section>
+						<p>Applying the base constructor on the newly created instance appears to be a <strong>dead end.</strong></p>
+						<p>The <strong>only way</strong> to call the base constructor is to use the <code>new</code> keyword.<p>
+						<small>But doing so would create a new instance of the base class: it won't be <strong>chained</strong> to the right prototype. This <strong>prevents</strong> subclassing.</small>
+					</section>
+					<section>
+						<h5><strong>StackOverflow</strong> to the rescue</h5>
+						<a href="https://stackoverflow.com/questions/30689817/es6-call-class-constructor-without-new-keyword">ES6: call class constructor without new keyword</a>
+						<q>For subclassing Foo (...) with class Bar extends Foo ..., you should use return <strong>Reflect.construct(_Foo, args, new.target)</strong> instead (...). Subclassing in ES5 style (with Foo.call(this, ...)) is not possible.</q>
+						<br /><cite>A comment from 2015</cite>
+					</section>
+					<section>
+						<h5>The idea</h5>
+						<ul>
+							<li><code>Reflect.construct</code> can invoke the base constructor <strong>and</strong> chain the prototype</li>
+							<li><code>this.$super</code> <strong>must</strong> trigger <code>Reflect.construct</code></li>
+							<li>However, this generates a <strong>new object</strong></li>
+							<li>A function constructor may <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new#Description">return</a> a <strong>different result</strong></li>
+						</ul>
+						<p class="fragment">Let's create a <strong>wrapper</strong></p>
+					</section>
+					<section>
+						<pre><code>function C () {
+  var newC;
+  function $super() { newC = Reflect.construct(B, arguments, C); }
+  var wrapper = Object.create(C.prototype);
+  wrapper.$super = $super;
+  Object.defineProperty(wrapper, "_c", {
+    get: function () { return newC._c; },
+    set: function (value) { newC._c = value; }
+  });
+  /*...defineProperty for _param2...*/
+  constructorOfC.apply(wrapper, arguments);
+  return newC;
+}</code></pre>
+						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/27/embedded">JSFiddle</a>
+					</section>
+					<section>
+						<h4>It works, <strong>but</strong>...</h4>
+						<p class="fragment">Every accessed property <strong>must be redirected</strong> from the wrapper to the instance</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h4><b>Attempt #5</b>: <strong>Shadowing</strong>  the object</h4>
+					</section>
 				</section>
 				<section>
 					<h3>Key <strong>Take-Aways</strong></h3>
 					<ul>
-            <li>Experimenting is <strong>fun</strong> and leads to <strong>new ideas</strong></li>
-<!--
-						<li><strong>OpenUI5</strong> is a <strong>enterprise-grade</strong> and <strong>evolving</strong> UI framework</li>
-						<li><strong>jsdom</strong> simulates browser <strong>inside</strong> NodeJS</li>
--->
+						<li><a href="http://gpf-js.blogspot.com/2019/01/how-i-learned-from-crazy-idea.html">How I learned from a crazy idea</a></code>
+						<li><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/b44dad860b61615179cfa5ecf477e20aa745f9c6/src/define/class/constructor.js#L59">GPF-JS implementation</a></code>
+						<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect">Reflect</a> provides methods for <strong>interceptable</strong> JavaScript operations</code>
+						<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy</a> defines <strong>custom</strong> behavior for <strong>fundamental</strong> operations</code>
+						<li>Experimenting is <strong>fun</strong> and leads to <strong>new ideas</strong> and <strong>knowledge</strong></li>
 					</ul>
 				</section>
 			</div>
