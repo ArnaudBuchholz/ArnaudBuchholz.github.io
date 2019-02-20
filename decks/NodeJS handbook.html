@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="Node.js handbook">
+		<meta name="author" content="Arnaud Buchholz">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<h3 data-agenda="no"><strong>Node.js</strong> handbook</h3>
+						<p>
+							<small>
+								Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+								<br/>
+								Inspired from <a href="https://medium.freecodecamp.org/the-definitive-node-js-handbook-6912378afc6e">The definitive Node.js handbook</a> from <a href="https://flaviocopes.com/">Flavio Copes</a>
+								<br/>
+								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+							</small>
+						</p>
+					</section>
+					<section include="me.html"></section>
+					<section>
+						<h3 data-agenda="no"><strong>Agenda</strong></h3>
+						<ul id="agenda"></ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3><strong>Introduction</strong> to Node.js</h3>
+						<img src="NodeJS handbook\Node.js_logo.svg" style="margin: 0; border: 0; box-shadow: unset;" />
+					</section>
+					<section>
+						<h4>Overview</h4>
+						<ul>
+							<li>Node.js is a <strong>runtime environment for JavaScript</strong> that runs on the <strong>server</strong>.</li>
+							<li><a href="https://github.com/nodejs/node">GitHub repository</a> has more than 58k stars.</li>
+							<li>Node.js is built on top of the <strong>Google Chrome V8</strong> JavaScript engine.</li>
+						</ul>
+					</section>
+					<section>
+						<h4>It's <strong>fast</strong>, <strong>simple</strong> &amp; <strong>asynchronous</strong></h4>
+						<p>JavaScript allows to create <strong>asynchronous and non-blocking</strong> code in a very simple way,
+							by using a single thread, callback functions and event-driven programming.</p>
+						<p>When Node.js needs to perform an <strong>I/O operation</strong>, instead of <strong>blocking the thread</strong>
+							it will simply <strong>resume</strong> the operations when the <strong>response comes back</strong>.</p>
+					</section>
+					<section>
+						<h4>It's <strong>powerful</strong></h4>
+						<p>This allows Node.js to handle <strong>thousands of concurrent connections</strong> with a single server
+							without introducing the burden of <strong>managing threads concurrency</strong>.</p>
+					</section>
+					<section>
+						<h4>A vast <strong>ecosystem</strong></h4>
+						<p>With its simple structure, the <strong>node package manager</strong> (npm) helped the ecosystem of Node.js proliferate.<br />
+							Now the npm registry hosts almost <strong>500,000 open source packages</strong> you can freely use.</p>
+					</section>
+					<section>
+						<h4>Hello World</h4>
+						<pre><code>const http = require('http')
+const hostname = '127.0.0.1'
+const port = 3000
+
+const server = http.createServer((req, res) => {
+  res.statusCode = 200
+  res.setHeader('Content-Type', 'text/plain')
+  res.end('Hello World\n')
+})
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`)
+})
+</code></pre>
+				</section>
+				<!-- A brief history of Node.js -->
+				<!-- https://medium.freecodecamp.org/the-definitive-node-js-handbook-6912378afc6e#bc80 -->
+			</div>
+		</div>
+		<script src="/gpf/0.2.8/gpf.js"></script>
+		<script src="deck.js"></script>
+	</body>
+</html>
