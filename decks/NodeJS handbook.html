@@ -67,16 +67,16 @@
 const hostname = '127.0.0.1'
 const port = 3000
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'text/plain')
-  res.end('Hello World\n')
+const server = http.createServer((request, response) => {
+  response.statusCode = 200
+  response.setHeader('Content-Type', 'text/plain')
+  response.end('Hello World\n')
 })
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`)
-})
-</code></pre>
+})</code></pre>
+				<a href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/hello%20world.js">hello world.js</a>
 				</section>
 				<!-- A brief history of Node.js -->
 				<!-- https://medium.freecodecamp.org/the-definitive-node-js-handbook-6912378afc6e#bc80 -->
