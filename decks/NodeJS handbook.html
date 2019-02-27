@@ -8,6 +8,11 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 		<link rel="stylesheet" type="text/css" href="styles.css">
+		<style>
+a.code {
+	font-size: 50%;
+}
+		</style>
 	</head>
 	<body>
 		<div class="reveal">
@@ -33,8 +38,8 @@
 				</section>
 				<section>
 					<section>
-						<h3><strong>Introduction</strong> to Node.js</h3>
 						<img src="NodeJS handbook\Node.js_logo.svg" style="margin: 0; border: 0; box-shadow: unset;" />
+						<h3><strong>Introduction</strong> to Node.js</h3>
 					</section>
 					<section>
 						<h4>Overview</h4>
@@ -64,7 +69,8 @@
 					</section>
 					<section>
 						<h4>Hello World</h4>
-						<pre><code>const http = require('http')
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/hello%20world.js"></a>
+						<!-- <pre><code>const http = require('http')
 const hostname = '127.0.0.1'
 const port = 3000
 
@@ -76,8 +82,7 @@ const server = http.createServer((request, response) => {
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`)
-})</code></pre>
-						<a href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/hello%20world.js">hello world.js</a>
+})</code></pre> -->
 					</section>
 					<section>
 						<h4><strong>History</strong> 1/2</h4>
@@ -105,7 +110,7 @@ server.listen(port, hostname, () => {
 								<td><small>
 									<a href="https://nodejs.org/en/blog/release/v4.0.0/">Node 4</a><br/>
 									<a href="https://foundation.nodejs.org/">Foundation</a><br/>
-									<strong><a href="http://es6-features.org">ES6</a> support</strong>
+									<a href="http://es6-features.org"><strong>ES6</strong></a> <strong>support</strong>
 								</small></td>
 								<td><small>
 									<a href="https://nodejs.org/en/blog/release/v6.0.0/">Node 6</a><br/>
@@ -140,40 +145,77 @@ server.listen(port, hostname, () => {
 				<!-- https://medium.freecodecamp.org/the-definitive-node-js-handbook-6912378afc6e#7af2 -->
 				<section>
 					<section>
+						<img src="NodeJS handbook\Node.js_logo.svg" style="margin: 0; border: 0; box-shadow: unset;" />
 						<h3>Node.js <strong>Basics</strong></h3>
 					</section>
 					<section>
 						<h4>Installation</h4>
-					</section>
-					<section>
-						<h4>JavaScript</h4>
-					</section>
-					<section>
-						<h4>ES6</h4>
-					</section>
-					<section>
-						<h4>const and let</h4>
 						<ul>
-							<li>const is for constants</li>
-							<li>let use block scoping</li>
+							<li><a href="https://nodejs.org/en/download/">Download</a></li>
+							<li>Windows, macOS, Linux or even <strong>source</strong> code</li>
+							<li>Choose between <strong>LTS</strong> or <strong>Latest</strong></li>
 						</ul>
 					</section>
 					<section>
-						<h4>Arrow functions</h4>
-						<ul>
-							<li>Short hand for function</li>
-							<li>No inner scope (this and arguments are inherited)</li>
-						</ul>
+						<h4><strong>ES6</strong> JavaScript</h4>
+						<img src="NodeJS handbook\ES6 syntaxic sugar.jpg" style="margin: 0; border: 0; box-shadow: unset;" />
+						<br />
+						<small><a href="https://webapplog.com/es6/">Top 10 ES6 Features Every Busy JavaScript Developer Must Know</a></small>
 					</section>
 					<section>
-						<h4>Arrow functions</h4>
+						<h4><strong>ES6</strong> const</h4>
 						<ul>
-							<li>Short hand for function</li>
-							<li>No inner scope (this and arguments are inherited)</li>
+							<li><code>const</code> is for constant <strong>assignment</strong></li>
 						</ul>
+						<br />
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/const%20assignment.js"></a>
+						<ul>
+							<li><code>const</code> is <strong>not</strong> for constant <strong>value</strong></li>
+						</ul>
+						<br />
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/const%20value.js"></a>
 					</section>
 					<section>
-						<h4>Host</h4>
+						<h4><strong>ES6</strong> let</h4>
+						<ul>
+							<li><code>let</code> introduces <strong>block scoping</strong> to JavaScript</li>
+							<li><code>let</code> does not benefit from <a href="https://developer.mozilla.org/en-US/docs/Glossary/Hoisting"><strong>hoisting</strong></a></li>
+						</ul>
+						<br/>
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/var%20hoisting.js"></a>
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/let%20no%20hoisting.js"></a>
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Arrow functions</h4>
+						<ul>
+							<li>Compact <strong>alternative</strong> for <code>function</code></li>
+							<li>No <strong>own</strong> bindings (<code>this</code>, <code>arguments</code>...)</li>
+							<li><strong>Not</strong> for constructors or methods</li>
+							<li>Ideal for <strong>callbacks</strong></li>
+						</ul>
+						<br/>
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/arrow%20sample.js"></a>
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Default parameters</h4>
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Template Literals</h4>
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Destructuring Assignment</h4>
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Enhanced Object Literals</h4>
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Promises, async and await</h4>
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Classes and Modules</h4>
+					</section>
+					<section>
+						<h4>Node.js as a <strong>Host</strong></h4>
 					</section>
 					<section>
 						<h4>Node.js as a command line</h4>
@@ -184,5 +226,26 @@ server.listen(port, hostname, () => {
 		</div>
 		<script src="/gpf/0.2.8/gpf.js"></script>
 		<script src="deck.js"></script>
+		<script>
+			var pre = gpf.web.createTagFunction("pre"),
+				code = gpf.web.createTagFunction("code");
+			[].slice.call(document.querySelectorAll("a.code")).forEach(function (a) {
+				var href = a.getAttribute("href"),
+					name = decodeURI(href.split("/").pop());
+				a.appendChild(document.createTextNode(name));
+				gpf.http.get(href
+					.replace("https://github.com", "https://raw.githubusercontent.com")
+					.replace("/blob/", "/")
+				)
+					.then(function (response) {
+						var next = a.nextSibling,
+							node = pre(code(response.responseText)).appendTo(a.parentNode);
+						if (next) {
+							a.parentNode.insertBefore(node, next);
+						}
+					});
+			});
+		</script>
 	</body>
 </html>
+;
