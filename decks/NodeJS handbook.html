@@ -12,6 +12,18 @@
 a.code {
 	font-size: 50%;
 }
+
+a.mdn::before {
+	content: ""
+}
+
+a.mdn {
+	display: inline-block;
+	width: 32px;
+	height: 26px;
+	background-image: url("NodeJS handbook/MDN.svg");
+	background-repeat: none;
+}
 		</style>
 	</head>
 	<body>
@@ -147,7 +159,7 @@ server.listen(port, hostname, () => {
 				<section>
 					<section>
 						<img src="NodeJS handbook\Node.js_logo.svg" style="margin: 0; border: 0; box-shadow: unset;" />
-						<h3>Node.js <strong>Basics</strong></h3>
+						<h3>Node.js &amp; ES6 <strong>Basics</strong></h3>
 					</section>
 					<section>
 						<h4>Installation</h4>
@@ -164,7 +176,9 @@ server.listen(port, hostname, () => {
 						<small><a href="https://webapplog.com/es6/">Top 10 ES6 Features Every Busy JavaScript Developer Must Know</a></small>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> const</h4>
+						<h4><strong>ES6</strong> const
+							<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const"></a>
+						</h4>
 						<ul>
 							<li><code>const</code> is for constant <strong>assignment</strong></li>
 						</ul>
@@ -177,7 +191,9 @@ server.listen(port, hostname, () => {
 						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/const%20value.js"></a>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> let</h4>
+						<h4><strong>ES6</strong> let
+							<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let"></a>
+						</h4>
 						<ul>
 							<li><code>let</code> introduces <strong>block scoping</strong> to JavaScript</li>
 							<li><code>let</code> does not benefit from <a href="https://developer.mozilla.org/en-US/docs/Glossary/Hoisting"><strong>hoisting</strong></a></li>
@@ -187,7 +203,9 @@ server.listen(port, hostname, () => {
 						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/let%20no%20hoisting.js"></a>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> Arrow functions</h4>
+						<h4><strong>ES6</strong> Arrow functions
+							<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions"></a>
+						</h4>
 						<ul>
 							<li>Compact <strong>alternative</strong> for <code>function</code></li>
 							<li>No <strong>own</strong> bindings (<code>this</code>, <code>arguments</code>...)</li>
@@ -198,22 +216,79 @@ server.listen(port, hostname, () => {
 						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/arrow%20sample.js"></a>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> Default parameters</h4>
+						<h4><strong>ES6</strong> Template Literals
+							<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals"></a>
+						</h4>
+						<ul>
+							<li>Compact <strong>alternative</strong> for string with <strong>embedded values</strong></li>
+							<li>Supports <strong>Multi-line</strong></li>
+						</ul>
+						<br/>
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/interpolation.js"></a>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> Template Literals</h4>
+						<h4><strong>ES6</strong> Spread syntax
+							<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax"></a>
+						</h4>
+						<ul>
+							<li>When used on the <strong>right</strong> of an assignment,<br/>
+								<strong><code>...</code></strong> expands an <strong>iterable object</strong> into a <strong>list of</strong> parameters or elements</li>
+						</ul>
+						<br />
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/spread parameters.js"></a>
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/spread array.js"></a>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> Destructuring Assignment</h4>
+						<h4><strong>ES6</strong> Spread syntax
+							<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax"></a>
+						</h4>
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/spread object.js"></a>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> Enhanced Object Literals</h4>
+						<h4><strong>ES6</strong> Destructuring Assignment
+							<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment"></a>
+						</h4>
+						<ul>
+							<li><strong>Assign</strong> values from arrays, or properties from objects, into <strong>distinct variables</strong></li>
+							<li>When used on the <strong>left</strong> of an assignment,<br/>
+								<strong><code>...</code></strong> is a <strong>collect syntax</strong></li>
+						</ul>
+						<br >
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/destructuring array.js"></a>
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Destructuring Assignment
+							<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment"></a>
+						</h4>
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/destructuring object.js"></a>
 					</section>
 					<section>
 						<h4><strong>ES6</strong> Promises, async and await</h4>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> Classes and Modules</h4>
+						<h4>Other <strong>ES6</strong> features</h4>
+						<ul>
+							<li>Default parameters<a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters"></a></li>
+						</ul>
+<pre><code>const multiply = (a, b = 1) => a * b
+console.log(multiply(5)) // 5</code></pre>
+						<ul>
+							<li>Classes <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes"></a></li>
+						</ul>
+<pre><code>class Rectangle extends Shape {
+	constructor (width, height, filled = false, color = "black") {
+		super(filled, color)
+		this.width = width
+		this.height = height
+	}
+
+	get area () {
+		return this.width * this.height
+	}
+}</code></pre>
+						<ul>
+							<li>Modules <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import"></a></li>
+						</ul>
 					</section>
 					<section>
 						<h4>Node.js as a <strong>Host</strong></h4>
