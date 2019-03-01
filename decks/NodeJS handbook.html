@@ -164,9 +164,33 @@ server.listen(port, hostname, () => {
 					<section>
 						<h4>Installation</h4>
 						<ul>
-							<li><a href="https://nodejs.org/en/download/">Download</a></li>
+							<li><a href="https://nodejs.org/en/download/"><strong>Download</strong></a></li>
 							<li>Windows, macOS, Linux or even <strong>source</strong> code</li>
 							<li>Choose between <strong>LTS</strong> or <strong>Latest</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h4>Running</h4>
+						<ul>
+							<li>In a <strong>command line</strong> prompt</li>
+							<li><strong>Execute</strong> any script: <br />
+								<code>node script.js</code></li>
+							<p />
+							<li>Or use the <strong>interactive</strong> Read-Eval-Print-Loop:<br />
+								<code>node</code><br />
+							<small>It offers an <strong>autocompletion</strong> feature, try with <code>global.</code></small></li>
+						</ul>
+					</section>
+					<section>
+						<h4>JavaScript</h4>
+						<ul>
+							<li>Node.js supports the JavaScript <strong>you</strong> know</li>
+							<li>It also supports <strong>future evolutions</strong> / variants of the language
+								<ul>
+									<li>Either <strong>natively</strong>, such as most <a href="http://exploringjs.com/es6/ch_core-features.html"><strong>ES6</strong></a> features</li>
+									<li>Or using <strong>transpilers</strong>: <a href="https://babeljs.io/">Babel</a>, <a href="https://www.typescriptlang.org/">TypeScript</a>...</li>
+								</ul>
+							</li>
 						</ul>
 					</section>
 					<section>
@@ -251,10 +275,11 @@ server.listen(port, hostname, () => {
 						<ul>
 							<li><strong>Assign</strong> values from arrays, or properties from objects, into <strong>distinct variables</strong></li>
 							<li>When used on the <strong>left</strong> of an assignment,<br/>
-								<strong><code>...</code></strong> is a <strong>collect syntax</strong></li>
+								<strong><code>...</code></strong> is a <strong>collect syntax<sup>*</sup></strong></li>
 						</ul>
 						<br >
 						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/destructuring array.js"></a>
+						<small><strong><sup>*</sup></strong><i> Not the official name, also supported for <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters"><strong>rest parameters</strong></a></i></small>
 					</section>
 					<section>
 						<h4><strong>ES6</strong> Destructuring Assignment
@@ -263,7 +288,15 @@ server.listen(port, hostname, () => {
 						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/destructuring object.js"></a>
 					</section>
 					<section>
-						<h4><strong>ES6</strong> Promises, async and await</h4>
+						<h4><strong>ES6</strong> Promises <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"></a>,
+							async <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"></a>
+							and await <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await"></a></h4>
+						<ul>
+							<li><code>async</code> functions are <strong>asynchronous</strong> and <strong>implicitly</strong> returns a promise</li>
+							<li>The <code>await</code> operator is used to <strong>wait</strong> for a promise</li>
+						</ul>
+						<br />
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/async.js"></a>
 					</section>
 					<section>
 						<h4>Other <strong>ES6</strong> features</h4>
