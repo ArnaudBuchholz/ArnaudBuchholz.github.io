@@ -45,7 +45,7 @@
 								<a href="https://github.com/ArnaudBuchholz/gpf-js">GPF-JS</a><br />
 								<small>A <strong>multi-purpose</strong> JavaScript <strong>library</strong></small>
 							</li>
-              <li>
+							<li>
 								<a href="http://gpf-js.blogspot.com/">JavaScript &amp; Development</a><br />
 								<small>A <strong>blog</strong> documenting the <strong>library development</strong> and related <strong>discoveries</strong></small>
 							</li>
@@ -58,7 +58,9 @@
 						<q class="fragment">motivation</q>
 					</section>
 					<section>
-						<img src="/gpf/gpf_320x200.svg" style="margin: 0; border: 0; box-shadow: unset;" />
+						<a href="https://github.com/ArnaudBuchholz/gpf-js">
+							<img src="/gpf/gpf_320x200.svg" style="margin: 0; border: 0; box-shadow: unset;" />
+						</a>
 						<ul>
 							<li>A <strong>multi-purpose</strong> JavaScript <strong>library</strong></li>
 							<li>A <strong>common scripting layer</strong> for several hosts <small>(cscript/wscript, NodeJS, Rhino, Nashorn, PhantomJS, most recent browsers)</small></li>
@@ -296,7 +298,7 @@ function constructorOfC (param2) {
 				</section>
 				<section>
 					<section>
-						<h4><b>Attempt #2</b>: <strong>Applying</strong> constructorOfC on <code>this</code></h4>
+						<h4><b>Attempt #2</b>: <strong>Applying</strong> <code>constructorOfC</code> on <code>this</code></h4>
 					</section>
 					<section>
 						<p>Considering we must keep and call <code>constructorOfC</code> <strong>as-is</strong>,
@@ -399,17 +401,16 @@ or returning from derived constructor</code></pre>
 					<section>
 						<pre><code>function C () {
   var instance,
-    $super = function () {
-      instance = Reflect.construct(B, arguments, C);
-    },
-    proxy = new Proxy({}, {
-      get: function (obj, property) {
-        if (property === '$super') { return $super; }
-        return instance[property];
-      },
-      set: function (obj, property, value) {
-        instance[property] = value;
-      } });
+      $super = function () {
+        instance = Reflect.construct(B, arguments, C); },
+      proxy = new Proxy({}, {
+        get: function (obj, property) {
+          if (property === '$super') { return $super; }
+          return instance[property]; },
+        set: function (obj, property, value) {
+          instance[property] = value;
+          return true; }
+      });
   constructorOfC.apply(proxy, arguments);
   return instance;
 }</code></pre>
