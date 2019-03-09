@@ -63,3 +63,7 @@ q {
 .reveal pre {
 	width: unset;
 }
+
+.reveal code:not(.hljs) {
+	color: #808080;
+}
