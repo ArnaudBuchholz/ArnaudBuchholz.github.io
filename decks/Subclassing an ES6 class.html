@@ -15,14 +15,23 @@
 			<div class="slides">
 				<section>
 					<section>
-						<h3 data-agenda="no"><strong>Subclassing</strong> an <strong>ES6</strong> class</h3>
-						<p>
-							<small>
-								Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
-								<br/>
-								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
-							</small>
-						</p>
+						<table>
+						  <tr>
+						    <td width="25%">
+									<img src="/blog/post/How I learned from a crazy idea/Hybrid-Bicolor-Hybridization-Johns-Night-Flower-3744246.jpg" style="margin: 0; border: 0; box-shadow: unset;"></img>
+						    </td>
+						    <td style="vertical-align: top;">
+									<h3 data-agenda="no"><strong>Subclassing</strong> an <strong>ES6</strong> class</h3>
+									<small>
+										Or the art of JavaScript classes <strong>hybridization</strong>
+										<br/>
+										Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+										<br/>
+										Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+									</small>
+						    </td>
+						  </tr>
+						</table>
 					</section>
 					<section include="me.html"></section>
 					<section>
@@ -36,7 +45,7 @@
 								<a href="https://github.com/ArnaudBuchholz/gpf-js">GPF-JS</a><br />
 								<small>A <strong>multi-purpose</strong> JavaScript <strong>library</strong></small>
 							</li>
-							<li>
+              <li>
 								<a href="http://gpf-js.blogspot.com/">JavaScript &amp; Development</a><br />
 								<small>A <strong>blog</strong> documenting the <strong>library development</strong> and related <strong>discoveries</strong></small>
 							</li>
@@ -49,7 +58,7 @@
 						<q class="fragment">motivation</q>
 					</section>
 					<section>
-						<img src="../gpf/gpf_320x200.svg" style="margin: 0; border: 0; box-shadow: unset;" />
+						<img src="/gpf/gpf_320x200.svg" style="margin: 0; border: 0; box-shadow: unset;" />
 						<ul>
 							<li>A <strong>multi-purpose</strong> JavaScript <strong>library</strong></li>
 							<li>A <strong>common scripting layer</strong> for several hosts <small>(cscript/wscript, NodeJS, Rhino, Nashorn, PhantomJS, most recent browsers)</small></li>
@@ -109,6 +118,8 @@ const B = gpf.define({
   this._a = "A";
 }
 
+OldA.prototype.constructor = OldA;
+
 OldA.prototype.a = function () {
   return this._a;
 };</code></pre>
@@ -122,6 +133,8 @@ OldA.prototype.a = function () {
 
 OldB.prototype =
 	Object.create(OldA.prototype);
+
+OldB.prototype.constructor = OldB;
 
 OldB.prototype.b = function () {
   return this._b;
@@ -413,7 +426,7 @@ or returning from derived constructor</code></pre>
 						<li><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/b44dad860b61615179cfa5ecf477e20aa745f9c6/src/define/class/constructor.js#L59">GPF-JS implementation</a></code>
 						<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect">Reflect</a> provides methods for <strong>interceptable</strong> JavaScript operations</code>
 						<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy</a> defines <strong>custom</strong> behavior for <strong>fundamental</strong> operations</code>
-						<li>Experimenting is <strong>fun</strong> and leads to <strong>new ideas</strong> and <strong>knowledge</strong></li>
+						<li>Experimenting is <strong>fun</strong>, leads to <strong>new ideas</strong> and brings <strong>knowledge</strong></li>
 					</ul>
 				</section>
 			</div>
