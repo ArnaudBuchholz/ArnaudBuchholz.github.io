@@ -400,21 +400,21 @@ or returning from derived constructor</code></pre>
 					</section>
 					<section>
 						<pre><code>function C () {
-  var instance,
+  var newC,
       $super = function () {
-        instance = Reflect.construct(B, arguments, C); },
+        newC = Reflect.construct(B, arguments, C); },
       proxy = new Proxy({}, {
         get: function (obj, property) {
           if (property === '$super') { return $super; }
-          return instance[property]; },
+          return newC[property]; },
         set: function (obj, property, value) {
-          instance[property] = value;
+          newC[property] = value;
           return true; }
       });
   constructorOfC.apply(proxy, arguments);
-  return instance;
+  return newC;
 }</code></pre>
-						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/32/embedded">JSFiddle</a>
+						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/35/embedded">JSFiddle</a>
 					</section>
 					<section>
 						<h4>It <strong>works</strong> !</h4>
