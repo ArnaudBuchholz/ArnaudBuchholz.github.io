@@ -13,7 +13,8 @@
 <a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <div class="summary">
     <img src="https://ArnaudBuchholz.github.io/blog/release.png" align="left">
-    This release introduces ES6 support into the library.
+    This release mainly introduces ES6 support as well as improvements to the serialization helpers.
+    A new flavor is created for Node.js-only users.
 </div>
 <code class="markdown">
 ## Release 0.2.9: ES6 Support
@@ -27,65 +28,138 @@
 
 ### ES6 support
 
-Subclassing an ES6 class
+While working on a side project which is based on Node.js, I realized that the library did not support ES6 classes.
+Not only the gpf.define API is not able to extend any of them (even if it does not really make sense) but
+it is also impossible to add attributes to a class that was not previously created with gpf.define (which is more
+problematic).
 
-Attributes through decorators
+After doing a quick test, a solution was drafted to detect and handle these classes the right way.
+It is all explained in the article
+[How I learned from a crazy idea](http://gpf-js.blogspot.com/2019/01/how-i-learned-from-crazy-idea.html).
 
-Require preprocessor to enable decorator substitutions
-Also improved configuration validation
+The $singleton and $abstract syntaxes were adapted accordingly.
 
-Had to adapt $singleton & $abstract
+(...) It is clearly **not recommended** to extend ES6 class using gpf.define
+
+In order to integrate attributes the right way, a quick look in the coming ES6 features pointed out the fact that
+[decorators](https://medium.com/google-developers/exploring-es7-decorators-76ecb65fb841) are used to qualify class
+members. Hence, an
+[attribute decorator](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.html#.decorator__anchor) was created.
+
+Last but not least, since decorators are not yet supported without transpiling, the library allows preprocessing
+of resources so that decorators can be subsituted with manuall call of the decorator.
+This was also the opportunity to refactor in depth the validation of the require configuration options.
 
 ### Improved serialization
 
-Serialization name
+While working on a side project that is extensively using serialization attributes, the need for code simplification
+became obvious.
 
-Asymetric Serialization
+First of all, it didn't make sense to repeat the name attribute when it could be easily deduced from the member the
+attribute was set on.
+
+Second, these attributes are used in a context where serialization is used to implement an ODATA service.
+Consequently, these attributes are used to describe how the data should be sent back the client but also how it is
+received.
+
+At some points, it was necessary to indicates which members should not be modified by the client. (For instance, the ID)
+
+With asymetric serialization, it is possible to distinguish when an attribute is read-only (i.e. it can be serialized but not deserialized).
+
+Furthermore, the class itself may indicate if the member should be modified or not. Indeed, with the use of Object.defineProperty, it
+is possible to define the (get, set) couple and, consequently, define read-only members.
+The serialization helpers will leverage Object.getOwnProperties if the host supports it and determine the readOnly member
+when not speicifed.
 
 ### Improved compatibility
 
-atob and btoa
+atob and btoa were added to the compatiblity layer.
 
-removed compatibleName
+The Function.prototpye.compatibleName method has been removed since it induced an extension of the Function prototype.
+Usually, libraries should avoid doing that because it is against best practices.
 
-any verb in gpf.http.request
+Still doing some tests, the gpf.http.request was absurdly limited in terms of verbs supports. Some hosts do not support
+custom verbs (and this is documented in the compatibility page) but browsers & node supports almost any verb.
+The code was modified to allow the use of custom verbs.
+
+Surprisingly, the [String method .substr](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substr)
+is documented as *"to be avoided when possible"*. Since it was massively used in the code, a ESLint custom rule was developped and the code adapted.
 
 ### New flavor node
 
-
+A Node.js flavor was created and is used as the default library being loaded when using require("gpf-js").
+It includes all features, including the compatibility's atob and btoa.
 
 ## Lessons learned
 
 ### Asymetric Serialization
 
-Had lots of difficulties to set the principles
-Ended up doing the most flexible choice
+The user story [Asymetric serialization](https://github.com/ArnaudBuchholz/gpf-js/issues/299) required several updates
+since it was pretty difficult to find the right balance between simplicity of use and flexibility. In the end,
+this feature is really usefull when going through a converter function since this is the place where one can control
+if the value will be serialized or not.
 
 ### Refactoring of classes
 
-Base classes are now associated with a class definition
-Also had to deal with anonymous classes (changed the validation)
-Had to reconsider preprocessor (wanted to import decorators)
+Integrating ES6 class was only a small part of the challenge. Actually, the library was suffering from inner defect
+regarding how class inheritance was handled. Actually, when looking for a class definition, you could get a base class
+provided the class was an instance of this one.
+
+To solve this issue, a mechanism was put in place to import classes and import all the class hierarchy up to root classes (i.e. Object).
+It also means that base classes are now associated with a class definition right upon the startup of the library.
+
+This also imply that the library may have to deal with anonymous functions when importing a class.
+It is still not possible to use gpf.define with a class name but, internally, the library can import *any* function.
+
+### Putting the effort at the right place
+
+When looking to import decorators, the initial idea was to have the library replace them when an ES6 class definition
+is [required](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html#.define__anchor).
+
+However, this would need the library to parse the javascript in order to detect the decorator uses.
+
+Since this should be let out of the library scope, it was instead decided to open resource preprocessing so that
+any user of the library could implement its own decorator substitution (or any other usefull feature).
 
 ### Refactoring of tests
 
-Regarding include path
+Introduction of ES6 to the library had a significant impact on how the tests are made.
+Indeed, it is mandatory to check if the host is actually supporting the ES6 class syntax.
+Node.js is an obvious candidate but the library does not distinguish browsers.
+
+So a new mechansim was built to detect features and add some flags to a global object available during the tests.
+
+The same way, the same algorithm was used multiple times to adapt reading / require pathRegarding include path
 
 ### Improved flavor mechanism
 
-to allow node and have part of COMPATIBILITY
+Build the Node.js flavor was harder than expected. Since the compatibility layer was not included, the internal use
+of .compatibleName didn't work anymore. That's the reason why it was decided to remove it. Instad an internal function
+was created to extract a function name (that points to the name property by default).
+
+Furthermore, a flavor debugging page was created to ensure that any update on the flavor algorithm would fit the
+expectations.
 
 ### New eslint rules
 
-no-substr
+As mentionned before, a new eslint rule was created to forbid the use of .substr:
+[no-substr](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/no-substr.js).
 
-no-empty-modules
+The same way, another rule was create to ensures that if a module has no function, a default one is being created:
+[no-empty-modules](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/no-empty-module.js).
+
+This the linters are applied every time a module is modified, more custom rules might be created to solve common
+problems (such as dependencies update).
 
 ### Release notes
 
-Difficult to find the release notes since one had to jump to github to check each Release
-Now the readme points to them
-For the current one, a redirection mechanism makes sure one access it when available
+Now that more than 14 releases exist for the library, it takes some time to access the release notes since one had to
+go to the release tab of GitHub in order to find them.
+
+It was decided to change the readme to include a link to the release notes.
+
+Regarding the last version, since the notes are usually written once the release is out, a mechanism was built to
+make any reader wait until the notes are out.
 
 ## Next release
 
