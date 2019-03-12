@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">85.25</p>
+      <p class="stat">77.25</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">91</p>
+      <p class="stat">141</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">8.59</p>
+      <p class="stat">12.41</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.18</p>
+      <p class="stat">0.46</p>
     </div>
   </div>
 </div>
@@ -100,6 +100,7 @@
 /*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*global _gpfFunctionBuild*/ // Build function from description and context
 /*global _gpfFunctionDescribe*/ // Extract function description
+/*global _gpfIsClass*/ // Check if the parameter is an ES6 class
 /*exported _gpfDefineClassConstructorAddCodeWrapper*/ // Adds a constructor code wrapper
 /*exported _gpfDefineGetClassSecuredConstructor*/ // Allocate a secured named constructor
 /*#endif*/
@@ -146,11 +147,60 @@ function _gpfDefineClassConstructorAddCodeWrapper (codeWrapper) {
     _gpfDefineClassConstructorCodeWrappers.push(codeWrapper);
 }
 
+function _gpfDefineGetClassSecuredConstructorGetES6ConstructionBody (classDefinition) {
+    if (classDefinition._extend === classDefinition._resolvedConstructor) {
+        return &quot;var that = Reflect.construct(_classDef_._extend, arguments, _classDef_._instanceBuilder);\n&quot;;
+    }
+    return &quot;var that,\n&quot;
+        + &quot;    $super = function () {\n&quot;
+        + &quot;        that = Reflect.construct(_classDef_._extend, arguments, _classDef_._instanceBuilder);\n&quot;
+        + &quot;    },\n&quot;
+        + &quot;    hasOwnProperty = function (name) {\n&quot;
+        + &quot;        return !!that &amp;&amp; that.hasOwnProperty(name);\n&quot;
+        + &quot;    },\n&quot;
+        + &quot;    proxy = new Proxy({}, {\n&quot;
+        + &quot;        get: function (obj, property) {\n&quot;
+        + &quot;            if (property === \&quot;hasOwnProperty\&quot;) {\n&quot;
+        + &quot;              return hasOwnProperty;\n&quot;
+        + &quot;            }\n&quot;
+        + &quot;            if (!that &amp;&amp; property === \&quot;$super\&quot;) {\n&quot;
+        + &quot;              return $super;\n&quot;
+        + &quot;            }\n&quot;
+        + &quot;            return that[property];\n&quot;
+        + &quot;        },\n&quot;
+        + &quot;        set: function (obj, property, value) {\n&quot;
+        + &quot;            if (property !== \&quot;$super\&quot;) {\n&quot;
+        + &quot;                that[property] = value;\n&quot;
+        + &quot;            }\n&quot;
+        + &quot;            return true;\n&quot;
+        + &quot;        }\n&quot;
+        + &quot;    });\n&quot;
+        + &quot;_classDef_._resolvedConstructor.apply(proxy, arguments);\n&quot;;
+}
+
+function _gpfDefineGetClassSecuredConstructorGetMainConstructionPattern (classDefinition) {
+    if (_gpfIsClass(classDefinition._extend)) {
+        return {
+            instance: &quot;that&quot;,
+            body: _gpfDefineGetClassSecuredConstructorGetES6ConstructionBody(classDefinition)
+        };
+    }
+    return {
+        instance: &quot;this&quot;,
+        body: &quot;_classDef_._resolvedConstructor.apply(this, arguments);&quot;
+    };
+}
+
 function _gpfDefineGetClassSecuredConstructorBody (classDefinition) {
-    return &quot;if (!(this instanceof _classDef_._instanceBuilder)) gpf.Error.classConstructorFunction();\n&quot;
-        + _gpfDefineClassConstructorCodeWrappers.reduce(function (body, codeWrapper) {
-            return codeWrapper(classDefinition, body);
-        }, &quot;_classDef_._resolvedConstructor.apply(this, arguments);&quot;);
+    var construction = _gpfDefineGetClassSecuredConstructorGetMainConstructionPattern(classDefinition),
+        constructorBody = &quot;if (!(this instanceof _classDef_._instanceBuilder)) gpf.Error.classConstructorFunction();\n&quot;
+            + _gpfDefineClassConstructorCodeWrappers.reduce(function (body, codeWrapper) {
+                return codeWrapper(classDefinition, body, construction.instance);
+            }, construction.body);
+    if (construction.instance !== &quot;this&quot;) {
+        constructorBody += &quot;\nreturn &quot; + construction.instance + &quot;;&quot;;
+    }
+    return constructorBody;
 }
 
 function _gpfDefineGetClassSecuredConstructorDefinition (classDefinition) {

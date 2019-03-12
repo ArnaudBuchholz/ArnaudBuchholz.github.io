@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">53</p>
+      <p class="stat">62</p>
     </div>
   </div>
   <div class="row historical">
@@ -97,15 +97,24 @@
 &quot;use strict&quot;;
 /*global _GpfClassDefinition*/ // Class definition
 /*global _gpfDefClassAttrIsAttributeSpecification*/ // Check if member name is an attribute
-/*global _gpfDefineGetEntityFromBuilder*/ // Retrieves entity definition from instance instance builder
+/*global _gpfDefineEntitiesFindByConstructor*/ // Retrieve entity definition from Constructor
+/*exported _gpfDefClassAttrBuild*/ // _gpfDefClassAttrBuild
 /*#endif*/
 
 var _gpfDefClassAttrClassAddmemberToPrototype = _GpfClassDefinition.prototype._addMemberToPrototype,
     _gpfDefClassAttrClassBuildPrototype = _GpfClassDefinition.prototype._buildPrototype;
 
+/**
+ * Build attribute
+ *
+ * @param {String} member Member name
+ * @param {gpf.attributes.Attribute} attribute Attribute
+ * @param {Object} newPrototype Class prototype
+ * @since 0.2.9
+ */
 function _gpfDefClassAttrBuild (member, attribute, newPrototype) {
     /*jshint validthis:true*/
-    var attributeEntityDefinition = _gpfDefineGetEntityFromBuilder(attribute.constructor);
+    var attributeEntityDefinition = _gpfDefineEntitiesFindByConstructor(attribute.constructor);
     if (!attributeEntityDefinition._singleton) {
         attribute._memberName = member;
         attribute._ClassConstructor = newPrototype.constructor;

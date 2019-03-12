@@ -62,7 +62,7 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">24.73</p>
+      <p class="stat">24.89</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
@@ -101,7 +101,7 @@
 /*global _gpfIsArray*/ // Return true if the parameter is an array
 /*global _gpfIsLiteralObject*/ // Check if the parameter is a literal object
 /*global _gpfObjectForEach*/ // Similar to [].forEach but for objects
-/*global _gpfStringEscapeFor*/ // Make the string content compatible with lang
+/*global _gpfStringEscapeForHtml*/ // String escape for Html
 /*global _gpfSyncReadSourceJSON*/ // Reads a source json file (only in source mode)
 /*#endif*/
 
@@ -348,7 +348,7 @@ var _GpfWebTag = _gpfDefine({
         return Object.keys(this._attributes).map(function (name) {
             _gpfWebCheckNamespaceSafe(name);
             return &quot; &quot; + _gpfWebTagAttributeAlias(name)
-                + &quot;=\&quot;&quot; + _gpfStringEscapeFor(this._attributes[name], &quot;html&quot;) + &quot;\&quot;&quot;;
+                + &quot;=\&quot;&quot; + _gpfStringEscapeForHtml(this._attributes[name]) + &quot;\&quot;&quot;;
         }, this).join(&quot;&quot;);
     },
 

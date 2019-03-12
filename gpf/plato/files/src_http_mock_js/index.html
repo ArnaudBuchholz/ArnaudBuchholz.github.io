@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">77.64</p>
+      <p class="stat">77.50</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">173</p>
+      <p class="stat">175</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">19.56</p>
+      <p class="stat">21.44</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.48</p>
+      <p class="stat">0.49</p>
     </div>
   </div>
 </div>
@@ -95,7 +95,6 @@
  */
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
-/*global _GPF_HTTP_METHODS*/ // HTTP Methods
 /*global _GPF_START*/ // 0
 /*global _gpfArrayTail*/ // [].slice.call(,1)
 /*global _gpfHost*/ // Host type
@@ -136,7 +135,7 @@
  * @type {Object}
  * @since 0.2.2
  */
-var _gpfHttpMockedRequests = {};
+var _gpfHttpMockedRequests;
 
 /**
  * Match the provided request with the mocked one
@@ -173,6 +172,13 @@ function _gpfHttMockMatch (mockedRequests, request) {
     return result;
 }
 
+function _gpfHttpMockGetMockedRequests (method) {
+    if (!_gpfHttpMockedRequests[method]) {
+        _gpfHttpMockedRequests[method] = [];
+    }
+    return _gpfHttpMockedRequests[method];
+}
+
 /**
  * Check if the provided request match any of the mocked one
  *
@@ -181,7 +187,7 @@ function _gpfHttMockMatch (mockedRequests, request) {
  * @since 0.2.2
  */
 function _gpfHttpMockCheck (request) {
-    return _gpfHttMockMatch(_gpfHttpMockedRequests[request.method], request);
+    return _gpfHttMockMatch(_gpfHttpMockGetMockedRequests(request.method.toUpperCase()), request);
 }
 
 var _gpfHttpMockLastId = 0;
@@ -195,11 +201,9 @@ var _gpfHttpMockLastId = 0;
  * @since 0.2.2
  */
 function _gpfHttpMockAdd (definition) {
-    var method = definition.method,
-        id;
-    ++_gpfHttpMockLastId;
-    id = method + &quot;.&quot; + _gpfHttpMockLastId;
-    _gpfHttpMockedRequests[method].unshift(Object.assign({
+    var method = definition.method.toUpperCase(),
+        id = method + &quot;.&quot; + _gpfHttpMockLastId++;
+    _gpfHttpMockGetMockedRequests(method).unshift(Object.assign({
         id: id
     }, definition));
     return id;
@@ -213,7 +217,7 @@ function _gpfHttpMockAdd (definition) {
  */
 function _gpfHttpMockRemove (id) {
     var method = id.substring(_GPF_START, id.indexOf(&quot;.&quot;));
-    _gpfHttpMockedRequests[method] = _gpfHttpMockedRequests[method].filter(function (mockedRequest) {
+    _gpfHttpMockedRequests[method] = _gpfHttpMockGetMockedRequests(method).filter(function (mockedRequest) {
         return mockedRequest.id !== id;
     });
 }
@@ -223,9 +227,7 @@ function _gpfHttpMockRemove (id) {
  * @since 0.2.2
  */
 function _gpfHttpMockReset () {
-    Object.keys(_GPF_HTTP_METHODS).forEach(function (method) {
-        _gpfHttpMockedRequests[method] = [];
-    });
+    _gpfHttpMockedRequests = {};
 }
 
 _gpfHttpMockReset();

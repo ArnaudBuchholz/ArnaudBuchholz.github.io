@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">78.47</p>
+      <p class="stat">76.72</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">91</p>
+      <p class="stat">41</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">11.63</p>
+      <p class="stat">7.49</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.38</p>
+      <p class="stat">0.16</p>
     </div>
   </div>
 </div>
@@ -99,9 +99,7 @@
 /*global _gpfArrayTail*/ // [].slice.call(,1)
 /*global _gpfBuildFunctionParameterList*/ // Builds an array of parameters
 /*global _gpfCompatibilityInstallMethods*/ // Define and install compatible methods on standard objects
-/*global _gpfEmptyFunc*/ // An empty function
 /*global _gpfFunc*/ // Create a new function using the source
-/*global _gpfJsCommentsRegExp*/ // Find all JavaScript comments
 /*#endif*/
 
 function _generateBindBuilderSource (length) {
@@ -131,55 +129,7 @@ _gpfCompatibilityInstallMethods(&quot;Function&quot;, {
 
     }
 
-});
-
-//region Function name
-
-var _GPF_COMPATIBILITY_FUNCTION_KEYWORD = &quot;function&quot;;
-
-function _gpfGetFunctionName () {
-    // Use simple parsing
-    /*jshint validthis:true*/
-    var functionSource = _gpfEmptyFunc.toString.call(this), //eslint-disable-line no-invalid-this
-        functionKeywordPos = functionSource.indexOf(_GPF_COMPATIBILITY_FUNCTION_KEYWORD)
-            + _GPF_COMPATIBILITY_FUNCTION_KEYWORD.length,
-        parameterListStartPos = functionSource.indexOf(&quot;(&quot;, functionKeywordPos);
-    return functionSource
-        .substr(functionKeywordPos, parameterListStartPos - functionKeywordPos)
-        .replace(_gpfJsCommentsRegExp, &quot;&quot;) // remove comments
-        .trim();
-}
-
-// Handling function name properly
-if ((function () {
-    // Trick source minification
-    var testFunction = _gpfFunc(&quot;return function functionName () {};&quot;)();
-    return testFunction.name !== &quot;functionName&quot;;
-})()) {
-
-    Function.prototype.compatibleName = _gpfGetFunctionName;
-
-} else {
-
-    /**
-     * Return function name
-     *
-     * @return {String} Function name
-     * @since 0.1.5
-     */
-    Function.prototype.compatibleName = function () {
-        return this.name;
-    };
-
-}
-
-//endregion
-
-/*#ifndef(UMD)*/
-
-gpf.internals._gpfGetFunctionName = _gpfGetFunctionName;
-
-/*#endif*/</textarea>
+});</textarea>
   </div>
 </div>
 

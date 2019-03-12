@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">80.28</p>
+      <p class="stat">81.55</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">180</p>
+      <p class="stat">207</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">17.45</p>
+      <p class="stat">18.53</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.45</p>
+      <p class="stat">0.53</p>
     </div>
   </div>
 </div>
@@ -104,11 +104,11 @@ _gpfErrorDeclare(&quot;serial/property&quot;, {
     /**
      * ### Summary
      *
-     * Name of serializable property is invalid
+     * Serializable property &#039;name&#039; is invalid
      *
      * ### Description
      *
-     * Name should respect the pattern `/^[a-z][a-z0-9_]*$/i`
+     * name should respect the pattern `/^[a-z][a-z0-9_]*$/i`
      * @since 0.2.8
      */
     invalidSerialName: &quot;Invalid serial name&quot;,
@@ -116,11 +116,11 @@ _gpfErrorDeclare(&quot;serial/property&quot;, {
     /**
      * ### Summary
      *
-     * Type of serializable property is invalid
+     * Serializable property &#039;type&#039; is invalid
      *
      * ### Description
      *
-     * Type should be one of the enumeration {@see gpf.serial.types}
+     * Value should be one of the enumeration {@see gpf.serial.types}
      * @since 0.2.8
      */
     invalidSerialType: &quot;Invalid serial type&quot;,
@@ -128,14 +128,26 @@ _gpfErrorDeclare(&quot;serial/property&quot;, {
     /**
      * ### Summary
      *
-     * Required of serializable property is invalid
+     * Serializable property &#039;required&#039; is invalid
      *
      * ### Description
      *
-     * Required can either be true or false
+     * Value can either be true or false
      * @since 0.2.8
      */
-    invalidSerialRequired: &quot;Invalid serial required&quot;
+    invalidSerialRequired: &quot;Invalid serial required&quot;,
+
+    /**
+     * ### Summary
+     *
+     * Serializable property &#039;readOnly&#039; is invalid
+     *
+     * ### Description
+     *
+     * Value can either be true or false
+     * @since 0.2.9
+     */
+    invalidSerialReadOnly: &quot;Invalid serial readOnly&quot;
 
 });
 
@@ -147,12 +159,16 @@ _gpfErrorDeclare(&quot;serial/property&quot;, {
 gpf.serial = {};
 
 /**
- * Filter property read specification
+ * Serializable property specification
  *
  * @typedef gpf.typedef.serializableProperty
  * @property {String} name Name of the property
  * @property {gpf.serial.types} [type=gpf.serial.types.string] Type of the property
  * @property {Boolean} [required=false] Property must have a value
+ * @property {Boolean} [readOnly=undefined] Property is read only. When undefined, and if the host supports
+ * [Object.getOwnPropertyDescriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+ * Object/getOwnPropertyDescriptors), the framework will check if the property can be set.
+ * This property is resolved when used in the {@link gpf.typedef.serialConverter}.
  * @see gpf.attributes.Serializable
  * @since 0.2.8
  */
@@ -231,9 +247,9 @@ function _gpfSerialPropertyCheckType (property) {
     }
 }
 
-function _gpfSerialPropertyCheckRequiredType (required) {
-    if (typeof required !== &quot;boolean&quot;) {
-        gpf.Error.invalidSerialRequired();
+function _gpfSerialPropertyCheckBooleanType (value, exception) {
+    if (typeof value !== &quot;boolean&quot;) {
+        exception();
     }
 }
 
@@ -241,7 +257,13 @@ function _gpfSerialPropertyCheckRequired (property) {
     if (undefined === property.required) {
         property.required = false;
     } else {
-        _gpfSerialPropertyCheckRequiredType(property.required);
+        _gpfSerialPropertyCheckBooleanType(property.required, gpf.Error.invalidSerialRequired);
+    }
+}
+
+function _gpfSerialPropertyCheckReadOnly (property) {
+    if (undefined !== property.readOnly) {
+        _gpfSerialPropertyCheckBooleanType(property.readOnly, gpf.Error.invalidSerialReadOnly);
     }
 }
 
@@ -258,9 +280,14 @@ function _gpfSerialPropertyCheckRequired (property) {
  */
 function _gpfSerialPropertyCheck (property) {
     var clonedProperty = Object.assign(property);
-    _gpfSerialPropertyCheckName(clonedProperty);
-    _gpfSerialPropertyCheckType(clonedProperty);
-    _gpfSerialPropertyCheckRequired(clonedProperty);
+    [
+        _gpfSerialPropertyCheckName,
+        _gpfSerialPropertyCheckType,
+        _gpfSerialPropertyCheckRequired,
+        _gpfSerialPropertyCheckReadOnly
+    ].forEach(function (checkFunction) {
+        checkFunction(clonedProperty);
+    });
     return clonedProperty;
 }
 

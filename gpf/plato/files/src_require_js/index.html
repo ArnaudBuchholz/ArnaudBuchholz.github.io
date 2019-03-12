@@ -44,11 +44,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
-      <p class="stat">79.20</p>
+      <p class="stat">74.69</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">260</p>
+      <p class="stat">151</p>
     </div>
   </div>
   <div class="row historical">
@@ -62,11 +62,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
-      <p class="stat">28.90</p>
+      <p class="stat">19.11</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
-      <p class="stat">0.84</p>
+      <p class="stat">0.52</p>
     </div>
   </div>
 </div>
@@ -96,8 +96,8 @@
 /*#ifndef(UMD)*/
 &quot;use strict&quot;;
 /*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
-/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
 /*global _gpfPathJoin*/ // Join all arguments together and normalize the resulting path
+/*global _gpfRequireConfigure*/ // Configure the {@link gpf.require} layer
 /*global _gpfRequireLoad*/ // Load the resource
 /*exported _gpfRequireAllocate*/ // Allocate a new require context with the proper methods
 /*#endif*/
@@ -106,106 +106,14 @@
 /*jshint -W040*/
 /*eslint-disable no-invalid-this*/
 
-_gpfErrorDeclare(&quot;require&quot;, {
-
-    /**
-     * ### Summary
-     *
-     * Invalid {@link gpf.require.configure} option
-     *
-     * ### Description
-     *
-     * This error is triggered whenever an option passed to {@link gpf.require.configure} is not recognized.
-     * Please check the {@link gpf.typedef.requireOptions} documentation.
-     * @since 0.2.2
-     */
-    invalidRequireConfigureOption:
-        &quot;Invalid configuration option&quot;
-});
-
-/**
- * @namespace gpf.require
- * @description Root namespace for the modularization helpers.
- * @since 0.2.2
- */
-
-/**
- * @typedef gpf.typedef.requireOptions
- * @property {String} [base] Base path used to resolve names
- * @property {Object} [cache] Inject names into the require cache
- * @property {Boolean} [clearCache=false] When set, the require cache is first cleared
- * @property {Object} [preload] Inject names into the loading cache
- * @since 0.2.2
- */
-
 /**
  * @typedef gpf.typedef._requireContext
  * @property {String} base Base path used to resolve names
  * @property {Object} cache Dictionary of loaded requires
+ * @property {Object} preload Dictionary of preloaded requires
+ * @property {gpf.typedef.requirePreprocessFunc} preprocess Preprocess function
  * @since 0.2.2
  */
-
-var _GPF_REQUIRE_OPTION_PRIORITY_HIGH = -1,
-    _GPF_REQUIRE_OPTION_PRIORITY_LOW = 1;
-
-/**
- * Valuate the option priority to have them executed in the proper order
- *
- * @param {String} name option name
- * @return {Number} Option priority
- * @since 0.2.2
- */
-function _gpfRequireOptionPriority (name) {
-    if (name === &quot;clearCache&quot;) {
-        return _GPF_REQUIRE_OPTION_PRIORITY_HIGH;
-    }
-    return _GPF_REQUIRE_OPTION_PRIORITY_LOW;
-}
-
-/**
- *  Dictionary of option name to function handling the option
- * @type {Object}
- * @since 0.2.2
- */
-var _gpfRequireOptionHandler = {
-
-    base: function (base) {
-        this.base = base;
-    },
-
-    cache: function (cache) {
-        _gpfArrayForEach(Object.keys(cache), function (name) {
-            this.cache[name] = Promise.resolve(cache[name]);
-        }, this);
-    },
-
-    clearCache: function () {
-        this.cache = {};
-    },
-
-    preload: function (cache) {
-        _gpfArrayForEach(Object.keys(cache), function (name) {
-            this.preload[name] = cache[name];
-        }, this);
-    }
-
-};
-
-/**
- * Configure the {@link gpf.require} layer
- *
- * @param {gpf.typedef.requireOptions} options Options to configure
- * @since 0.2.2
- */
-function _gpfRequireConfigure (options) {
-    var me = this;
-    _gpfArrayForEach(Object.keys(options).sort(function (key1, key2) {
-        // Some keys must be processed first
-        return _gpfRequireOptionPriority(key1) - _gpfRequireOptionPriority(key2);
-    }), function (key) {
-        (_gpfRequireOptionHandler[key] || gpf.Error.invalidRequireConfigureOption).call(me, options[key]);
-    }, me);
-}
 
 /**
  * Resolves the resource name according to current require context.
@@ -309,33 +217,16 @@ function _gpfRequireAllocate (parentContext, options) {
 gpf.require = _gpfRequireAllocate({
     base: &quot;&quot;,
     cache: {},
-    preload: {}
+    preload: {},
+    preprocess: function (resource) {
+        return Promise.resolve(resource);
+    }
 });
 
 /**
  * @method gpf.require.define
  * @gpf:sameas _gpfRequireDefine
  * @since 0.2.2
- */
-
-/**
- * @method gpf.require.configure
- * @gpf:sameas _gpfRequireConfigure
- * @since 0.2.2
- *
- * @example &lt;caption&gt;Setting the base path&lt;/caption&gt;
- * gpf.require.configure({
- *   base: &quot;/test/require&quot;
- * });
- * assert(gpf.require.resolve(&quot;file.js&quot;) === &quot;/test/require/file.js&quot;);
- *
- * @example &lt;caption&gt;Injecting in the cache&lt;/caption&gt;
- * var cache = {};
- * cache[gpf.require.resolve(&quot;data.json&quot;)] = {};
- * gpf.require.configure({
- *   clearCache: true,
- *   cache: cache
- * });
  */
 
 /**

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/require/configure.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/require/configure.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">82.92</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">139</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">13.23</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.18</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @file Require configuration implementation
+ * @since 0.2.9
+ */
+/*#ifndef(UMD)*/
+&quot;use strict&quot;;
+/*global _gpfArrayForEach*/ // Almost like [].forEach (undefined are also enumerated)
+/*global _gpfErrorDeclare*/ // Declare new gpf.Error names
+/*exported _gpfRequireConfigure*/ // Configure the {@link gpf.require} layer
+/*exported _gpfRequireConfigureAddOption*/ // Declare a configuration option
+/*#endif*/
+
+/* this is globally used as the current context in this module */
+/*jshint -W040*/
+/*eslint-disable no-invalid-this*/
+
+_gpfErrorDeclare(&quot;require/configure&quot;, {
+
+    /**
+     * ### Summary
+     *
+     * Invalid {@link gpf.require.configure} option
+     *
+     * ### Description
+     *
+     * This error is triggered whenever an option passed to {@link gpf.require.configure} is not recognized.
+     * Please check the {@link gpf.typedef.requireOptions} documentation.
+     * @since 0.2.2
+     */
+    invalidRequireConfigureOption:
+        &quot;Invalid configuration option&quot;,
+
+    /**
+     * ### Summary
+     *
+     * Invalid {@link gpf.require.configure} option value
+     *
+     * ### Description
+     *
+     * This error is triggered whenever an option passed to {@link gpf.require.configure} has an invalid value.
+     * Please check the {@link gpf.typedef.requireOptions} documentation.
+     * @since 0.2.9
+     */
+    invalidRequireConfigureOptionValue:
+        &quot;Invalid configuration option value&quot;
+});
+
+/**
+ * @namespace gpf.require
+ * @description Root namespace for the modularization helpers.
+ * @since 0.2.2
+ */
+
+/**
+ * @typedef gpf.typedef.requireOptions
+ * @property {String} [base] Base path used to resolve names
+ * @property {Object} [cache] Inject names into the require cache
+ * @property {Boolean} [clearCache=false] When set, the require cache is first cleared
+ * @property {Object} [preload] Inject names into the loading cache
+ * @property {gpf.typedef.requirePreprocessFunc} [preprocess] Resource preprocessor
+ * @since 0.2.2
+ */
+
+var
+    /**
+     * Dictionary of option name to function handling the option
+     * @type {Object}
+     * @since 0.2.2
+     */
+    _gpfRequireConfigureHandler = {},
+
+    /**
+     * Array of option names which order is significant
+     * @type {Array}
+     * @since 0.2.9
+     */
+    _gpfRequireConfigureOptionNames = [];
+
+/**
+ * Declare a configuration option
+ *
+ * @param {String} name Option name
+ * @param {Function} handler Option handler (will receive context and value)
+ * @param {Boolean} [highPriority=false] Option must be handled before the others
+ * @since 0.2.9
+ */
+function _gpfRequireConfigureAddOption (name, handler, highPriority) {
+    if (highPriority) {
+        _gpfRequireConfigureOptionNames.unshift(name);
+    } else {
+        _gpfRequireConfigureOptionNames.push(name);
+    }
+    _gpfRequireConfigureHandler[name] = handler;
+}
+
+function _gpfRequireConfigureCheckOptions (options) {
+    _gpfArrayForEach(Object.keys(options), function (name) {
+        if (!_gpfRequireConfigureHandler[name]) {
+            gpf.Error.invalidRequireConfigureOption();
+        }
+    });
+}
+
+/**
+ * Configure the {@link gpf.require} layer
+ *
+ * @param {gpf.typedef.requireOptions} options Options to configure
+ * @throws {gpf.Error.InvalidRequireConfigureOption}
+ * @since 0.2.2
+ */
+function _gpfRequireConfigure (options) {
+    _gpfRequireConfigureCheckOptions(options);
+    var me = this;
+    _gpfArrayForEach(_gpfRequireConfigureOptionNames.filter(function (name) {
+        return options[name] !== undefined;
+    }), function (name) {
+        _gpfRequireConfigureHandler[name](me, options[name]);
+    });
+}
+
+/**
+ * @method gpf.require.configure
+ * @gpf:sameas _gpfRequireConfigure
+ * @since 0.2.2
+ *
+ * @example &lt;caption&gt;Setting the base path&lt;/caption&gt;
+ * gpf.require.configure({
+ *   base: &quot;/test/require&quot;
+ * });
+ * assert(gpf.require.resolve(&quot;file.js&quot;) === &quot;/test/require/file.js&quot;);
+ *
+ * @example &lt;caption&gt;Injecting in the cache&lt;/caption&gt;
+ * var cache = {};
+ * cache[gpf.require.resolve(&quot;data.json&quot;)] = {};
+ * gpf.require.configure({
+ *   clearCache: true,
+ *   cache: cache
+ * });
+ */</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
