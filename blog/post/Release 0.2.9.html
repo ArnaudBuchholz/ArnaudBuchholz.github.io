@@ -1,0 +1,100 @@
+<script language="javascript" src="../include.js"></script>
+<script language="javascript" src="../export.js"></script>
+<link rel="stylesheet" type="text/css" href="../file.css" />
+<div class="post">
+<h3 class="post-title entry-title">
+    Release 0.2.9: ES6 Support
+</h3>
+<div class="post-header">
+    <div class="post-header-line-1"></div>
+</div>
+<div class="post-body">
+<a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
+<div class="summary">
+    <img src="https://ArnaudBuchholz.github.io/blog/release.png" align="left">
+    This release introduces ES6 support into the library.
+</div>
+<code class="markdown">
+## Release 0.2.9: ES6 Support
+
+* [Stories and bugs](https://github.com/ArnaudBuchholz/gpf-js/milestone/17?closed=1) implemented
+* [Sources](https://github.com/ArnaudBuchholz/gpf-js/tree/v0.2.9)
+* [Documentation](https://arnaudbuchholz.github.io/gpf/doc/index.html)
+* [NPM package](https://www.npmjs.com/package/gpf-js)
+
+## Release content
+
+### ES6 support
+
+Subclassing an ES6 class
+
+Attributes through decorators
+
+Require preprocessor to enable decorator substitutions
+Also improved configuration validation
+
+Had to adapt $singleton & $abstract
+
+### Improved serialization
+
+Serialization name
+
+Asymetric Serialization
+
+### Improved compatibility
+
+atob and btoa
+
+removed compatibleName
+
+any verb in gpf.http.request
+
+### New flavor node
+
+
+
+## Lessons learned
+
+### Asymetric Serialization
+
+Had lots of difficulties to set the principles
+Ended up doing the most flexible choice
+
+### Refactoring of classes
+
+Base classes are now associated with a class definition
+Also had to deal with anonymous classes (changed the validation)
+Had to reconsider preprocessor (wanted to import decorators)
+
+### Refactoring of tests
+
+Regarding include path
+
+### Improved flavor mechanism
+
+to allow node and have part of COMPATIBILITY
+
+### New eslint rules
+
+no-substr
+
+no-empty-modules
+
+### Release notes
+
+Difficult to find the release notes since one had to jump to github to check each Release
+Now the readme points to them
+For the current one, a redirection mechanism makes sure one access it when available
+
+## Next release
+
+The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/18) is about performances.
+It's been a while I wanted to manipulate the release code to inline functions as much as possible and substitute loops
+for performances.
+
+Still, I need to work on the side project beacuse it **really** requires all my attention.
+
+</code>
+</div>
+</div>
