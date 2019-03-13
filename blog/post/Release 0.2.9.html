@@ -10,11 +10,10 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <div class="summary">
     <img src="https://ArnaudBuchholz.github.io/blog/release.png" align="left">
     This release mainly introduces ES6 support as well as improvements to the serialization helpers.
-    A new flavor is created for Node.js-only users.
+    A new flavor is created for Node.js users.
 </div>
 <code class="markdown">
 ## Release 0.2.9: ES6 Support
@@ -28,67 +27,99 @@
 
 ### ES6 support
 
-While working on a side project which is based on Node.js, I realized that the library did not support ES6 classes.
-Not only the gpf.define API is not able to extend any of them (even if it does not really make sense) but
-it is also impossible to add attributes to a class that was not previously created with gpf.define (which is more
+While working on a side project which is based on Node.js, I realized that **the library did not support ES6 classes**.
+Not only the gpf.define API was not able to extend any of them (even if it does not really make sense) but
+it was also **impossible to add attributes** to a class that was not previously created with gpf.define (which is more
 problematic).
 
 After doing a quick test, a solution was drafted to detect and handle these classes the right way.
 It is all explained in the article
 [How I learned from a crazy idea](http://gpf-js.blogspot.com/2019/01/how-i-learned-from-crazy-idea.html).
 
-The $singleton and $abstract syntaxes were adapted accordingly.
+The [$singleton and $abstract](https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html) syntaxes were adapted
+accordingly.
 
-(...) It is clearly **not recommended** to extend ES6 class using gpf.define
+(...) It is clearly **not recommended** to extend ES6 class using
+[gpf.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.define__anchor).
 
-In order to integrate attributes the right way, a quick look in the coming ES6 features pointed out the fact that
-[decorators](https://medium.com/google-developers/exploring-es7-decorators-76ecb65fb841) are used to qualify class
+In order to integrate attributes properly, a quick look in the **coming ES6 features** pointed out the fact that
+**[decorators](https://medium.com/google-developers/exploring-es7-decorators-76ecb65fb841)** are used to qualify class
 members. Hence, an
 [attribute decorator](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.html#.decorator__anchor) was created.
 
-Last but not least, since decorators are not yet supported without transpiling, the library allows preprocessing
-of resources so that decorators can be subsituted with manuall call of the decorator.
-This was also the opportunity to refactor in depth the validation of the require configuration options.
+Last but not least, since decorators are not yet supported without
+[transpiling](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them),
+the library allows **[preprocessing](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.requireOptions) of
+resources** so that decorators can be subsituted with
+[manual call of the decorator](https://github.com/ArnaudBuchholz/gpf-js/blob/bb6936760963f7dc4fc942da1eadeead5976b3b1/
+test/require/es6/class_with_attributes.js#L45).
+
+This was also the opportunity to **refactor** in depth the validation of the require configuration options.
 
 ### Improved serialization
 
-While working on a side project that is extensively using serialization attributes, the need for code simplification
-became obvious.
+The side project is **extensively using
+[serialization attributes](https://arnaudbuchholz.github.io/gpf/doc/gpf.attributes.Serializable.html)**.
+Quickly, the need for **code simplification** became obvious.
 
-First of all, it didn't make sense to repeat the name attribute when it could be easily deduced from the member the
-attribute was set on.
+First, it does not make sense to repeat the
+[property name](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.serializableProperty)
+when it can be easily **deduced** from the member the attribute is assigned to.
 
-Second, these attributes are used in a context where serialization is used to implement an ODATA service.
-Consequently, these attributes are used to describe how the data should be sent back the client but also how it is
+(...) When set on a 'private' member, the result property name won't include the underscore.
+
+Then, these attributes are used in a context where serialization is used to implement an
+**[ODATA](https://www.odata.org/) service**.
+Consequently, they are used to **describe** how the data should be sent back the client but also how it is
 received.
 
-At some points, it was necessary to indicates which members should not be modified by the client. (For instance, the ID)
+For instance, an entity unique identifier must be transmitted to the client but it will never be modified by the client.
 
-With asymetric serialization, it is possible to distinguish when an attribute is read-only (i.e. it can be serialized but not deserialized).
+With the introduction of the
+[readOnly property](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.serializableProperty), it is possible
+to make this distinction and have **asymetric serialization**.
 
-Furthermore, the class itself may indicate if the member should be modified or not. Indeed, with the use of Object.defineProperty, it
-is possible to define the (get, set) couple and, consequently, define read-only members.
-The serialization helpers will leverage Object.getOwnProperties if the host supports it and determine the readOnly member
-when not speicifed.
+But, as for names, it does not make sense to repeat something that is **already built in the class**.
+Indeed, with the use [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+Global_Objects/Object/defineProperty) - or using ES6 class getter / setter - it is possible to define the (get, set)
+couple and, when not setter exists, configure read-only members.
+
+That's why, **when the hosts supports it**, the serialization code will leverage
+[Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+Object/getOwnPropertyDescriptor) recursively on
+the class hierarchy to **determine if the member is read-only**.
 
 ### Improved compatibility
 
-atob and btoa were added to the compatiblity layer.
+Browser's **base64 helpers** ([atob](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/
+atob) and [btoa](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa)) were added to
+the [compatibility](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html) layer.
 
-The Function.prototpye.compatibleName method has been removed since it induced an extension of the Function prototype.
-Usually, libraries should avoid doing that because it is against best practices.
+The Function.prototype.compatibleName method has been **removed** since it induced an **extension of the Function
+prototype**. Usually, libraries should avoid doing that because it is **against best practices**.
 
-Still doing some tests, the gpf.http.request was absurdly limited in terms of verbs supports. Some hosts do not support
-custom verbs (and this is documented in the compatibility page) but browsers & node supports almost any verb.
-The code was modified to allow the use of custom verbs.
+Because of the [mocking](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.mock__anchor) implementation, the
+[gpf.http.request](https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.request__anchor) was **limited** in terms
+of which [http methods](https://www.restapitutorial.com/lessons/httpmethods.html) could be used.
+Some hosts do not support
+custom verbs (and this is **documented** in the
+[compatibility page](https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html)) but browsers & node supports
+almost any verb. The code was modified to allow the use of **custom verbs**.
 
-Surprisingly, the [String method .substr](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substr)
-is documented as *"to be avoided when possible"*. Since it was massively used in the code, a ESLint custom rule was developped and the code adapted.
+Surprisingly, the
+[String method .substr](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substr)
+is documented as *"to be avoided when possible"*.
+Since it was massively used in the sources, an ESLint
+[custom rule](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/no-substr.js) was developped and the
+code reworked.
 
 ### New flavor node
 
-A Node.js flavor was created and is used as the default library being loaded when using require("gpf-js").
-It includes all features, including the compatibility's atob and btoa.
+A **Node.js flavor** was created and is used as the **default library** being loaded when using `require("gpf-js")`
+
+It implements **all features** including the compatibility's atob and btoa.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ## Lessons learned
 
