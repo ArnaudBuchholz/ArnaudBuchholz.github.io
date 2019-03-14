@@ -28,9 +28,10 @@
 ### ES6 support
 
 While working on a side project which is based on Node.js, I realized that **the library did not support ES6 classes**.
-Not only the gpf.define API was not able to extend any of them (even if it does not really make sense) but
-it was also **impossible to add attributes** to a class that was not previously created with gpf.define (which is more
-problematic).
+Not only the [gpf.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.define__anchor) API was not able to extend
+any of them (even if it does not really make sense) but
+it was also **impossible to add attributes** to a class that was not previously created with
+[gpf.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.define__anchor) (which is more problematic).
 
 After doing a quick test, a solution was drafted to detect and handle these classes the right way.
 It is all explained in the article
@@ -119,57 +120,62 @@ A **Node.js flavor** was created and is used as the **default library** being lo
 
 It implements **all features** including the compatibility's atob and btoa.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ## Lessons learned
 
 ### Asymetric Serialization
 
 The user story [Asymetric serialization](https://github.com/ArnaudBuchholz/gpf-js/issues/299) required several updates
-since it was pretty difficult to find the right balance between simplicity of use and flexibility. In the end,
-this feature is really usefull when going through a converter function since this is the place where one can control
+since it was pretty difficult to find the right **balance between simplicity of use and flexibility**. In the end,
+this feature is really powerfull when applied with a converter function. Indeed, this is the place where one can control
 if the value will be serialized or not.
 
 ### Refactoring of classes
 
-Integrating ES6 class was only a small part of the challenge. Actually, the library was suffering from inner defect
-regarding how class inheritance was handled. Actually, when looking for a class definition, you could get a base class
-provided the class was an instance of this one.
+Integrating ES6 classes was only the visible part of the challenging iceberg.
+Actually, **the library was suffering from a structural defect regarding how classes were handled**.
 
-To solve this issue, a mechanism was put in place to import classes and import all the class hierarchy up to root classes (i.e. Object).
-It also means that base classes are now associated with a class definition right upon the startup of the library.
+Initially, each class was associated to a **class definition** created only when using
+[gpf.define](https://arnaudbuchholz.github.io/gpf/doc/gpf.html#.define__anchor).
+This object **holds important information** such as the list of attributes.
+
+When subclassing, the parent class definition was looked up by searching the one that matches the condition
+`instanceBuilder.prototype instanceof entityDefinition.getInstanceBuilder()`
+(*see [full code](https://github.com/ArnaudBuchholz/gpf-js/blob/v0.2.8/src/define/build.js#L30)*)
+
+As a result, you could have classes in the hierarchy that were invisible because not created with the library.
+
+To solve this issue, a mechanism was put in place to **import any class as well as its hierarchy up to the root class**
+(i.e. [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)).
+It also means that **base classes are now associated with a class definition** during the
+[startup of the library](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/define/class/standard.js).
 
 This also imply that the library may have to deal with anonymous functions when importing a class.
-It is still not possible to use gpf.define with a class name but, internally, the library can import *any* function.
 
-### Putting the effort at the right place
-
-When looking to import decorators, the initial idea was to have the library replace them when an ES6 class definition
-is [required](https://arnaudbuchholz.github.io/gpf/doc/gpf.require.html#.define__anchor).
-
-However, this would need the library to parse the javascript in order to detect the decorator uses.
-
-Since this should be let out of the library scope, it was instead decided to open resource preprocessing so that
-any user of the library could implement its own decorator substitution (or any other usefull feature).
+It is still not possible to use gpf.define without a class name but, internally, **the library can import *any* class**.
 
 ### Refactoring of tests
 
-Introduction of ES6 to the library had a significant impact on how the tests are made.
-Indeed, it is mandatory to check if the host is actually supporting the ES6 class syntax.
-Node.js is an obvious candidate but the library does not distinguish browsers.
+Introduction of ES6 in the library had a **significant impact on how the tests are executed**.
 
-So a new mechansim was built to detect features and add some flags to a global object available during the tests.
+Indeed, it is mandatory to check **if the host is really supporting the ES6 class syntax** before trying to create one.
 
-The same way, the same algorithm was used multiple times to adapt reading / require pathRegarding include path
+So a new mechansim was built to:
+* **detect features** (with the possibility to override them, like for nodewscript), result is transmitted in a global
+  object available during the tests
+* **include test files** dynamically
 
 ### Improved flavor mechanism
 
-Build the Node.js flavor was harder than expected. Since the compatibility layer was not included, the internal use
-of .compatibleName didn't work anymore. That's the reason why it was decided to remove it. Instad an internal function
-was created to extract a function name (that points to the name property by default).
+Writing the Node.js flavor was harder than expected. The main struggle came from the **inclusion of base64 helpers
+without getting the whole compatibility layer**.
+Furthermore, without the compatibility layer, the *compatibleName* function member was no more available.
+This broke the code at many places. That's why it was decided to replace it with an **internal helper** to extract
+the function name where needed (it points to the name property by default).
 
-Furthermore, a flavor debugging page was created to ensure that any update on the flavor algorithm would fit the
-expectations.
+Also, a [flavor debugging page](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/flavor.html) was created to
+**ensure that any update on the flavor algorithm would fit the expectations**.
+
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 
 ### New eslint rules
 
