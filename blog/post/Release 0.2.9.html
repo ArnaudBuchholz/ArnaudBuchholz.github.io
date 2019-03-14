@@ -10,6 +10,7 @@
 </div>
 <div class="post-body">
 <a href="#todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a><br />
+<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
 <div class="summary">
     <img src="https://ArnaudBuchholz.github.io/blog/release.png" align="left">
     This release mainly introduces ES6 support as well as improvements to the serialization helpers.
@@ -51,7 +52,7 @@ members. Hence, an
 Last but not least, since decorators are not yet supported without
 [transpiling](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them),
 the library allows **[preprocessing](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.requireOptions) of
-resources** so that decorators can be subsituted with
+resources** so that decorators can be substituted with
 [manual call of the decorator](https://github.com/ArnaudBuchholz/gpf-js/blob/bb6936760963f7dc4fc942da1eadeead5976b3b1/
 test/require/es6/class_with_attributes.js#L45).
 
@@ -78,7 +79,7 @@ For instance, an entity unique identifier must be transmitted to the client but 
 
 With the introduction of the
 [readOnly property](https://arnaudbuchholz.github.io/gpf/doc/gpf.typedef.html#.serializableProperty), it is possible
-to make this distinction and have **asymetric serialization**.
+to make this distinction and have **asymmetric serialization**.
 
 But, as for names, it does not make sense to repeat something that is **already built in the class**.
 Indeed, with the use [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
@@ -111,7 +112,7 @@ Surprisingly, the
 [String method .substr](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substr)
 is documented as *"to be avoided when possible"*.
 Since it was massively used in the sources, an ESLint
-[custom rule](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/no-substr.js) was developped and the
+[custom rule](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/no-substr.js) was developed and the
 code reworked.
 
 ### New flavor node
@@ -122,11 +123,11 @@ It implements **all features** including the compatibility's atob and btoa.
 
 ## Lessons learned
 
-### Asymetric Serialization
+### asymmetric Serialization
 
-The user story [Asymetric serialization](https://github.com/ArnaudBuchholz/gpf-js/issues/299) required several updates
+The user story [asymmetric serialization](https://github.com/ArnaudBuchholz/gpf-js/issues/299) required several updates
 since it was pretty difficult to find the right **balance between simplicity of use and flexibility**. In the end,
-this feature is really powerfull when applied with a converter function. Indeed, this is the place where one can control
+this feature is really powerful when applied with a converter function. Indeed, this is the place where one can control
 if the value will be serialized or not.
 
 ### Refactoring of classes
@@ -144,12 +145,12 @@ When subclassing, the parent class definition was looked up by searching the one
 
 As a result, you could have classes in the hierarchy that were invisible because not created with the library.
 
-To solve this issue, a mechanism was put in place to **import any class as well as its hierarchy up to the root class**
+To solve this issue, a new code was put in place to **import any class as well as its hierarchy up to the root class**
 (i.e. [Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)).
 It also means that **base classes are now associated with a class definition** during the
 [startup of the library](https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/define/class/standard.js).
 
-This also imply that the library may have to deal with anonymous functions when importing a class.
+This also implies that the library may have to deal with anonymous functions when importing a class.
 
 It is still not possible to use gpf.define without a class name but, internally, **the library can import *any* class**.
 
@@ -159,7 +160,7 @@ Introduction of ES6 in the library had a **significant impact on how the tests a
 
 Indeed, it is mandatory to check **if the host is really supporting the ES6 class syntax** before trying to create one.
 
-So a new mechansim was built to:
+So a new algorithm was built to:
 * **detect features** (with the possibility to override them, like for nodewscript), result is transmitted in a global
   object available during the tests
 * **include test files** dynamically
@@ -175,28 +176,31 @@ the function name where needed (it points to the name property by default).
 Also, a [flavor debugging page](https://github.com/ArnaudBuchholz/gpf-js/blob/master/make/flavor.html) was created to
 **ensure that any update on the flavor algorithm would fit the expectations**.
 
-<a name="todo">&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;&#128317;&#128315;</a>
-
 ### New eslint rules
 
-As mentionned before, a new eslint rule was created to forbid the use of .substr:
+As mentioned before, a **custom eslint rule** was created to forbid the use of .substr:
 [no-substr](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/no-substr.js).
 
-The same way, another rule was create to ensures that if a module has no function, a default one is being created:
+The same way, another rule was created to ensure that when a module has no function, a default one is being created:
 [no-empty-modules](https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/no-empty-module.js).
 
-This the linters are applied every time a module is modified, more custom rules might be created to solve common
-problems (such as dependencies update).
+(...) One weakness of [plato](https://www.npmjs.com/package/plato) is the evaluation of a module with no function
+
+As the linters are applied every time a module is modified, **more custom rules will be created to solve common
+problems** (such as dependencies update).
 
 ### Release notes
 
-Now that more than 14 releases exist for the library, it takes some time to access the release notes since one had to
-go to the release tab of GitHub in order to find them.
+Today, there are **more than 14 releases** for the library.
+It takes some time to access the **release notes** since one has to go to the
+[release information](https://github.com/ArnaudBuchholz/gpf-js/releases) in GitHub in order to find them.
 
-It was decided to change the readme to include a link to the release notes.
+It was decided to change the [readme](https://github.com/ArnaudBuchholz/gpf-js#versions) to embed a direct link to
+each note.
 
-Regarding the last version, since the notes are usually written once the release is out, a mechanism was built to
-make any reader wait until the notes are out.
+However, regarding the last version, its notes are usually **written after the release was created**.
+A [page](http://gpf-js.blogspot.com/p/release-notes-are-coming.html) was built to redirect the
+reader **when the notes are out**.
 
 ## Next release
 
@@ -204,8 +208,7 @@ The [next release content](https://github.com/ArnaudBuchholz/gpf-js/milestone/18
 It's been a while I wanted to manipulate the release code to inline functions as much as possible and substitute loops
 for performances.
 
-Still, I need to work on the side project beacuse it **really** requires all my attention.
-
+Still, I need to work on the side project because it **really** requires all my attention.
 </code>
 </div>
 </div>
