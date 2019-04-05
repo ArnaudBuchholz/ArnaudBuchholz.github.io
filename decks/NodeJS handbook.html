@@ -348,17 +348,40 @@ console.log(multiply(5)) // 5</code></pre>
 				code = gpf.web.createTagFunction("code");
 			[].slice.call(document.querySelectorAll("a.code")).forEach(function (a) {
 				var href = a.getAttribute("href"),
-					name = decodeURI(href.split("/").pop());
+					name = decodeURI(href.split("/").pop()),
+					es6SrcUrl = href
+						.replace("https://github.com", "https://raw.githubusercontent.com")
+						.replace("/blob/", "/"),
+					es5SrcUrl = es6SrcUrl.replace(".js", ".es5.js");
 				a.appendChild(document.createTextNode(name));
-				gpf.http.get(href
-					.replace("https://github.com", "https://raw.githubusercontent.com")
-					.replace("/blob/", "/")
-				)
-					.then(function (response) {
+				Promise.all([
+					gpf.http.get(es6SrcUrl),
+					gpf.http.get(es5SrcUrl)
+				]).then(function (responses) {
 						var next = a.nextSibling,
-							node = pre(code(response.responseText)).appendTo(a.parentNode);
+							es6Code = pre(code(responses[0].responseText)).appendTo(a.parentNode),
+							es5Code;
+						if (responses[1].status === 200) {
+							es5Code = pre(code(responses[1].responseText)).appendTo(a.parentNode);
+						}
 						if (next) {
-							a.parentNode.insertBefore(node, next);
+							a.parentNode.insertBefore(es6Code, next);
+							if (es5Code) {
+								a.parentNode.insertBefore(es5Code, next);
+							}
+						}
+						if (es5Code) {
+							es5Code.setAttribute("style", "display: none;");
+							es5Code.setAttribute("class", "es5");
+							es5Code.addEventListener("click", function () {
+								es5Code.setAttribute("style", "display: none;");
+								es6Code.setAttribute("style", "display: block;");
+							});
+							es6Code.setAttribute("class", "es6");
+							es6Code.addEventListener("click", function () {
+								es6Code.setAttribute("style", "display: none;");
+								es5Code.setAttribute("style", "display: block;");
+							});
 						}
 					});
 			});
