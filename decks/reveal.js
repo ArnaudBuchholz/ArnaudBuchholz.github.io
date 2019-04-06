@@ -10,7 +10,7 @@ gpf.require.define({
     var dom = require.dom,
         head = dom.head(),
         // Keep track of any styles node below the head node
-        styles = [].slice.call(head.querySelectorAll("style")),
+        styles = [].slice.call(head.querySelectorAll("style,link")),
         // Use cached reveal if offline
         offline = !!location.toString().match(/(\?|&)offline\b/);
 
