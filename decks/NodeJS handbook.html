@@ -303,7 +303,11 @@ server.listen(port, hostname, () => {
 							<li><code>async</code> functions are <strong>asynchronous</strong> and <strong>implicitly</strong> returns a promise</li>
 							<li>The <code>await</code> operator is used to <strong>wait</strong> for a promise</li>
 						</ul>
-						<br />
+					</section>
+					<section>
+						<h4><strong>ES6</strong> Promises <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"></a>,
+							async <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"></a>
+							and await <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await"></a></h4>
 						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/es6/async.js"></a>
 					</section>
 					<section>
@@ -327,6 +331,9 @@ console.log(multiply(5)) // 5</code></pre>
 		return this.width * this.height
 	}
 }</code></pre>
+					</section>
+					<section>
+						<h4>Other <strong>ES6</strong> features</h4>
 						<ul>
 							<li>Modules <a class="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import"></a></li>
 						</ul>
@@ -346,6 +353,12 @@ console.log(multiply(5)) // 5</code></pre>
 		<script>
 			var pre = gpf.web.createTagFunction("pre"),
 				code = gpf.web.createTagFunction("code");
+			function hide (element) {
+				element.setAttribute("style", "display: none;");
+			}
+			function show (element) {
+				element.setAttribute("style", "display: block;");
+			}
 			[].slice.call(document.querySelectorAll("a.code")).forEach(function (a) {
 				var href = a.getAttribute("href"),
 					name = decodeURI(href.split("/").pop()),
@@ -359,28 +372,27 @@ console.log(multiply(5)) // 5</code></pre>
 					gpf.http.get(es5SrcUrl)
 				]).then(function (responses) {
 						var next = a.nextSibling,
-							es6Code = pre(code(responses[0].responseText)).appendTo(a.parentNode),
+							srcCode = pre(code(responses[0].responseText)).appendTo(a.parentNode),
 							es5Code;
 						if (responses[1].status === 200) {
-							es5Code = pre(code(responses[1].responseText)).appendTo(a.parentNode);
+							es5Code = pre({"class": "es5"}, code(responses[1].responseText)).appendTo(a.parentNode);
 						}
 						if (next) {
-							a.parentNode.insertBefore(es6Code, next);
+							a.parentNode.insertBefore(srcCode, next);
 							if (es5Code) {
 								a.parentNode.insertBefore(es5Code, next);
 							}
 						}
 						if (es5Code) {
-							es5Code.setAttribute("style", "display: none;");
-							es5Code.setAttribute("class", "es5");
+							srcCode.setAttribute("class", "es6");
+							hide(es5Code);
 							es5Code.addEventListener("click", function () {
-								es5Code.setAttribute("style", "display: none;");
-								es6Code.setAttribute("style", "display: block;");
+								hide(es5Code);
+								show(srcCode);
 							});
-							es6Code.setAttribute("class", "es6");
-							es6Code.addEventListener("click", function () {
-								es6Code.setAttribute("style", "display: none;");
-								es5Code.setAttribute("style", "display: block;");
+							srcCode.addEventListener("click", function () {
+								hide(srcCode);
+								show(es5Code);
 							});
 						}
 					});
