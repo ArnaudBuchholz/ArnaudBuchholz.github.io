@@ -83,19 +83,6 @@ a.mdn {
 					<section>
 						<h4>Hello World</h4>
 						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/hello%20world.js"></a>
-						<!-- <pre><code>const http = require('http')
-const hostname = '127.0.0.1'
-const port = 3000
-
-const server = http.createServer((request, response) => {
-  response.statusCode = 200
-  response.setHeader('Content-Type', 'text/plain')
-  response.end('Hello World\n')
-})
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`)
-})</code></pre> -->
 					</section>
 					<section>
 						<h4><strong>History</strong> 1/2</h4>
@@ -358,9 +345,30 @@ console.log(multiply(5)) // 5</code></pre>
 					</section>
 					<section>
 						<h4>Node.js as a <strong>Command Line</strong></h4>
-						<small>process.exit, process.env, args, output</small>
+						<ul>
+							<li>The <strong>current Node.js instance</strong> information is available through the <a href="https://nodejs.org/api/process.html"><code>process</code></a> object
+								<ul>
+									<li><strong>Environment variables</strong> are on the <a href="https://nodejs.org/api/process.html#process_process_env"><code>process.env</code></a> dictionary</li>
+									<li>Command line <strong>arguments</strong> are in the <a href="https://nodejs.org/api/process.html#process_process_argv"><code>process.argv</code></a> array</li>
+								</ul>
+							</li>
+							<li><a href="https://nodejs.org/api/console.html"><code>console</code></a> APIs output on the command line</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Node.js as a <strong>Command Line</strong></h4>
+						<p><strong>Reading</strong> from the command line is not straightforward</p>
+						<a class="code" href="https://github.com/ArnaudBuchholz/training-nodejs-playground/blob/master/handbook/input.js"></a>
 					</section>
 				</section>
+				<section>
+					<section>
+						<h3><b>Exercise 1:</b> Folder browser</h3>
+					</section>
+					<section>
+						<h4>Prerequesites</h4>
+					</section>
+				<section>
 			</div>
 		</div>
 		<script src="/gpf/0.2.8/gpf.js"></script>
