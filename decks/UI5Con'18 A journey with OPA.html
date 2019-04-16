@@ -8,6 +8,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta name="deck-duration" content="40">
 		<link rel="stylesheet" type="text/css" href="styles.css">
 	</head>
 	<body onload="onLoad()">
@@ -26,51 +27,7 @@
 						<img src="UI5Con'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
 						<img src="UI5Con'18%20A%20journey%20with%20OPA/UI5Con.png" height="100px" style="border: 0;" />
 					</section>
-					<section>
-						<h3>Arnaud <strong>Buchholz</strong></h3>
-						<table>
-							<tr>
-								<td width="25%">
-									<img src="/gfx/me40.png" />
-								</td>
-								<td  style="vertical-align: top;">
-									<small>
-										<ul>
-											<li>Development Expert @ SAP</li>
-											<li>In the software industry for <strong><span id="software_years"></span> years</strong></li>
-											<li><strong><span id="js_years"></span> years</strong> of experience with <strong>JavaScript</strong>
-												<ul>
-													<li>Front-End development: <span id="fe_years"></span> years</li>
-													<li>SapUI5: <span id="ui5_years"></span> years</li>
-												</ul>
-											</li>
-											<li>Passionate, curious &amp; experimenting</li>
-											<li>French and almost <strong>Canadian</strong></li>
-										</ul>
-									</small>
-									<script>
-										var year = new Date().getFullYear(),
-											years = {
-												software: 1998,
-												js: 2008,
-												fe: 2013,
-												ui5: 2015
-											};
-										Object.keys(years).forEach(function (id) {
-											document.getElementById(id + "_years").innerHTML = year - years[id];
-										});
-									</script>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2" style="border: 0;">
-									<a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" style="border: 0; box-shadow: unset;" /></a>
-									<a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" style="border: 0; box-shadow: unset;" /></a>
-									<a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" style="border: 0; box-shadow: unset;" /></a>
-								</td>
-							</tr>
-						</table>
-					</section>
+					<section include="me.html"></section>
 					<section>
 						<h3><strong>Agenda</strong></h3>
 						<ul id="agenda"></ul>
@@ -791,7 +748,8 @@
 				</section>
 			</div>
 		</div>
-		<script src="/gpf/0.2.6/gpf.js"></script>
+		<script src="/gpf/0.2.8/gpf.js"></script>
+		<script src="deck.js"></script>
 		<img id="running" src="http://localhost:8080/running.png" />
 		<script>
 			"use strict";
@@ -816,22 +774,6 @@
 				});
 			}
 
-			// Build agenda
-			[].slice.call(document.querySelectorAll("h3"), 3).forEach(function (h3) {
-				var item = document.createElement("li");
-				[].slice.call(h3.childNodes, 0).forEach(function (node) {
-					item.appendChild(node.cloneNode(true));
-				});
-				this.appendChild(item);
-			}, document.getElementById("agenda"));
-			// Remove hidden slides
-			[].slice.call(document.querySelectorAll(".hide")).forEach(function (node) {
-				node.parentNode.removeChild(node);
-			});
-			// Replace tabs with double spaces in code samples to reduce code width
-			[].slice.call(document.querySelectorAll("code")).forEach(function (node) {
-				node.innerHTML = node.innerHTML.replace(/	/g, "  ");
-			});
 			// Reformat code samples
 			var small = gpf.web.createTagFunction("small"),
 				a = gpf.web.createTagFunction("a"),
@@ -846,17 +788,6 @@
 					]);
 				node.innerHTML = "";
 				tag.appendTo(node);
-			});
-			// Load reveal
-			gpf.require.define({Reveal: "reveal.js"}, function (require) {
-				"use strict";
-				require.Reveal.configure({
-					slideNumber: "c/t",
-					allottedTime: 40 * 60 * 1000, // 40 minutes
-					progressBarHeight: 10,
-					barColor: 'rgb(200,0,0)',
-					pausedBarColor: 'rgba(200,0,0,.6)'
-				});
 			});
 		</script>
 	</body>
