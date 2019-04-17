@@ -1,0 +1,45 @@
+There is more than UI in UI5
+
+ACT 1 UI5Con'18
+Last year, I was at UICon'18 to present "A journey with OPA".
+I explained how you can assess the behavior of the User Interface using test automation.
+I also talked about the Mock server, this component that simulates the backend by hooking AJAX requests directly
+inside the browser.
+If you want to catch up, you may have a look to the recording.
+
+ACT 2 MockServer as a server
+Some time after this event, I was contacted by a colleague because he was interested to reuse the MockServer
+in order to validate a network configuration. Indeed, in his particular scenario, he needed an ODATA server behind
+a particular network landscape. Before going in production and to validate the configuration, he thought about the
+MockServer.
+
+The initial prototype was using express, socket.io and Puppeteer. Every single request coming to NodeJS was
+transmitted to the browser through socket.io...
+WE can do better.
+
+After doing some investigation on the web, jsdom appeared to be a solution to simulate a browser directly inside
+NodeJS.
+
+It was not enough, I had to load OpenUI5 and ensure that any local file could be loaded through sap.ui.define
+=> Ended up rewriting the XmlHttpRequest object
+=> Mapping local files
+
+ACT 3 OpenUI5 inside NodeJS
+
+ACT 4 Better ODATA testing
+
+How do you test your ODATA?
+Did you try to test batch?
+Did you try to envision all the scenarios the UI may do?
+
+
+
+Any UI5 application more or less looks like the following
+(SPA)
+
+It means that the ODATA communication with the backend is ensurr
+
+When developing the MockServer, you should be able to test it
+=> need to develop unit test of MockServer
+
+=> need to be able to run these unit test on top of a real server
