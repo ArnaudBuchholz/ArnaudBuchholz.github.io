@@ -14,11 +14,14 @@ function assert(condition, message) {
             condition = false;
         }
     }
+    line.className = "assert";
     line.appendChild(document.createTextNode(message));
     if (condition) {
+        line.className += " ok";
         status.innerHTML = "&check;";
         color = "green";
     } else {
+        line.className += " ko";
         status.innerHTML = "&cross;";
         color = "red";
     }
