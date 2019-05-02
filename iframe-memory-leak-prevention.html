@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+    <head>
+        <title>iFrame memory leak prevention test</title>
+    </head>
+    <body>
+        <h1>iFrame memory leak prevention test (void)</h1>
+
+        <p>In IE up through version 8 adding an iframe to a page and
+        removing it produces a memory leak in some cases.  The pattern
+        seems to be that iframes that display an image produce leaks.
+        In IE7 that memory is not reclaimed when the top page unloads.
+        In IE8 the memory is usually mostly reclaimed when the top page
+        unloads.</p>
+
+        <p>This is a test for a method that cleans iframes before
+        removing them to avoid this memory leak.  This prevents a leak
+        in certain cases - for example, when loading <a
+            href="//google.com/">//google.com/</a> in an iframe.
+        Unfortunately there are cases where it does not help, such as <a
+            href="//en.wikipedia.org/wiki/Memory_leak">//en.wikipedia.org/wiki/Memory_leak</a>.</p>
+
+        <p>To run the test, click one of the buttons below and watch
+        the browser memory usage as frames are added and removed.</p>
+
+        <p>
+            <label for="iframeSrc">iframe src for test:</label>
+            <input type="text" name="iframeSrc" id="iframeSrc" value="/gpf/doc/" size="100" />
+        </p>
+
+        <p>iterations: <span id="iter">0</span></p>
+        <button id="withCleanup">run test with frame cleanup</button>
+        <button id="withoutCleanup">run test without frame cleanup (control)</button>
+        <div id="main"></div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+        <!-- This is the cleanup method that is tested here -->
+        <script>
+            (function($) {
+                $.fn.purgeFrame = function() {
+                    var deferred;
+
+                    if ($.browser.msie && parseFloat($.browser.version, 10) < 9) {
+                        deferred = purge(this);
+                    } else {
+                        this.remove();
+                        deferred = $.Deferred();
+                        deferred.resolve();
+                    }
+
+                    return deferred;
+                };
+
+                function purge($frame) {
+                    var sem = $frame.length
+                      , deferred = $.Deferred();
+
+                    $frame.load(function() {
+                        var frame = this;
+                        frame.contentWindow.document.innerHTML = '';
+
+                        sem -= 1;
+                        if (sem <= 0) {
+                            $frame.remove();
+                            deferred.resolve();
+                        }
+                    });
+                    $frame.attr('src', 'about:blank');
+
+                    if ($frame.length === 0) {
+                        deferred.resolve();
+                    }
+
+                    return deferred.promise();
+                }
+            })(jQuery);
+        </script>
+
+        <!-- The test procedure -->
+        <script>
+            var $ = jQuery
+              , $main = $('#main')
+              , $iter = $('#iter');
+
+            function createFrame(url) {
+                var $frame = $('<iframe/>').attr('src', url).css({
+                    width: '640px',
+                    height: '480px',
+                    border: '1px solid black'
+                });
+                $main.append($frame);
+                return $frame;
+            }
+
+            function runTest(remove, url, n) {
+                $iter.text(n);
+                var $frame = createFrame(url);
+                setTimeout(function() {
+                    remove($frame, function() {
+                        setTimeout(function() { runTest(remove, url, n + 1); }, 0);
+                    });
+                }, 500);
+            }
+
+            function removeWithCleanup($frame, callback) {
+                $frame.purgeFrame().then(callback);
+            }
+
+            function removeWithoutCleanup($frame, callback) {
+                $frame.remove();
+                callback();
+            }
+
+            function getFrameSrc() {
+                return $('#iframeSrc').val();
+            }
+
+            $('#withCleanup').one('click', function() {
+                runTest(removeWithCleanup, getFrameSrc(), 1);
+            });
+
+            $('#withoutCleanup').one('click', function() {
+                runTest(removeWithoutCleanup, getFrameSrc, 1);
+            });
+        </script>
+    </body>
+</html>

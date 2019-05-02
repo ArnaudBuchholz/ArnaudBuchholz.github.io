@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="utf-8">
+
+		<title>Just a Button</title>
+
+		<script src="https://ui5.sap.com/1.64.1/resources/sap-ui-core.js" 
+			id="sap-ui-bootstrap"
+			data-sap-ui-libs="sap.m"
+			data-sap-ui-theme="sap_belize"></script>
+			<!-- only load the main library "sap.m" and the Belize theme -->
+
+		<script>
+			var btn = new sap.m.Button({
+				text:'Hello World',
+				press: function(){
+					alert("Hello");
+				}
+			});
+			btn.placeAt('content');
+		</script>
+
+	</head>
+	<body id="content" class="sapUiBody">
+	</body>
+</html>
