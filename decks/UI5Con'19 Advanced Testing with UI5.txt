@@ -32,8 +32,6 @@ How do you test your ODATA?
 Did you try to test batch?
 Did you try to envision all the scenarios the UI may do?
 
-
-
 Any UI5 application more or less looks like the following
 (SPA)
 
@@ -43,3 +41,13 @@ When developing the MockServer, you should be able to test it
 => need to develop unit test of MockServer
 
 => need to be able to run these unit test on top of a real server
+
+ACT 4b Building a mock server
+
+Prerequisites
+
+Step 1: 
+
+ACT 5 OPA End to End
+
+Inside Node-UI5 there is a configurable proxy server that can be used
