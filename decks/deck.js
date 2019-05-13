@@ -46,7 +46,8 @@ function processMeInfo() {
         years = {
             software: 1998,
             js: 2008,
-            fe: 2013,
+            fe: 2009,
+            node: 2013,
             ui5: 2015
         };
     Object.keys(years).forEach(function(id) {
