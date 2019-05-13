@@ -11,7 +11,7 @@
 		<meta name="deck-duration" content="40">
 		<link rel="stylesheet" type="text/css" href="styles.css">
 	</head>
-	<body onload="onLoad()">
+	<body>
 		<div class="reveal">
 			<div class="slides">
 				<section>
@@ -748,31 +748,11 @@
 				</section>
 			</div>
 		</div>
-		<script src="/gpf/0.2.8/gpf.js"></script>
+		<script src="/gpf/0.2.9/gpf.js"></script>
+		<script src="training-ui5con18-opa.js"></script>
 		<script src="deck.js"></script>
-		<img id="running" src="http://localhost:8080/running.png" />
 		<script>
 			"use strict";
-
-			function onLoad () {
-				var isSampleAppAvailable = !!document.getElementById("running").naturalWidth;
-
-				// Links should open in a new tab to keep the presentation state
-				var missingSampleAppMsg = "Download the training-ui5con18-opa project and use grunt serve";
-				window.missingSampleApp = function () {
-					alert(missingSampleAppMsg);
-				};
-				[].slice.call(document.querySelectorAll("a")).forEach(function (node) {
-					node.setAttribute("target", "_blank");
-					if (node.getAttribute("href").indexOf("http://localhost") === 0) {
-						if (!isSampleAppAvailable) {
-							node.setAttribute("title", missingSampleAppMsg);
-							node.setAttribute("href", "javascript:missingSampleApp()");
-							node.className = "missingSampleApp";
-						}
-					}
-				});
-			}
 
 			// Reformat code samples
 			var small = gpf.web.createTagFunction("small"),
