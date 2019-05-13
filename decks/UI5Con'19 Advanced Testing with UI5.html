@@ -15,16 +15,30 @@
 			<div class="slides">
 				<section>
 					<section>
-						<h3 data-agenda="no">Advanced Testing with <strong>UI5</strong></h3>
-						<p>
-							<small>
-								Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
-								<br/>
-								Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
-							</small>
-						</p>
-						<img src="UI5Con'18%20A%20journey%20with%20OPA/OpenUI5_new_big_side.png" height="100px" style="border: 0;" />
-						<img src="UI5Con'18%20A%20journey%20with%20OPA/UI5Con.png" height="100px" style="border: 0;" />
+						<table>
+							<tr>
+								<td width="50%">
+									<small>
+										<a href="https://en.wikipedia.org/wiki/Advanced_Test_Reactor">Advanced test reactor
+											<img src="UI5Con'19 Advanced Testing with UI5/Advanced_Test_Reactor.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+										</a>
+									</small>
+								</td>
+								<td style="vertical-align: top;">
+									<h3 data-agenda="no">Advanced <strong>Testing</strong> with <strong>UI5</strong></h3>
+									<p>
+										<small>
+											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+											<br/>
+											Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+										</small>
+									</p>
+									<br />
+									<img src="UI5Con'18 A journey with OPA/OpenUI5_new_big_side.png" height="75px" style="border: 0;" />
+									<img src="UI5Con'18 A journey with OPA/UI5Con.png" height="75px" style="border: 0;" />
+								</td>
+							</tr>
+						</table>
 					</section>
 					<section include="me.html"></section>
 					<section>
@@ -40,7 +54,7 @@
 							</li>
 							<li>
 								<a href="https://github.com/ArnaudBuchholz/training-ui5Con18-opa">training-ui5con18-opa</a><br />
-								<small>A simple  <strong>todo list</strong> developed with <strong>OpenUI5</strong> to <strong>illustrate</strong></a> the <strong>OPA</strong> concepts</small>
+								<small>A <strong>todo list</strong> developed with <strong>OpenUI5</strong> to <strong>illustrate</strong></a> the testing concepts</small>
 							</li>
 							<li>
 								<a href="https://github.com/jsdom/jsdom">jsdom</a><br />
@@ -48,22 +62,31 @@
 							</li>
 							<li>
 								<a href="https://github.com/ArnaudBuchholz/node-ui5">node-ui5</a><br />
-								<small>An <strong>NodeJS</strong> wrapper for <strong>OpenUI5</strong></strong></small>
+								<small>An <strong>NodeJS</strong> wrapper for <strong>OpenUI5</strong>, enabling advanced testing</small>
 							</li>
 						</ul>
 						<p>
 						</p>
 					</section>
+					<section>
+						<h4><strong>About</strong> the presentation</h4>
+						<ul>
+							<li class="fragment">There is <strong>more than UI</strong> in UI5</li>
+							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 development</li>
+							<br />
+							<li class="fragment">This presentation is about <strong>unusual ways of leveraging UI5</strong> to test your development</li>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<section>
-						<h3>Act I: <strong>UI5Con</strong>'18</h3>
+						<h3>UI5Con<strong>'18</strong></h3>
 					</section>
 					<section>
-						<img src="From%20OPA%20to%20Node-UI5/UI5Con18.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="From OPA to Node-UI5/UI5Con18.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<br />
-						<small><a href="https://openui5.org/ui5con/">https://openui5.org/ui5con</a></small>
-						<p>In July 2018, I was invited to present<br />at <strong>UI5Con'18</strong> in Germany</p>
+						<small><a href="https://openui5.org/ui5con/material2018.html">UI5 sessions 2018</a></small>
+						<p>I presented <strong>A journey with OPA</strong> at UI5Con<strong>'18</strong></p>
 					</section>
 					<section>
 						<h4>A journey with <strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance</h4>
@@ -80,12 +103,8 @@
 						<p>OPA is a set of tools used to <strong>automate</strong> and <strong>validate</strong> UI
 							and it comes with <strong>backend mocking</strong>.</p>
 						<br/>
-						<p>Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong> to abstract the UI,
-							and <strong>readable</strong>.</p>
-					</section>
-					<section>
-						<h4><strong>DEMO</strong> OPA syntax example</h4>
-						<small>TodoListJourney</small>
+						<p>Tests are organized in <strong>Journeys</strong>, based on <strong>Pages</strong>
+							to provide a <strong>readable abstraction</strong> of the UI.</p>
 					</section>
 					<section>
 						<h4>The <strong>need</strong> for a backend</h4>
@@ -94,19 +113,22 @@
 					</section>
 					<section>
 						<h4>Introducing the <strong>MockServer</strong></h4>
-						<img src="UI5Con'18%20A%20journey%20with%20OPA/MockServer.png" style="border: 0; max-width: 40%; max-height: 40%;" align="left"/>
+						<img src="UI5Con'18 A journey with OPA/MockServer.png" style="border: 0; max-width: 40%; max-height: 40%;" align="left"/>
 						<br/>
 						<p>The MockServer is a software component that <strong>captures</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> Automated tests samples</h4>
-						<small>qUnit, OPA, karma</small>
+						<small>
+							<a href="http://localhost:8080/index.html">Application</a>
+							<a href="http://localhost:8080/test/integration/opaTests.qunit.html">OPA tests</a>
+						</small>
 					</section>
 					<section>
 						<h4><strong>Learn</strong> more</h4>
 						<br/>
 						<a href="https://youtu.be/HiZq-kuIbt0">
-							<img src="From%20OPA%20to%20Node-UI5/UI5con@SAP%202018%20-%20A%20journey%20with%20OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+							<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						</a>
 						<br />
 						<small><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a></small>
@@ -114,24 +136,23 @@
 				</section>
 				<section>
 					<section>
-						<h3>Act II: MockServer as a <strong>server</strong></h3>
+						<h3>MockServer as a <strong>real</strong> server</h3>
 					</section>
 					<section>
 						<h4>The <strong>request</strong></h4>
-						<p>3 months later, a German <strong>colleague</strong> contacted me with a strange <strong>request</strong>.<p>
+						<p>3 months later, a <strong>colleague</strong> contacted me with a strange <strong>request</strong>.<p>
 						<p>His team needed a <strong>fake ODATA server</strong> to validate an unusual network configuration.</p>
 					</section>
 					<section>
-						<h4>The <strong>prototype</strong></h4>
-						<img src="From%20OPA%20to%20Node-UI5/MockServer%20server%20old.png" style="border: 0; max-width: 80%; max-height: 60%;" />
+						<h4>His <strong>prototype</strong></h4>
+						<img src="From OPA to Node-UI5/MockServer server old.png" style="border: 0; max-width: 80%; max-height: 60%;" />
 					</section>
 					<section>
 						<q>There must be a better way !</q>
 					</section>
 					<section>
 						<h4>Introducing <strong>jsdom</strong></h4>
-						<small><a href="https://github.com/jsdom/jsdom">https://github.com/jsdom/jsdom</a></small>
-						<p>jsdom simulates a browser <strong>inside</strong> NodeJS.</p>
+						<p>jsdom <strong>simulates</strong> a browser <strong>inside</strong> NodeJS.</p>
 						<pre><code>const dom = new JSDOM(``, {
   url: "https://example.org/",
   referrer: "https://example.com/",
@@ -139,13 +160,14 @@
   includeNodeLocations: true,
   storageQuota: 10000000
 });</pre></code>
+						<small><a href="https://github.com/jsdom/jsdom">https://github.com/jsdom/jsdom</a></small>
 					</section>
 					<section>
 						<h4>Challenges</h4>
 						<ul>
-							<li>OpenUI5 uses <strong>synchronous</strong> AJAX requests to load <strong>dependencies</strong></li>
-							<li>jsdom implements <strong>C</strong>ross-<strong>o</strong>rigin <strong>r</strong>esource <strong>s</strong>haring</li>
-							<li>jsdom <strong>isolates</strong> environments <i>(not able to run NodeJS code in loaded scripts)</i></li>
+							<li>NodeJS does not allow <strong>synchronous</strong> requests</li>
+							<li>jsdom implements <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"><strong>CORS</strong></a></li>
+							<li>jsdom <strong>isolates</strong> environments <i><small>(not able to run NodeJS code in loaded scripts)</small></i></li>
 						</ul>
 					</section>
 					<section>
@@ -162,7 +184,7 @@
 				</section>
 				<section>
 					<section>
-						<h3>Act III: OpenUI5 <strong>inside</strong> NodeJS</h3>
+						<h3>UI5 <strong>inside</strong> NodeJS</h3>
 					</section>
 					<section>
 						<p>The server experiment demonstrated that it is possible to <strong>load OpenUI5 in NodeJs</strong>.</p>
@@ -185,6 +207,16 @@
 					</section>
 				</section>
 				<section>
+					<section>
+						<h3>Act IV: <strong>OData</strong> testing with UI5</h3>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Act V: OPA <strong>end-to-end</strong></h3>
+					</section>
+				</section>
+				<section>
 					<h3>Key <strong>Take-Aways</strong></h3>
 					<ul>
 						<li><strong>OpenUI5</strong> is a <strong>enterprise-grade</strong> and <strong>evolving</strong> UI framework</li>
@@ -194,7 +226,8 @@
 				</section>
 			</div>
 		</div>
-		<script src="/gpf/0.2.8/gpf.js"></script>
+		<script src="/gpf/0.2.9/gpf.js"></script>
+		<script src="training-ui5con18-opa.js"></script>
 		<script src="deck.js"></script>
 	</body>
 </html>
