@@ -16,21 +16,22 @@
 				<section>
 					<section>
 						<table>
-						  <tr>
-						    <td width="25%">
-									<img src="/blog/post/How I learned from a crazy idea/Hybrid-Bicolor-Hybridization-Johns-Night-Flower-3744246.jpg" style="margin: 0; border: 0; box-shadow: unset;"></img>
-						    </td>
-						    <td style="vertical-align: top;">
+							<tr>
+								<td width="50%">
+									<img src="/blog/post/How I learned from a crazy idea/Hybrid-Bicolor-Hybridization-Johns-Night-Flower-3744246.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+								</td>
+								<td style="vertical-align: top;">
 									<h3 data-agenda="no"><strong>Subclassing</strong> an <strong>ES6</strong> class</h3>
 									<small>
 										Or the art of JavaScript classes <strong>hybridization</strong>
+										<br/>
 										<br/>
 										Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
 										<br/>
 										Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
 									</small>
-						    </td>
-						  </tr>
+								</td>
+							</tr>
 						</table>
 					</section>
 					<section include="me.html"></section>
@@ -75,8 +76,8 @@ var B = gpf.define({
 	$class: "B",
 	$extend: A,
 	constructor: function () {
-	  this.$super();
-	  this._b = "B";
+		this.$super();
+		this._b = "B";
 	}
 });</code></pre>
 						<small>
@@ -88,16 +89,16 @@ var B = gpf.define({
 						<h4>Subclassing an <strong>ES6 class</strong></h4>
 						<pre><code>const gpf = require("gpf-js");
 class A {
-  constructor () {
-    this._a = "A";
-  }
+	constructor () {
+		this._a = "A";
+	}
 }
 const B = gpf.define({
 	$class: "B",
 	$extend: A,
 	constructor: function () {
-	  this.$super();
-	  this._b = "B";
+		this.$super();
+		this._b = "B";
 	}
 });</code></pre>
 					</section>
@@ -117,20 +118,20 @@ const B = gpf.define({
 							<div class="left">
 								<h5>Declaration</h5>
 								<pre><code>function OldA () {
-  this._a = "A";
+	this._a = "A";
 }
 
 OldA.prototype.constructor = OldA;
 
 OldA.prototype.a = function () {
-  return this._a;
+	return this._a;
 };</code></pre>
 							</div>
 							<div class="right">
 								<h5>Subclassing</h5>
 								<pre><code>function OldB () {
-  OldA.apply(this, arguments);
-  this._b = "B";
+	OldA.apply(this, arguments);
+	this._b = "B";
 }
 
 OldB.prototype =
@@ -139,7 +140,7 @@ OldB.prototype =
 OldB.prototype.constructor = OldB;
 
 OldB.prototype.b = function () {
-  return this._b;
+	return this._b;
 };</code></pre>
 							</div>
 						</div>
@@ -151,25 +152,25 @@ OldB.prototype.b = function () {
 								<h5>Declaration</h5>
 								<pre><code>class Es6A {
 	constructor () {
-    this._a = "A";
-  }
+		this._a = "A";
+	}
 
-  a () {
-    return this._a;
-  }
+	a () {
+		return this._a;
+	}
 };</code></pre>
 							</div>
 							<div class="right">
 								<h5>Subclassing</h5>
 								<pre><code>class Es6B extends Es6A {
-  constructor () {
-    super();
-    this._b = "B";
-  }
+	constructor () {
+		super();
+		this._b = "B";
+	}
 
-  b () {
-    return this._b;
-  }
+	b () {
+		return this._b;
+	}
 }</code></pre>
 							</div>
 						</div>
@@ -177,28 +178,28 @@ OldB.prototype.b = function () {
 					<section>
 						<h4><strong>Subclassing</strong> an Old class with ES6</h4>
 								<pre><code>class ExtendOldWithEs6B extends OldA {
-  constructor () {
-    super();
-    this._b = "B";
-  }
+	constructor () {
+		super();
+		this._b = "B";
+	}
 
-  b () {
-    return this._b;
-  }
+	b () {
+		return this._b;
+	}
 }</code></pre>
 						<small>Works <strong>smoothly</strong></small>
 					</section>
 					<section>
 						<h4><strong>Subclassing</strong> an ES6 class the old way</h4>
 								<pre><code>function ExtendEs6WithOldB () {
-  Es6A.apply(this, arguments);
-  this._b = "B";
+	Es6A.apply(this, arguments);
+	this._b = "B";
 }
 
 ExtendEs6WithOldB.prototype = Object.create(Es6A.prototype);
 
 ExtendEs6WithOldB.prototype.b = function () {
-  return this._b;
+	return this._b;
 };</code></pre>
 						<small><strong>Fails</strong></small>
 					</section>
@@ -243,19 +244,19 @@ ExtendEs6WithOldB.prototype.b = function () {
 					<section>
 						<h4>Validation</h4>
 						<pre><code>class A {
-  constructor () { this._a = "A" }
+	constructor () { this._a = "A" }
 }
 class B extends A {
-  constructor (param) {
-    super()
-    this._b = "B"
-    this._param = param
-  }
+	constructor (param) {
+		super()
+		this._b = "B"
+		this._param = param
+	}
 }
 function constructorOfC (param2) {
-  this.$super("test")
-  this._c = "C"
-  this._param2 = param2
+	this.$super("test")
+	this._c = "C"
+	this._param2 = param2
 }</code></pre>
 						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/embedded">JSFiddle</a>
 					</section>
@@ -280,13 +281,13 @@ function constructorOfC (param2) {
 					<section>
 						<pre><code>var C = new Function("B", `
 
-  return class C extends B {
-    constructor ${
-      /\((?:.|\n)*}$/.exec(constructorOfC)
-        .toString()
-        .replace("this.$super", "super")
-    }
-  }
+	return class C extends B {
+		constructor ${
+			/\((?:.|\n)*}$/.exec(constructorOfC)
+				.toString()
+				.replace("this.$super", "super")
+		}
+	}
 
 `)(B);</code></pre>
 						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/13/embedded">JSFiddle</a>
@@ -306,12 +307,12 @@ function constructorOfC (param2) {
 					</section>
 					<section>
 						<pre><code>class C extends B {
-  $super () {
-    super.construtor();
-  }
-  constructor (param2) {
-    constructorOfC.apply(this, arguments);
-  }
+	$super () {
+		super.construtor();
+	}
+	constructor (param2) {
+		constructorOfC.apply(this, arguments);
+	}
 }</code></pre>
 						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/16/embedded">JSFiddle</a>
 					</section>
@@ -330,13 +331,13 @@ or returning from derived constructor</code></pre>
 					</section>
 					<section>
 						<pre><code>class C extends B {
-  $super () {
-    super.constructor.apply(this, arguments);
-  }
-  constructor (param2) {
-    super();
-    constructorOfC.apply(this, arguments);
-  }
+	$super () {
+		super.constructor.apply(this, arguments);
+	}
+	constructor (param2) {
+		super();
+		constructorOfC.apply(this, arguments);
+	}
 }</code></pre>
 						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/19/embedded">JSFiddle</a>
 					</section>
@@ -371,17 +372,17 @@ or returning from derived constructor</code></pre>
 					</section>
 					<section>
 						<pre><code>function C () {
-  var newC;
-  function $super() { newC = Reflect.construct(B, arguments, C); }
-  var wrapper = Object.create(C.prototype);
-  wrapper.$super = $super;
-  Object.defineProperty(wrapper, "_c", {
-    get: function () { return newC._c; },
-    set: function (value) { newC._c = value; }
-  });
-  /*...defineProperty for _param2...*/
-  constructorOfC.apply(wrapper, arguments);
-  return newC;
+	var newC;
+	function $super() { newC = Reflect.construct(B, arguments, C); }
+	var wrapper = Object.create(C.prototype);
+	wrapper.$super = $super;
+	Object.defineProperty(wrapper, "_c", {
+		get: function () { return newC._c; },
+		set: function (value) { newC._c = value; }
+	});
+	/*...defineProperty for _param2...*/
+	constructorOfC.apply(wrapper, arguments);
+	return newC;
 }</code></pre>
 						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/27/embedded">JSFiddle</a>
 					</section>
@@ -392,7 +393,7 @@ or returning from derived constructor</code></pre>
 				</section>
 				<section>
 					<section>
-						<h4><b>Attempt #5</b>: <strong>Shadowing</strong>  the object</h4>
+						<h4><b>Attempt #5</b>: <strong>Shadowing</strong>	the object</h4>
 					</section>
 					<section>
 						<p>In the same StackOverflow thread, some proposed the use of <strong>proxies</strong> but for a different purpose.</p>
@@ -400,19 +401,19 @@ or returning from derived constructor</code></pre>
 					</section>
 					<section>
 						<pre><code>function C () {
-  var newC,
-      $super = function () {
-        newC = Reflect.construct(B, arguments, C); },
-      proxy = new Proxy({}, {
-        get: function (obj, property) {
-          if (property === '$super') { return $super; }
-          return newC[property]; },
-        set: function (obj, property, value) {
-          newC[property] = value;
-          return true; }
-      });
-  constructorOfC.apply(proxy, arguments);
-  return newC;
+	var newC,
+			$super = function () {
+				newC = Reflect.construct(B, arguments, C); },
+			proxy = new Proxy({}, {
+				get: function (obj, property) {
+					if (property === '$super') { return $super; }
+					return newC[property]; },
+				set: function (obj, property, value) {
+					newC[property] = value;
+					return true; }
+			});
+	constructorOfC.apply(proxy, arguments);
+	return newC;
 }</code></pre>
 						<a href="http://jsfiddle.net/ArnaudBuchholz/zg70m9of/35/embedded">JSFiddle</a>
 					</section>
