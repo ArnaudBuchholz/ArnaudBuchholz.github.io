@@ -62,7 +62,7 @@
 							</li>
 							<li>
 								<a href="https://github.com/ArnaudBuchholz/node-ui5">node-ui5</a><br />
-								<small>An <strong>NodeJS</strong> wrapper for <strong>OpenUI5</strong>, enabling advanced testing</small>
+								<small>An <strong>Node.js</strong> wrapper for <strong>OpenUI5</strong>, enabling advanced testing</small>
 							</li>
 						</ul>
 						<p>
@@ -149,10 +149,11 @@
 					</section>
 					<section>
 						<q>There must be a better way !</q>
+						<p class="fragment">Why not running UI5 <strong>in</strong> Node.js ?</p>
 					</section>
 					<section>
 						<h4>Introducing <strong>jsdom</strong></h4>
-						<p>jsdom <strong>simulates</strong> a browser <strong>inside</strong> NodeJS.</p>
+						<p>jsdom <strong>simulates</strong> a browser <strong>inside</strong> Node.js.</p>
 						<pre><code>const dom = new JSDOM(``, {
   url: "https://example.org/",
   referrer: "https://example.com/",
@@ -163,31 +164,36 @@
 						<small><a href="https://github.com/jsdom/jsdom">https://github.com/jsdom/jsdom</a></small>
 					</section>
 					<section>
-						<h4>Challenges</h4>
+						<h4>jsdom <strong>Challenges</strong></h4>
 						<ul>
-							<li>NodeJS does not allow <strong>synchronous</strong> requests</li>
-							<li>jsdom implements <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"><strong>CORS</strong></a></li>
-							<li>jsdom <strong>isolates</strong> environments <i><small>(not able to run NodeJS code in loaded scripts)</small></i></li>
+							<li>No <strong>synchronous</strong> requests</li>
+							<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"><strong>CORS</strong></a></li>
+							<li>Environments are <strong>isolated</strong><br />
+								<i><small>(not able to run Node.js code in loaded scripts)</small></i></li>
 						</ul>
 					</section>
 					<section>
 						<h4>Rewriting <strong>XMLHttpRequest</strong></h4>
 						<ul>
-							<li><strong>Local</strong> resources handled from file system through <strong>ResourceLoader</strong></li>
-							<li>Remote ones handled with <a href="https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html"><strong>gpf-js http helper</strong></a></li>
-							<li>Synchronous requests handled with <a href="https://www.npmjs.com/package/sync-request"><strong>sync-request</strong></a></li>
+							<li>Enables loading of <strong>file system resources</strong></li>
+							<li>Remote resources are handled <strong>natively</strong></li>
+							<li>Synchronous code is handled with <a href="https://www.npmjs.com/package/deasync"><strong>DeAsync.js</strong></a></li>
 						</ul>
 					</section>
 					<section>
-						<h4><strong>DEMO</strong> Standalone mock server</h4>
+						<h4><strong>DEMO</strong> MockServer server</h4>
+						<small>
+							<a href="http://localhost:8080/odata/TODO_SRV/$metadata">$metadata</a>
+							<a href="http://localhost:8080/index.html?no-mock">Application</a>
+						</small>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3>UI5 <strong>inside</strong> NodeJS</h3>
+						<h3>UI5 <strong>inside</strong> Node.js</h3>
 					</section>
 					<section>
-						<p>The server experiment demonstrated that it is possible to <strong>load OpenUI5 in NodeJs</strong>.</p>
+						<p>The server experiment demonstrated that it is possible to <strong>load OpenUI5 in Node.js</strong>.</p>
 					</section>
 					<section>
 						<q>What else can we do ?</q>
@@ -197,7 +203,7 @@
 					<section>
 						<h4>Introducing <strong>node-ui5</strong></h4>
 						<small><a href="https://www.npmjs.com/package/node-ui5">https://www.npmjs.com/package/node-ui5</a></small>
-						<p>node-ui5 gives you access to OpenUI5 <strong>in</strong> NodeJS.</p>
+						<p>node-ui5 gives you access to OpenUI5 <strong>in</strong> Node.js.</p>
 						<pre><code>require('node-ui5').then(({sap}) => {
   // use sap...
 })</pre></code>
@@ -220,7 +226,7 @@
 					<h3>Key <strong>Take-Aways</strong></h3>
 					<ul>
 						<li><strong>OpenUI5</strong> is a <strong>enterprise-grade</strong> and <strong>evolving</strong> UI framework</li>
-						<li><strong>jsdom</strong> simulates browser <strong>inside</strong> NodeJS</li>
+						<li><strong>jsdom</strong> simulates browser <strong>inside</strong> Node.js</li>
 						<li>Experimenting is <strong>fun</strong> and leads to <strong>new ideas</strong></li>
 					</ul>
 				</section>
