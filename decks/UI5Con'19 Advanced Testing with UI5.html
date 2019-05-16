@@ -193,7 +193,8 @@
 						<h3>UI5 <strong>inside</strong> Node.js</h3>
 					</section>
 					<section>
-						<p>The server experiment demonstrated that it is possible to <strong>run UI5 in Node.js</strong>.</p>
+						<p>The MockServer <strong>proof of concept</strong> demonstrated
+							that it is possible to <strong>run UI5 in Node.js</strong>.</p>
 					</section>
 					<section>
 						<q>What else can we do ?</q>
@@ -203,23 +204,76 @@
 					<section>
 						<h4>Introducing <strong>node-ui5</strong></h4>
 						<small><a href="https://www.npmjs.com/package/node-ui5">https://www.npmjs.com/package/node-ui5</a></small>
-						<p>node-ui5 gives you access to UI5 <strong>in</strong> Node.js.</p>
+						<p>node-ui5 <strong>wraps</strong> UI5 API <strong>in</strong> Node.js.</p>
 						<pre><code>require('node-ui5').then(({sap}) => {
-  // use sap...
+  sap.ui.require([
+    /* module dependencies */
+  ], function (/* module values */) {
+	  /* ... */
+  })
 })</pre></code>
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> Accessing MockServer server</h4>
+						<pre><code>require('node-ui5')
+  .then(({ sap }) => {
+    sap.ui.require([
+      'sap/ui/model/odata/v2/ODataModel',
+      'node-ui5/promisify'
+    ], async function (ODataModel) {
+      console.log('Creating ODataModel...')
+      const model = new ODataModel({
+        serviceUrl: 'http://localhost:8080/odata/TODO_SRV'
+      })
+      console.log('Reading $metadata')
+      await model.metadataLoaded()
+      console.log('Reading TODO items')
+      const { results } = await model.readAsync('/TodoItemSet')
+      console.log(`Found ${results.length} todo items`)
+      /* ... */</pre></code>
+
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3>Act IV: <strong>OData</strong> testing with UI5</h3>
+						<h3><strong>OData</strong> testing with UI5</h3>
+					</section>
+<!-- TODO -->
+					<section>
+						<div style="white-space: pre; font-size: 1rem; text-align: left;">
+						For ODATA testing we tend to test *only* the ODATA layer
+						DEMO with POSTMAN
+							I skip the authentication part
+							$metadata retreive
+								how do you validate it?
+								What if I want to check that a specific field has a label?
+							single request with one result
+							single request with multiple results
+							batch (write it and analyse it)
+
+							Actually, most of the 'extra' work done in Postman is already done in SapUI5
+
+						considering that an UI5 application is actually more than
+						(image of SPA)
+							postman.cmd
+
+						When building the mock server it shall be possible to validate the behavior...
+							It is even possible to build the mock server before the backend is ready
+							And then validate backend behavior (big UP for UI developers)
+						</div>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3>Act V: OPA <strong>end-to-end</strong></h3>
+						<h3>OPA <strong>end-to-end</strong></h3>
+					</section>
+					<section>
+						<div style="white-space: pre; font-size: 1rem; text-align: left;">
+							When building OPA pages, the developper somehow creates a language to manipulate the UI
+							It works only if the OPA code and the app is served on the same server
+							node-ui5 comes with a server that proxify requests and can 'aggregate' websites
+							making the use of OPA code on top of a real system
+						</div>
 					</section>
 				</section>
 				<section>
