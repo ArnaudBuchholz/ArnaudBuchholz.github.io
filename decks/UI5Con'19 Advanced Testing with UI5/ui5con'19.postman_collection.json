@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "443a9369-447b-43d6-92f3-f3275410bcf5",
+		"name": "ui5con'19",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Metadata",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "55afd40b-dd7c-42d5-8044-8a5ae648750e",
+						"exec": [
+							"",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "x-csrf-token",
+						"value": "{{XCSRF_Token}}"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/odata/TODO_SRV/$metadata",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"$metadata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get app configuration",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "sap-contextid-accept",
+						"value": "header"
+					},
+					{
+						"key": "Accept",
+						"value": "multipart/mixed"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/odata/TODO_SRV/AppConfigurationSet('ItemEditing')?$format=json",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"AppConfigurationSet('ItemEditing')"
+					],
+					"query": [
+						{
+							"key": "$format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get todo items",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "sap-contextid-accept",
+						"value": "header"
+					},
+					{
+						"key": "Accept",
+						"value": "multipart/mixed"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/odata/TODO_SRV/TodoItemSet?$format=json",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"TodoItemSet"
+					],
+					"query": [
+						{
+							"key": "$format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get app configuration & todo items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "55afd40b-dd7c-42d5-8044-8a5ae648750e",
+						"exec": [
+							"",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "multipart/mixed",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "multipart/mixed;boundary=batch_6a5a-9659-7c4c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n--batch_6a5a-9659-7c4c\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\n\r\nGET AppConfigurationSet('ItemEditing') HTTP/1.1\r\nsap-cancel-on-close: true\r\nsap-contextid-accept: header\r\nAccept: application/json\r\nAccept-Language: en\r\nDataServiceVersion: 2.0\r\nMaxDataServiceVersion: 2.0\r\n\r\n\r\n--batch_6a5a-9659-7c4c\r\nContent-Type: application/http\r\nContent-Transfer-Encoding: binary\r\n\r\n\r\nGET TodoItemSet HTTP/1.1\r\nsap-cancel-on-close: true\r\nsap-contextid-accept: header\r\nAccept: application/json\r\nAccept-Language: en\r\nDataServiceVersion: 2.0\r\nMaxDataServiceVersion: 2.0\r\n\r\n\r\n--batch_6a5a-9659-7c4c--"
+				},
+				"url": {
+					"raw": "localhost:8080/odata/TODO_SRV/$batch",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"odata",
+						"TODO_SRV",
+						"$batch"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
