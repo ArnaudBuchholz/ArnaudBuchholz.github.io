@@ -215,7 +215,20 @@
 })</pre></code>
 					</section>
 					<section>
+						<h4><strong>Benefits</strong> of running in Node.js</h4>
+						<p><strong>Native</strong> access to the <strong>latest JavaScript</strong> features:</p>
+						<ul>
+							<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">template literals</a></li>
+							<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">arrow functions</a> for callbacks</li>
+							<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">async functions</a>,
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await">await operator</a></li>
+							<li>...</li>
+						</ul>
+						<p>node-ui5 provides <a href="https://www.npmjs.com/package/node-ui5#node-ui5-helpers"><strong>asynchronous wrappers</strong></a></p>
+					</section>
+					<section>
 						<h4><strong>DEMO</strong> Accessing MockServer server</h4>
+						<small><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/test.js">test.js</a></small>
 						<pre><code>require('node-ui5')
   .then(({ sap }) => {
     sap.ui.require([
