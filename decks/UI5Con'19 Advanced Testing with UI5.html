@@ -155,7 +155,12 @@
 					<section>
 						<h4>Introducing <strong>jsdom</strong></h4>
 						<p>jsdom <strong>simulates</strong> a browser <strong>inside</strong> Node.js.</p>
-						<pre><code>const dom = new JSDOM(``, {
+						<pre><code>const dom = new JSDOM(`&lt;script id="sap-ui-bootstrap"
+  src="resources/sap-ui-core.js"
+  data-sap-ui-compatVersion="edge"
+  data-sap-ui-frameOptions='allow'
+  data-sap-ui-preload='async'>
+&lt;/script>`, {
   url: "https://example.org/",
   referrer: "https://example.com/",
   contentType: "text/html",
@@ -222,10 +227,11 @@
 							<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">template literals</a></li>
 							<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">arrow functions</a> for callbacks</li>
 							<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">async functions</a>,
-								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await">await operator</a></li>
-							<li>...</li>
+								<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await">await operator</a>
+								<small><p>(node-ui5 provides <a href="https://www.npmjs.com/package/node-ui5#node-ui5-helpers"><strong>asynchronous wrappers</strong></a>)</p></small>
+							</li>
 						</ul>
-						<p>node-ui5 provides <a href="https://www.npmjs.com/package/node-ui5#node-ui5-helpers"><strong>asynchronous wrappers</strong></a></p>
+						<p class="fragment">Easy to <strong>automate</strong>.</p>
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> Accessing MockServer server</h4>
@@ -255,7 +261,11 @@
 					</section>
 					<section>
 						<h4><strong>OData</strong> testing</h4>
-						<p>Focuses on calling <strong>CRUD</strong> methods</p>
+						<p>UI developers are the <strong>primary users</strong> of the ODATA service
+							but they are not <strong>involved</strong> in ODATA testing.</p>
+						<br />
+						<p>Furthermore, testing <strong>usually</strong> focuses on <strong>CRUD</strong> methods
+							and <strong>rarely</strong> on checking <strong>$metadata</strong>.</p>
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> ODATA testing with <strong>Postman</strong></h4>
@@ -272,27 +282,39 @@
 						<h4>ODATA in <strong>UI5</strong> applications</h4>
 						<img src="From OPA to Node-UI5/SPA.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left"/>
 						<br/>
-						<p>UI5 takes care of more than CRUD.<p>
+						<br/>
+						<p>ODATA calls are made through the <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.model.odata.v2.ODataModel"><strong>ODataModel</strong></a> class.<p>
 					</section>
 					<section>
 						<h4>ODataModel <strong>benefits</strong></h4>
 						<ul>
-							<li><strong>Validates</strong> $metadata</li>
-							<li>Provides entities <strong>descriptors</strong></li>
-							<li>Encapsulate <strong>CRUD</strong></li>
-							<li><strong>Deserialize</strong> entities</li>
+							<li><strong>Validates</strong> $metadata
+								<ul>
+									<li>Provides <strong>description</strong> of entities</li>
+								</ul>
+							</li>
+							<li>Encapsulate <strong>CRUD</strong>
+								<ul>
+									<li><strong>Deserialize</strong> entities</li>
+									<li>Enables <strong>batching</strong> of requests</li>
+								</ul>
+							</li>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> ODATA testing with <strong>UI5</strong></h4>
 					</section>
-<!-- TODO -->
 					<section>
-						<div style="white-space: pre; font-size: 1rem; text-align: left;">
+						<h4>Considering the <strong>effort</strong></h4>
+						<p>When building an application, a good practice is also to customize the MockServer
+							to prepare OPA testing.
+						</p>
+						<p>It is possible to build the MockServer the TDD way and then run these tests
+							on the real server</p>
+						<p>It is possible to check the MockServer behavior using qUnit tests</p>
 						When building the mock server it shall be possible to validate the behavior...
 							It is even possible to build the mock server before the backend is ready
 							And then validate backend behavior (big UP for UI developers)
-						</div>
 					</section>
 				</section>
 				<section>
