@@ -235,7 +235,7 @@
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> Accessing MockServer server</h4>
-						<small><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/test.js">test.js</a></small>
+						<small><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/demos/test.js">demos/test.js</a></small>
 						<pre><code>require('node-ui5')
   .then(({ sap }) => {
     sap.ui.require([
@@ -269,6 +269,7 @@
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> ODATA testing with <strong>Postman</strong></h4>
+						<small><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/demos/postman_collection.json">demos/postman_collection.json</a></small>
 						<!--
 						$metadata retreive
 							how do you validate it?
@@ -303,13 +304,21 @@
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> ODATA testing with <strong>UI5</strong></h4>
+						<small><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/demos/postman.js">demos/postman.js</a></small>
 					</section>
 					<section>
 						<h4>Considering the <strong>effort</strong></h4>
-						<p>When <strong>building</strong> an application, a good practice is to also customize the MockServer
-							to prepare <strong>OPA testing</strong>.</p>
+						<p>When <strong>building</strong> an application, a good practice is to also prepare the MockServer
+							for <strong>OPA testing</strong>.</p>
 						<p>The MockServer can be implemented the <strong>TDD way</strong>.</p>
-						<p>To some extend, the <strong>same</strong> tests may apply to the <strong>backend</strong>.</p>
+						<p>To some extend, the <strong>same</strong> tests may apply to a <strong>real backend</strong>.</p>
+					</section>
+					<section>
+						<h4><strong>DEMO</strong> ODATA testing with <strong>UI5</strong> and <strong>qUnit</strong></h4>
+						<small>
+							<a href="http://localhost:8080/test/unit/unitTests.qunit.html?module=MockServer">qUnit tests of MockServer</a>
+							<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/demos/qunit-mockserver.js">demos/qunit-mockserver.js</a>
+						</small>
 					</section>
 				</section>
 				<section>
