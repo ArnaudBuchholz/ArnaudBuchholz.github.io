@@ -74,7 +74,7 @@
 							<li class="fragment">There is <strong>more than UI</strong> in UI5</li>
 							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 development</li>
 							<br />
-							<li class="fragment">This presentation is about <strong>unusual ways of leveraging UI5</strong> to test your developments</li>
+							<li class="fragment">This presentation is about <strong>unusual ways of leveraging UI5</strong> to test UI5 developments</li>
 						</ul>
 					</section>
 				</section>
@@ -194,7 +194,7 @@
 							that it is possible to <strong>run UI5 in Node.js</strong>.</p>
 					</section>
 					<section>
-						<q>What else can we do ?</q>
+						<q>What else can be done ?</q>
 						<br />
 						<q class="fragment">Anything !</q>
 					</section>
@@ -332,38 +332,86 @@
 					</section>
 					<section>
 						<h4><strong>Initial</strong> MockServer</h4>
-						<p>To achieve this goal, we will <strong>customize</strong> the initial MockServer <strong>implementation</strong>.</p>
+						<p>To achieve this goal, the initial MockServer <strong>implementation</strong> must be <strong>customized</strong>.</p>
 						<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/setup/webapp/test/MockServer.js">webapp/test/MockServer.js</a>
 					</section>
 					<section>
 						<h4>Exposes <strong>predefined</strong> items</h4>
-						<p>MockServer is capable of <strong>preloading</strong> entities from a <strong>JSON file</strong>.</p>
-						<ul>
-							<li>Files are located in sMockdataBaseUrl</li>
-							<li>Name of the file must match the entity set (case sensitively)</li>
-							<li>It must contain an array of objects</li>
-							<li>Only required fields</li>
-						</ul>
+						<p>MockServer is capable of <strong>preloading</strong><br />entities from a <strong>JSON file</strong>.</p>
+						<small>
+							<ul>
+								<li>Files <strong>location</strong> is given by <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/simulate">sMockdataBaseUrl</a></li>
+								<li>File name must match the <strong>entity set</strong> <i>(case sensitively)</i></li>
+								<li>It must contain an <strong>array of objects</strong></li>
+								<li>Only define the <strong>necessary</strong> fields</li>
+								<li>Date/Time fields use a <strong>specific format</strong></li>
+							</ul>
+						</small>
+						<pre><code>"/Date(" + date.getTime() + ")/"</code></pre>
 					</section>
 					<section>
 						<h4>Exposes <strong>more than 100</strong> items</h4>
-						<p>Another approach is to <strong>programmatically build</strong> mock data.</p>
+						<p>Using <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/getEntitySetData">getEntitySetData</a>
+							and <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/setEntitySetData">setEntitySetData</a>,
+							one can <strong>manipulate</strong> the MockServer's entities.</p>
+						<small>
+							<ul>
+								<li>Returned array contains a <strong>copy</strong> of MockServer's entities</li>
+								<li>All fields <strong>must</strong>  be set, including <code>__metadata</code></li>
+							</ul>
+						</small>
+						<pre><code class="javascript">oItem.__metadata = {
+  uri: "/odata/TODO_SRV/TodoItemSet(guid'" + sGuid + "')",
+  type: "TODO_SRV.TodoItem"
+};</code></pre>
 					</section>
 					<section>
 						<h4>Handles <strong>update</strong> of item</h4>
-						<p>MockServer offers CRUD operations, but it is possible to alter them.</p>
+						<p>MockServer offers <strong>default</strong> CRUD implementations.</p>
+						<p>Using <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/getRequests">getRequests</a>
+							and <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/setRequests">setRequests</a>,
+						 <br />it is possible to <strong>alter</strong> their behavior.</p>
+					</section>
+					<section>
+						<h4>Request <strong>definition</strong></h4>
+						<pre><code>{
+  method: "MERGE",
+  path: CONST.OData.entityNames.todoItemSet + "\\(guid'([^']+)'\\)",
+  response: function(oXhr, sCapturingGroupValue) {
+    // oXhr.respond(iStatusCode, mHeaders, sBody);
+    return true || false;
+  }
+}</pre></code>
+						<small>
+							<ul>
+								<li><code>method</code> is the <strong>HTTP verb</strong> to match</li>
+								<li><code>path</code> is a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions"><strong>regular expression</strong></a>
+									matching the <strong>request URL</strong> <i>(string or RegExp)</i>
+									<ul>
+										<li><strong>capturing groups</strong>' values are passed to the <code>response</code> function</li>
+									</ul>
+								</li>
+								<li><code>oXhr</code> simulates an <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest"><strong>XMLHttpRequest</strong></a> object
+									<ul>
+										<li>Use <code>oxhr.respond</code> to <strong>answer</strong> the request</li>
+									</ul>
+								</li>
+								<li>If the <code>response</code> function returns <strong>true</strong>,
+									the MockServer won't <strong>search</strong> for another matching definition (LIFO)</li>
+							</ul>
+						</small>
 					</section>
 					<section>
 						<h4>Handles <strong>creation</strong> of a new item</h4>
-						<p>You may also completely override MockServer offers CRUD operations, but it is possible to alter them.</p>
 					</section>
 					<section>
 						<h4>Simulates an <strong>error</strong></h4>
-						<p>Error simulation should be part of the process.</p>
+						<p>It is important to <strong>check</strong> how an application<br /><strong>behaves</strong> in case of errors.</p>
 					</section>
 					<section>
 						<h4>Implements ClearCompleted <strong>function import</strong></h4>
-						<p>Function imports can't be defaulted by MockServer, here is how you can implement your own</p>
+						<p>Unlike CRUD operations on entities,<br />
+							the MockServer <strong>can't default</strong> function imports.</p>
 					</section>
 				</section>
 				<section>
