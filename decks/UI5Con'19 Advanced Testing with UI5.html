@@ -313,6 +313,48 @@
 				</section>
 				<section>
 					<section>
+						<h3>OPA <strong>end-to-end</strong> <i>(POC)</i></h3>
+					</section>
+					<section>
+						<h4><strong>Integration</strong> Testing</h4>
+						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
+						<p>OPA is used for <strong>integration testing</strong> but with <strong>no connection</strong> to the server.</p>
+						<br />
+						<small>Hence the use of MockServer</small>
+					</section>
+					<section>
+						<h4><strong>end-to-end</strong> testing challenges</h4>
+						<p>The application must be <strong>hosted</strong> on the server to access the <strong>ODATA service</strong>.</p>
+						<p>Thanks to <strong>OPA concepts</strong>, the developer can <strong>automate</strong> the application.
+						  However, the test code is <strong>not delivered</strong>.</p>
+						<br />
+						<p class="fragment">It is <strong>not possible</strong> to run OPA tests against a <strong>distant server</strong>.</p>
+					</section>
+					<section>
+						<h4>node-ui5 <strong>proxy</strong> server</h4>
+						<p>node-ui5 offers a <strong>configurable proxy server</strong> that <strong>flattens</strong>
+							the system landscape.<p>
+						<p>The OPA code can access the <strong>distant server</strong> as if it was <strong>local</strong>.</p>
+					</section>
+					<section>
+						<h4><strong>DEMO</strong> OPA <strong>end-to-end</strong> testing</h4>
+						<small>
+							<a href="http://localhost:8080/demos/opa.html">OPA on OpenUI5 documentation</a>
+						</small>
+					</section>
+				</section>
+				<section>
+					<h3>Key <strong>Take-Aways</strong></h3>
+					<ul>
+						<li>There is <strong>more than UI</strong> in UI5</li>
+						<li><strong>node-ui5</strong> enables the use of UI5 <strong>in</strong> Node.js</li>
+						<li>UI developers <strong>can</strong> help with <strong>backend testing</strong></li>
+						<br />
+						<li class="fragment">Experimenting is <strong>fun</strong> and leads to <strong>new ideas</strong></li>
+					</ul>
+				</section>
+				<section>
+					<section>
 						<h3 data-agenda="no"><b>Workshop</b><br /><strong>Building</strong> a MockServer</h3>
 					</section>
 					<section>
@@ -413,48 +455,6 @@
 						<p>Unlike CRUD operations on entities,<br />
 							the MockServer <strong>can't default</strong> function imports.</p>
 					</section>
-				</section>
-				<section>
-					<section>
-						<h3>OPA <strong>end-to-end</strong> <i>(POC)</i></h3>
-					</section>
-					<section>
-						<h4><strong>Integration</strong> Testing</h4>
-						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
-						<p>OPA is used for <strong>integration testing</strong> but with <strong>no connection</strong> to the server.</p>
-						<br />
-						<small>Hence the use of MockServer</small>
-					</section>
-					<section>
-						<h4><strong>end-to-end</strong> testing challenges</h4>
-						<p>The application must be <strong>hosted</strong> on the server to access the <strong>ODATA service</strong>.</p>
-						<p>Thanks to <strong>OPA concepts</strong>, the developer can <strong>automate</strong> the application.
-						  However, the test code is <strong>not delivered</strong>.</p>
-						<br />
-						<p class="fragment">It is <strong>not possible</strong> to run OPA tests against a <strong>distant server</strong>.</p>
-					</section>
-					<section>
-						<h4>node-ui5 <strong>proxy</strong> server</h4>
-						<p>node-ui5 offers a <strong>configurable proxy server</strong> that <strong>flattens</strong>
-							the system landscape.<p>
-						<p>The OPA code can access the <strong>distant server</strong> as if it was <strong>local</strong>.</p>
-					</section>
-					<section>
-						<h4><strong>DEMO</strong> OPA <strong>end-to-end</strong> testing</h4>
-						<small>
-							<a href="http://localhost:8080/demos/opa.html">OPA on OpenUI5 documentation</a>
-						</small>
-					</section>
-				</section>
-				<section>
-					<h3>Key <strong>Take-Aways</strong></h3>
-					<ul>
-						<li>There is <strong>more than UI</strong> in UI5</li>
-						<li><strong>node-ui5</strong> enables the use of UI5 <strong>in</strong> Node.js</li>
-						<li>UI developers <strong>can</strong> help with <strong>backend testing</strong></li>
-						<br />
-						<li class="fragment">Experimenting is <strong>fun</strong> and leads to <strong>new ideas</strong></li>
-					</ul>
 				</section>
 			</div>
 		</div>
