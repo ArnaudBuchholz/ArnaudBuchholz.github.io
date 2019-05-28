@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta name="description" content="UI5Con'19 Advanced Testing with UI5">
+		<meta name="description" content="UI5Con'19 Use UI5 to test your ODATA service">
 		<meta name="author" content="Arnaud Buchholz">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -25,7 +25,7 @@
 									</small>
 								</td>
 								<td style="vertical-align: top;">
-									<h3 data-agenda="no">Advanced <strong>Testing</strong> with <strong>UI5</strong></h3>
+									<h3 data-agenda="no">Use <strong>UI5</strong> to <strong>test</strong> your <strong>ODATA</strong> service</h3>
 									<p>
 										<small>
 											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
@@ -62,7 +62,7 @@
 							</li>
 							<li>
 								<a href="https://github.com/ArnaudBuchholz/node-ui5">node-ui5</a><br />
-								<small>A <strong>Node.js</strong> wrapper for <strong>OpenUI5</strong>, enabling advanced testing</small>
+								<small>A <strong>Node.js</strong> wrapper for <strong>OpenUI5</strong>, enabling ODATA testing</small>
 							</li>
 						</ul>
 						<p>
@@ -72,9 +72,11 @@
 						<h4><strong>About</strong> the presentation</h4>
 						<ul>
 							<li class="fragment">There is <strong>more than UI</strong> in UI5</li>
-							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 development</li>
+							<li class="fragment">In particular, it offers tools to <strong>validate the UI</strong></li>
 							<br />
-							<li class="fragment">This presentation is about <strong>unusual ways of leveraging UI5</strong> to test UI5 developments</li>
+							<li class="fragment">This presentation is about <strong>leveraging UI5</strong> to also test ODATA services</li>
+							<br />
+							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 development</li>
 						</ul>
 					</section>
 				</section>
@@ -83,10 +85,10 @@
 						<h3>UI5Con<strong>'18</strong></h3>
 					</section>
 					<section>
-						<img src="From OPA to Node-UI5/UI5Con18.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<br />
-						<small><a href="https://openui5.org/ui5con/material2018.html">UI5 sessions 2018</a></small>
-						<p><strong>A journey with OPA</strong> at UI5Con<strong>'18</strong></p>
+						<p><strong>A journey with OPA</strong> at <a href="https://openui5.org/ui5con/material2018.html">UI5Con<strong>'18</strong></a></p>
+						<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a> <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a></small>
 					</section>
 					<section>
 						<h4>What is <strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance?</h4>
@@ -106,6 +108,7 @@
 						<img src="UI5Con'18 A journey with OPA/MockServer.png" style="border: 0; max-width: 40%; max-height: 40%;" align="left"/>
 						<br/>
 						<p>The MockServer is a software component that <strong>captures</strong> AJAX requests and either <strong>answer them</strong> or <strong>let them reach</strong> the backend.<p>
+						<p>It handles its own set of <strong>mocked data</strong>.</p>
 					</section>
 					<section>
 						<h4><strong>DEMO</strong> Automated tests samples</h4>
@@ -113,15 +116,6 @@
 							<a href="http://localhost:8080/index.html">Application</a>
 							<a href="http://localhost:8080/test/integration/opaTests.qunit.html">OPA tests</a>
 						</small>
-					</section>
-					<section>
-						<h4><strong>Learn</strong> more</h4>
-						<br/>
-						<a href="https://youtu.be/HiZq-kuIbt0">
-							<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-						</a>
-						<br />
-						<small><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a></small>
 					</section>
 				</section>
 				<section>
@@ -199,7 +193,7 @@
 						<q class="fragment">Anything !</q>
 					</section>
 					<section>
-						<h4>Introducing <strong>node-ui5</strong></h4>
+						<h4>Introducing <strong>node-ui5 <sup>*</sup></strong></h4>
 						<small><a href="https://www.npmjs.com/package/node-ui5">https://www.npmjs.com/package/node-ui5</a></small>
 						<p>node-ui5 <strong>wraps</strong> UI5 API <strong>in</strong> Node.js.</p>
 						<pre><code>require('node-ui5').then(({sap}) => {
@@ -209,6 +203,7 @@
 	  /* ... */
   })
 })</pre></code>
+						<small><i><strong><sup>*</sup> Not</strong> supported by <strong>UI5</strong></i></small>
 					</section>
 					<section>
 						<h4><strong>Benefits</strong> of running in Node.js</h4>
@@ -313,7 +308,7 @@
 				</section>
 				<section>
 					<section>
-						<h3>OPA <strong>end-to-end</strong> <i>(POC)</i></h3>
+						<h3>OPA <strong>end-to-end</strong> <i><small>(Proof Of Concept)</small></i></h3>
 					</section>
 					<section>
 						<h4><strong>Integration</strong> Testing</h4>
@@ -383,7 +378,7 @@
 						<small>
 							<ul>
 								<li>Files <strong>location</strong> is given by <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/simulate">sMockdataBaseUrl</a></li>
-								<li>File name must match the <strong>entity set</strong> <i>(case sensitively)</i></li>
+								<li>File name must match the <strong>entity set</strong> <i>(case sensitive)</i></li>
 								<li>It must contain an <strong>array of objects</strong></li>
 								<li>Only define the <strong>necessary</strong> fields</li>
 								<li>Date/Time fields use a <strong>specific format</strong></li>
