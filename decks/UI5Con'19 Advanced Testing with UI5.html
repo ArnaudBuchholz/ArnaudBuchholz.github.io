@@ -73,9 +73,7 @@
 						<ul>
 							<li class="fragment">There is <strong>more than UI</strong> in UI5</li>
 							<li class="fragment">In particular, it offers tools to <strong>validate the UI</strong></li>
-							<br />
 							<li class="fragment">This presentation is about <strong>leveraging UI5</strong> to also test ODATA services</li>
-							<br />
 							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 development</li>
 						</ul>
 					</section>
@@ -133,7 +131,7 @@
 						<img src="From OPA to Node-UI5/MockServer server old.png" style="border: 0; max-width: 80%; max-height: 60%;" />
 					</section>
 					<section>
-						<q>There must be a better way !</q>
+						<q>There must be a better way!</q>
 					</section>
 					<section>
 						<q>Why not running MockServer <strong>inside</strong> Node.js ?</q>
@@ -161,7 +159,7 @@
 						<ul>
 							<li><strong>Huge</strong> framework and <strong>slow</strong> to start</li>
 							<li>No <strong>synchronous</strong> requests</li>
-							<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"><strong>CORS</strong></a></li>
+							<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"><strong>CORS</strong></a> limits access to servers</li>
 							<li>Environments are <strong>isolated</strong><br />
 								<i><small>(not able to run Node.js code in loaded scripts)</small></i></li>
 						</ul>
@@ -191,9 +189,9 @@
 							that it is possible to <strong>run UI5 in Node.js</strong>.</p>
 					</section>
 					<section>
-						<q>What else can be done ?</q>
+						<q>What else can be done?</q>
 						<br />
-						<q class="fragment">Anything !</q>
+						<q class="fragment">Anything!</q>
 					</section>
 					<section>
 						<h4>Introducing <strong>node-ui5 <sup>*</sup></strong></h4>
@@ -282,9 +280,9 @@
 									<li>Provides <strong>description</strong> of entities</li>
 								</ul>
 							</li>
-							<li>Encapsulate <strong>CRUD</strong>
+							<li>Encapsulates <strong>CRUD</strong>
 								<ul>
-									<li><strong>Deserialize</strong> entities</li>
+									<li><strong>Deserializes</strong> entities</li>
 									<li>Enables <strong>batching</strong> of requests</li>
 								</ul>
 							</li>
@@ -316,9 +314,9 @@
 					<section>
 						<h4><strong>Integration</strong> Testing</h4>
 						<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
-						<p>OPA is used for <strong>integration testing</strong> but with <strong>no connection</strong> to the server.</p>
 						<br />
-						<small>Hence the use of MockServer</small>
+						<p>OPA is used for <strong>integration testing</strong> but with <strong>no connection</strong> to the server.</p>
+						<small>That's why the MockServer is <strong>part of the framework</strong>.</small>
 					</section>
 					<section>
 						<h4><strong>end-to-end</strong> testing challenges</h4>
