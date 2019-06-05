@@ -1,8 +1,44 @@
-There is more than UI in UI5
+1:
+This is a picture of the advanced test reactor at the Idaho National Laboratory, used to test nuclear fuel and materials.
 
-ACT 1 UI5Con'18
-Last year, I was at UICon'18 to present "A journey with OPA".
-I explained how you can assess the behavior of the User Interface using test automation.
+This presentation is about using UI5 to test ODATA services.
+
+It will be published after the conference for you to review it.
+
+2:
+Few words about me.
+I have been working at SAP for 4 years.
+I play a lot with JavaScript, both on front-end and back-end.
+As you may hear it, I am French but I live in Canada.
+
+3:
+The agenda looks packed but this is the logical sequence of a story that started last year.
+
+4:
+Several projects will be covered during this talk.
+I don't think it is necessary to introduce OpenUI5.
+The training-ui5con18-opa project was initially created for last year presentation but it evolved to support this year conference.
+jsdom is an open-source project that was really helpful to build node-ui5.
+
+5:
+There is more than UI in UI5.
+Since I love code quality and test automation, I remind you that the framework comes with tools to validate the UI.
+Besides that, I would like to show you how you can also leverage UI5 to test ODATA services.
+However, the official tools for UI5 development are consolidated under UI5 tooling.
+
+6:
+First chapter of our story: last year UI5Con
+
+7:
+Last year, I presented "A journey with OPA".
+Since it was recorded (and the link is available here) I will not replay the whole deck but rather recall some slides required to put you back in the proper context.
+
+8:
+UI5 offers the OPA framework
+I explained how you can assess the behavior of the user interface using test automation.
+
+9:
+
 I also talked about the Mock server, this component that simulates the backend by hooking AJAX requests directly
 inside the browser.
 If you want to catch up, you may have a look to the recording.
@@ -46,7 +82,7 @@ ACT 4b Building a mock server
 
 Prerequisites
 
-Step 1: 
+Step 1:
 
 ACT 5 OPA End to End
 
