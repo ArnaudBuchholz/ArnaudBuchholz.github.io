@@ -1,8 +1,6 @@
 1:
 This is a picture of the advanced test reactor at the Idaho National Laboratory, used to test nuclear fuel and materials.
-
 This presentation is about using UI5 to test ODATA services.
-
 It will be published after the conference for you to review it.
 
 2:
@@ -34,14 +32,35 @@ Last year, I presented "A journey with OPA".
 Since it was recorded (and the link is available here) I will not replay the whole deck but rather recall some slides required to put you back in the proper context.
 
 8:
-UI5 offers the OPA framework
-I explained how you can assess the behavior of the user interface using test automation.
+UI5 contains the OPA framework, OPA stands for One Page Acceptance.
+This toolset is designed to automate and validate the user interface.
+By defining journeys and pages, the developer creates a readable abstraction of the user interface.
+It means that the test script are easy to maintain.
 
 9:
+But, most of the time, an application requires a backend to store data and implement the business logic.
+So, when it comes to testing, the dataset must be known to match the scenario.
+Furthermore, some operations might be risky. For instance, publishing information or interacting with physical devices:
 
-I also talked about the Mock server, this component that simulates the backend by hooking AJAX requests directly
-inside the browser.
-If you want to catch up, you may have a look to the recording.
+10:
+This is where the MockServer comes into play.
+The name itself is confusing. Actually, this software component resides in the browser.
+It simulates the backend by hooking AJAX requests before they reach the network.
+Then, it decides if and how it should answer.
+
+When it starts, it loads or generate mocked data.
+By default, it implements CRUD methods (create, read, update and delete). But it can be customized to extend its capabilities.
+
+11:
+Run the app and show the network tab: no requests
+With this level of isolation, the OPA tests are self sufficient.
+Run the OPA tests.
+
+12:
+Second chapter of the story: building a real server using the MockServer
+
+
+If you want to catch up with OPA or the MockServer, you may have a look to the recording.
 
 ACT 2 MockServer as a server
 Some time after this event, I was contacted by a colleague because he was interested to reuse the MockServer
