@@ -59,21 +59,35 @@ Run the OPA tests.
 12:
 Second chapter of the story: building a real server using the MockServer
 
-
-If you want to catch up with OPA or the MockServer, you may have a look to the recording.
-
-ACT 2 MockServer as a server
+13: -- TODO --
 Some time after this event, I was contacted by a colleague because he was interested to reuse the MockServer
 in order to validate a network configuration. Indeed, in his particular scenario, he needed an ODATA server behind
 a particular network landscape. Before going in production and to validate the configuration, he thought about the
 MockServer.
 
-The initial prototype was using express, socket.io and Puppeteer. Every single request coming to NodeJS was
-transmitted to the browser through socket.io...
-WE can do better.
+I started by explaining that the MockServer name was confusing and it was not possible to use it out of the box.
 
-After doing some investigation on the web, jsdom appeared to be a solution to simulate a browser directly inside
-NodeJS.
+He answered "Oh I know, we have a prototype"
+
+14:
+His prototype was using express, socket.io and Puppeteer.
+Upon startup, puppeeter is used to open Chrome Headless.
+Then, Chrome connects to the express server to load a page that instantiate the mockserver and opens a socket with the server.
+
+Every single ODATA request coming to NodeJS is transmitted to Chrome through the socket, processed by the mocserver and the answer is sent back to the client.
+
+15:
+There must be a better way
+
+16:
+Why not embedding the MockServer directly in NodeJS rather than relying on two processes.
+
+17:
+After doing some research on the web, jsdom appeared to be a solution to simulate a browser directly inside NodeJS.
+
+In this example, the HTML content is evaluated in a simulated environment where the base URL is http://example.org
+
+18:
 
 It was not enough, I had to load OpenUI5 and ensure that any local file could be loaded through sap.ui.define
 => Ended up rewriting the XmlHttpRequest object
