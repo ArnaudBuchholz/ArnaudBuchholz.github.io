@@ -25,7 +25,7 @@ Besides that, I would like to show you how you can also leverage UI5 to test ODA
 However, the official tools for UI5 development are consolidated under UI5 tooling.
 
 6:
-First chapter of our story: last year UI5Con
+First chapter of our story: last year UI5Con.
 
 7:
 Last year, I presented "A journey with OPA".
@@ -40,7 +40,8 @@ It means that the test script are easy to maintain.
 9:
 But, most of the time, an application requires a backend to store data and implement the business logic.
 So, when it comes to testing, the dataset must be known to match the scenario.
-Furthermore, some operations might be risky. For instance, publishing information or interacting with physical devices:
+Furthermore, some operations might be risky.
+For instance, publishing information or interacting with physical devices.
 
 10:
 This is where the MockServer comes into play.
@@ -52,48 +53,123 @@ When it starts, it loads or generate mocked data.
 By default, it implements CRUD methods (create, read, update and delete). But it can be customized to extend its capabilities.
 
 11:
-Run the app and show the network tab: no requests
+[>] Run the app and show the network tab: no requests.
+[>] Add a task and refresh the view, the task disappeared.
 With this level of isolation, the OPA tests are self sufficient.
-Run the OPA tests.
+[>] Run the OPA tests.
 
 12:
-Second chapter of the story: building a real server using the MockServer
+Second chapter of the story: building a real server using the MockServer.
 
-13: -- TODO --
-Some time after this event, I was contacted by a colleague because he was interested to reuse the MockServer
-in order to validate a network configuration. Indeed, in his particular scenario, he needed an ODATA server behind
-a particular network landscape. Before going in production and to validate the configuration, he thought about the
-MockServer.
+13:
+Some time after this event, I was internally contacted by a colleague.
+He explained me that he wanted to use the MockServer in order to validate a network configuration before going to production.
+In his particular scenario, he needed an ODATA server to answer calls made through a particular network landscape.
 
-I started by explaining that the MockServer name was confusing and it was not possible to use it out of the box.
+I started by explaining that the MockServer name was confusing and it was not possible to use it outside of a browser.
 
-He answered "Oh I know, we have a prototype"
+But he answered "Oh I know, I have a working proof of concept"
 
 14:
-His prototype was using express, socket.io and Puppeteer.
-Upon startup, puppeeter is used to open Chrome Headless.
-Then, Chrome connects to the express server to load a page that instantiate the mockserver and opens a socket with the server.
+His prototype is based on NodeJS and uses several frameworks: express, socket.io and Puppeteer.
+Upon startup, puppeeter opens an instance of Chrome Headless.
+Then, Chrome connects to the express server to load a page that instantiate the MockServer.
+Last but not least, a realtime connection is established between NodeJS and Chrome through socket.io.
 
-Every single ODATA request coming to NodeJS is transmitted to Chrome through the socket, processed by the mocserver and the answer is sent back to the client.
+Every single ODATA request coming to NodeJS is received by express, transmitted to Chrome through socket.io, processed by the MockServer and the answer is sent back to the client.
 
 15:
-There must be a better way
+So I thought "There must be a better way".
 
 16:
-Why not embedding the MockServer directly in NodeJS rather than relying on two processes.
+And I wondered "Why not embedding the MockServer directly in NodeJS rather than relying on two processes."
+
+But MockServer being part of SapUI5, it has to be hosted by a browser to work properly.
+
+After doing some research on the web...
 
 17:
-After doing some research on the web, jsdom appeared to be a solution to simulate a browser directly inside NodeJS.
+...jsdom appeared to be a solution to simulate a browser directly inside NodeJS.
 
-In this example, the HTML content is evaluated in a simulated environment where the base URL is http://example.org
+In this example, the HTML content is evaluated in a simulated environment where the base URL is http://example.org.
+
+You might recognize the bootstrap of SapUI5 that consists in loadig sap-ui-core.js with some settings.
+
+And it actually almost works.
 
 18:
+I said "almost" because it was not straightforward.
 
-It was not enough, I had to load OpenUI5 and ensure that any local file could be loaded through sap.ui.define
-=> Ended up rewriting the XmlHttpRequest object
-=> Mapping local files
+First of all, jsdom is a huge framework and it is rather slow to start. It has lots of dependencies.
+Furthermore, synchronous requests are not handled. This comes from the nature of NodeJS that enforces asynchronicity.
+As for a real browser, Cross Origin Resource Sharing is implemented. While creating a jsdom window, a base URL must be specified: it limits access to servers.
+Last but not least, the simulation includes isolation. As a result, you can't use NodeJS code inside jsdom evaluated code.
+For instance, if I want to load the MockServer with its mocked data, they have to be hosted (to be available through HTTP requests). This would force me to include a web server to MockServer server.
 
-ACT 3 OpenUI5 inside NodeJS
+19:
+An easy way to workaround most of these limitations was to rewrite the XmlHttpRequest class.
+This class is responsible of handling AJAX requests in a browser.
+
+Doing so, it opened the door to access the file system, it removed the CORS limitation and synchronous requests were enabled using DeAsync.js, a NodeJS module that transform asynchronous code into synchronous one.
+
+20:
+After doing that, I was able to build a server that could answer ODATA requests using the MockServer.
+For instance, I can now show you the $metadata of the simulate service.
+[>] click $metadata, show the network tab and refresh
+It means that I can also run the application with a 'real' server.
+[>] click Application, stress out the "no-mock" parameter, show the network tab and play with the app
+[>] Add a task and refresh the app, the task is still there
+
+21:
+Third chapter of the story: Generalizing the approach to UI5.
+
+22:
+The MockServer experiment demonstrated that it is possible to run UI5 in NodeJS.
+
+So the next obvious question is...
+
+23:
+"What else can be done?"
+And the answer is "Anything".
+
+24:
+By isolating parts of the MockServer proof of concept, a new NodeJS module called node-ui5 was created.
+
+This module encapsulates all the necessary steps to load UI5 and make it available to NodeJS.
+
+25:
+Why would you like to run UI5 inside NodeJS?
+Well, first it gives you access to a native support of all the latest (and cool) JavaScript features.
+
+In particular, the async & await operators are really helpful when it comes to dealing with asynchronous code.
+Since these tools rely on promises, node-ui5 also provides helpers to wrap asynchronous API with promises.
+(This will be demonstrated right after this slide).
+
+But most important, it is easy to automate. Indeed, you don't need a browser or any complex selenium configuration.
+Just NodeJS and a command line.
+
+26:
+In this example, we use the ODataModel v2, promisified with the module node-ui5 promisify, to access our MockServer and extract some data.
+Please note the use of await to:
+- Wait for the metadata to be loaded (quick remark, if the metadataLoaded promise is rejected the code will fail with an exception)
+- Then to read the list of TodoItems
+
+[>] In a DOS prompt, use node demos\test --fast
+
+27:
+So if we summarize everything we have seen so far, it is possible to load and use UI5 inside NodeJS.
+What can we do with that? Since I am someone who likes testing, I looked into ODATA testing.
+
+28:
+I am a UI developer. Because of that, I am the primary user of the ODATA services built to expose information.
+However, I am rarely involved in ODATA testing.
+
+And basically, most of the ODATA testing focus on CRUD operations and I have rarely seen tests checking the content of the $metadata.
+
+However, the $metadata is the schema that configures completely how the ODataModel will access the backend, it provides structural information that condition the list of possible operations. Hence it is critical to check that it is generated correctly and that it provides the right information.
+
+29:
+Let see how ODATA testing is done with POSTMAN
 
 ACT 4 Better ODATA testing
 
