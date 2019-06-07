@@ -170,6 +170,60 @@ However, the $metadata is the schema that configures completely how the ODataMod
 
 29:
 Let see how ODATA testing is done with POSTMAN
+[>] Start postman
+[>] Show $metadata testing
+[>] $batch testing
+
+30:
+Now let's have a closer look on how ODATA is being used in an UI5 application.
+UI5 relies on the Model View Controller pattern. Hence, it provides classes to implement models.
+In particular, the ODataModel class will take care of the communication with the ODATA backend.
+
+On the left of the diagram, you see how much is tested when focusing on ODATA only or if you do it through the ODataModel class.
+
+31:
+What are the benefits of using the ODataModel class.
+First of all, it always validate the $metadata. Indeed, it is a prerequisite for this class to download and parse the $metadata before being available. Furthermore, the class provides information about the loaded entities. You will see in the next slide how you can gather field properties in a simple way.
+
+32:
+[>] Click the link to show the example
+[>] Show entity properties
+[>] show $batch
+
+33:
+How much does it cost to develop such tests?
+
+Actually, when building an application it is always a good idea to also prepare the MockServer.
+Not only this is the first step for OPA testing but it also enables the development before the backend is ready.
+
+To ensure the MockServer works the right way, you can implement it using Test Driven Development.
+
+Then, to some extend, the same tests may apply to the backend.
+
+34:
+[>] Show MockServer qUnit source
+[>] Run qUnit of MockServer
+
+The same tests can be run in a command line against a real server
+[>] Run demos/qunit-mockserver.js
+
+35:
+Ultimately, the idea is to reuse as much as possible the code being developed for the UI to also test the backend.
+We reached the last chapter of our story: End to End testing with OPA.
+
+36:
+Usually OPA is used for component testing or integration but without connection to the backend.
+That's why we need the MockServer.
+
+37:
+What do we need to add the backend in this test?
+
+OPA provides patterns to abstract the UI. As a result, the tests (or journeys) are easy to read and maintain.
+
+To access the ODATA service, the tested application and the service must be hosted on the same server.
+
+First, since OPA runs in a browser, the application, the OPA journeys and pages
+
 
 ACT 4 Better ODATA testing
 
