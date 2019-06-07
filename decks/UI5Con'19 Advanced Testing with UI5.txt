@@ -222,8 +222,26 @@ OPA provides patterns to abstract the UI. As a result, the tests (or journeys) a
 
 To access the ODATA service, the tested application and the service must be hosted on the same server.
 
-First, since OPA runs in a browser, the application, the OPA journeys and pages
+But the OPA test code is not delivered with the app.
 
+Hence it is not possible to run OPA tests against a distant server.
+
+38:
+One solution would consists in simulating a flat landscape where the OPA test code and the application would appear to be on the same server.
+
+node-ui5 offers a configurable proxy server that allows this configuration.
+
+From a browser point of view, everything becomes local.
+
+39:
+[>] Demo first by setting https:// => It fails
+[>] Then use the /prxy/https/ => it works
+
+This is a POC, there are many unsolved questions, such as authentication.
+
+But the big value of such a mechanism is that it becomes possible to leverage existing OPA code to manipulate and test the real application.
+
+40:
 
 ACT 4 Better ODATA testing
 
