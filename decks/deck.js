@@ -110,7 +110,10 @@ function loadNotes () {
                     content = match[2].trim(),
                     aside = document.createElement("aside");
                 aside.className = "notes";
-                aside.appendChild(document.createTextNode(content));
+                content.split("\n").forEach(function (line) {
+                    aside.appendChild(document.createTextNode(line));
+                    aside.appendChild(document.createElement("br"));
+                });
                 sections[index].appendChild(aside);
                 match = reNotes.exec(notes);
             }
