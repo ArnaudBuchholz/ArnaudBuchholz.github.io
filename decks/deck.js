@@ -105,7 +105,6 @@ function loadNotes () {
                 reNotes = /[^#]*^#([0-9]+)([^#]*)/gmy,
                 match = reNotes.exec(notes);
             while(match) {
-                match = reNotes.exec(notes)
                 var
                     index = parseInt(match[1], 10) - 1,
                     content = match[2].trim(),
@@ -113,6 +112,7 @@ function loadNotes () {
                 aside.className = "notes";
                 aside.appendChild(document.createTextNode(content));
                 sections[index].appendChild(aside);
+                match = reNotes.exec(notes);
             }
         })
         .catch(function () {
