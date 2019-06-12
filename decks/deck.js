@@ -85,6 +85,41 @@ function updateLinks () {
     });
 }
 
+function loadNotes () {
+    var currentPath = location.pathname;
+    if (currentPath.indexOf(".html") !== -1) {
+        currentPath = currentPath.replace(".html", ".txt");
+    } else {
+        currentPath += ".txt";
+    }
+    return gpf.http.get(currentPath)
+        .then(function (response) {
+            if (response.status.toString().charAt(0) !== "2") {
+                return;
+            }
+            var
+                sections = [].slice.call(document.querySelectorAll("section")).filter(function (section) {
+                    return !section.querySelector("section");
+                }),
+                notes = response.responseText,
+                reNotes = /[^#]*^#([0-9]+)([^#]*)/gmy,
+                match = reNotes.exec(notes);
+            while(match) {
+                match = reNotes.exec(notes)
+                var
+                    index = parseInt(match[1], 10) - 1,
+                    content = match[2].trim(),
+                    aside = document.createElement("aside");
+                aside.className = "notes";
+                aside.appendChild(document.createTextNode(content));
+                sections[index].appendChild(aside);
+            }
+        })
+        .catch(function () {
+            // ignore error
+        });
+}
+
 function loadReveal() {
     var
         deckLength = readDeckMeta("duration", 0),
@@ -115,5 +150,6 @@ window.addEventListener("load", function() {
         .then(reformatCodeSamples)
         .then(processMeInfo)
         .then(updateLinks)
+        .then(loadNotes)
         .then(loadReveal);
 });
