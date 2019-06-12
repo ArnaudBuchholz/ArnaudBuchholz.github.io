@@ -3,5 +3,6 @@
     "marked": "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/marked.js",
     "markdown": "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/markdown/markdown.min.js",
     "hljs": "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/plugin/highlight/highlight.min.js",
+    "notes": "plugins/notes.js",
     "elapsed": "plugins/elapsed-time-bar.js"
 }
