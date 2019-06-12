@@ -4,7 +4,7 @@ Prerequesites:
 - Command line in git\training-ui5con18-opa: node serve
 - Command line in git\training-ui5con18-opa\demos
 - start postman
-- warmup mocha
+- warmup mocha (demos\odata-test)
 - Start Atom on opa.js
 - Modify URL in opa.js
 
@@ -62,11 +62,13 @@ Then, it decides if and how it should answer.
 When it starts, it loads or generate mocked data.
 By default, it implements CRUD methods (create, read, update and delete). But it can be customized to extend its capabilities.
 
+There will be a workshop named 'Building a MockServer' room D at 13:50
+
 #11
-[>] Run the app and show the network tab: no requests.
-[>] Add a task and refresh the view, the task disappeared.
+✅ Run the app and show the network tab: no requests.
+✅ Add a task and refresh the view, the task disappeared.
 With this level of isolation, the OPA tests are self sufficient.
-[>] Run the OPA tests.
+✅ Run the OPA tests.
 
 #12 10:00
 Second chapter of the story: building a real server using the MockServer.
@@ -110,7 +112,7 @@ And it actually almost works.
 #18
 I said "almost" because it was not straightforward.
 
-First of all, jsdom is a huge framework and it is rather slow to start. It has lots of dependencies.
+First of all, jsdom is a huge framework and so is its digital footprint. It has lots of dependencies.
 Furthermore, synchronous requests are not handled. This comes from the nature of NodeJS that enforces asynchronicity.
 As for a real browser, Cross Origin Resource Sharing is implemented. While creating a jsdom window, a base URL must be specified: it limits access to servers.
 Last but not least, the simulation includes isolation. As a result, you can't use NodeJS code inside jsdom evaluated code.
@@ -125,10 +127,10 @@ Doing so, it opened the door to access the file system, it removed the CORS limi
 #20
 After doing that, I was able to build a server that could answer ODATA requests using the MockServer.
 For instance, I can now show you the $metadata of the simulate service.
-[>] click $metadata, show the network tab and refresh
+✅ click $metadata, show the network tab and refresh
 It means that I can also run the application with a 'real' server.
-[>] click Application, stress out the "no-mock" parameter, show the network tab and play with the app
-[>] Add a task and refresh the app, the task is still there
+✅ click Application, stress out the "no-mock" parameter, show the network tab and play with the app
+✅ Add a task and refresh the app, the task is still there
 
 #21 15:00
 Third chapter of the story: Generalizing the approach to UI5.
@@ -164,7 +166,7 @@ Please note the use of await to:
 - Wait for the metadata to be loaded (quick remark, if the metadataLoaded promise is rejected the code will fail with an exception)
 - Then to read the list of TodoItems
 
-[>] In a DOS prompt, use node demos\test --fast
+✅ In a DOS prompt, use node demos\test --fast
 
 #27 20:00
 So if we summarize everything we have seen so far, it is possible to load and use UI5 inside NodeJS.
@@ -180,9 +182,9 @@ However, the $metadata is the schema that configures completely how the ODataMod
 
 #29
 Let see how ODATA testing is done with POSTMAN
-[>] Start postman
-[>] Show $metadata testing
-[>] $batch testing
+✅ Start postman
+✅ Show $metadata testing
+✅ $batch testing
 
 #30
 Now let's have a closer look on how ODATA is being used in an UI5 application.
@@ -198,9 +200,9 @@ First of all, it always validate the $metadata. Indeed, it is a prerequisite for
 Also, considering CRUD operations, this component is capable of deserializing entities and it enables batching transparently.
 
 #32
-[>] Click the link to show the example
-[>] Show entity properties
-[>] show $batch
+✅ Click the link to show the example
+✅ Show entity properties
+✅ show $batch
 
 #33
 How much does it cost to develop such tests?
@@ -213,11 +215,11 @@ To ensure the MockServer works the right way, you can implement it using Test Dr
 Then, to some extend, the same tests may apply to the backend.
 
 #34
-[>] Show MockServer qUnit source
-[>] Run qUnit of MockServer
+✅ Show MockServer qUnit source
+✅ Run qUnit of MockServer
 
 The same tests can be run in a command line against a real server
-[>] Run demos/qunit-mockserver.js
+✅ Run demos/qunit-mockserver.js
 
 #35 30:00
 Ultimately, the idea is to reuse as much as possible the code being developed for the UI to also test the backend.
@@ -249,8 +251,8 @@ From a browser point of view, everything becomes local.
 A disclaimer before starting the demo, this is a Proof of Concept, there are many unanswered questions (such as authentication) that I need to solve before it becomes a reliable tool.
 But as a first step, I'd like to show how I can access a remote app from the OPA code.
 
-[>] Demo first by setting https:// => It fails
-[>] Then use the /proxy/https/ => it works
+✅ Demo first by setting https:// => It fails
+✅ Then use the /proxy/https/ => it works
 
 The big value of such a mechanism is that it becomes possible to leverage existing OPA code to manipulate and test the real application.
 
@@ -258,5 +260,6 @@ The big value of such a mechanism is that it becomes possible to leverage existi
 To conclude.
 
 UI developers can contribute to backend testing.
+OPA is powerful and we should leverage the tool and help improve it (make it grow).
 
 As a side note, never fear the failure. I started this project as an experiment and I ended up building a tool that, I hope, will help the community to develop better.
