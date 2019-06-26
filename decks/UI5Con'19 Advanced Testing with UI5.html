@@ -548,8 +548,20 @@ _oMockServer.setRequests(aRequests);</pre></code>
 					</section>
 					<section>
 						<h4><b>Test 6 :</b> Implements ClearCompleted <strong>function import</strong></h4>
-						<p>Unlike CRUD operations on entities,<br />
-							the MockServer <strong>can't default</strong> function imports.</p>
+						<p><ul>
+							<li>Unlike <strong>CRUD</strong> operations on entities,<br />
+								the MockServer <strong>can't default</strong> function imports.<br/>
+								<small>Any use <strong>before</strong> implementation will <strong>go to the backend</strong></small></li>
+							<li>A result is expected, check <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/webapp/model/metadata.xml#L27-L29">$metadata</a></li>
+						</ul></p>
+						<pre><code class="javascript">oXhr.respond(200, {
+	"Content-Type": "application/json;charset=utf-8"
+}, JSON.stringify({
+	d: oResult
+}));</pre></code>
+						<small class="fragment">Solution in <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/step6/webapp/test/MockServer.js#L98-L119">
+							<code>/training-ui5con18-opa/workshop/ui5con19-mockserver/step6/webapp/test/MockServer.js</code>
+						</a></small>
 					</section>
 				</section>
 			</div>
