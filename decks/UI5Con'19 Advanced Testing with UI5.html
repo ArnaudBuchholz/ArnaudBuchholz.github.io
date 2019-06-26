@@ -444,11 +444,13 @@
 
 ], function(MockServer, CONST, getNewItem) {
 	/* ... */
-	var oNewItem = getNewItem("title",
+	var todoItemSet = CONST.OData.entityNames.todoItemSet;
+	var aTodoItemSet = _oMockServer.getEntitySetData(todoItemSet),
+	aTodoItemSet.push(getNewItem("title",
 		/* due date */ new Date(),
 		/* completion date, optional */ new Date()
-	);
-</code></pre>
+	));
+	_oMockServer.setEntitySetData(todoItemSet, aTodoItemSet);</code></pre>
 						<small class="fragment">Solution in <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/step2/webapp/test/MockServer.js#L38-L57">
 							<code>/training-ui5con18-opa/workshop/ui5con19-mockserver/step2/webapp/test/MockServer.js</code>
 						</a></small>
@@ -534,6 +536,15 @@ _oMockServer.setRequests(aRequests);</pre></code>
 					<section>
 						<h4><b>Test 5 :</b> Simulates an <strong>error</strong></h4>
 						<p>It is important to <strong>check</strong> how an application<br /><strong>behaves</strong> in case of errors.</p>
+						<pre><code class="javascript">if (sTodoItemGuid === STOP_PROCRASTINATING_GUID) {
+	oXhr.respond(400, {
+		"Content-Type": "text/plain;charset=utf-8"
+	}, "I'll start tomorrow !");
+	return true; // Skip default processing
+}</pre></code>
+						<small class="fragment">Solution in <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/step5/webapp/test/MockServer.js#L82-L87">
+							<code>/training-ui5con18-opa/workshop/ui5con19-mockserver/step5/webapp/test/MockServer.js</code>
+						</a></small>
 					</section>
 					<section>
 						<h4><b>Test 6 :</b> Implements ClearCompleted <strong>function import</strong></h4>
