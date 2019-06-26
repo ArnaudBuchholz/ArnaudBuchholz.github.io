@@ -353,6 +353,7 @@
 				<section>
 					<section>
 						<h3 data-agenda="no"><b>Workshop</b><br /><strong>Building</strong> a MockServer</h3>
+						<small>Want to open the slides <strong>locally</strong> ?<br /> go to <a href="https://bit.ly/2FsObxZ">https://bit.ly/2FsObxZ</a></small>
 					</section>
 					<section>
 						<h4>Prerequesites (<strong>Node.js</strong>)</h4>
@@ -362,10 +363,10 @@
 							<li>Clone / download <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa"><strong>training-ui5con18-opa</strong></a>
 								<small><code>https://github.com/ArnaudBuchholz/training-ui5con18-opa.git</code></small>
 							</li>
-							<li>Run <code><strong>npm i</strong></code> in the cloned / unzipped folder</li>
+							<li>Run <code>npm i</code> in the cloned / unzipped folder</li>
 							<br />
 							<li class="fragment">At the beginning of the workshop,<br />
-								run <code><strong>npm run-script ui5con19</strong></code></li>
+								run <code>npm run-script ui5con19</code></li>
 						</ul>
 					</section>
 					<section>
@@ -373,6 +374,7 @@
 						<ul>
 							<li>Clone repository <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa"><strong>training-ui5con18-opa</strong></a>
 								<small><code>https://github.com/ArnaudBuchholz/training-ui5con18-opa.git</code></small>
+								<img src="UI5Con'19 Advanced Testing with UI5/WebIDE ignore files.png" style="margin: 0; border: 0; box-shadow: unset; max-height: 20%; max-width: 50%;"></img>
 							</li>
 							<br />
 							<li class="fragment">At the beginning of the workshop,<br />
@@ -383,14 +385,24 @@
 						<h4>The <strong>TDD</strong> way</h4>
 						<p>The <strong>goal</strong> of this workshop is to <strong>pass all the tests</strong>.</p>
 						<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/webapp/test/unit/test/MockServer.js">webapp/test/unit/test/MockServer.js</a>
+						<br /><br />
+						<small>See the tests results:<br /><ul>
+							<li>For <strong>Node.js</strong>, open <br /><a href="http://localhost:8080/test/unit/unitTests.qunit.html?module=MockServer"><code>http://localhost:8080/test/unit/unitTests.qunit.html?module=MockServer</code></a></li>
+							<li>For <strong>WebIDE</strong>, select <strong>Run as a Web Application</strong> on<br /><code>/training-ui5con18-opa/webapp/test/unit/unitTests.qunit.html</code></li>
+						</ul></small>
 					</section>
 					<section>
 						<h4><strong>Initial</strong> MockServer</h4>
 						<p>To achieve this goal, the initial MockServer <strong>implementation</strong> must be <strong>customized</strong>.</p>
 						<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/setup/webapp/test/MockServer.js">webapp/test/MockServer.js</a>
+						<br /><br />
+						<small>See the default behavior:<br /><ul>
+							<li>For <strong>Node.js</strong>, open <br /><a href="http://localhost:8080/index.html"><code>http://localhost:8080/index.html</code></a></li>
+							<li>For <strong>WebIDE</strong>, select <strong>Run as a Web Application</strong> on<br /><code>/training-ui5con18-opa/webapp/index.html</code></li>
+						</ul></small>
 					</section>
 					<section>
-						<h4>Exposes <strong>predefined</strong> items</h4>
+						<h4><b>Test 1 :</b> Exposes <strong>predefined</strong> items</h4>
 						<p>MockServer is capable of <strong>preloading</strong><br />entities from a <strong>JSON file</strong>.</p>
 						<small>
 							<ul>
@@ -402,9 +414,12 @@
 							</ul>
 						</small>
 						<pre><code>"/Date(" + date.getTime() + ")/"</code></pre>
+						<small class="fragment">Solution in <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/step1/webapp/model/TodoItemSet.json">
+							<code>/training-ui5con18-opa/workshop/ui5con19-mockserver/step1/webapp/model/TodoItemSet.json</code>
+						</a></small>
 					</section>
 					<section>
-						<h4>Exposes <strong>more than 100</strong> items</h4>
+						<h4><b>Test 2 :</b> Exposes <strong>more than 100</strong> items</h4>
 						<p>Using <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/getEntitySetData">getEntitySetData</a>
 							and <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/setEntitySetData">setEntitySetData</a>,
 							one can <strong>manipulate</strong> the MockServer's entities.</p>
@@ -420,7 +435,26 @@
 };</code></pre>
 					</section>
 					<section>
-						<h4>Handles <strong>update</strong> of item</h4>
+						<h4><b>Test 2 :</b> Exposes <strong>more than 100</strong> items</h4>
+						<p><strong>Allocate</strong> new entities in a <strong>loop</strong> with <code>./newItem</code></p>
+						<pre><code class="javascript">sap.ui.define([
+	"sap/ui/core/util/MockServer",
+	"sap/ui/demo/todo/const",
+	"./newItem"
+
+], function(MockServer, CONST, getNewItem) {
+	/* ... */
+	var oNewItem = getNewItem("title",
+		/* due date */ new Date(),
+		/* completion date, optional */ new Date()
+	);
+</code></pre>
+						<small class="fragment">Solution in <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/step2/webapp/test/MockServer.js#L38-L57">
+							<code>/training-ui5con18-opa/workshop/ui5con19-mockserver/step2/webapp/test/MockServer.js</code>
+						</a></small>
+					</section>
+					<section>
+						<h4><b>Test 3 :</b> Handles <strong>update</strong> of item</h4>
 						<p>MockServer offers <strong>default</strong> CRUD implementations.</p>
 						<p>Using <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/getRequests">getRequests</a>
 							and <a href="https://openui5.hana.ondemand.com/#/api/sap.ui.core.util.MockServer/methods/setRequests">setRequests</a>,
@@ -440,7 +474,7 @@
 							<ul>
 								<li><code>method</code> is the <strong>HTTP verb</strong> to match</li>
 								<li><code>path</code> is a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions"><strong>regular expression</strong></a>
-									matching the <strong>request URL</strong> <i>(string or RegExp)</i>
+									matching the <strong>request URL</strong> <i>(string or <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a>)</i>
 									<ul>
 										<li><strong>capturing groups</strong>' values are passed to the <code>response</code> function</li>
 									</ul>
@@ -456,14 +490,53 @@
 						</small>
 					</section>
 					<section>
-						<h4>Handles <strong>creation</strong> of a new item</h4>
+						<h4><b>Test 3 :</b> Handles <strong>update</strong> of item</h4>
+						<ul>
+							<li><strong>Update</strong> is done with <a href="https://www.odata.org/documentation/odata-version-2-0/operations/">PUT or MERGE</a> on a <strong>given</strong> entity,<br/>
+								<small>check the unit test that <strong>reflects the application behavior</strong></small></li>
+							<li>Use <a href="https://regex101.com/">regex101</a> to check your expression<br />
+								<small>remember to double escape \ when using strings</small></li>
+							<li>For this test case, we want the backend to <strong>assign / remove</strong> the completion date</li>
+							<li>The <strong>default handler</strong> will take care of updating the entity based on the <strong>request body</strong></li>
+						</ul>
 					</section>
 					<section>
-						<h4>Simulates an <strong>error</strong></h4>
+						<h4><b>Test 3 :</b> Handles <strong>update</strong> of item</h4>
+						<pre><code class="javascript">var aRequests = _oMockServer.getRequests();
+aRequests.push({
+	method: "?",
+	path: CONST.OData.entityNames.todoItemSet + "\\(guid'([^']+)'\\)",
+	response: function(oXhr, sTodoItemGuid) {
+		var oBody = JSON.parse(oXhr.requestBody);
+		if (oBody[CONST.OData.entityProperties.todoItem.completed]) {
+		} else {
+		}
+		oXhr.requestBody = JSON.stringify(oBody);
+		return false; // Keep default processing
+	}
+});
+_oMockServer.setRequests(aRequests);</pre></code>
+						<small class="fragment">Solution in <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/step3/webapp/test/MockServer.js#L59-L78">
+							<code>/training-ui5con18-opa/workshop/ui5con19-mockserver/step3/webapp/test/MockServer.js</code>
+						</a></small>
+					</section>
+					<section>
+						<h4><b>Test 4 :</b> Handles <strong>creation</strong> of a new item</h4>
+						<ul>
+							<li><strong>Create</strong> is done with a <a href="https://www.odata.org/documentation/odata-version-2-0/operations/">POST</a> on the entity set</li>
+							<li>For this test case, a new item must <strong>NOT be completed</strong></li>
+						</ul>
+						<br /><br />
+						<small class="fragment">Solution in <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/workshop/ui5con19-mockserver/step4/webapp/test/MockServer.js#L61-L72">
+							<code>/training-ui5con18-opa/workshop/ui5con19-mockserver/step4/webapp/test/MockServer.js</code>
+						</a></small>
+					</section>
+					<section>
+						<h4><b>Test 5 :</b> Simulates an <strong>error</strong></h4>
 						<p>It is important to <strong>check</strong> how an application<br /><strong>behaves</strong> in case of errors.</p>
 					</section>
 					<section>
-						<h4>Implements ClearCompleted <strong>function import</strong></h4>
+						<h4><b>Test 6 :</b> Implements ClearCompleted <strong>function import</strong></h4>
 						<p>Unlike CRUD operations on entities,<br />
 							the MockServer <strong>can't default</strong> function imports.</p>
 					</section>
