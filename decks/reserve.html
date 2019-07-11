@@ -20,7 +20,7 @@
 								<td width="50%">
 									<small>
 										<a href="https://en.wikipedia.org/wiki/Mont_M%C3%A9gantic_Observatory">Mont Mégantic Observatory
-											<img src="reserve/mont megantic.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+											<img src="reserve/mont megantic.jpg" style="border-radius: 16px;"></img>
 										</a>
 									</small>
 								</td>
@@ -51,11 +51,34 @@
             <h3>Rational</h3>
           </section>
           <section>
-            <h4>Which tool do you use ?</h4>
+            <h4>Which <strong>package</strong> do you use...</h4>
+            <p>...To serve static files with minimalistic logic ?</p>
             <ul>
-              <li><a href="https://www.npmjs.com/package/serve">serve</a> <a href="https://npm.anvaka.com/#/view/2d/serve">dependencies</a></li>
-              <li><a href="https://www.npmjs.com/package/express">express</a> <a href="https://npm.anvaka.com/#/view/2d/express">dependencies</a></li>
+<script>
+  function template () {/*
+              <li>
+                <a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
+                <img src="https://img.shields.io/npm/dw/PACKAGE.svg" />
+                <a href="https://npm.anvaka.com/#/view/2d/PACKAGE">
+                  <img src="https://img.shields.io/david/bevry/PACKAGE.svg" />
+                </a>
+                <a href="https://packagephobia.now.sh/result?p=PACKAGE">
+                  <img src="https://packagephobia.now.sh/badge?p=PACKAGE" />
+                </a>
+              </li>
+  */}
+  var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
+  "express,serve"
+    .split(",")
+    .forEach(function (sPackageName) {
+      document.write(templateString.replace(/PACKAGE/g, sPackageName));
+    });
+</script>
             </ul>
+          </section>
+          <section>
+            <h4><strong>Wrong</strong> tool</h4>
+            <img src="reserve/wrong tool.gif" />
           </section>
         </section>
         <section>
