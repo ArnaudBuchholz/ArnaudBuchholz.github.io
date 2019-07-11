@@ -73,15 +73,10 @@ function readDeckMeta(name, defaultValue) {
 function updateLinks () {
     [].slice.call(document.querySelectorAll("a")).forEach(function (a) {
         a.setAttribute("target", "_blank");
-/* TODO implements with a special attribute telling which URL to test
-        if (a.getAttribute("href").indexOf("http://localhost") === 0) {
-            if (!isSampleAppAvailable) {
-                a.setAttribute("title", missingSampleAppMsg);
-                a.setAttribute("href", "javascript:missingSampleApp()");
-                a.className = "missingSampleApp";
-            }
+        // If the link includes only one image, specify it
+        if (a.querySelectorAll(":not(img)").length === 0 && !a.innerText.trim()) {
+            a.classList.add("img-only");
         }
-*/
     });
 }
 
