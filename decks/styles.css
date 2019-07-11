@@ -19,6 +19,10 @@
 	content: "🛈"
 }
 
+.reveal a.img-only::before {
+	content: ""
+}
+
 .reveal span.pre {
 	font-family: monospace;
 	white-space: pre;
@@ -53,6 +57,12 @@ q {
 .TODO::before {
 	content: "TODO";
 	font-size: small;
+}
+
+.reveal section img {
+  margin: 0;
+	border: 0;
+	box-shadow: unset;
 }
 
 .reveal .screenshot {
