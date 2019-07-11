@@ -26,16 +26,17 @@
 								</td>
 								<td style="vertical-align: top;">
 									<h3 data-agenda="no"><strong>reserve</strong></h3>
-                  <small>
-                    <p>
-                      A <strong>lightweight</strong> web server statically <strong>configurable</strong> with regular expressions. It can also be <strong>embedded</strong> and <strong>extended</strong>.
-                    </p>
-                    <p>
-										Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
-										<br/>
-  										Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
-                    </p>
-									</small>
+									<p>
+									  A <strong>lightweight</strong>, <strong>embeddable</strong> and <strong>extendable</strong> web server statically <strong>configurable</strong> with regular expressions.
+									</p>
+									<br />
+									<p>
+										<small>
+											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+											<br/>
+	  										Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+										</small>
+									</p>
 								</td>
 							</tr>
 						</table>
@@ -46,56 +47,68 @@
 						<ul id="agenda"></ul>
 					</section>
 				</section>
-        <section>
-          <section>
-            <h3>Rational</h3>
-          </section>
-          <section>
-            <h4>Which <strong>package</strong> do you use...</h4>
-            <p>...To serve static files with minimalistic logic ?</p>
-            <ul>
+				<section>
+					<section>
+						<h3><strong>R</strong>ational</h3>
+						<q>Why reinventing the wheel again ?</q>
+						<br />
+						<br />
+						<img src="reserve/wheel.gif" />
+					</section>
+				 	<section>
+						<h4>Which <strong>package</strong> do you use...</h4>
+						<p>...To serve <strong>static files</strong><br />
+							<strong>experiment</strong> or build a <strong>minimalistic</strong> service ?</p>
+						<ul>
 <script>
-  function template () {/*
-              <li>
-                <a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
-                <img src="https://img.shields.io/npm/dw/PACKAGE.svg" />
-                <a href="https://npm.anvaka.com/#/view/2d/PACKAGE">
-                  <img src="https://img.shields.io/david/bevry/PACKAGE.svg" />
-                </a>
-                <a href="https://packagephobia.now.sh/result?p=PACKAGE">
-                  <img src="https://packagephobia.now.sh/badge?p=PACKAGE" />
-                </a>
-              </li>
-  */}
-  var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
-  "express,serve"
-    .split(",")
-    .forEach(function (sPackageName) {
-      document.write(templateString.replace(/PACKAGE/g, sPackageName));
-    });
+function template () {/*
+							<li>
+								<a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
+								<img src="https://img.shields.io/npm/dw/PACKAGE.svg" />
+								<a href="https://npm.anvaka.com/#/view/2d/PACKAGE">
+									<img src="https://img.shields.io/david/ACCOUNT/PACKAGE.svg" />
+								</a>
+								<a href="https://packagephobia.now.sh/result?p=PACKAGE">
+									<img src="https://packagephobia.now.sh/badge?p=PACKAGE" />
+								</a>
+							</li>
+*/}
+var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
+"expressjs/express,zeit/serve,lwsjs/local-web-server"
+	.split(",")
+	.forEach(function (sPackagePath) {
+		var aPackageParts = sPackagePath.split("/");
+		document.write(templateString
+			.replace(/PACKAGE/g, aPackageParts[1])
+			.replace(/ACCOUNT/g, aPackageParts[0])
+		);
+	});
 </script>
-            </ul>
-          </section>
-          <section>
-            <h4><strong>Wrong</strong> tool</h4>
-            <img src="reserve/wrong tool.gif" />
-          </section>
-        </section>
-        <section>
-          <section>
-            <h3>Demo</h3>
-          </section>
-        </section>
-        <section>
-          <section>
-            <h3>Technical details</h3>
-          </section>
-        </section>
-        <section>
-          <section>
-            <h3>Challenges</h3>
-          </section>
-        </section>
+						</ul>
+					</section>
+					<section>
+						<h4>What it <strong>feels</strong> like...</h4>
+						<img src="reserve/wrong tool.gif" />
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>D<strong>E</strong>mo</h3>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>Technical detail<strong>S</strong></h3>
+					</section>
+					<section>
+						<h4>Implementation in a nutshell</h4>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>T<strong>E</strong>sts and mocking</h4>
+					</section>
+				</section>
 			</div>
 		</div>
 		<script src="/gpf/0.2.9/gpf.js"></script>
