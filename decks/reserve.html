@@ -25,7 +25,7 @@
 									</small>
 								</td>
 								<td style="vertical-align: top;">
-									<h3 data-agenda="no"><strong>reserve</strong></h3>
+									<h3 data-agenda="no"><strong>REserve</strong></h3>
 									<p>
 									  A <strong>lightweight</strong>, <strong>embeddable</strong> and <strong>extendable</strong> web server statically <strong>configurable</strong> with regular expressions.
 									</p>
@@ -61,7 +61,8 @@
 							<strong>experiment</strong> or build a <strong>minimalistic</strong> service ?</p>
 						<ul>
 <script>
-function template () {/*
+(function () {
+	function template () {/*
 							<li>
 								<a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
 								<img src="https://img.shields.io/npm/dw/PACKAGE.svg" />
@@ -72,17 +73,18 @@ function template () {/*
 									<img src="https://packagephobia.now.sh/badge?p=PACKAGE" />
 								</a>
 							</li>
-*/}
-var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
-"expressjs/express,zeit/serve,lwsjs/local-web-server"
-	.split(",")
-	.forEach(function (sPackagePath) {
-		var aPackageParts = sPackagePath.split("/");
-		document.write(templateString
-			.replace(/PACKAGE/g, aPackageParts[1])
-			.replace(/ACCOUNT/g, aPackageParts[0])
-		);
-	});
+	*/}
+	var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
+	"expressjs/express,zeit/serve,lwsjs/local-web-server"
+		.split(",")
+		.forEach(function (packagePath) {
+			var parts = packagePath.split("/");
+			document.write(templateString
+				.replace(/PACKAGE/g, parts[1])
+				.replace(/ACCOUNT/g, parts[0])
+			);
+		});
+}())
 </script>
 						</ul>
 					</section>
@@ -98,15 +100,72 @@ var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
 				</section>
 				<section>
 					<section>
-						<h3>Technical detail<strong>S</strong></h3>
+						<h3>T<strong>E</strong>chnical details</h3>
 					</section>
 					<section>
 						<h4>Implementation in a nutshell</h4>
 					</section>
+					<section>
+						<h4>Handlers</h4>
+						<p>Each handler exposes a <code>redirect</code> method receiving <strong>request details</strong>
+							and returning a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><strong>Promise</strong></a></p>
+						<br />
+						<ul>
+<script>
+(function () {
+	function template () {/*
+							<li>
+								<a href="https://github.com/ArnaudBuchholz/reserve/blob/master/handlers/HANDLER.js">HANDLER</a> : EXPLANATION
+							</li>
+	*/}
+	var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1],
+		explanations = {
+			custom: "enables <strong>custom</strong> handlers",
+			status: "<strong>ends</strong> the request with a given status",
+			file: "answers the request using <strong>file system</strong>",
+			url: "answers the request by <strong>forwarding</strong> it to a different URL"
+		};
+	"custom,status,file,url"
+		.split(",")
+		.forEach(function (handler) {
+			document.write(templateString
+				.replace(/HANDLER/g, handler)
+				.replace("EXPLANATION", explanations[handler])
+			);
+		});
+}())
+</script>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<section>
-						<h3>T<strong>E</strong>sts and mocking</h4>
+						<h3>T<strong>E</strong>sts and mocking</h3>
+					</section>
+					<section>
+						<h4>Basic testing</h4>
+						<p>index.html, assertions isolated &amp; all.js<p>
+					</section>
+					<section>
+						<h4>In-depth testing</h4>
+						<p>mocha tests<p>
+					</section>
+					<section>
+						<h4>In-depth testing</h4>
+						<p>Mocking fs, response, request & http<p>
+					</section>
+					<section>
+						<h4>Code coverage with Istanbul</h4>
+						<p>and nyc<p>
+					</section>
+					<section>
+						<h4>Continous integration</h4>
+					</section>
+					<section>
+						<h4>Coveralls</h4>
+					</section>
+					<section>
+						<h4>Code climate</h4>
 					</section>
 				</section>
 			</div>
