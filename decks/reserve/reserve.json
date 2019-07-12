@@ -1,0 +1,11 @@
+{
+  "port": 5001,
+  "mappings": [{
+    "match": "^/proxy/(https?)/(.*)",
+    "url": "$1://$2",
+    "unsecure-cookies": true
+  }, {
+    "match": "(.*)",
+    "file": "./$1"
+  }]
+}
