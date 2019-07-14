@@ -57,32 +57,36 @@
 					</section>
 				 	<section>
 						<h4>Which <strong>package</strong> do you use...</h4>
-						<p>...To serve <strong>static files</strong><br />
+						<p>...To serve <strong>static files</strong>,<br />
 							<strong>experiment</strong> or build a <strong>minimalistic</strong> service ?</p>
 						<ul>
 <script>
+
+function gitHubProjectTemplate () {/*
+	<a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
+	<img src="https://img.shields.io/npm/dw/PACKAGE.svg" />
+	<a href="https://npm.anvaka.com/#/view/2d/PACKAGE">
+		<img src="https://img.shields.io/david/ACCOUNT/PACKAGE.svg" />
+	</a>
+	<a href="https://packagephobia.now.sh/result?p=PACKAGE">
+		<img src="https://packagephobia.now.sh/badge?p=PACKAGE" />
+	</a>
+*/}
+
+function templateToString (template) {
+	return /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
+}
+
 (function () {
-	function template () {/*
-							<li>
-								<a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
-								<img src="https://img.shields.io/npm/dw/PACKAGE.svg" />
-								<a href="https://npm.anvaka.com/#/view/2d/PACKAGE">
-									<img src="https://img.shields.io/david/ACCOUNT/PACKAGE.svg" />
-								</a>
-								<a href="https://packagephobia.now.sh/result?p=PACKAGE">
-									<img src="https://packagephobia.now.sh/badge?p=PACKAGE" />
-								</a>
-							</li>
-	*/}
-	var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
-	"expressjs/express,zeit/serve,lwsjs/local-web-server"
+	var templateString = templateToString(gitHubProjectTemplate);
+	"expressjs/express,zeit/serve,lwsjs/local-web-server,franciscop/server"
 		.split(",")
 		.forEach(function (packagePath) {
 			var parts = packagePath.split("/");
-			document.write(templateString
+			document.write("<li>" + templateString
 				.replace(/PACKAGE/g, parts[1])
 				.replace(/ACCOUNT/g, parts[0])
-			);
+			+ "</li>");
 		});
 }())
 </script>
@@ -104,6 +108,8 @@
 					</section>
 					<section>
 						<h4>Implementation in a nutshell</h4>
+						<p>TAM diagram showing: agents: HTTP server, dispatcher, handlers (list of)
+							Storage is file system, web and configuration</p>
 					</section>
 					<section>
 						<h4>Handlers</h4>
@@ -118,7 +124,7 @@
 								<a href="https://github.com/ArnaudBuchholz/reserve/blob/master/handlers/HANDLER.js">HANDLER</a> : EXPLANATION
 							</li>
 	*/}
-	var templateString = /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1],
+	var templateString = templateToString(template),
 		explanations = {
 			custom: "enables <strong>custom</strong> handlers",
 			status: "<strong>ends</strong> the request with a given status",
@@ -144,19 +150,25 @@
 					</section>
 					<section>
 						<h4>Basic testing</h4>
-						<p>index.html, assertions isolated &amp; all.js<p>
+						<ul>
+							<li><code>mappings.json</code></li>
+							<li><code>assertions.js</code></li>
+							<li><code>index.html</code></li>
+							<li><code>all.js</code></li>
+						</ul>
 					</section>
 					<section>
 						<h4>In-depth testing</h4>
-						<p>mocha tests<p>
+						<p>mocha<p>
 					</section>
 					<section>
 						<h4>In-depth testing</h4>
-						<p>Mocking fs, response, request & http<p>
+						<p>Mocking fs, response, request & http</p>
+						boblauer/mock-require
 					</section>
 					<section>
 						<h4>Code coverage with Istanbul</h4>
-						<p>and nyc<p>
+						<p>and nyc</p>
 					</section>
 					<section>
 						<h4>Continous integration</h4>
