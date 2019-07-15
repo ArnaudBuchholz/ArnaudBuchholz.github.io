@@ -25,9 +25,9 @@
 									</small>
 								</td>
 								<td style="vertical-align: top;">
-									<h3 data-agenda="no"><strong>REserve</strong></h3>
+									<h3 data-agenda="no" style="text-transform: unset;"><strong>RE</strong>serve</h3>
 									<p>
-									  A <strong>lightweight</strong>, <strong>embeddable</strong> and <strong>extendable</strong> web server statically <strong>configurable</strong> with regular expressions.
+									  A <strong>lightweight</strong>, <strong>embeddable</strong> and <strong>extendable</strong> web server statically <strong>configurable</strong> with regular expressions
 									</p>
 									<br />
 									<p>
@@ -77,18 +77,20 @@ function templateToString (template) {
 	return /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
 }
 
-(function () {
-	var templateString = templateToString(gitHubProjectTemplate);
-	"expressjs/express,zeit/serve,lwsjs/local-web-server,franciscop/server"
-		.split(",")
-		.forEach(function (packagePath) {
-			var parts = packagePath.split("/");
-			document.write("<li>" + templateString
-				.replace(/PACKAGE/g, parts[1])
-				.replace(/ACCOUNT/g, parts[0])
-			+ "</li>");
-		});
-}())
+function gitHubProjectHTML (packagePath) {
+	var parts = packagePath.split("/");
+	return gitHubProjectHTML.templateString
+		.replace(/PACKAGE/g, parts[1])
+		.replace(/ACCOUNT/g, parts[0])
+}
+gitHubProjectHTML.templateString = templateToString(gitHubProjectTemplate);
+
+"expressjs/express,zeit/serve,lwsjs/local-web-server,franciscop/server"
+	.split(",")
+	.forEach(function (packagePath) {
+		document.write("<li>" + gitHubProjectHTML(packagePath) + "</li>");
+	});
+
 </script>
 						</ul>
 					</section>
@@ -107,9 +109,17 @@ function templateToString (template) {
 						<h3>T<strong>E</strong>chnical details</h3>
 					</section>
 					<section>
-						<h4>Implementation in a nutshell</h4>
-						<p>TAM diagram showing: agents: HTTP server, dispatcher, handlers (list of)
-							Storage is file system, web and configuration</p>
+						<h4><strong>Implementation</strong> in a nutshell</h4>
+						<img src="reserve/TAM diagram.png" style="max-width: 40%;" />
+					</section>
+					<section>
+						<h4>configuration and serve</h4>
+						<a href="https://github.com/ArnaudBuchholz/reserve/blob/master/configuration.js">configuration</a> : reads configuration and check consistency
+						<a href="https://github.com/ArnaudBuchholz/reserve/blob/master/serve.js">serve</a> : initiates http(s) server, listen to requests
+					</section>
+					<section>
+						<h4>dispatcher</h4>
+						<a href="https://github.com/ArnaudBuchholz/reserve/blob/master/dispatcher.js">dispatcher</a> : is responsible of matching the request to the list of mapping and executing the corresponding handler.
 					</section>
 					<section>
 						<h4>Handlers</h4>
@@ -160,15 +170,23 @@ function templateToString (template) {
 					<section>
 						<h4>In-depth testing</h4>
 						<p>mocha<p>
+<script>
+document.write(gitHubProjectHTML("mochajs/mocha"));
+</script>
 					</section>
 					<section>
 						<h4>In-depth testing</h4>
 						<p>Mocking fs, response, request & http</p>
-						boblauer/mock-require
+<script>
+document.write(gitHubProjectHTML("boblauer/mock-require"));
+</script>
 					</section>
 					<section>
 						<h4>Code coverage with Istanbul</h4>
 						<p>and nyc</p>
+<script>
+document.write(gitHubProjectHTML("istanbuljs/nyc"));
+</script>
 					</section>
 					<section>
 						<h4>Continous integration</h4>
