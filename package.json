@@ -5,10 +5,10 @@
   "main": "gpf.js",
   "dependencies": {},
   "devDependencies": {
-    "serve": "^11.0.0"
+    "reserve": "^1.0.1"
   },
   "scripts": {
-    "start": "serve"
+    "start": "reserve"
   },
   "repository": {
     "type": "git",
