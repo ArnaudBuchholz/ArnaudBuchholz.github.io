@@ -1,11 +1,17 @@
 {
   "port": 5001,
   "mappings": [{
+    "match": ".*",
+    "custom": "./cors.js"
+  }, {
+    "match": "/private/.*",
+    "custom": "./basic_authent.js"
+  }, {
     "match": "^/proxy/(https?)/(.*)",
     "url": "$1://$2",
     "unsecure-cookies": true
   }, {
-    "match": "(.*)",
+    "match": "^/(.*)",
     "file": "./$1"
   }]
 }
