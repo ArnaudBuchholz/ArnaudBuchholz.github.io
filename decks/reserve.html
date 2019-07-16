@@ -113,17 +113,32 @@ gitHubProjectHTML.templateString = templateToString(gitHubProjectTemplate);
 						<img src="reserve/TAM diagram.png" style="max-width: 40%;" />
 					</section>
 					<section>
-						<h4>configuration and serve</h4>
-						<a href="https://github.com/ArnaudBuchholz/reserve/blob/master/configuration.js">configuration</a> : reads configuration and check consistency
-						<a href="https://github.com/ArnaudBuchholz/reserve/blob/master/serve.js">serve</a> : initiates http(s) server, listen to requests
+						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/configuration.js">configuration</a></h4>
+						<ul>
+							<li><strong>reads</strong> configuration</li>
+							<li><i>(and / or)</i> <strong>validates</strong> consistency</li>
+							<li>supports <strong>reusability</strong> (<code>extend</code>)</li>
+						</ul>
 					</section>
 					<section>
-						<h4>dispatcher</h4>
-						<a href="https://github.com/ArnaudBuchholz/reserve/blob/master/dispatcher.js">dispatcher</a> : is responsible of matching the request to the list of mapping and executing the corresponding handler.
+						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/serve.js">serve</a></h4>
+						<ul>
+							<li>instantiates the <a href="https://nodejs.org/api/events.html#events_class_eventemitter"><strong>EventEmitter</strong></a></li>
+							<li>initiates <strong>http<i>(s)</i></strong> server</li>
+							<li>transmits <strong>incoming requests</strong> to the dispatcher</li>
+						</ul>
+					</section>
+					<section>
+						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/dispatcher.js">dispatcher</a></h4>
+						<ul>
+							<li><strong>matches</strong> the URL with mappings' regular expressions</li>
+							<li><i>(when match found)</i> <strong>executes</strong> the handler</li>
+							<li>continue until the response is <strong>finalized</strong> (<code>finished</code>)</li>
+							<li>if handlers redirects internally, <strong>restart</strong> the matching process</li>
 					</section>
 					<section>
 						<h4>Handlers</h4>
-						<p>Each handler exposes a <code>redirect</code> method receiving <strong>request details</strong>
+						<p>Each handler implements a <code>redirect</code> method receiving <strong>request details</strong>
 							and returning a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><strong>Promise</strong></a></p>
 						<br />
 						<ul>
@@ -159,16 +174,16 @@ gitHubProjectHTML.templateString = templateToString(gitHubProjectTemplate);
 						<h3>T<strong>E</strong>sts and mocking</h3>
 					</section>
 					<section>
-						<h4>Basic testing</h4>
+						<h4><strong>Basic</strong> testing</h4>
 						<ul>
-							<li><code>mappings.json</code></li>
+							<li><code>mappings.json</code><br /><small> extended by <code>http.json</code>, <code>https.json</code></small></li>
 							<li><code>assertions.js</code></li>
 							<li><code>index.html</code></li>
 							<li><code>all.js</code></li>
 						</ul>
 					</section>
 					<section>
-						<h4>In-depth testing</h4>
+						<h4><strong>In-depth</strong> testing</h4>
 						<p>mocha<p>
 <script>
 document.write(gitHubProjectHTML("mochajs/mocha"));
