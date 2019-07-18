@@ -1,0 +1,21 @@
+[{
+  "type": "deck",
+  "link": "decks/Subclassing an ES6 class.html",
+  "title": "*Subclassing* an *ES6* class",
+  "subtitle": "Or the art of JavaScript classes *hybridization*"
+}, {
+  "type": "deck",
+  "link": "decks/NodeJS handbook.html",
+  "title": "*Node.js* handbook",
+  "subtitle": "Work in Progress"
+}, {
+  "type": "deck",
+  "link": "decks/UI5Con'18 A journey with OPA.html",
+  "title": "A journey with *OPA*",
+  "subtitle": "Presented during UI5Con'18"
+}, {
+  "type": "deck",
+  "link": "decks/UI5Con'19 Advanced Testing with UI5.html",
+  "title": "Use *UI5* to *test* your *ODATA* service",
+  "subtitle": "Presented during UI5Con'19"
+}]
