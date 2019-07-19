@@ -27,14 +27,17 @@
 								<td style="vertical-align: top;">
 									<h3 data-agenda="no" style="text-transform: unset;"><strong>RE</strong>serve</h3>
 									<p>
-									  A <strong>lightweight</strong>, <strong>embeddable</strong> and <strong>extendable</strong> web server statically <strong>configurable</strong> with regular expressions
+									  A <strong>lightweight</strong> and <strong>configurable</strong> web server
 									</p>
 									<br />
 									<p>
 										<small>
+											<br/>
 											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
 											<br/>
 	  										Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+											<br/>
+											<i>"The Emperor's New Groove" pictures were gathered from the web, they are copyrights of Walt Disney Pictures</i>
 										</small>
 									</p>
 								</td>
@@ -102,11 +105,11 @@ gitHubProjectHTML.templateString = templateToString(gitHubProjectTemplate);
 					</section>
 					<section>
 						<h4 style="text-transform: unset;"><strong>RE</strong>serve</h4>
+						<img src="reserve/perfect.gif" />
+						<br /><br />
 <script>
 document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 </script>
-						<br /><br />
-						<img src="reserve/perfect.gif" />
 					</section>
 				</section>
 				<section>
@@ -183,7 +186,8 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 				</section>
 				<section>
 					<section>
-						<h3>T<strong>E</strong>sts and mocking</h3>
+						<h3>T<strong>E</strong>sts and Quality</h3>
+						<img src="reserve/quality.gif" />
 					</section>
 					<section>
 						<h4><strong>Basic</strong> testing</h4>
@@ -203,7 +207,7 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 document.write(gitHubProjectHTML("mochajs/mocha"));
 </script>
 </p><br />
-						<p>Node.js modules (fs, http, ...) are <strong>mocked</strong>
+						<p>Node.js modules <i>(fs, http, ...)</i> <a href="https://github.com/ArnaudBuchholz/reserve/tree/master/tests/mocha/mocked_modules"><strong>mocking</strong></a> is possible
 							<br />with
 <script>
 document.write(gitHubProjectHTML("boblauer/mock-require"));
@@ -211,23 +215,27 @@ document.write(gitHubProjectHTML("boblauer/mock-require"));
 </p>
 					</section>
 					<section>
-						<h4>Code coverage with Istanbul</h4>
-						<p>and nyc</p>
-<script>
-document.write(gitHubProjectHTML("istanbuljs/nyc"));
-</script>
-					</section>
-					<section>
-						<h4>Continous integration</h4>
+						<h4><strong>Continous</strong> integration</h4>
+						<p>Every push <strong>triggers</strong> a job that <strong>runs the tests</strong> and updates coverage info</p>
 						<img src="https://travis-ci.org/ArnaudBuchholz/reserve.svg?branch=master" height="30px" />
 					</section>
 					<section>
-						<h4>Coveralls</h4>
-						<img src="https://coveralls.io/repos/github/ArnaudBuchholz/reserve/badge.svg?branch=master" height="30px" />
+						<h4>Code coverage with <strong>Istanbul</strong></h4>
+						<p>Code coverage measurement is <a href="https://github.com/ArnaudBuchholz/reserve/blob/master/package.json"><strong>made simple</strong></a>
+							<br />with
+<script>
+document.write(gitHubProjectHTML("istanbuljs/nyc"));
+</script>
+ 						</p>
+						<br />
+						<p>Results are uploaded to <strong>Coveralls</strong> platform
+							<a href="https://coveralls.io/github/ArnaudBuchholz/reserve?branch=master"><img src="https://coveralls.io/repos/github/ArnaudBuchholz/reserve/badge.svg?branch=master" height="30px" /></a>
+						</p>
 					</section>
 					<section>
-						<h4>Code climate</h4>
-						<img src="https://api.codeclimate.com/v1/badges/49e3adbc8f31ae2febf3/maintainability" height="30px" />
+						<h4>Code <strong>smells</strong></h4>
+						<p>Some online tools offer <strong>code analysis</strong> to detect <strong>maintainability</strong> issues</p>
+						<a href="https://codeclimate.com/github/ArnaudBuchholz/reserve"><img src="https://api.codeclimate.com/v1/badges/49e3adbc8f31ae2febf3/maintainability" height="30px" /></a>
 					</section>
 				</section>
 			</div>
