@@ -1,16 +1,21 @@
 "use strict";
 
 var templates = {
+    "app": function () {/*
+        <li><a href="%link%"><img src="/gfx/app.svg" align="left" width="64px"/></a>
+        %title%<br/>
+        <small><i>%subtitle%</i></small>
+        </li>
+        */},
     "deck": function () {/*
         <li><a href="%link%"><img src="/gfx/slides.svg" align="left" width="64px"/></a>
             %title%<br/>
             <small><i>%subtitle%</i></small>
         </li>
     */},
-    "app": function () {/*
-        <li><a href="%link%"><img src="/gfx/app.svg" align="left" width="64px"/></a>
-            %title%<br/>
-            <small><i>%subtitle%</i></small>
+    "wip": function () {/*
+        <li><a href="%link%"><img src="/gfx/wip.svg" align="left" width="64px"/></a>
+            %title%
         </li>
     */}
 }
