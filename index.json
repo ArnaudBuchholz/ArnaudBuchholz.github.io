@@ -1,4 +1,9 @@
 [{
+  "type": "app",
+  "link": "bubu-timer/index.html",
+  "title": "A configurable *timer*",
+  "subtitle": "My first webpack app"
+}, {
   "type": "deck",
   "link": "decks/Subclassing an ES6 class.html",
   "title": "*Subclassing* an *ES6* class",
