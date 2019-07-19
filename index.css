@@ -19,6 +19,7 @@ ul {
 
 ul > li {
   margin-bottom: 1rem;
+  min-height: 64px;
 }
 
 div.social {
