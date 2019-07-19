@@ -19,8 +19,8 @@
 							<tr>
 								<td width="50%">
 									<small>
-										<a href="https://en.wikipedia.org/wiki/Mont_M%C3%A9gantic_Observatory">Mont Mégantic Observatory
-											<img src="reserve/mont megantic.jpg" style="border-radius: 16px;"></img>
+										<a href="https://en.wikipedia.org/wiki/Machu_Picchu">Machu Picchu
+											<img src="reserve/Machu-Picchu.jpg" style="border-radius: 16px;"></img>
 										</a>
 									</small>
 								</td>
@@ -53,7 +53,7 @@
 						<q>Why reinventing the wheel again ?</q>
 						<br />
 						<br />
-						<img src="reserve/wheel.gif" />
+						<img src="reserve/why.gif" />
 					</section>
 				 	<section>
 						<h4>Which <strong>package</strong> do you use...</h4>
@@ -64,12 +64,14 @@
 
 function gitHubProjectTemplate () {/*
 	<a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
-	<img src="https://img.shields.io/npm/dw/PACKAGE.svg" />
+	<img src="https://img.shields.io/npm/dw/PACKAGE.svg"  height="30px" />
+<!--
 	<a href="https://npm.anvaka.com/#/view/2d/PACKAGE">
-		<img src="https://img.shields.io/david/ACCOUNT/PACKAGE.svg" />
+		<img src="https://img.shields.io/david/ACCOUNT/PACKAGE.svg" height="30px" />
 	</a>
+-->
 	<a href="https://packagephobia.now.sh/result?p=PACKAGE">
-		<img src="https://packagephobia.now.sh/badge?p=PACKAGE" />
+		<img src="https://packagephobia.now.sh/badge?p=PACKAGE"  height="30px" />
 	</a>
 */}
 
@@ -96,23 +98,27 @@ gitHubProjectHTML.templateString = templateToString(gitHubProjectTemplate);
 					</section>
 					<section>
 						<h4>What it <strong>feels</strong> like...</h4>
-						<img src="reserve/wrong tool.gif" />
+						<img src="reserve/kuzcotopia.gif" />
 					</section>
 					<section>
 						<h4 style="text-transform: unset;"><strong>RE</strong>serve</h4>
 <script>
 document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 </script>
+						<br /><br />
+						<img src="reserve/perfect.gif" />
 					</section>
 				</section>
 				<section>
 					<section>
 						<h3>D<strong>E</strong>mo</h3>
+						<img src="reserve/suspicious.gif" />
 					</section>
 				</section>
 				<section>
 					<section>
 						<h3>T<strong>E</strong>chnical details</h3>
+						<img src="reserve/check.gif" />
 					</section>
 					<section>
 						<h4><strong>Implementation</strong> in a nutshell</h4>
@@ -144,8 +150,8 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 					</section>
 					<section>
 						<h4>Handlers</h4>
-						<p>Each handler implements a <code>redirect</code> method receiving <strong>request details</strong>
-							and returning a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><strong>Promise</strong></a></p>
+						<p>Each handler implements an <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><strong>async</strong></a>
+							<code>redirect</code> method receiving <strong>request details</strong></p>
 						<br />
 						<ul>
 <script>
@@ -182,25 +188,27 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 					<section>
 						<h4><strong>Basic</strong> testing</h4>
 						<ul>
-							<li><code>mappings.json</code><br /><small> extended by <code>http.json</code>, <code>https.json</code></small></li>
-							<li><code>assertions.js</code></li>
-							<li><code>index.html</code></li>
-							<li><code>all.js</code></li>
+							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/mappings.json"><code>mappings.json</code></a><br /><small> extended by <code>http.json</code>, <code>https.json</code></small></li>
+							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/assertions.js"><code>assertions.js</code></a> based on
+								<a href="https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.get__anchor"><strong>gpf</strong></a>'s http helper</li>
+							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/index.html"><code>index.html</code></a> for <strong>browser</strong> testing</li>
+							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/all.js"><code>all.js</code></a> for <strong>Node.js</strong> testing</li>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>In-depth</strong> testing</h4>
-						<p>mocha<p>
+						<p><a href="https://github.com/ArnaudBuchholz/reserve/tree/master/tests/mocha"><strong>Test cases</strong></a> are defined and executed
+							<br />with
 <script>
 document.write(gitHubProjectHTML("mochajs/mocha"));
 </script>
-					</section>
-					<section>
-						<h4>In-depth testing</h4>
-						<p>Mocking fs, response, request & http</p>
+</p><br />
+						<p>Node.js modules (fs, http, ...) are <strong>mocked</strong>
+							<br />with
 <script>
 document.write(gitHubProjectHTML("boblauer/mock-require"));
 </script>
+</p>
 					</section>
 					<section>
 						<h4>Code coverage with Istanbul</h4>
@@ -211,12 +219,15 @@ document.write(gitHubProjectHTML("istanbuljs/nyc"));
 					</section>
 					<section>
 						<h4>Continous integration</h4>
+						<img src="https://travis-ci.org/ArnaudBuchholz/reserve.svg?branch=master" height="30px" />
 					</section>
 					<section>
 						<h4>Coveralls</h4>
+						<img src="https://coveralls.io/repos/github/ArnaudBuchholz/reserve/badge.svg?branch=master" height="30px" />
 					</section>
 					<section>
 						<h4>Code climate</h4>
+						<img src="https://api.codeclimate.com/v1/badges/49e3adbc8f31ae2febf3/maintainability" height="30px" />
 					</section>
 				</section>
 			</div>
