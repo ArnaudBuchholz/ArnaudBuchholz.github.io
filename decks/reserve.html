@@ -27,7 +27,7 @@
 								<td style="vertical-align: top;">
 									<h3 data-agenda="no" style="text-transform: unset;"><strong>RE</strong>serve</h3>
 									<p>
-									  A <strong>lightweight</strong> and <strong>configurable</strong> web server
+									  A <strong>lightweight</strong> but <strong>configurable</strong> web server
 									</p>
 									<br />
 									<p>
@@ -37,7 +37,7 @@
 											<br/>
 	  										Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
 											<br/>
-											<i>"The Emperor's New Groove" pictures were gathered from the web, they are copyrights of Walt Disney Pictures</i>
+											<i class="local-only">"The Emperor's New Groove" pictures were gathered from the web, they are copyrights of Walt Disney Pictures</i>
 										</small>
 									</p>
 								</td>
@@ -56,7 +56,7 @@
 						<q>Why reinventing the wheel again ?</q>
 						<br />
 						<br />
-						<img src="reserve/why.gif" />
+						<img class="local-only" src="reserve/why.gif" />
 					</section>
 				 	<section>
 						<h4>Which <strong>package</strong> do you use...</h4>
@@ -99,13 +99,14 @@ gitHubProjectHTML.templateString = templateToString(gitHubProjectTemplate);
 </script>
 						</ul>
 					</section>
-					<section>
+					<section class="local-only">
 						<h4>What it <strong>feels</strong> like...</h4>
 						<img src="reserve/kuzcotopia.gif" />
 					</section>
 					<section>
 						<h4 style="text-transform: unset;"><strong>RE</strong>serve</h4>
-						<img src="reserve/perfect.gif" />
+						<p>Small, configurable <strong>and</strong> reusable</p>
+						<img class="local-only" src="reserve/perfect.gif" />
 						<br /><br />
 <script>
 document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
@@ -121,7 +122,7 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 				<section>
 					<section>
 						<h3>T<strong>E</strong>chnical details</h3>
-						<img src="reserve/check.gif" />
+						<img class="local-only" src="reserve/check.gif" />
 					</section>
 					<section>
 						<h4><strong>Implementation</strong> in a nutshell</h4>
@@ -129,6 +130,8 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 					</section>
 					<section>
 						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/configuration.js">configuration</a></h4>
+						<pre><code class="javascript">const { read } = require('reserve/configuration')
+read('reserve.json').then(configuration => /* ... */)</code></pre>
 						<ul>
 							<li><strong>reads</strong> configuration</li>
 							<li><i>(and / or)</i> <strong>validates</strong> consistency</li>
@@ -137,6 +140,10 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 					</section>
 					<section>
 						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/serve.js">serve</a></h4>
+						<pre><code class="javascript">const reserve = require('reserve/serve')
+reserve({ /* ... */ }).on('ready', ({ url }) => {
+	console.log(`Server running at ${url}`)
+})</code></pre>
 						<ul>
 							<li>instantiates the <a href="https://nodejs.org/api/events.html#events_class_eventemitter"><strong>EventEmitter</strong></a></li>
 							<li>initiates <strong>http<i>(s)</i></strong> server</li>
@@ -146,10 +153,10 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 					<section>
 						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/dispatcher.js">dispatcher</a></h4>
 						<ul>
-							<li><strong>matches</strong> the URL with mappings' regular expressions</li>
+							<li><strong>matches</strong> the incoming request URL with mappings' regular expressions</li>
 							<li><i>(when match found)</i> <strong>executes</strong> the handler</li>
 							<li>continue until the response is <strong>finalized</strong> (<code>finished</code>)</li>
-							<li>if handlers redirects internally, <strong>restart</strong> the matching process</li>
+							<li>if the executed handler <strong>internally redirects</strong>, <strong>restarts</strong> the matching process</li>
 					</section>
 					<section>
 						<h4>Handlers</h4>
@@ -187,7 +194,7 @@ document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
 				<section>
 					<section>
 						<h3>T<strong>E</strong>sts and Quality</h3>
-						<img src="reserve/quality.gif" />
+						<img class="local-only" src="reserve/quality.gif" />
 					</section>
 					<section>
 						<h4><strong>Basic</strong> testing</h4>
@@ -234,7 +241,7 @@ document.write(gitHubProjectHTML("istanbuljs/nyc"));
 					</section>
 					<section>
 						<h4>Code <strong>smells</strong></h4>
-						<p>Some online tools offer <strong>code analysis</strong> to detect <strong>maintainability</strong> issues</p>
+						<p><strong>Code Climate</strong> online platform performs code analysis to detect <strong>maintainability</strong> issues</p>
 						<a href="https://codeclimate.com/github/ArnaudBuchholz/reserve"><img src="https://api.codeclimate.com/v1/badges/49e3adbc8f31ae2febf3/maintainability" height="30px" /></a>
 					</section>
 				</section>
