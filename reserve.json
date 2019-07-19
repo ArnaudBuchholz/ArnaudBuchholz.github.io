@@ -4,6 +4,9 @@
     "match": "^/index.json",
     "custom": "./index.json.dev"
   }, {
+    "match": "^/local.json",
+    "file": "./local.dev.json"
+  }, {
     "match": "^/(.*)",
     "file": "./$1"
   }]
