@@ -2,7 +2,13 @@
 
 var templates = {
     "deck": function () {/*
-        <li><a href="%link%"><img src="/gfx/view.svg" align="left" width="64px"/></a>
+        <li><a href="%link%"><img src="/gfx/slides.svg" align="left" width="64px"/></a>
+            %title%<br/>
+            <small><i>%subtitle%</i></small>
+        </li>
+    */},
+    "app": function () {/*
+        <li><a href="%link%"><img src="/gfx/app.svg" align="left" width="64px"/></a>
             %title%<br/>
             <small><i>%subtitle%</i></small>
         </li>
