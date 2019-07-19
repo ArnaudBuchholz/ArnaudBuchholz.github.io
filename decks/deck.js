@@ -9,10 +9,26 @@ function processIncludes() {
     }));
 }
 
-function removeHiddenElements() {
-    [].slice.call(document.querySelectorAll(".hide")).forEach(function(node) {
+function remove(selector) {
+    [].slice.call(document.querySelectorAll(selector)).forEach(function(node) {
         node.parentNode.removeChild(node);
     });
+}
+
+function removeHiddenElements() {
+    remove(".hide");
+    return gpf.http.get("/local.json")
+        .then(function (response) {
+            return JSON.parse(response.responseText);
+        })
+        .then(function (isLocal) {
+            if (!isLocal) {
+                remove(".local-only");
+            }
+        })
+        .catch(function () {
+            // Ignore error
+        })
 }
 
 function buildTitle() {
