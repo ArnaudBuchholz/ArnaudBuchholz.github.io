@@ -5,7 +5,7 @@
   "main": "gpf.js",
   "dependencies": {},
   "devDependencies": {
-    "reserve": "^1.0.1"
+    "reserve": "^1.0.4"
   },
   "scripts": {
     "start": "reserve"
