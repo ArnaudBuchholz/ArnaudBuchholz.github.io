@@ -1,6 +1,6 @@
 "use strict";
 
-function processIncludes() {
+function processIncludes () {
     return Promise.all([].slice.call(document.querySelectorAll("*[include]")).map(function(include) {
         return gpf.http.get(include.getAttribute("include"))
             .then(function(response) {
@@ -9,13 +9,13 @@ function processIncludes() {
     }));
 }
 
-function remove(selector) {
+function remove (selector) {
     [].slice.call(document.querySelectorAll(selector)).forEach(function(node) {
         node.parentNode.removeChild(node);
     });
 }
 
-function removeHiddenElements() {
+function removeHiddenElements () {
     remove(".hide");
     return gpf.http.get("/local.json")
         .then(function (response) {
@@ -31,11 +31,23 @@ function removeHiddenElements() {
         })
 }
 
-function buildTitle() {
+function loadAsyncImages () {
+    [].slice.call(document.querySelectorAll("img[async-src]"))
+        .forEach(function (img) {
+            var asyncImg = new Image(),
+                src = img.getAttribute("async-src");
+            asyncImg.src = src;
+            asyncImg.onload = function () {
+                img.src = src;
+            };
+        });
+}
+
+function buildTitle () {
     document.title = document.querySelector("h3").innerHTML.replace(/<[^>]+>/g, "");
 }
 
-function buildAgenda() {
+function buildAgenda () {
     [].slice.call(document.querySelectorAll("h3"))
         .filter(function(h3) {
             return h3.getAttribute("data-agenda") !== "no";
@@ -49,14 +61,14 @@ function buildAgenda() {
         }, document.getElementById("agenda"));
 }
 
-function reformatCodeSamples() {
+function reformatCodeSamples () {
     // Replace tabs with double spaces in code samples to reduce code width
     [].slice.call(document.querySelectorAll("code")).forEach(function(node) {
         node.innerHTML = node.innerHTML.replace(/\t/g, "  ");
     });
 }
 
-function processMeInfo() {
+function processMeInfo () {
     var
         year = new Date().getFullYear(),
         years = {
@@ -71,7 +83,7 @@ function processMeInfo() {
     });
 }
 
-function readDeckMeta(name, defaultValue) {
+function readDeckMeta (name, defaultValue) {
     var meta = document.head.querySelector("meta[name='deck-" + name + "']"),
         value;
     if (meta) {
@@ -134,7 +146,7 @@ function loadNotes () {
         });
 }
 
-function loadReveal() {
+function loadReveal () {
     var
         deckLength = readDeckMeta("duration", 0),
         deckProgressBarHeight = readDeckMeta("progress-bar-height", 10),
@@ -156,9 +168,10 @@ function loadReveal() {
     });
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
     processIncludes()
         .then(removeHiddenElements)
+        .then(loadAsyncImages)
         .then(buildTitle)
         .then(buildAgenda)
         .then(reformatCodeSamples)
