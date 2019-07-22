@@ -67,14 +67,9 @@
 
 function gitHubProjectTemplate () {/*
 	<a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
-	<img src="https://img.shields.io/npm/dw/PACKAGE.svg"  height="30px" />
-<!--
-	<a href="https://npm.anvaka.com/#/view/2d/PACKAGE">
-		<img src="https://img.shields.io/david/ACCOUNT/PACKAGE.svg" height="30px" />
-	</a>
--->
+	<img async-src="https://img.shields.io/npm/dw/PACKAGE.svg" height="30px" />
 	<a href="https://packagephobia.now.sh/result?p=PACKAGE">
-		<img src="https://packagephobia.now.sh/badge?p=PACKAGE"  height="30px" />
+		<img async-src="https://packagephobia.now.sh/badge?p=PACKAGE" height="30px" />
 	</a>
 */}
 
@@ -224,7 +219,7 @@ document.write(gitHubProjectHTML("boblauer/mock-require"));
 					<section>
 						<h4><strong>Continous</strong> integration</h4>
 						<p>Every push <strong>triggers</strong> a job that <strong>runs the tests</strong> and updates coverage info</p>
-						<img src="https://travis-ci.org/ArnaudBuchholz/reserve.svg?branch=master" height="30px" />
+						<img async-src="https://travis-ci.org/ArnaudBuchholz/reserve.svg?branch=master" height="30px" />
 					</section>
 					<section>
 						<h4>Code coverage with <strong>Istanbul</strong></h4>
@@ -236,13 +231,17 @@ document.write(gitHubProjectHTML("istanbuljs/nyc"));
  						</p>
 						<br />
 						<p>Results are uploaded to <strong>Coveralls</strong> platform
-							<a href="https://coveralls.io/github/ArnaudBuchholz/reserve?branch=master"><img src="https://coveralls.io/repos/github/ArnaudBuchholz/reserve/badge.svg?branch=master" height="30px" /></a>
+							<a href="https://coveralls.io/github/ArnaudBuchholz/reserve?branch=master">
+								<img async-src="https://coveralls.io/repos/github/ArnaudBuchholz/reserve/badge.svg?branch=master" height="30px" />
+							</a>
 						</p>
 					</section>
 					<section>
 						<h4>Code <strong>smells</strong></h4>
 						<p><strong>Code Climate</strong> online platform performs code analysis to detect <strong>maintainability</strong> issues</p>
-						<a href="https://codeclimate.com/github/ArnaudBuchholz/reserve"><img src="https://api.codeclimate.com/v1/badges/49e3adbc8f31ae2febf3/maintainability" height="30px" /></a>
+						<a href="https://codeclimate.com/github/ArnaudBuchholz/reserve">
+							<img async-src="https://api.codeclimate.com/v1/badges/49e3adbc8f31ae2febf3/maintainability" height="30px" />
+						</a>
 					</section>
 				</section>
 			</div>
