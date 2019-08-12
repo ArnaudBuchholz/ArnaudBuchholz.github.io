@@ -4,12 +4,18 @@
     "match": ".*",
     "custom": "./cors.js"
   }, {
-    "match": "/private/.*",
+    "match": "/private.*",
     "custom": "./basic_authent.js"
   }, {
+    "match": "/private.*",
+    "file": "./private/secret.jpg"
+    }, {
     "match": "^/proxy/(https?)/(.*)",
     "url": "$1://$2",
     "unsecure-cookies": true
+  }, {
+    "match": "^/gpf.js",
+    "url": "https://cdn.jsdelivr.net/npm/gpf-js@0.2.9/build/gpf.js"
   }, {
     "match": "^/(.*)",
     "file": "./$1"
