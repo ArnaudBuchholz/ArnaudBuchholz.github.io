@@ -185,6 +185,24 @@ reserve({ /* configuration */ }).on('ready', ({ url }) => {
 </script>
 						</ul>
 					</section>
+					<section>
+						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/mock.js">mock</a></h4>
+						<pre><code class="javascript">require('reserve/mock')({
+	mappings: [{
+		match: /^\/(.*)/,
+		file: path.join(__dirname, '$1')
+	}]
+})
+	.then(mocked => mocked.request('GET', '/'))
+	.then(response => {
+		assert(response.statusCode === 200)
+		assert(response.toString() === '...')
+	})</code></pre>
+						<ul>
+							<li><strong>Self-sufficient</strong> test environment</li>
+							<li>Handlers can be <strong>mocked</strong></li>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<section>
