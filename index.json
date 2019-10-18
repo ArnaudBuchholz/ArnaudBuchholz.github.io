@@ -5,6 +5,11 @@
   "subtitle": "My first webpack app"
 }, {
   "type": "deck",
+  "link": "decks/reserve.html",
+  "title": "*RE*serve",
+  "subtitle": "A *lightweight* but *configurable* web server"
+}, {
+  "type": "deck",
   "link": "decks/Subclassing an ES6 class.html",
   "title": "*Subclassing* an *ES6* class",
   "subtitle": "Or the art of JavaScript classes *hybridization*"
