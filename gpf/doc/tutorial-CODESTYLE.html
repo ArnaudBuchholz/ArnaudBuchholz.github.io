@@ -93,17 +93,21 @@
 </header>
 
 <article>
-    <h2>Source structure</h2><h3>Source</h3><p>All source file must be using <a href="https://en.wikipedia.org/wiki/ASCII">ASCII encoding</a> and
+    <h2>Source structure</h2>
+<h3>Source</h3>
+<p>All source file must be using <a href="https://en.wikipedia.org/wiki/ASCII">ASCII encoding</a> and
 <a href="https://en.wikipedia.org/wiki/Carriage_return">UNIX-like carriage return</a>.
 They end with an empty line.</p>
-<p>If specific character must be used, the <a href="https://developer.mozilla.org/en-US/docs/Web/
-JavaScript/Reference/Lexical_grammar#String_literals">Unicode escape sequence</a> can be used.</p>
+<p>If specific character must be used, the [Unicode escape sequence](https://developer.mozilla.org/en-US/docs/Web/
+JavaScript/Reference/Lexical_grammar#String_literals) can be used.</p>
 <p>Sources start with:</p>
 <pre class="prettyprint source lang-javascript"><code>/*#ifndef(UMD)*/
 &quot;use strict&quot;;
 /*global 'IMPORTED' VARIABLE OR FUNCTIONS*/ // Brief description of the import
 /*exported 'EXPORTED' VARIABLE OR FUNCTIONS*/ // Bried description of the export
-/*#endif*/</code></pre><p>Consequently, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a> is applied
+/*#endif*/
+</code></pre>
+<p>Consequently, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a> is applied
 everywhere.</p>
 <p>Globals and exported are written to make sure that the linter can relate to:</p>
 <ul>
@@ -112,7 +116,9 @@ exported comment by the build process)</em></li>
 <li>Variables or functions that are being declared without being used in this source <em>(exported comment must be used)</em></li>
 </ul>
 <p>They are sorted alphabetically automatically by the build process.</p>
-<h2>Coding style</h2><h3>Formatting</h3><p>The project comes with an <a href="http://editorconfig.org/">.editorconfig file</a>.</p>
+<h2>Coding style</h2>
+<h3>Formatting</h3>
+<p>The project comes with an <a href="http://editorconfig.org/">.editorconfig file</a>.</p>
 <p>The maximum line length is set to 120.</p>
 <p>When breaking a line, the following principles are applied:</p>
 <ul>
@@ -121,7 +127,10 @@ exported comment by the build process)</em></li>
 </ul>
 <p>Example:</p>
 <pre class="prettyprint source lang-javascript"><code>_gpfAssert(handler instanceof Array || _gpfEventsIsValidHandler(handler),
-    &quot;Expected a valid output handler&quot;);</code></pre><h3>Naming conventions</h3><p>Identifiers are using <a href="https://en.wikipedia.org/wiki/CamelCase">lowerCamelCase</a> naming convention except for constants
+    &quot;Expected a valid output handler&quot;);
+</code></pre>
+<h3>Naming conventions</h3>
+<p>Identifiers are using <a href="https://en.wikipedia.org/wiki/CamelCase">lowerCamelCase</a> naming convention except for constants
 that are uppercase.</p>
 <p>Because there are many way to load the sources and, in particular, one evaluates everything in the global context,
 all internal variables of the library are prefixed by:</p>
@@ -130,14 +139,18 @@ all internal variables of the library are prefixed by:</p>
 <li><strong>_Gpf</strong> for classes or object type definition</li>
 <li><strong>_GPF</strong> for constants</li>
 </ul>
-<h3>Documentation</h3><p>There are three levels of documentation:</p>
+<h3>Documentation</h3>
+<p>There are three levels of documentation:</p>
 <ul>
-<li><p>Sources must have a <a href="http://usejsdoc.org/tags-file.html">@file</a> tag to provide summary of module content.</p>
+<li>
+<p>Sources must have a <a href="https://jsdoc.app/tags-file.html">@file</a> tag to provide summary of module content.</p>
 </li>
-<li><p>Functions, classes, constants that are exposed by the library (there should not be any variable).
+<li>
+<p>Functions, classes, constants that are exposed by the library (there should not be any variable).
 They are easily distinguished as they all belong to the gpf namespace.</p>
 </li>
-<li><p>Functions, classes and variables (including constants) that are exposed by any source and might be reused in a
+<li>
+<p>Functions, classes and variables (including constants) that are exposed by any source and might be reused in a
 different source. They do not belong to the gpf namespace (but they must start with <strong>_gpf</strong> as explained in the naming
 convention).</p>
 </li>
@@ -145,22 +158,22 @@ convention).</p>
 <p>Any other function / class / variable that are internal to sources might not be documented (hoping they are clear
 enough). Within a class declaration (leveraging gpf.define), members visibility is based on public / private / protected
 modifiers.</p>
-<p>Documentation is based on <a href="http://usejsdoc.org/">jsdoc</a> tags.</p>
+<p>Documentation is based on <a href="https://jsdoc.app/">jsdoc</a> tags.</p>
 <p>In particular:</p>
 <ul>
-<li><a href="http://usejsdoc.org/tags-param.html">@param</a>
+<li><a href="https://jsdoc.app/tags-param.html">@param</a>
 Must be specified with type and description (and optional specification)</li>
-<li><a href="http://usejsdoc.org/tags-returns.html">@return</a>
+<li><a href="https://jsdoc.app/tags-returns.html">@return</a>
 If the function does not return anything, do not use @return {undefined} or @return {void}</li>
-<li><a href="http://usejsdoc.org/tags-readonly.html">@readonly</a></li>
-<li><a href="http://usejsdoc.org/tags-inheritdoc.html">@inheritdoc</a> (&lt;namespace/class&gt;#<method>)
+<li><a href="https://jsdoc.app/tags-readonly.html">@readonly</a></li>
+<li><a href="https://jsdoc.app/tags-inheritdoc.html">@inheritdoc</a> (&lt;namespace/class&gt;#<method>)
 Can be detected if inheritance is clear and function names are the same</li>
-<li><a href="http://usejsdoc.org/tags-class.html">@constructor</a>
+<li><a href="https://jsdoc.app/tags-class.html">@constructor</a>
 Can be detected when the class is defined by gpf.define</li>
-<li><a href="http://usejsdoc.org/tags-augments.html">@extends</a>
+<li><a href="https://jsdoc.app/tags-augments.html">@extends</a>
 Can be detected when the class is defined by gpf.define or recognizing the syntax A.prototype = new B</li>
-<li><a href="http://usejsdoc.org/tags-alias.html">@alias</a></li>
-<li><a href="http://usejsdoc.org/tags-this.html">@this</a></li>
+<li><a href="https://jsdoc.app/tags-alias.html">@alias</a></li>
+<li><a href="https://jsdoc.app/tags-this.html">@this</a></li>
 </ul>
 <p>However, and as much as possible, documentation generation should rely on simple patterns to detect properties.
 For instance, the following situation is easily recognizable:</p>
@@ -171,7 +184,9 @@ For instance, the following situation is easily recognizable:</p>
          /** The attribute is unique for the whole class when true or per member when false */
         _classScope: true
 
-    },</code></pre><p>Should generate the properties @private and @type {Boolean}</p>
+    },
+</code></pre>
+<p>Should generate the properties @private and @type {Boolean}</p>
 <p>Some 'extensions' are defined</p>
 <ul>
 <li>@gpf:forwardThis: the scope of the function is forwarded to the callback function</li>
@@ -194,7 +209,9 @@ if (&quot;undefined&quot; === typeof setTimeout) {
 
     /** @gpf:sameas _gpfHandleTimeout */
     gpf.handleTimeout = _gpfHandleTimeout;
-</code></pre><p>A counter example (where both private and public version exist):</p>
+
+</code></pre>
+<p>A counter example (where both private and public version exist):</p>
 <pre class="prettyprint source lang-javascript"><code>/**
  * Extends the destination object by copying own enumerable properties from the source object.
  * If the member already exists, it is overwritten.
@@ -212,7 +229,9 @@ function _gpfExtend (destination, source) {
 }
 
 /** @gpf:sameas _gpfExtend */
-gpf.extend = _gpfExtend;</code></pre><p>If a parameter documentation needs several lines, text should start at the beginning of each line.
+gpf.extend = _gpfExtend;
+</code></pre>
+<p>If a parameter documentation needs several lines, text should start at the beginning of each line.
 <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> formatting helpers can be used:</p>
 <pre class="prettyprint source lang-javascript"><code>    /**
      * To implement gpf.noConflict(), we need to keep the previous content of gpf.
@@ -223,8 +242,11 @@ gpf.extend = _gpfExtend;</code></pre><p>If a parameter documentation needs sever
      *
      * @type {undefined|Object}
      */
-    _gpfConflictingSymbol,</code></pre><p>Errors are automatically documented when the _gpfErrorDeclare API is used.</p>
-<h3>Assertions</h3><p>Two functions are provided for assertions:</p>
+    _gpfConflictingSymbol,
+</code></pre>
+<p>Errors are automatically documented when the _gpfErrorDeclare API is used.</p>
+<h3>Assertions</h3>
+<p>Two functions are provided for assertions:</p>
 <pre class="prettyprint source lang-javascript"><code>/**
  * Assertion helper
  *
@@ -240,15 +262,20 @@ _gpfAssert = function (condition, message) {/*...*/}
  * @param {Object} assertions Dictionary of messages associated to condition values
  * @throws {gpf.Error.AssertionFailed}
  */
-_gpfAsserts = function (assertions) {/*...*/}</code></pre><p>Ideally, there should be only one assertion per function (to reduce the number of necessary instructions), this is the
+_gpfAsserts = function (assertions) {/*...*/}
+</code></pre>
+<p>Ideally, there should be only one assertion per function (to reduce the number of necessary instructions), this is the
 reason why <code>_gpfAsserts</code> was introduced.
 The message of the assertion <strong>must</strong> be the evaluated condition.</p>
 <p>For instance:</p>
-<pre class="prettyprint source lang-javascript"><code>_gpfAssert(value instanceof _gpfAttribute, &quot;Expected an Attribute-like parameter&quot;);</code></pre><h3>Comments</h3><p>Following Robert Martin's excellent Clean Code principles, comments should be reduced to the minimum.
+<pre class="prettyprint source lang-javascript"><code>_gpfAssert(value instanceof _gpfAttribute, &quot;Expected an Attribute-like parameter&quot;);
+</code></pre>
+<h3>Comments</h3>
+<p>Following Robert Martin's excellent Clean Code principles, comments should be reduced to the minimum.
 When needed:</p>
 <ul>
 <li>Comments standing on one line <strong>must</strong> use //</li>
-<li>Comments on multiple lines <strong>must</strong> use /<em> </em>/</li>
+<li>Comments on multiple lines <strong>must</strong> use /* */</li>
 </ul>
 <p>Ending dots are optional. They must be added to separate sentences (new line is not enough).</p>
 <p>For instance:</p>
@@ -256,15 +283,23 @@ When needed:</p>
      * This comment stands on one line, no ending dot is required
      *
      * @type {Object}
-     */</code></pre><pre class="prettyprint source lang-javascript"><code>    /**
+     */
+</code></pre>
+<pre class="prettyprint source lang-javascript"><code>    /**
      * For this comment, two lines are needed.
      * That's why a dot was added on the previous line.
      *
      * @type {Object}
-     */</code></pre><h3>Special comments</h3><p>Some preprocessing instructions are defined inside comments:</p>
+     */
+</code></pre>
+<h3>Special comments</h3>
+<p>Some preprocessing instructions are defined inside comments:</p>
 <pre class="prettyprint source lang-javascript"><code>/*#ifdef(DEBUG)*/
 /*#else*/
-/*#endif*/</code></pre><h3>Variables declaration</h3><p>Variables are grouped as much as possible: for instance, if the variable is used in one function only, its declaration
+/*#endif*/
+</code></pre>
+<h3>Variables declaration</h3>
+<p>Variables are grouped as much as possible: for instance, if the variable is used in one function only, its declaration
 will remain close to the function where it is used.</p>
 <p>Multiple variable declaration should be grouped in one var statement. Alignment of the first variable depends on the
 comment it may have.</p>
@@ -275,16 +310,22 @@ comment it may have.</p>
 var
     // Whatever the documentation
     commentedFirst,
-    second;</code></pre><h3>Functions</h3><p>Prefer the named function syntax over the variable one.</p>
+    second;
+</code></pre>
+<h3>Functions</h3>
+<p>Prefer the named function syntax over the variable one.</p>
 <p>Function variables are all declared at the beginning of the function.
 If a function create closures, the @gpf:closure tag is added.</p>
 <p>Functions signatures are checked by some APIs, hence it is important to declare all parameters. If they are not used,
 and to avoid linter warning, the _gpfIgnore function might be used: you may pass all unused parameters.</p>
-<h3>Classes</h3><p>GPF Library provides its own mechanism to define classes.
+<h3>Classes</h3>
+<p>GPF Library provides its own mechanism to define classes.
 To encapsulate the notion of member accessors, no public member is exposed by built-in classes.
 The convention is to create getter/setter functions which name is based on the member name:</p>
 <pre class="prettyprint source lang-javascript"><code>instance.getName() // Read the name property
-instance.setName(&quot;newValue&quot;) // Write the name property</code></pre><p><em>THIS MIGHT BE REVIEWED TO INCREASE CODE CLARITY</em></p>
+instance.setName(&quot;newValue&quot;) // Write the name property
+</code></pre>
+<p><em>THIS MIGHT BE REVIEWED TO INCREASE CODE CLARITY</em></p>
 <p>Classes definition allows defining the visibility of members through the public, protected, private and static keywords.
 To increase the readability of the class declaration, the following structure is proposed:</p>
 <pre class="prettyprint source lang-javascript"><code>gpf.define(&quot;ClassName&quot;, {
@@ -312,7 +353,10 @@ To increase the readability of the class declaration, the following structure is
         myPublicMethod: function() {}
 
     }
-});</code></pre><h3>Forbidden syntaxes</h3><p>The use of the [conditional ternary operator]
+});
+</code></pre>
+<h3>Forbidden syntaxes</h3>
+<p>The use of the [conditional ternary operator]
 (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) is prohibited.</p>
 <p>The following keywords are prohibited:</p>
 <ul>
@@ -322,17 +366,23 @@ To increase the readability of the class declaration, the following structure is
 <p>as well as the
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator">ternary operator</a></p>
 <p><em>EXPLANATIONS WILL BE GIVEN LATER</em></p>
-<h3>Particular syntaxes</h3><p>Variable initialisation:
+<h3>Particular syntaxes</h3>
+<p>Variable initialisation:
 the following syntax</p>
 <pre class="prettyprint source lang-javascript"><code>function sample (fromIndex) {
     var index = fromIndex || 0;
-}</code></pre><p>is sometimes used to reduce the following:</p>
+}
+</code></pre>
+<p>is sometimes used to reduce the following:</p>
 <pre class="prettyprint source lang-javascript"><code>function sample (fromIndex) {
     var index;
     if (undefined === fromIndex) {
         fromIndex = 0;
     }
-}</code></pre><h2>JShint validations</h2><p>The project comes with an <a href="http://jshint.com/docs/">.jhsintrc file</a>.</p>
+}
+</code></pre>
+<h2>JShint validations</h2>
+<p>The project comes with an <a href="http://jshint.com/docs/">.jhsintrc file</a>.</p>
 <p>In particular:</p>
 <table>
 <thead>
@@ -385,16 +435,23 @@ the following syntax</p>
 </tr>
 </tbody>
 </table>
-<h3>Turning off JSHint warnings</h3><p>Turning off a warning or an error is allowed provided a comment explains why</p>
+<h3>Turning off JSHint warnings</h3>
+<p>Turning off a warning or an error is allowed provided a comment explains why</p>
 <p>The following syntax is used on internal constructors as the function name starts with _Gpf (and it is not detected
 as a valid constructor function).</p>
-<pre class="prettyprint source lang-javascript"><code>/*jshint validthis:true*/</code></pre><p>Or it may be temporarily turned of using -W040 / +W040 as the following:</p>
+<pre class="prettyprint source lang-javascript"><code>/*jshint validthis:true*/
+</code></pre>
+<p>Or it may be temporarily turned of using -W040 / +W040 as the following:</p>
 <pre class="prettyprint source lang-javascript"><code>    /*jshint -W040*/ // This is the common way to get the global context
     // Main context object
     _gpfMainContext = this,
-    /*jshint +W040*/</code></pre><h2>ESLint validations</h2><p>The project comes with an <a href="http://eslint.org/docs/user-guide/configuring">.eslsintrc file</a>.</p>
+    /*jshint +W040*/
+</code></pre>
+<h2>ESLint validations</h2>
+<p>The project comes with an <a href="http://eslint.org/docs/user-guide/configuring">.eslsintrc file</a>.</p>
 <p>It overlaps JSHint validation and has more checks.</p>
-<h2>Code coverage</h2><p>Turning off istanbul is allowed provided a comment explains why the code is skipped.</p>
+<h2>Code coverage</h2>
+<p>Turning off istanbul is allowed provided a comment explains why the code is skipped.</p>
 <p>These comments are consolidated inside the <a href="tutorial-COVERAGE.html">Code coverage exceptions</a> page, an ID is allocated for each
 and reported in the source.</p>
 <p>For instance:</p>
@@ -405,7 +462,10 @@ and reported in the source.</p>
             _gpfAssert(messages[message], message);
         }
     }
-};</code></pre><h2>Code quality</h2><p><a href="https://github.com/es-analysis/plato">Plato</a> is used to evaluate the code quality.
+};
+</code></pre>
+<h2>Code quality</h2>
+<p><a href="https://github.com/es-analysis/plato">Plato</a> is used to evaluate the code quality.
 The target maintainability for each source is to be at least 70 (<em>configurable</em>).</p>
 </article>
 
@@ -442,9 +502,9 @@ The target maintainability for each source is to be at least 70 (<em>configurabl
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2019-03-11T22:32:58-04:00
+		on 2019-10-29T22:23:06-04:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

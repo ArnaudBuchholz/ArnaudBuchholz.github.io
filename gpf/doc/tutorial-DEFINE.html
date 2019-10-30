@@ -98,7 +98,8 @@ It takes only one parameter: a definition dictionary that describes the entity t
 <p>The primary goal of this mechanism is to simplify the description (and generation) of custom entities such as classes,
 interfaces and attributes. While the library evolves, it will take advantage of the most recent JavaScript features
 (depending on the host) to implement those entities without fundamentally change the way they are described.</p>
-<h2>$ properties</h2><p>The structure of the definition dictionary depends on the entity to create.
+<h2>$ properties</h2>
+<p>The structure of the definition dictionary depends on the entity to create.
 However, some special properties are globally defined in order to provide general or entity-specific information.
 They are always introduced with the character $.</p>
 <p>Properties that are common to all entity types:</p>
@@ -112,11 +113,12 @@ For instance: <code>$namespace: &quot;test.doc&quot;, $name: &quot;tutorial.Samp
 </ul>
 <p>This also means that any property starting with the $ sign will be treated as a special one and may generate validation
 errors if not supported by the entity type.</p>
-<h2>Class</h2><p>The class entity is based on <a href="https://en.wikipedia.org/wiki/Class_%28computer_programming%29">class concepts</a></p>
+<h2>Class</h2>
+<p>The class entity is based on <a href="https://en.wikipedia.org/wiki/Class_%28computer_programming%29">class concepts</a></p>
 <ul>
 <li><code>$type</code>: <code>&quot;class&quot;</code></li>
-<li><code>$name</code>: <strong>(required)</strong> Class name (must start with an uppercase letter, $ or <em>,
-validation regexp is `/^[A-Z</em>$][a-zA-Z0-9]*$/`)</li>
+<li><code>$name</code>: <strong>(required)</strong> Class name (must start with an uppercase letter, $ or _,
+validation regexp is <code>/^[A-Z_$][a-zA-Z0-9]*$/</code>)</li>
 <li><code>$class</code>: Shortcut to synthesize <code>$type</code>, <code>$name</code> and <code>$namespace</code></li>
 <li><code>$extend</code>: Indicates the class to inherit from, it can be either a Class handler (JavaScript function) or a string
 giving the contextual path to the Class handler (through <a href="gpf.html#.context">gpf.context</a>).</li>
@@ -131,7 +133,9 @@ var ResultClass = gpf.define({
     $class: &quot;test.EmptyClass&quot;
 });
 assert(ResultClass === test.EmptyClass);
-var instance = new test.EmptyClass();</code></pre><p>is equivalent to:</p>
+var instance = new test.EmptyClass();
+</code></pre>
+<p>is equivalent to:</p>
 <pre class="prettyprint source lang-javascript"><code>var test = {};
 var ResultClass = gpf.define({
     $type: &quot;class&quot;,
@@ -139,7 +143,10 @@ var ResultClass = gpf.define({
     $namespace: &quot;test&quot;
 });
 assert(ResultClass === test.EmptyClass);
-var instance = new test.EmptyClass();</code></pre><h3>Members</h3><p>Provided you respect the expected member names (validation regexp is <code>^[a-z_][a-zA-Z0-9]*$</code>)
+var instance = new test.EmptyClass();
+</code></pre>
+<h3>Members</h3>
+<p>Provided you respect the expected member names (validation regexp is <code>^[a-z_][a-zA-Z0-9]*$</code>)
 and you don't use any reserved member names (see below), you may define almost any member you
 want.</p>
 <p>It is recommended to define both methods and members in the class definition.
@@ -147,7 +154,8 @@ Even if you can declare add members within the constructor (or by manipulating i
 once created), making them known in the entity definition structure will allow latter
 optimizations.</p>
 <p>The same way, the library extensively uses the _ character to indicate private member names.</p>
-<h3>Reserved member names</h3><p>The following member names are prohibited:</p>
+<h3>Reserved member names</h3>
+<p>The following member names are prohibited:</p>
 <ul>
 <li>super</li>
 <li>class</li>
@@ -157,7 +165,8 @@ optimizations.</p>
 <li>static</li>
 <li>mixin</li>
 </ul>
-<h3>Constructor</h3><p>In order to customize how a new object is created, you may add to the definition dictionary a constructor property
+<h3>Constructor</h3>
+<p>In order to customize how a new object is created, you may add to the definition dictionary a constructor property
 associated to a method.</p>
 <p>For instance:</p>
 <pre class="prettyprint source lang-javascript"><code>var A = gpf.define({
@@ -171,18 +180,22 @@ associated to a method.</p>
             this._member = memberValue;
         }
     }
-});</code></pre><p>Several things to consider:</p>
+});
+</code></pre>
+<p>Several things to consider:</p>
 <ul>
 <li>This property must be quoted on some hosts (such as WScript)</li>
-<li>All instances owns a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
-Global_Objects/Object/constructor">constructor property</a> that <strong>is not</strong> the one set in the definition dictionary.</li>
+<li>All instances owns a [constructor property](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+Global_Objects/Object/constructor) that <strong>is not</strong> the one set in the definition dictionary.</li>
 <li>The constructor function returned by gpf.define is secured so that you must use it with
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new">new</a></li>
 </ul>
-<h3>Inheritance</h3><p>Class inheritance relies on
+<h3>Inheritance</h3>
+<p>Class inheritance relies on
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain">prototype inheritance</a>.</p>
 <p>Inherited constructor is not called implicitely.</p>
-<h3>this.$super</h3><p>When <a href="https://en.wikipedia.org/wiki/Method_overriding">overriding</a> a method, the parent one is available through the
+<h3>this.$super</h3>
+<p>When <a href="https://en.wikipedia.org/wiki/Method_overriding">overriding</a> a method, the parent one is available through the
 method <code>this.$super()</code>. This method is bound dynamically, meaning that if you modify the super method
 by changing the implementation (altering the prototype), $super will always point to the right one.</p>
 <p>If you need to access another parent, you may use the syntax <code>this.$super.methodName()</code>.</p>
@@ -202,14 +215,18 @@ by changing the implementation (altering the prototype), $super will always poin
     setMember: function (newValue) {
         this._member = newValue;
     }
-});</code></pre><p>Unlike <code>super</code>, <code>this.$super</code> and <code>this.$super.methodName</code> function objects are not equal to the parent ones. Yet they
+});
+</code></pre>
+<p>Unlike <code>super</code>, <code>this.$super</code> and <code>this.$super.methodName</code> function objects are not equal to the parent ones. Yet they
 can be invoked with any given context.</p>
-<h3>Supported features</h3><ul>
+<h3>Supported features</h3>
+<ul>
 <li>Because of the way inheritance is implemented, you may define classes with any valid JavaScript class.</li>
 <li><code>constructor</code> property is set to the class constructor</li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof"><code>instanceof</code></a> is supported</li>
 </ul>
-<h2>Interface</h2><p>The class entity is based on <a href="https://en.wikipedia.org/wiki/Public_interface">interface concept</a></p>
+<h2>Interface</h2>
+<p>The class entity is based on <a href="https://en.wikipedia.org/wiki/Public_interface">interface concept</a></p>
 <ul>
 <li><code>$type</code>: <code>&quot;interface&quot;</code></li>
 <li><code>$name</code>: <strong>(required)</strong> Interface name (must start with an uppercase I, validation regexp is <code>/^I[a-zA-Z0-9]*$/</code>)</li>
@@ -227,11 +244,15 @@ var obj = {
     }
 };
 
-assert(gpf.interfaces.isImplementedBy(ISerializable, obj));</code></pre><h3>Members</h3><p>The goal of an interface is to establish a <a href="https://en.wikipedia.org/wiki/Design_by_contract">contract of service</a>
+assert(gpf.interfaces.isImplementedBy(ISerializable, obj));
+</code></pre>
+<h3>Members</h3>
+<p>The goal of an interface is to establish a <a href="https://en.wikipedia.org/wiki/Design_by_contract">contract of service</a>
 between the object implementing the interface and the consumer. Only methods are allowed.
 Because an interface exposes only 'public' methods, names must respect the validation regexp
 <code>^[a-z][a-zA-Z0-9]*$</code>.</p>
-<h3>Reserved member names</h3><p>The following member names are prohibited:</p>
+<h3>Reserved member names</h3>
+<p>The following member names are prohibited:</p>
 <ul>
 <li>super</li>
 <li>class</li>
@@ -242,16 +263,21 @@ Because an interface exposes only 'public' methods, names must respect the valid
 <li>mixin</li>
 <li>constructor</li>
 </ul>
-<h3>Constructor</h3><p>An interface can't be instantiated, hence no constructor is allowed.</p>
-<h3>Supported features</h3><p>Interfaces are leveraged through these two APIs:</p>
+<h3>Constructor</h3>
+<p>An interface can't be instantiated, hence no constructor is allowed.</p>
+<h3>Supported features</h3>
+<p>Interfaces are leveraged through these two APIs:</p>
 <ul>
 <li><a href="gpf.interfaces.html#.isImplementedBy">gpf.interfaces.isImplementedBy</a> to check if an object implements a given interface</li>
 <li><a href="gpf.interfaces.html#.query">gpf.interfaces.query</a> to query a specific interface either because it implements it or
 because it implements the <a href="gpf.interfaces.IUnknown.html">gpf.interfaces.IUnknown</a> interface.</li>
 </ul>
-<h2>Attributes</h2><h3>Concept</h3><p>Attributes are used to qualify members of a class definition.
+<h2>Attributes</h2>
+<h3>Concept</h3>
+<p>Attributes are used to qualify members of a class definition.
 The mechanism is comparable to <a href="https://en.wikipedia.org/wiki/Java_annotation">Java annotations</a>.</p>
-<h3>Definition</h3><p><strong>Every member</strong> of a class, whatever its type, can own attributes.</p>
+<h3>Definition</h3>
+<p><strong>Every member</strong> of a class, whatever its type, can own attributes.</p>
 <p>The attributes of a member can be set either in the class introducing the member or in any of its subclasses.
 Attributes are <strong>inherited</strong>.</p>
 <p>On the contrary, it is not possible to set attributes on a member that does not exist in the class hierarchy.</p>
@@ -267,24 +293,39 @@ enclosed in square brackets.</p>
 
     &quot;[value]&quot;: [new MyAttribute()],
     value: 0
-});</code></pre><p>In the following example, MySubClass will own a second attribute for the member value:</p>
-<pre class="prettyprint source lang-javascript"><code>MySubClass = gpf.define({
+});```
+
+In the following example, MySubClass will own a second attribute for the member value:
+
+```javascript
+MySubClass = gpf.define({
     $class: &quot;MySubClass&quot;,
     $extend: MyClass,
 
     &quot;[value]&quot;: [new MySecondAttribute()]
-});</code></pre><p>Attributes can also be set at the class level, the $ property $attributes introduces them:</p>
-<pre class="prettyprint source lang-javascript"><code>MySecondClass = gpf.define({
+});```
+
+Attributes can also be set at the class level, the $ property $attributes introduces them:
+
+```javascript
+MySecondClass = gpf.define({
     $class: &quot;MySecondClass&quot;,
     $attributes: [new MyClassAttribute()],
 
     &quot;[value]&quot;: [new MyAttribute()],
     value: 0
-});</code></pre><h3>Retrieve Attributes</h3><p>After assigning attributes to a class, the library offers the <a href="gpf.attributes.html#.get">gpf.attributes.get</a> API to
+});```
+
+### Retrieve Attributes
+
+After assigning attributes to a class, the library offers the <a href="gpf.attributes.html#.get">gpf.attributes.get</a> API to
 query the class definition or one of its instances. As a result, a dictionary mapping members
-to their respective list of attributes is returned.</p>
-<p>For instance:</p>
-<pre class="prettyprint source lang-javascript"><code>MyClass = gpf.define({
+to their respective list of attributes is returned.
+
+For instance:
+
+```javascript
+MyClass = gpf.define({
     $class: &quot;MyClass&quot;,
 
     &quot;[value]&quot;: [new MyAttribute()],
@@ -295,7 +336,8 @@ console.log(gpf.attributes.get(MyClass));
 // outputs: {value: [{}]} where the object is the instance of MyAttribute
 
 console.log(gpf.attributes.get(new MyClass()));
-// same output</code></pre>
+// same output
+</code></pre>
 </article>
 
 </section>
@@ -331,9 +373,9 @@ console.log(gpf.attributes.get(new MyClass()));
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2019-03-11T22:32:58-04:00
+		on 2019-10-29T22:23:06-04:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

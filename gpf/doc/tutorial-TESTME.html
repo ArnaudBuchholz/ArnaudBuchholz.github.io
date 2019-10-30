@@ -93,15 +93,18 @@
 </header>
 
 <article>
-    <h2>Command line testing</h2><p>You must first run <code>grunt serve</code>.</p>
+    <h2>Command line testing</h2>
+<p>You must first run <code>grunt serve</code>.</p>
 <p>Command lines must be run from the root of the gpf-js folder.</p>
 <ul>
-<li>With <a href="https://mochajs.org/">mocha</a>:<ul>
+<li>With <a href="https://mochajs.org/">mocha</a>:
+<ul>
 <li><code>http://localhost:8000/test/host/mocha/web.html</code></li>
 <li><code>node test/host/mocha/nodejs.js</code></li>
 </ul>
 </li>
-<li>Without mocha:<ul>
+<li>Without mocha:
+<ul>
 <li><code>http://localhost:8000/test/host/web.html</code></li>
 <li><code>node test/host/nodejs.js</code></li>
 <li><code>phantomjs test/host/phantomjs.js</code></li>
@@ -109,50 +112,58 @@
 <li><code>java -jar node_modules\rhino-1_7r5-bin\rhino1_7R5\js.jar test\host\rhino.js</code></li>
 </ul>
 </li>
-<li>With <a href="http://gruntjs.com/">grunt</a>:<ul>
-<li>testing with PhantomJS (as a browser):<ul>
+<li>With <a href="http://gruntjs.com/">grunt</a>:
+<ul>
+<li>testing with PhantomJS (as a browser):
+<ul>
 <li><code>grunt connectIf mocha</code></li>
 <li><code>grunt connectIf mocha:source</code></li>
 <li><code>grunt connectIf mocha:debug</code></li>
 <li><code>grunt connectIf mocha:release</code></li>
 </ul>
 </li>
-<li>testing with NodeJS:<ul>
+<li>testing with NodeJS:
+<ul>
 <li><code>grunt mochaTest</code></li>
 <li><code>grunt mochaTest:source</code></li>
 <li><code>grunt mochaTest:debug</code></li>
 <li><code>grunt mochaTest:release</code></li>
 </ul>
 </li>
-<li>testing with cscript (Windows only):<ul>
+<li>testing with cscript (Windows only):
+<ul>
 <li><code>grunt exec:testWscript</code></li>
 <li><code>grunt exec:testWscriptVerbose</code> <em>(alias: <code>grunt wscript</code>)</em></li>
 <li><code>grunt exec:testWscriptDebug</code></li>
 <li><code>grunt exec:testWscriptRelease</code></li>
 </ul>
 </li>
-<li>testing with a simulated cscript environment (Non-windows):<ul>
+<li>testing with a simulated cscript environment (Non-windows):
+<ul>
 <li><code>grunt exec:testNodewscript</code></li>
 <li><code>grunt exec:testNodewscriptVerbose</code> <em>(alias: <code>grunt nodewscript</code>)</em></li>
 <li><code>grunt exec:testNodewscriptDebug</code></li>
 <li><code>grunt exec:testNodewscriptRelease</code></li>
 </ul>
 </li>
-<li>testing with Rhino (java required):<ul>
+<li>testing with Rhino (java required):
+<ul>
 <li><code>grunt exec:testRhino</code></li>
 <li><code>grunt exec:testRhinoVerbose</code> <em>(alias: <code>grunt rhino</code>)</em></li>
 <li><code>grunt exec:testRhinoDebug</code></li>
 <li><code>grunt exec:testRhinoRelease</code></li>
 </ul>
 </li>
-<li>testing with Nashorn (java required):<ul>
+<li>testing with Nashorn (java required):
+<ul>
 <li><code>grunt exec:testNashorn</code></li>
 <li><code>grunt exec:testNashornVerbose</code> <em>(alias: <code>grunt nashorn</code>)</em></li>
 <li><code>grunt exec:testNashornDebug</code></li>
 <li><code>grunt exec:testNashornRelease</code></li>
 </ul>
 </li>
-<li>testing with browsers using <a href="http://www.seleniumhq.org/">Selenium</a>:<ul>
+<li>testing with browsers using <a href="http://www.seleniumhq.org/">Selenium</a>:
+<ul>
 <li>you must first run <code>node detectSelenium</code> to check drivers installation <em>(see below)</em></li>
 <li><code>grunt firefox</code></li>
 <li><code>grunt chrome</code></li>
@@ -163,12 +174,15 @@
 </ul>
 </li>
 </ul>
-<h2>Selenium drivers</h2><p>To enable browser automation with <a href="http://www.seleniumhq.org/">Selenium</a>, a driver must be installed for most browsers.
+<h2>Selenium drivers</h2>
+<p>To enable browser automation with <a href="http://www.seleniumhq.org/">Selenium</a>, a driver must be installed for most browsers.
 It is recommended to put them in the current <a href="https://en.wikipedia.org/wiki/PATH_%28variable%29">PATH</a>.</p>
 <p>Please check
 <a href="http://seleniumhq.github.io/selenium/docs/api/javascript/index.html">selenium-webdriver documentation page</a>.</p>
-<h3>Safari</h3><p><a href="http://appldnld.apple.com/Safari5/041-5487.20120509.INU8B/SafariSetup.exe">Safari 5.1.7 for Windows</a></p>
-<h2>Command line browser testing</h2><p>Coming with <a href="http://gpf-js.blogspot.ca/2017/03/release-017.html">version 0.1.7</a>, it is now possible to test a specific
+<h3>Safari</h3>
+<p><a href="http://appldnld.apple.com/Safari5/041-5487.20120509.INU8B/SafariSetup.exe">Safari 5.1.7 for Windows</a></p>
+<h2>Command line browser testing</h2>
+<p>Coming with <a href="http://gpf-js.blogspot.ca/2017/03/release-017.html">version 0.1.7</a>, it is now possible to test a specific
 browser using a command line.</p>
 <p>There are several assumptions:</p>
 <ul>
@@ -196,7 +210,8 @@ specified with an array property <code>&quot;args&quot;</code></li>
             &quot;type&quot;: &quot;spawn&quot;,
             &quot;bin&quot;: &quot;C:\\Program Files (x86)\\Safari\\Safari.exe&quot;
         }
-    },</code></pre>
+    },
+</code></pre>
 </article>
 
 </section>
@@ -232,9 +247,9 @@ specified with an array property <code>&quot;args&quot;</code></li>
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2019-03-11T22:32:58-04:00
+		on 2019-10-29T22:23:06-04:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

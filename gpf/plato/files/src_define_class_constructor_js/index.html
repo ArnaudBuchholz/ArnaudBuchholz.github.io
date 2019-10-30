@@ -156,7 +156,7 @@ function _gpfDefineGetClassSecuredConstructorGetES6ConstructionBody (classDefini
         + &quot;        that = Reflect.construct(_classDef_._extend, arguments, _classDef_._instanceBuilder);\n&quot;
         + &quot;    },\n&quot;
         + &quot;    hasOwnProperty = function (name) {\n&quot;
-        + &quot;        return !!that &amp;&amp; that.hasOwnProperty(name);\n&quot;
+        + &quot;        return !!that &amp;&amp; Object.prototype.hasOwnProperty.call(that, name);\n&quot;
         + &quot;    },\n&quot;
         + &quot;    proxy = new Proxy({}, {\n&quot;
         + &quot;        get: function (obj, property) {\n&quot;

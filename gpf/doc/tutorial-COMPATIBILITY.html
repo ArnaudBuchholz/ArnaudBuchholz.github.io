@@ -94,7 +94,9 @@
 
 <article>
     <p>The library offers a common compatibility layer whatever the environment it runs on.</p>
-<h2>Standard object methods and statics</h2><h3>Array</h3><ul>
+<h2>Standard object methods and statics</h2>
+<h3>Array</h3>
+<ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every">every</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">filter</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach">forEach</a></li>
@@ -106,25 +108,33 @@
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from">Array.from</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray">Array.isArray</a></li>
 </ul>
-<h3>Date</h3><p>The Date constructor supports <a href="http://gpf-js.blogspot.ca/2016/02/date-override.html">ISO 8601 format</a>
+<h3>Date</h3>
+<p>The Date constructor supports <a href="http://gpf-js.blogspot.ca/2016/02/date-override.html">ISO 8601 format</a>
 and instances offers:</p>
 <ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString">toIsoString</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now">Date.now</a></li>
 </ul>
-<h3>Function</h3><ul>
+<h3>Function</h3>
+<ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">bind</a></li>
 </ul>
-<p><strong>NOTE:</strong> Function.prototype.toString() does not include comments on Rhino.</p>
-<h3>Object</h3><ul>
+<p><strong>NOTE:</strong> <code>Function.prototype.toString()</code> does not include comments on Rhino.</p>
+<h3>Object</h3>
+<ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign">Object.assign</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create">Object.create</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf">Object.getPrototypeOf</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys">Object.keys</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values">Object.values</a></li>
 </ul>
-<p><strong>NOTE:</strong> Object.keys doesn't behave the same way on primitive types depending on the host.</p>
-<h3>String</h3><ul>
+<p><strong>NOTES:</strong></p>
+<ul>
+<li><code>Object.assign</code> fails with <a href="https://en.wikipedia.org/wiki/Chakra_%28JScript_engine%29">Chakra</a> if one parameter is <code>undefined</code></li>
+<li><code>Object.keys</code> doesn't behave the same way on primitive types depending on the host.</li>
+</ul>
+<h3>String</h3>
+<ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith">endsWith</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes">includes</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padEnd">padEnd</a></li>
@@ -132,35 +142,41 @@ and instances offers:</p>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith">startsWith</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim">trim</a></li>
 </ul>
-<h2>Console</h2><p>The library defines (when not existing) <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a>,
+<h2>Console</h2>
+<p>The library defines (when not existing) <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a>,
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/warn">console.warn</a> and
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/error">console.error</a>.</p>
 <p><strong>NOTE:</strong> Only one string parameter is expected.</p>
-<h2>Promise</h2><p>The library offers (when necessary) a <a href="https://promisesaplus.com/">Promise/A+</a> implementation based on
+<h2>Promise</h2>
+<p>The library offers (when necessary) a <a href="https://promisesaplus.com/">Promise/A+</a> implementation based on
 <a href="https://github.com/taylorhakes/promise-polyfill">promise-polyfill</a></p>
-<h2>Timeout</h2><ul>
+<h2>Timeout</h2>
+<ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout">setTimeout</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/clearTimeout">clearTimeout</a></li>
 </ul>
 <p>setInterval / clearInterval are not managed but can be easily simulated by chaining timeouts.</p>
 <p>On some hosts, <a href="gpf.html#.handleTimeout">gpf.handleTimeout</a>() must be used to activate timeouts.</p>
-<h2>JSON</h2><ul>
+<h2>JSON</h2>
+<ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse">parse</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify">stringify</a></li>
 </ul>
-<p><strong>NOTE:</strong> Some hosts have their own specificities in the way the <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/2b4ced1d6dd3de99344d64eb14c97c89793305ba/test/compatibility/
-json.js#L225">reviver</a> /
-<a href="https://github.com/ArnaudBuchholz/gpf-js/blob/2b4ced1d6dd3de99344d64eb14c97c89793305ba/test/compatibility/
-json.js#L139">replacer</a> keys are transmitted. It is recommended to
+<p><strong>NOTE:</strong> Some hosts have their own specificities in the way the <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/2b4ced1d6dd3de99344d64eb14c97c89793305ba/test/compatibility/json.js#L225">reviver</a> /
+<a href="https://github.com/ArnaudBuchholz/gpf-js/blob/2b4ced1d6dd3de99344d64eb14c97c89793305ba/test/compatibility/json.js#L139">replacer</a> keys are transmitted. It is recommended to
 convert the keys to string to ensure maximum compatibility.</p>
-<h2>Base64 helpers</h2><ul>
+<h2>Base64 helpers</h2>
+<ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/atob">atob</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa">btoa</a></li>
 </ul>
-<h2>Strict mode</h2><p>When functions are generated,
+<h2>Strict mode</h2>
+<p>When functions are generated,
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">strict mode</a>
 is always assumed even if the host (such as Rhino or WScript) does not support it.</p>
-<h2>Known limitations</h2><h3><a href="gpf.http.html#.request">gpf.http.request</a></h3><p>When it comes to supporting custom verbs, some hosts are not working properly:</p>
+<h2>Known limitations</h2>
+<h3><a href="gpf.http.html#.request">gpf.http.request</a></h3>
+<p>When it comes to supporting custom verbs, some hosts are not working properly:</p>
 <ul>
 <li><a href="http://phantomjs.org/">PhantomJS</a> does not even try to send the request.</li>
 <li>On JAVA hosts (<a href="https://en.wikipedia.org/wiki/Nashorn_%28JavaScript_engine%29">Nashorn</a>
@@ -204,9 +220,9 @@ and <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino">Rh
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2019-03-11T22:32:58-04:00
+		on 2019-10-29T22:23:06-04:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

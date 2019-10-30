@@ -95,7 +95,8 @@
 <article>
     <p>This documentation details the <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc">configuration</a> of
 <a href="https://eslint.org/">eslint</a>.</p>
-<h2>Configuration</h2><p>Recommended rules (if not ignored) appear as <em>error</em>.</p>
+<h2>Configuration</h2>
+<p>Recommended rules (if not ignored) appear as <em>error</em>.</p>
 <table>
 <thead>
 <tr>
@@ -116,7 +117,7 @@
 </tr>
 <tr>
 <td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/no-empty-module.js">no-empty-module</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -152,7 +153,7 @@
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-async-promise-executor">no-async-promise-executor</a></td>
 <td></td>
-<td><strong>-</strong></td>
+<td><em>error</em></td>
 <td></td>
 <td></td>
 </tr>
@@ -180,9 +181,9 @@
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-console">no-console</a></td>
 <td></td>
-<td><strong>ignore</strong></td>
+<td><strong>-</strong></td>
 <td></td>
-<td>The library offers a <a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html">compatibility layer</a> that includes <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/warn">console.warn</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/error">console.error</a>. </td>
+<td>The library offers a <a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html">compatibility layer</a> that includes <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/warn">console.warn</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/error">console.error</a>.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-constant-condition">no-constant-condition</a></td>
@@ -249,21 +250,21 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-extra-boolean-cast">no-extra-boolean-cast</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><em>error</em></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-extra-parens">no-extra-parens</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-extra-semi">no-extra-semi</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><em>error</em></td>
 <td></td>
 <td></td>
@@ -272,6 +273,13 @@
 <td><a href="https://eslint.org/docs/rules/no-func-assign">no-func-assign</a></td>
 <td></td>
 <td><em>error</em></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/no-import-assign">no-import-assign</a></td>
+<td></td>
+<td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
@@ -299,7 +307,7 @@
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-misleading-character-class">no-misleading-character-class</a></td>
 <td></td>
-<td><strong>-</strong></td>
+<td><em>error</em></td>
 <td></td>
 <td></td>
 </tr>
@@ -320,13 +328,13 @@
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-prototype-builtins">no-prototype-builtins</a></td>
 <td></td>
-<td><strong>-</strong></td>
+<td><em>error</em></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-regex-spaces">no-regex-spaces</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><em>error</em></td>
 <td></td>
 <td></td>
@@ -368,7 +376,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-unsafe-negation">no-unsafe-negation</a></td>
-<td>&check;</td>
+<td></td>
 <td><em>error</em></td>
 <td></td>
 <td></td>
@@ -376,7 +384,7 @@
 <tr>
 <td><a href="https://eslint.org/docs/rules/require-atomic-updates">require-atomic-updates</a></td>
 <td></td>
-<td><strong>-</strong></td>
+<td><em>error</em></td>
 <td></td>
 <td></td>
 </tr>
@@ -389,10 +397,10 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/valid-jsdoc">valid-jsdoc</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L7"><em>.eslintrc</em></a></td>
-<td>Rule parameters are used to normalize the <a href="http://usejsdoc.org/">jsdoc</a> tags. Also, The rule was also <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/valid-jsdoc.js">customized</a> to match <code>@gpf</code> tags. </td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L6"><em>.eslintrc</em></a></td>
+<td>Rule parameters are used to normalize the <a href="https://jsdoc.app/">jsdoc</a> tags. Also, The rule was also <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrules/valid-jsdoc.js">customized</a> to match <code>@gpf</code> tags.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/valid-typeof">valid-typeof</a></td>
@@ -427,7 +435,7 @@
 <td></td>
 <td><strong>error</strong></td>
 <td></td>
-<td>This limits misuse of <a href="https://developer.mozilla.org/en-US/docs/Glossary/Hoisting">hoisting</a> that leads to obscure code. </td>
+<td>This limits misuse of <a href="https://developer.mozilla.org/en-US/docs/Glossary/Hoisting">hoisting</a> that leads to obscure code.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/class-methods-use-this">class-methods-use-this</a></td>
@@ -448,11 +456,11 @@
 <td></td>
 <td><strong>-</strong></td>
 <td></td>
-<td>The API extensively uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a> value to represent no value. Since a method with no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return"><code>return</code></a> statement returns <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a>, many functions are not consistent. </td>
+<td>The API extensively uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a> value to represent no value. Since a method with no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return"><code>return</code></a> statement returns <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a>, many functions are not consistent.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/curly">curly</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;all&quot;</td>
 <td></td>
@@ -465,22 +473,29 @@
 <td></td>
 </tr>
 <tr>
+<td><a href="https://eslint.org/docs/rules/default-param-last">default-param-last</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
 <td><a href="https://eslint.org/docs/rules/dot-location">dot-location</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;property&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/dot-notation">dot-notation</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L31"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L30"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/eqeqeq">eqeqeq</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -522,14 +537,14 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-div-regex">no-div-regex</a></td>
-<td></td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-else-return">no-else-return</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -567,18 +582,18 @@
 <td></td>
 <td><strong>-</strong></td>
 <td></td>
-<td>Since the library implements <a href="https://developer.mozilla.org/en-US/docs/Glossary/Polyfill">polyfills</a> to provide a <a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html">compatibility layer</a>, this rule is turned off. However, the general rule is to not extend native classes with non standard methods. </td>
+<td>Since the library implements <a href="https://developer.mozilla.org/en-US/docs/Glossary/Polyfill">polyfills</a> to provide a <a href="https://arnaudbuchholz.github.io/gpf/doc/tutorial-COMPATIBILITY.html">compatibility layer</a>, this rule is turned off. However, the general rule is to not extend native classes with non standard methods.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-extra-bind">no-extra-bind</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-extra-label">no-extra-label</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -592,7 +607,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-floating-decimal">no-floating-decimal</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -606,7 +621,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-implicit-coercion">no-implicit-coercion</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -644,7 +659,7 @@
 <td></td>
 <td><strong>error</strong></td>
 <td></td>
-<td>Really? </td>
+<td>Really?</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-lone-blocks">no-lone-blocks</a></td>
@@ -665,11 +680,11 @@
 <td></td>
 <td><strong>error</strong></td>
 <td></td>
-<td>Disabled for test files. </td>
+<td>Disabled for test files.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-multi-spaces">no-multi-spaces</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -740,8 +755,8 @@
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-redeclare">no-redeclare</a></td>
 <td></td>
-<td><em>error</em></td>
-<td></td>
+<td><strong>error</strong></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L132"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
@@ -816,7 +831,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-unused-labels">no-unused-labels</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><em>error</em></td>
 <td></td>
 <td></td>
@@ -831,7 +846,7 @@
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-useless-catch">no-useless-catch</a></td>
 <td></td>
-<td><strong>-</strong></td>
+<td><em>error</em></td>
 <td></td>
 <td></td>
 </tr>
@@ -851,7 +866,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-useless-return">no-useless-return</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -875,10 +890,24 @@
 <td></td>
 <td><strong>error</strong></td>
 <td></td>
-<td>Extracted from the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with">MDN description</a>: Use of the with statement is not recommended, as it may be the source of confusing bugs and compatibility issues. </td>
+<td>Extracted from the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with">MDN description</a>: Use of the with statement is not recommended, as it may be the source of confusing bugs and compatibility issues.</td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/prefer-named-capture-group">prefer-named-capture-group</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/prefer-promise-reject-errors">prefer-promise-reject-errors</a></td>
+<td></td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/prefer-regex-literals">prefer-regex-literals</a></td>
 <td></td>
 <td><strong>-</strong></td>
 <td></td>
@@ -910,21 +939,21 @@
 <td></td>
 <td><strong>-</strong></td>
 <td></td>
-<td>Unless you don't understand hoisting, it is useless to put all vars on top. </td>
+<td>Unless you don't understand hoisting, it is useless to put all vars on top.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/wrap-iife">wrap-iife</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;outside&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/yoda">yoda</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
-<td>Do or do not, there is no try. </td>
+<td>Do or do not, there is no try.</td>
 </tr>
 <tr>
 <td><strong>Strict Mode</strong></td>
@@ -935,10 +964,10 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/strict">strict</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;global&quot;</td>
-<td>Required for all GPF-JS modules. </td>
+<td>Required for all GPF-JS modules.</td>
 </tr>
 <tr>
 <td><strong>Variables</strong></td>
@@ -952,7 +981,7 @@
 <td></td>
 <td><strong>-</strong></td>
 <td></td>
-<td>As GPF-JS uses <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a>, variables are not necessarily initialized with a value. </td>
+<td>As GPF-JS uses <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a>, variables are not necessarily initialized with a value.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-catch-shadow">no-catch-shadow</a></td>
@@ -1005,7 +1034,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-undef-init">no-undef-init</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -1015,20 +1044,20 @@
 <td></td>
 <td><strong>-</strong></td>
 <td></td>
-<td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a> is a value. </td>
+<td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a> is a value.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-unused-vars">no-unused-vars</a></td>
 <td></td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L79"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L78"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-use-before-define">no-use-before-define</a></td>
 <td></td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L80"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L79"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
@@ -1085,7 +1114,7 @@
 <td></td>
 <td><strong>-</strong></td>
 <td></td>
-<td>GPF-JS handles path separator the proper way </td>
+<td>GPF-JS handles path separator the proper way</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-process-env">no-process-env</a></td>
@@ -1124,35 +1153,35 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/array-bracket-newline">array-bracket-newline</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/array-bracket-spacing">array-bracket-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;never&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/array-element-newline">array-element-newline</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/block-spacing">block-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;never&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/brace-style">brace-style</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;1tbs&quot;</td>
 <td></td>
@@ -1166,35 +1195,35 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/capitalized-comments">capitalized-comments</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/comma-dangle">comma-dangle</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;never&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/comma-spacing">comma-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L90"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L89"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/comma-style">comma-style</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;last&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/computed-property-spacing">computed-property-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1208,14 +1237,14 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/eol-last">eol-last</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/func-call-spacing">func-call-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;never&quot;</td>
 <td></td>
@@ -1239,11 +1268,18 @@
 <td></td>
 <td><strong>error</strong></td>
 <td>&quot;declaration&quot;</td>
-<td>Enforced on purpose. </td>
+<td>Enforced on purpose.</td>
+</tr>
+<tr>
+<td><a href="https://eslint.org/docs/rules/function-call-argument-newline">function-call-argument-newline</a></td>
+<td>✓</td>
+<td><strong>-</strong></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/function-paren-newline">function-paren-newline</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1267,48 +1303,48 @@
 <td></td>
 <td><strong>-</strong></td>
 <td></td>
-<td>A special rule will be developed to validate the IDs. From a general point of view, <a href="https://en.wikipedia.org/wiki/Camel_case">lowerCamelCase</a> is preferred. <a href="https://en.wikipedia.org/wiki/Constant_%28computer_programming%29">Constants</a> must be uppercase with _ to separate words. Finally, 'global' variables must start with _GPF or _gpf, they usually start with the module name (ex: <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/stream/csv/parser.js#L49">_GpfStreamCsvParser</a>) </td>
+<td>A special rule will be developed to validate the IDs. From a general point of view, <a href="https://en.wikipedia.org/wiki/Camel_case">lowerCamelCase</a> is preferred. <a href="https://en.wikipedia.org/wiki/Constant_%28computer_programming%29">Constants</a> must be uppercase with _ to separate words. Finally, 'global' variables must start with _GPF or _gpf, they usually start with the module name (ex: <a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/src/stream/csv/parser.js#L49">_GpfStreamCsvParser</a>)</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/implicit-arrow-linebreak">implicit-arrow-linebreak</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/indent">indent</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>4</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/indent-legacy">indent-legacy</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/jsx-quotes">jsx-quotes</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/key-spacing">key-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L97"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L96"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/keyword-spacing">keyword-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L121"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L120"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
@@ -1320,28 +1356,28 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/linebreak-style">linebreak-style</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>warning</strong></td>
 <td>&quot;unix&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/lines-around-comment">lines-around-comment</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/lines-around-directive">lines-around-directive</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/lines-between-class-members">lines-between-class-members</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1404,7 +1440,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/multiline-comment-style">multiline-comment-style</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1425,28 +1461,28 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/new-parens">new-parens</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/newline-after-var">newline-after-var</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/newline-before-return">newline-before-return</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/newline-per-chained-call">newline-per-chained-call</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1481,7 +1517,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-lonely-if">no-lonely-if</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -1509,7 +1545,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-multiple-empty-lines">no-multiple-empty-lines</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -1546,12 +1582,12 @@
 <td><a href="https://eslint.org/docs/rules/no-restricted-syntax">no-restricted-syntax</a></td>
 <td></td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L108"><em>.eslintrc</em></a></td>
-<td>Forbids the use of  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch">switch</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with">with</a> </td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L107"><em>.eslintrc</em></a></td>
+<td>Forbids the use of  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch">switch</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with">with</a></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-spaced-func">no-spaced-func</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1572,7 +1608,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-trailing-spaces">no-trailing-spaces</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -1586,105 +1622,105 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-unneeded-ternary">no-unneeded-ternary</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-whitespace-before-property">no-whitespace-before-property</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/nonblock-statement-body-position">nonblock-statement-body-position</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/object-curly-newline">object-curly-newline</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/object-curly-spacing">object-curly-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;never&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/object-property-newline">object-property-newline</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/one-var">one-var</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
-<td>Following <a href="https://blog.cleancoder.com/">clean code</a> principles, variables are declared close to their related functions. </td>
+<td>Following <a href="https://blog.cleancoder.com/">clean code</a> principles, variables are declared close to their related functions.</td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/one-var-declaration-per-line">one-var-declaration-per-line</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/operator-assignment">operator-assignment</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;always&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/operator-linebreak">operator-linebreak</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;before&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/padded-blocks">padded-blocks</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/padding-line-between-statements">padding-line-between-statements</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/prefer-object-spread">prefer-object-spread</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/quote-props">quote-props</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>warning</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L115"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L114"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/quotes">quotes</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;double&quot;</td>
 <td></td>
@@ -1698,21 +1734,21 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/semi">semi</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;always&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/semi-spacing">semi-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L117"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L116"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/semi-style">semi-style</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1726,77 +1762,77 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/sort-vars">sort-vars</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/space-before-blocks">space-before-blocks</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L119"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L118"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/space-before-function-paren">space-before-function-paren</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;always&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/space-in-parens">space-in-parens</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td>&quot;never&quot;</td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/space-infix-ops">space-infix-ops</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
-<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L123"><em>.eslintrc</em></a></td>
+<td><a href="https://github.com/ArnaudBuchholz/gpf-js/blob/master/.eslintrc#L122"><em>.eslintrc</em></a></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/space-unary-ops">space-unary-ops</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/spaced-comment">spaced-comment</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/switch-colon-spacing">switch-colon-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/template-tag-spacing">template-tag-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/unicode-bom">unicode-bom</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/wrap-regex">wrap-regex</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>error</strong></td>
 <td></td>
 <td></td>
@@ -1810,21 +1846,21 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/arrow-body-style">arrow-body-style</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/arrow-parens">arrow-parens</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/arrow-spacing">arrow-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1838,7 +1874,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/generator-star-spacing">generator-star-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1852,7 +1888,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-confusing-arrow">no-confusing-arrow</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1901,7 +1937,7 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-useless-computed-key">no-useless-computed-key</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1915,49 +1951,49 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-useless-rename">no-useless-rename</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/no-var">no-var</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/object-shorthand">object-shorthand</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/prefer-arrow-callback">prefer-arrow-callback</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/prefer-const">prefer-const</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/prefer-destructuring">prefer-destructuring</a></td>
-<td></td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/prefer-numeric-literals">prefer-numeric-literals</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1978,14 +2014,14 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/prefer-spread">prefer-spread</a></td>
-<td>&check;</td>
+<td></td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/prefer-template">prefer-template</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -1999,14 +2035,14 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/rest-spread-spacing">rest-spread-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/sort-imports">sort-imports</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -2020,14 +2056,14 @@
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/template-curly-spacing">template-curly-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td><a href="https://eslint.org/docs/rules/yield-star-spacing">yield-star-spacing</a></td>
-<td>&check;</td>
+<td>✓</td>
 <td><strong>-</strong></td>
 <td></td>
 <td></td>
@@ -2070,9 +2106,9 @@
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2019-03-11T22:32:58-04:00
+		on 2019-10-29T22:23:06-04:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

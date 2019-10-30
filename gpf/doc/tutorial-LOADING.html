@@ -93,34 +93,63 @@
 </header>
 
 <article>
-    <h2><a href="http://technet.microsoft.com/en-us/library/bb490887.aspx">cscript/wscript</a></h2><h3>Using <a href="https://en.wikipedia.org/wiki/Windows_Script_File">Windows Script File</a> format</h3><pre class="prettyprint source lang-xml"><code>&lt;?xml version=&quot;1.0&quot;?>
+    <h2><a href="http://technet.microsoft.com/en-us/library/bb490887.aspx">cscript/wscript</a></h2>
+<h3>Using <a href="https://en.wikipedia.org/wiki/Windows_Script_File">Windows Script File</a> format</h3>
+<pre class="prettyprint source lang-xml"><code>&lt;?xml version=&quot;1.0&quot;?>
 &lt;job id=&quot;gpfExample&quot;>
   &lt;script language=&quot;JScript&quot; src=&quot;gpf.js&quot; />
   &lt;script language=&quot;JScript&quot;>
     // use gpf namespace
   &lt;/script>
-&lt;/job></code></pre><h3>Using <a href="https://msdn.microsoft.com/en-us/library/aa711216%28v=vs.71%29.aspx">Scripting.FileSystemObject</a> object</h3><pre class="prettyprint source lang-javascript"><code>var fso = new ActiveXObject(&quot;Scripting.FileSystemObject&quot;);
+&lt;/job>
+</code></pre>
+<h3>Using <a href="https://msdn.microsoft.com/en-us/library/aa711216%28v=vs.71%29.aspx">Scripting.FileSystemObject</a> object</h3>
+<pre class="prettyprint source lang-javascript"><code>var fso = new ActiveXObject(&quot;Scripting.FileSystemObject&quot;);
 eval(fso.OpenTextFile(&quot;gpf.js&quot;, 1, false, 0).ReadAll());
-// use gpf namespace</code></pre><h2><a href="http://nodejs.org/">NodeJS</a></h2><h3>Using gpf.js directly</h3><p>Assuming the file is in the same folder than your source.</p>
-<pre class="prettyprint source lang-javascript"><code>var gpf = require(&quot;./gpf.js&quot;);</code></pre><h3>Using NPM package</h3><p>To install the <a href="https://www.npmjs.com/package/gpf-js">gpf-js package</a> use:</p>
+// use gpf namespace
+</code></pre>
+<h2><a href="http://nodejs.org/">NodeJS</a></h2>
+<h3>Using gpf.js directly</h3>
+<p>Assuming the file is in the same folder than your source.</p>
+<pre class="prettyprint source lang-javascript"><code>var gpf = require(&quot;./gpf.js&quot;);
+</code></pre>
+<h3>Using NPM package</h3>
+<p>To install the <a href="https://www.npmjs.com/package/gpf-js">gpf-js package</a> use:</p>
 <p><code>npm install gpf-js --save</code></p>
 <p>Then, in your code, you can access the release version with:</p>
-<pre class="prettyprint source lang-javascript"><code>var gpf = require(&quot;gpf-js&quot;);</code></pre><p>Or the debug version with:</p>
-<pre class="prettyprint source lang-javascript"><code>var gpf = require(&quot;gpf-js/debug&quot;);</code></pre><h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino">Rhino</a></h2><p>Use <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino/Shell#load.28.5Bfilename.2C_....5D.29">load</a></p>
+<pre class="prettyprint source lang-javascript"><code>var gpf = require(&quot;gpf-js&quot;);
+</code></pre>
+<p>Or the debug version with:</p>
+<pre class="prettyprint source lang-javascript"><code>var gpf = require(&quot;gpf-js/debug&quot;);
+</code></pre>
+<h2><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino">Rhino</a></h2>
+<p>Use <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino/Shell#load.28.5Bfilename.2C_....5D.29">load</a></p>
 <pre class="prettyprint source lang-javascript"><code>load(&quot;./gpf.js&quot;);
-// use gpf namespace</code></pre><h2><a href="https://en.wikipedia.org/wiki/Nashorn_%28JavaScript_engine%29">Nashorn</a></h2><p>Use <a href="https://wiki.openjdk.java.net/display/Nashorn/Nashorn+extensions">load</a></p>
+// use gpf namespace
+</code></pre>
+<h2><a href="https://en.wikipedia.org/wiki/Nashorn_%28JavaScript_engine%29">Nashorn</a></h2>
+<p>Use <a href="https://wiki.openjdk.java.net/display/Nashorn/Nashorn+extensions">load</a></p>
 <pre class="prettyprint source lang-javascript"><code>load(&quot;./gpf.js&quot;);
-// use gpf namespace</code></pre><h2><a href="http://phantomjs.org/">PhantomJS</a></h2><pre class="prettyprint source lang-javascript"><code>require(&quot;./gpf.js&quot;);
-// use gpf namespace</code></pre><p>or</p>
+// use gpf namespace
+</code></pre>
+<h2><a href="http://phantomjs.org/">PhantomJS</a></h2>
+<pre class="prettyprint source lang-javascript"><code>require(&quot;./gpf.js&quot;);
+// use gpf namespace
+</code></pre>
+<p>or</p>
 <pre class="prettyprint source lang-html"><code>&lt;script src=&quot;gpf.js&quot;>&lt;/script>
 &lt;script>
     // use gpf namespace
-&lt;/script></code></pre><p>If you plan to use <a href="gpf.http.html#.request">gpf.http.request</a>, you may need to turn off security with
-<a href="http://phantomjs.org/api/command-line.html">--web-security=false</a>   </p>
-<h2>Browsers</h2><pre class="prettyprint source lang-html"><code>&lt;script src=&quot;gpf.js&quot;>&lt;/script>
+&lt;/script>
+</code></pre>
+<p>If you plan to use <a href="gpf.http.html#.request">gpf.http.request</a>, you may need to turn off security with
+<a href="http://phantomjs.org/api/command-line.html">--web-security=false</a></p>
+<h2>Browsers</h2>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;gpf.js&quot;>&lt;/script>
 &lt;script>
     // use gpf namespace
-&lt;/script></code></pre>
+&lt;/script>
+</code></pre>
 </article>
 
 </section>
@@ -156,9 +185,9 @@ eval(fso.OpenTextFile(&quot;gpf.js&quot;, 1, false, 0).ReadAll());
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
 	
-		on 2019-03-11T22:32:58-04:00
+		on 2019-10-29T22:23:06-04:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

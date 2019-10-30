@@ -18,25 +18,36 @@
         }());
 
     /*
+     * Simple Timer implementation
+     */
+
+    function DefaultTimer () {
+        this._start = new Date();
+        this.elapsed = function () {
+            var now = new Date();
+            return now - this._start;
+        };
+    }
+
+    /*
      * Simple BDD implementation
      */
 
     // Enumeration helper
     function _objectForEach (dictionary, callback, thisArg) {
         for (var property in dictionary) {
-            if (dictionary.hasOwnProperty(property)) {
+            if (Object.prototype.hasOwnProperty.call(dictionary, property)) {
                 callback.call(thisArg, dictionary[property], property, dictionary);
             }
         }
     }
 
-    function _addMember (value, name) {
-        /*jshint validthis:true*/ // Used below and bound to Constructor
-        this[name] = value; //eslint-disable-line no-invalid-this
-    }
-
     // Class helper
     function _toClass (Constructor, BaseClass, members) {
+        function _addMember (value, name) {
+            /*jshint validthis:true*/ // Used below and bound to Constructor
+            this[name] = value; //eslint-disable-line no-invalid-this
+        }
         Constructor.prototype = new BaseClass();
         _objectForEach(members, function (memberValue, memberName) {
             if (memberName === "statics") {
@@ -60,7 +71,7 @@
     var BDDAbstract = _toClass(function BDDAbstract (label, parent) {
         if (undefined !== parent) {
             this.parent = parent;
-            if (!parent.hasOwnProperty("children")) {
+            if (!Object.prototype.hasOwnProperty.call(parent, "children")) {
                 // Make the array unique to the instance
                 parent.children = [];
             }
@@ -154,7 +165,7 @@
              */
             addCallback: function (listName, callback) {
                 var current = BDDDescribe.current;
-                if (!current.hasOwnProperty(listName)) {
+                if (!Object.prototype.hasOwnProperty.call(current, listName)) {
                     // Make the array unique
                     current[listName] = [];
                 }
@@ -313,7 +324,7 @@
             if (data.result === false && data.exception) {
                 _output("Exception: " + data.exception.message);
                 for (var key in data.exception) {
-                    if (key !== "message" && data.exception.hasOwnProperty(key)) {
+                    if (key !== "message" && Object.prototype.hasOwnProperty.call(data.exception, key)) {
                         _output("Exception." + key + ": " + data.exception[key]);
                     }
                 }
@@ -332,7 +343,7 @@
         results: function (data) {
             _output("--- Results: ");
             for (var key in data) {
-                if (data.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(data, key)) {
                     _output(key + "        : ".substring(key.length) + data[key]);
                 }
             }
@@ -355,16 +366,17 @@
 
     //region Running the tests
 
-    var Runner = _toClass(function Runner (callback, timeoutDelay) {
+    var Runner = _toClass(function Runner (callback, timeoutDelay, Timer) {
         this._state = Runner.STATE_DESCRIBE_BEFORE;
         this._callback = callback || _defaultCallback;
         this._timeoutDelay = timeoutDelay || Runner.DEFAULT_TIMEOUT_DELAY;
+        this._Timer = Timer || DefaultTimer;
         this._describes = [];
         this._describe = BDDDescribe.root;
         this._nextChildIndexes = [];
         this._beforeEach = [];
         this._afterEach = [];
-        this._runAt = new Date();
+        this._timer = new this._Timer();
         this._statistics = {
             count: 0,
             success: 0,
@@ -441,11 +453,11 @@
         _afterEach: [],
 
         /**
-         * Date when the run was started
+         * Timer started when run is called
          *
-         * @type {Date}
+         * @type {Timer}
          */
-        _runAt: null,
+        _timer: null,
 
         /** Test statistics */
         _statistics: {},
@@ -457,7 +469,7 @@
          * @param {Function} [callbackCompleted=undefined] callbackCompleted Function called when the callback completed
          * (will be bound to the Runner), expected parameters are
          * - {Object} context
-         * - {Date} startDate
+         * - {Timer} timer
          * - {Object} [error=undefined] error When not specified, it means the callback succeeded, otherwise this
          * parameter is the error object transmitted by the test execution
          * @param {Object} callbackContext context parameter of the callbackCompleted function
@@ -470,7 +482,7 @@
                     callbackCompleted: callbackCompleted,
                     callbackContext: callbackContext,
                     error: null,
-                    startDate: new Date(),
+                    timer: new this._Timer(),
                     numberOfCall: 0,
                     timeoutId: null,
                     complete: this._complete
@@ -515,7 +527,7 @@
 
         // complete wrapper, is bound to a monitorContext
         _complete: function (error) {
-            this.callbackCompleted.call(this.runner, this.callbackContext, this.startDate, error);
+            this.callbackCompleted.call(this.runner, this.callbackContext, this.timer, error);
         },
 
         // provide done parameter only if requested
@@ -594,7 +606,7 @@
         },
 
         // IT Callback completion function (see _monitorCallback)
-        _itCallbackCompleted: function (it, startDate, optionalError) {
+        _itCallbackCompleted: function (it, timer, optionalError) {
             var error;
             if (it.failureExpected) {
                 if (!optionalError) {
@@ -606,9 +618,9 @@
                 error = optionalError;
             }
             if (error) {
-                this._fail(it.label, startDate, error);
+                this._fail(it.label, timer, error);
             } else {
-                this._success(it.label, startDate);
+                this._success(it.label, timer);
             }
         },
 
@@ -623,27 +635,27 @@
         },
 
         // Log a failure
-        _fail: function (label, startDate, e) {
+        _fail: function (label, timer, e) {
             ++this._statistics.fail;
             this._callback("it", {
                 context: this._gentItContext(),
                 depth: this._describes.length,
                 label: label,
                 result: false,
-                timeSpent: new Date() - startDate,
+                timeSpent: timer.elapsed(),
                 exception: e
             });
         },
 
         // Log a success
-        _success: function (label, startDate) {
+        _success: function (label, timer) {
             ++this._statistics.success;
             this._callback("it", {
                 context: this._gentItContext(),
                 depth: this._describes.length,
                 label: label,
                 result: true,
-                timeSpent: new Date() - startDate
+                timeSpent: timer.elapsed()
             });
         },
 
@@ -658,9 +670,9 @@
         },
 
         // Callback completion function (see _monitorCallback)
-        _callbackCompleted: function (ignored, startDate, e) {
+        _callbackCompleted: function (ignored, timer, e) {
             if (e) {
-                this._fail("UNEXPECTED error during " + this._pendingCallbacksType + "?", startDate, e);
+                this._fail("UNEXPECTED error during " + this._pendingCallbacksType + "?", timer, e);
                 // TODO right now, an error is not acceptable at this point, signal and ends everything
                 this._nextChildIndex = this._describe.children.length;
                 this._describes = [];
@@ -778,7 +790,7 @@
                 return true;
             }
             this._state = Runner.STATE_FINISHED;
-            this._statistics.timeSpent = new Date() - this._runAt;
+            this._statistics.timeSpent = this._timer.elapsed();
             this._callback("results", this._statistics);
             return false;
         },
@@ -823,9 +835,10 @@
      *
      * @param {Function} callback see callback examples above
      * @param {Number} timeoutDelay asynchronous test limit in time (ms)
+     * @param {Class} Timer timer to measure elapsed time
      */
-    context.run = function (callback, timeoutDelay) {
-        var runner = new Runner(callback, timeoutDelay);
+    context.run = function (callback, timeoutDelay, Timer) {
+        var runner = new Runner(callback, timeoutDelay, Timer);
         runner.next();
     };
 

@@ -258,7 +258,7 @@ Object.assign(_GpfClassDefinition.prototype, {
      * @since 0.1.7
      */
     _superifiedBody: &quot;var _super_;\n&quot;
-        + &quot;if (this.hasOwnProperty(\&quot;$super\&quot;)) {\n&quot;
+        + &quot;if (Object.prototype.hasOwnProperty.call(this, \&quot;$super\&quot;)) {\n&quot;
         + &quot;    _super_ = this.$super;\n&quot;
         + &quot;}\n&quot;
         + &quot;this.$super = _classDef_._get$Super(this, _methodName_, _superMembers_);\n&quot;

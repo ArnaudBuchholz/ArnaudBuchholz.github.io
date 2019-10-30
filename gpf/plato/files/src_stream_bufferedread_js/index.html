@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
-      <p class="stat">244</p>
+      <p class="stat">247</p>
     </div>
   </div>
   <div class="row historical">
@@ -90,7 +90,7 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="col-md-12">/**
- * @file Flushable stream base
+ * @file Buffered read stream base
  * @since 0.2.3
  */
 /*#ifndef(UMD)*/
@@ -162,6 +162,9 @@ var
          * - {@link gpf.stream.BufferedRead#_appendToReadBuffer}
          * - {@link gpf.stream.BufferedRead#_completeReadBuffer}
          * - {@link gpf.stream.BufferedRead#_setReadError}
+         *
+         * Make sure to implement the {@link gpf.interfaces.IFlushableStream} interface
+         * to complete the buffer.
          *
          * @constructor gpf.stream.BufferedRead
          * @implements {gpf.interfaces.IReadableStream}
