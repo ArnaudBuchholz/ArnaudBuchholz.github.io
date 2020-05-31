@@ -28,3 +28,57 @@ Maintainability, and in particular code complexity, has been studied in depth. H
 * [A Complexity Measure](http://www.literateprogramming.com/mccabe.pdf), by Thomas J McCabe.
 * [Cyclomatic Complexity Density and Software Maintenance Productivity](http://www.pitt.edu/~ckemerer/CK%20research%20papers/CyclomaticComplexityDensity_GillKemerer91.pdf), by Geoffrey K. Gill and Chris F. Kemerer.
 * [Resolving the Mysteries of the Halstead Measures](http://horst-zuse.homepage.t-online.de/z-halstead-final-05-1.pdf), by Horst Zuse.
+
+# An example project
+
+The GPF-JS libray is an experiment I started almost 5 years ago. It contains helpers designed to be compatible with several JavaScript hosts (browsers, nodejs but also less typical such as Microsoft cscript, Nashorn & Rhino). The validation process includes a linter as well as code complexity measurement automated with plato.
+
+https://docs.microsoft.com/en-us/archive/blogs/codeanalysis/maintainability-index-range-and-meaning
+
+# Coding rules
+
+Here ar some coding rules 
+
+## Never use more than 3 parameters
+
+When the call implies more than 3 parameters, it quickly becomes unreadabme.
+
+For instance:
+
+function  ()
+
+If the method really needs more than 3 parameters, an object parameter is introduced. This way, the values are documented.
+
+For instance :
+
+function ()
+
+## Limit the use of boolean parameters
+
+Consider the following code
+
+
+
+## Limit the number of instructions
+
+Did you ever see a method that contains hundreds lines of code ? you can quickly get lost by what it does
+
+Splitting this method into smaller methods has two values: it increases isolation & modularity and the function name is a way to recall what it does
+
+## Limit the code complexity
+
+if / else if / esle if / esle if ...
+
+### Use dictionaries
+
+### Use regular expressions
+examples
+
+if (value === "a" || value === "b")
+
+if /a|b/.exec(value)
+
+## Asynchronous code
+
+If you don't use Promises, you should. I don't even what to explain why but here are some good references
+
