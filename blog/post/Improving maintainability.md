@@ -16,7 +16,12 @@ To put it in a nutshell, maintainability implies two main **qualities**:
  
 Obviously, it all start by a **good design** : there are **tons of articles** and [principles****](https://en.wikipedia.org/wiki/Software_design) (like [SOLID](https://en.wikipedia.org/wiki/SOLID), [KISS](https://en.wikipedia.org/wiki/KISS_principle), [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) ...) on the web already.
 
-But if you go down to code writing,  
+But if you go down to code writing, it translates to best practices such as :
+* naming convention
+* isolation
+* documentation (including testing)
+
+> There are multiple values to testing. It validates and secures the code behavior but it also documents it.
 
 Maintainability, and in particular code complexity, has been studied in depth. Here are some papers :
 
