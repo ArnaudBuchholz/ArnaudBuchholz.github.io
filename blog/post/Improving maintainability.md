@@ -51,11 +51,28 @@ Here ar some coding rules
 
 ## Never use more than 3 parameters
 
-When the call implies more than 3 parameters, it quickly becomes unreadabme.
+When the call implies more than 3 parameters, it quickly becomes unreadabml.
 
 For instance:
 
-function  ()
+function log (level, message, details, medium) {
+    /* ... */
+}
+
+there are several ways to tackle this example :
+=> Create specialized method with one of the parameter
+
+group less used parameters in an object parameter
+
+
+
+log.error (message, details, medium)
+
+log.info
+
+
+
+
 
 If the method really needs more than 3 parameters, an object parameter is introduced. This way, the values are documented.
 
@@ -67,6 +84,24 @@ function ()
 
 Consider the following code
 
+function save (medium, notify) {
+
+}
+
+notify is a boolean parameter that will throw an event to ...
+
+upon usage, this gives :
+
+save ("./anyfile.txt", true)
+or save ("./anyfile", false)
+
+how do you remember the meaning of this boolean ?
+
+would it be better to have two methods
+
+save (medium)
+
+saveAndNotify (medium)
 
 
 ## Limit the number of instructions
