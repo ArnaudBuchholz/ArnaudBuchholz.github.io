@@ -43,7 +43,7 @@ A metric has also been [defined](https://docs.microsoft.com/en-us/archive/blogs/
 
 # An example project
 
-The GPF-JS libray is an experiment I started almost 5 years ago. It contains helpers designed to be compatible with several JavaScript hosts (browsers, nodejs but also less typical such as Microsoft cscript, Nashorn & Rhino). The validation process includes a linter as well as code complexity measurement automated with plato.
+The [GPF-JS libray](https://github.com/ArnaudBuchholz/gpf-js) is an **experiment** started almost 5 years ago. It contains **helpers and concepts** designed to be **compatible** with multiple JavaScript hosts *(browsers, nodejs but also less typical such as Microsoft cscript, Nashorn & Rhino)*. The **validation process** includes a linter as well as code **complexity measurement** automated with [plato](https://www.npmjs.com/package/plato). The goal is to keep the ratio [above 80](https://arnaudbuchholz.github.io/gpf/plato/index.html).
 
 # Coding rules
 
