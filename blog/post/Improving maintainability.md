@@ -16,21 +16,50 @@ To put it in a nutshell, maintainability implies two main **qualities**:
 * readability
 * ease of modification
  
-Obviously, it starts with a **good design**. Since anyone can already find **tons of articles** and [**documented principles**](https://en.wikipedia.org/wiki/Software_design) ([desgin patterns](https://en.wikipedia.org/wiki/Software_design_pattern), [SOLID](https://en.wikipedia.org/wiki/SOLID), [KISS](https://en.wikipedia.org/wiki/KISS_principle), [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) ...) on the web, this article is not about this step.
+Obviously, it starts with a **good design**. Since anyone can already find **lots of articles** and [**documented principles**](https://en.wikipedia.org/wiki/Software_design) on the web ([desgin patterns](https://en.wikipedia.org/wiki/Software_design_pattern), [SOLID](https://en.wikipedia.org/wiki/SOLID), [KISS](https://en.wikipedia.org/wiki/KISS_principle), [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) ...), this article is not about design or architecture.
 
-Assuming a proper design exists, we will rather focus on **code writing**. From that point of view, maintainability echoes to **best practices** such as :
-* use **consistent** indentation
-* respect **naming** convention
-* avoid **deep nesting**
-* reduce **code complexity**
+The focus is rather set on **writing code**.
 
-All of these points can be **defined and validated** with a [linter](https://gomakethings.com/javascript-linters/).
+## Static validation of maintainability
 
-**Testing the code** is associated to maintainability for several reasons :
+From that point of view, **maintainability first echoes to best practices** such as :
+* consistent [formatting](https://en.wikipedia.org/wiki/Indentation_style)
+* [naming convention](https://en.wikipedia.org/wiki/Naming_convention_%28programming%29)
+* avoid [deep nesting](https://en.wikibooks.org/wiki/Computer_Programming/Coding_Style/Minimize_nesting)
+* reduce [code complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity)
+* ...
+
+All of these points can be **defined and verified** with a [linter](https://gomakethings.com/javascript-linters/).
+
+If your **project definition** does not include a **static validation step** leveraging tools like [ESLint](https://eslint.org/) or [StandardJS](https://standardjs.com/), you are missing the **opportunity to detect upfront all the potiental problems** of your code base.
+
+Any doubt ? Just look at the [eslint rules database](https://eslint.org/docs/rules/). Each rule is **heavily documented** with advices and examples. They are **constantly revised** and they convey the **knowledge of many developers** *(more than [700 contributors](https://github.com/eslint/eslint/graphs/contributors) to the project)*.
+
+Two examples in particular :
+
+* [`no-cond-assign`](https://eslint.org/docs/rules/no-cond-assign) : it controls the use of assignment inside a condition. As the rule says :
+
+> There are valid reasons to use assignment operators in conditional statements. However, it can be difficult to tell whether a specific assignment was intentional.
+
+* [`no-async-promise-executor`](https://eslint.org/docs/rules/no-async-promise-executor) : it prevents the use of async functions as the promise executor. The rule explains : 
+
+> The executor function can also be an async function. However, this is usually a mistake, for a few reasons:
+> * If an async executor function throws an error, the error will be lost and won't cause the newly-constructed Promise to reject. This could make it difficult to debug and handle some errors.
+> * If a Promise executor function is using await, this is usually a sign that it is not actually necessary to use the new Promise constructor, or the scope of the new Promise constructor can be reduced.
+
+Some rules also offers the possibility to **fix automatically** the spotted issues *(in particular  the formatting)*. This is a great benefit for [**lazy developers** like me](https://www.linkedin.com/pulse/lazy-arnaud-buchholz/).
+
+## Testing
+
+**Every** line of code should be tested and, actually, the tests should even be written [**before** the production code](https://en.wikipedia.org/wiki/Test-driven_development). **Testing the code** is associated to maintainability for several reasons :
 * Tests **validate and secure the code behavior**. It means that if you need to work on it, it makes sure the modification will not **break** it.
 * Tests also **document the code**. The best way to understand a class or a method is to check the tests and discover what are the **use cases**.
 
-Something else that relates to the topic but that is more **subtle** is everything that clarifies the **developer intention**. For instance, declaring a variable with `const` has a different meaning than declaring it with `let`.
+Something else that relates to the topic but that is more **subtle** is everything that clarifies the **developer intention**. For instance, declaring a variable with `const` has a different meaning than declaring it with `let`. 
+
+Another example is callback functions. Most [Node.js](https://nodejs.org/) functions are using callbacks to be notified of the method completion. It m
+
+The same way, creating an `async` function or returning a Promise 
 
 Last but not least, **code review** *(an implementation of the [four eyes principle](https://www.openriskmanual.org/wiki/Four_Eyes_Principle))* is recommended as it fosters maintainability. Not only this will guarantee that the above practices are respected but it also enables knowledge sharing inside a team.
 
