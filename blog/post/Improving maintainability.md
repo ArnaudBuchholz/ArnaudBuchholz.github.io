@@ -51,11 +51,17 @@ Some rules also offers the possibility to **fix automatically** the spotted issu
 
 ## Testing
 
-**Every** line of code should be tested and, actually, the tests should even be written [**before** the production code](https://en.wikipedia.org/wiki/Test-driven_development). **Testing the code** is associated to maintainability for several reasons :
+**Every** line of code should be tested and, actually, the tests may even be written [**before** the production code](https://en.wikipedia.org/wiki/Test-driven_development). **Testing the code** is associated to maintainability for several reasons :
 * Tests **validate and secure the code behavior**. It means that if you need to work on it, it makes sure the modification will not **break** it.
 * Tests also **document the code**. The best way to understand a class or a method is to check the tests and discover what are the **use cases**.
 
-Something else that relates to the topic but that is more **subtle** is everything that clarifies the **developer intention**. For instance, declaring a variable with `const` has a different meaning than declaring it with `let`. 
+## Developer intention
+
+Another aspect that relates to the topic but that is more **subtle** is everything that clarifies the **developer intention**.
+
+For instance, declaring a variable with `const` has a different meaning than declaring it with `let`. 
+
+> However, in JavaScript, the `const` keyword does not mean that the value will not change. Only the association between the variable and the value is constant
 
 Another example is callback functions. Most [Node.js](https://nodejs.org/) functions are using callbacks to be notified of the method completion. It m
 
