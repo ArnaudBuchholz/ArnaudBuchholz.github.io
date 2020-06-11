@@ -20,7 +20,7 @@ Obviously, it starts with a **good design**. Since anyone can already find **lot
 
 The focus is rather set on **writing code**.
 
-## Static validation of maintainability
+## Static validation of maintainability
 
 From that point of view, **maintainability first echoes to best practices** such as :
 * consistent [formatting](https://en.wikipedia.org/wiki/Indentation_style)
@@ -49,9 +49,11 @@ Two examples in particular :
 
 Some rules also offers the possibility to **fix automatically** the spotted issues *(in particular  the formatting)*. This is a great benefit for [**lazy developers** like me](https://www.linkedin.com/pulse/lazy-arnaud-buchholz/).
 
-## Testing
+## Runtime validation of maintainability
 
-**Every** line of code should be tested and, actually, the tests may even be written [**before** the production code](https://en.wikipedia.org/wiki/Test-driven_development). **Testing the code** is associated to maintainability for several reasons :
+**Every** line of code should be tested and, actually, the tests may even be written [**before** the production code](https://en.wikipedia.org/wiki/Test-driven_development).
+
+**Testing the code** is associated to maintainability for several reasons :
 * Tests **validate and secure the code behavior**. It means that if you need to work on it, it makes sure the modification will not **break** it.
 * Tests also **document the code**. The best way to understand a class or a method is to check the tests and discover what are the **use cases**.
 
@@ -61,13 +63,15 @@ Another aspect that relates to the topic but that is more **subtle** is everythi
 
 For instance, declaring a variable with `const` has a different meaning than declaring it with `let`. 
 
-> However, in JavaScript, the `const` keyword does not mean that the value will not change. Only the association between the variable and the value is constant
+> However, in JavaScript, the `const` keyword does not mean that the value will not change. Only the association between the variable and the value is constant.
 
-Another example is callback functions. Most [Node.js](https://nodejs.org/) functions are using callbacks to be notified of the method completion. It m
+Another example is callback functions. Most [Node.js](https://nodejs.org/) functions are using callbacks to be notified of the method completion. Most of them are asynchronous but it is not a requirement !
 
-The same way, creating an `async` function or returning a Promise 
+On the other hand, declaring an async function or returning a Promise means that the result is transmitted asynchronously.
 
-Last but not least, **code review** *(an implementation of the [four eyes principle](https://www.openriskmanual.org/wiki/Four_Eyes_Principle))* is recommended as it fosters maintainability. Not only this will guarantee that the above practices are respected but it also enables knowledge sharing inside a team.
+A good way to validate the developer intention is to practice **code review** *(an implementation of the [four eyes principle](https://www.openriskmanual.org/wiki/Four_Eyes_Principle))*. It is recommended as it fosters maintainability. Not only this will guarantee that the above practices are respected but it also enables knowledge sharing inside a team.
+
+## 
 
 Maintainability, and in particular code complexity, has been studied in depth. Here are some papers :
 * [A Complexity Measure](http://www.literateprogramming.com/mccabe.pdf), by Thomas J McCabe.
