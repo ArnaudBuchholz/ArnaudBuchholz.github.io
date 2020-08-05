@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="Kaos, simple and streamable data encrypter">
+		<meta name="author" content="Arnaud Buchholz">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta name="deck-duration" content="25">
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<table>
+							<tr>
+								<td width="50%">
+									<small>
+										<img src="kaos/matrix.jpg" style="border-radius: 16px;"></img>
+									</small>
+								</td>
+								<td style="vertical-align: top;">
+									<h3 data-agenda="no" style="text-transform: unset;">&#975;&#592;<strong>&oplus;</strong>&sopf;</h3>
+									<p>
+									  A <strong>simple</strong> and <strong>streamable</strong> data <strong>encrypter</strong>
+									</p>
+									<br />
+									<p>
+										<small>
+											<br/>
+											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+											<br/>
+	  										Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+										</small>
+									</p>
+								</td>
+							</tr>
+						</table>
+					</section>
+					<section include="me.html"></section>
+					<section>
+						<h3 data-agenda="no"><strong>Agenda</strong></h3>
+						<ul id="agenda"></ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3><strong>R</strong>ational</h3>
+					</section>
+				 	<section>
+						<h4>Which <strong>package</strong> do you use...</h4>
+						<p>...To serve <strong>static files</strong>,<br />
+							<strong>experiment</strong> or build a <strong>minimalistic</strong> service ?</p>
+					</section>
+					<section>
+						<h4 style="text-transform: unset;"><strong>RE</strong>serve</h4>
+						<p>Small, configurable <strong>and</strong> reusable</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>T<strong>E</strong>chnical details</h3>
+					</section>
+					<section>
+						<h4><strong>Implementation</strong> in a nutshell</h4>
+						<img src="reserve/TAM diagram.png" style="max-width: 40%;" />
+					</section>
+					<section>
+						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/configuration.js">configuration</a></h4>
+						<pre><code class="javascript">const { read } = require('reserve/configuration')
+read('reserve.json').then(configuration => /* ... */)</code></pre>
+						<ul>
+							<li><strong>reads</strong> configuration</li>
+							<li><i>(and / or)</i> <strong>validates</strong> consistency</li>
+							<li>supports <strong>reusability</strong> (<code>extend</code>)</li>
+						</ul>
+					</section>
+					<section>
+						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/serve.js">serve</a></h4>
+						<pre><code class="javascript">const reserve = require('reserve/serve')
+reserve({ /* configuration */ }).on('ready', ({ url }) => {
+	console.log(`Server running at ${url}`)
+})</code></pre>
+						<ul>
+							<li>instantiates the <a href="https://nodejs.org/api/events.html#events_class_eventemitter"><strong>EventEmitter</strong></a></li>
+							<li>initiates <strong>http<i>(s)</i></strong> server</li>
+							<li>transmits <strong>incoming requests</strong> to the dispatcher</li>
+						</ul>
+					</section>
+					<section>
+						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/dispatcher.js">dispatcher</a></h4>
+						<ul>
+							<li><strong>matches</strong> the incoming request URL with mappings' regular expressions</li>
+							<li><i>(when match found)</i> <strong>executes</strong> the handler</li>
+							<li>continue until the response is <strong>finalized</strong> (<a href="https://nodejs.org/dist/latest/docs/api/http.html#http_response_finished"><code>finished</code></a>)</li>
+							<li>if the executed handler <strong>internally redirects</strong>, <strong>restarts</strong> the matching process</li>
+					</section>
+					<section>
+						<h4>Handlers</h4>
+						<p>Each handler implements an <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><strong>async</strong></a>
+							<code>redirect</code> method receiving <strong>request details</strong></p>
+						<br />
+					</section>
+					<section>
+						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/mock.js">mock</a></h4>
+						<pre><code class="javascript">require('reserve/mock')({
+	mappings: [{
+		match: /^\/(.*)/,
+		file: path.join(__dirname, '$1')
+	}]
+})
+	.then(mocked => mocked.request('GET', '/'))
+	.then(response => {
+		assert(response.statusCode === 200)
+		assert(response.toString() === '...')
+	})</code></pre>
+						<ul>
+							<li><strong>Self-sufficient</strong> test environment</li>
+							<li>Handlers can be <strong>mocked</strong></li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>T<strong>E</strong>sts and Quality</h3>
+					</section>
+					<section>
+						<h4><strong>Basic</strong> testing</h4>
+						<ul>
+							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/mappings.json"><code>mappings.json</code></a><br /><small> extended by <code>http.json</code>, <code>https.json</code></small></li>
+							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/assertions.js"><code>assertions.js</code></a> based on
+								<a href="https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.get__anchor"><strong>gpf</strong></a>'s http helper</li>
+							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/index.html"><code>index.html</code></a> for <strong>browser</strong> testing</li>
+							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/all.js"><code>all.js</code></a> for <strong>Node.js</strong> testing</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>In-depth</strong> testing</h4>
+						<p><a href="https://github.com/ArnaudBuchholz/reserve/tree/master/tests/mocha"><strong>Test cases</strong></a> are defined and executed
+							<br />with
+</p><br />
+						<p>Node.js modules <i>(fs, http, ...)</i> <a href="https://github.com/ArnaudBuchholz/reserve/tree/master/tests/mocha/mocked_modules"><strong>mocking</strong></a> is possible
+							<br />with
+</p>
+					</section>
+					<section>
+						<h4><strong>Continous</strong> integration</h4>
+						<p>Every push <strong>triggers</strong> a job that <strong>runs the tests</strong> and updates coverage info</p>
+						<a href="https://travis-ci.org/ArnaudBuchholz/reserve">
+							<img async-src="https://travis-ci.org/ArnaudBuchholz/reserve.svg?branch=master" height="30px" />
+						</a>
+					</section>
+					<section>
+						<h4>Code coverage with <strong>Istanbul</strong></h4>
+						<p>Code coverage measurement is <a href="https://github.com/ArnaudBuchholz/reserve/blob/master/package.json"><strong>made simple</strong></a>
+							<br />with
+ 						</p>
+						<br />
+						<p>Results are uploaded to <strong>Coveralls</strong> platform
+							<a href="https://coveralls.io/github/ArnaudBuchholz/reserve?branch=master">
+								<img async-src="https://coveralls.io/repos/github/ArnaudBuchholz/reserve/badge.svg?branch=master" alt="Coveralls" height="30px" />
+							</a>
+						</p>
+					</section>
+					<section>
+						<h4>Code <strong>smells</strong></h4>
+						<p><strong>Code Climate</strong> online platform performs code analysis to detect <strong>maintainability</strong> issues</p>
+						<a href="https://codeclimate.com/github/ArnaudBuchholz/reserve">
+							<img async-src="https://api.codeclimate.com/v1/badges/49e3adbc8f31ae2febf3/maintainability" height="30px" />
+						</a>
+					</section>
+					<section>
+						<h4><strong>Publishing</strong></h4>
+						<p>This project is my first experience<br />with <a href="https://www.npmjs.com/support"><strong>NPM support</strong></a>.</p>
+						<p>The name was taken by an <strong>empty</strong> project, it has been <strong>reassigned</strong> after contacting the <strong>original owner</strong>.</p>
+						<img src="reserve/NPM support.png"></img>
+						<a href="https://www.npmjs.com/package/reserve">
+							<img async-src="https://badge.fury.io/js/reserve.svg" height="30px" />
+						</a>
+					</section>
+				</section>
+			</div>
+		</div>
+		<script src="/gpf/last/gpf.js"></script>
+		<script src="deck.js"></script>
+	</body>
+</html>
