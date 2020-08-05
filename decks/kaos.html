@@ -19,7 +19,9 @@
 							<tr>
 								<td width="50%">
 									<small>
-										<img src="kaos/matrix.jpg" style="border-radius: 16px;"></img>
+										<a href="https://en.wikipedia.org/wiki/Enigma_machine">Enigma Machine
+											<img src="kaos/enigma.jpg" style="border-radius: 16px;"></img>
+										</a>
 									</small>
 								</td>
 								<td style="vertical-align: top;">
@@ -48,143 +50,124 @@
 				</section>
 				<section>
 					<section>
+						<h3><strong>Rational</strong></h3>
+						<q>Why reinventing the wheel again ?</q>
+					</section>
+					<section>
+						<h4><strong>Requirements</strong></h4>
+						<ul>
+							<li><strong>Small</strong> with <strong>no</strong> dependencies</li>
+							<li>Compatible with <strong>Node.js' streams</strong></li>
+							<li>Enables encryption / decryption by <strong>chunks</strong></li>
+							<li>Two consecutive encryptions with the same key generates <strong>different outputs</strong></li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
 						<h3><strong>Basic</strong> encryption</h3>
+					</section>
+					<section>
+						<h4>The <strong>message</strong></h4>
+						<ul>
+							<li>Any <strong>message</strong> <i>(texte, sound, image, video ...)</i> can be represented with <strong>binary data</strong></li>
+							<li>For <strong>text</strong>, depending on the <a href="https://en.wikipedia.org/wiki/Character_encoding"><strong>encoding</strong></a>,
+								one letter can fit <strong>one or several bytes</strong><br />
+								<small>(for instance <a href="https://en.wikipedia.org/wiki/UTF-8"><strong>UTF-8</strong></a>)</small></li>
+							<li>Let's consider a simple <i>(& classical)</i> example
+								<small>(using <a href="https://en.wikipedia.org/wiki/ASCII"><strong>ASCII</strong></a>)</small></li>
+						</ul>
+					</section>
+					<section>
+						<h4>Hello World !</h4>
+						<small><pre><code>
+H        e         l       l        o                 W        o        r        l        d                 !
+01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100 00100000 00100001
+						</code></pre></small>
+					</section>
+					<section>
+						<h4>The <strong>key</strong></h4>
+						<ul>
+							<li>Any <strong>binary data</strong> can be used as <strong>key</strong></li>
+							<li>A key is defined by its <strong>content</strong> and <strong>length</strong></li>
+							<li>Let's consider a simple example</li>
+						</ul>
+						<small><pre><code>
+s        e        c        r        e        t
+01110011 01100101 01100011 01110010 01100101 01110100
+						</code></pre></small>
 					</section>
 				 	<section>
 						<h4>The <strong>XOR</strong> binary operator</h4>
 						<img src="kaos/xor-truth-table.png"></img>
+						<ul>
+							<li>This operator is used to <strong>combine</strong> the bytes of the message and the key
+								<small>(the key is <strong>truncated or repeated</strong> to <strong>match</strong> the message length)</small></li>
+							<li>It generates a new <strong>binary content</strong></li>
+						</ul>
 					</section>
 					<section>
-						<h4>The <strong>message</strong></h4>
-						<pre>
-H        e	      l        l	o		W	o	r	l	d		!
+						<h4><strong>Encrypted</strong> message</h4>
+						<small><pre><code>
+H        e         l       l        o                 W        o        r        l        d                 !
 01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100 00100000 00100001
-						</pre>
+s        e        c        r        e        t        s        e        c        r        e        t        s
+01110011 01100101 01100011 01110010 01100101 01110100 01110011 01100101 01100011 01110010 01100101 01110100 01110011
+
+&oplus;
+
+;        \x0      \xf      \x1e     \xa      T        $        \xa      \x11     \x1e     \x1      T        R
+00111011 00000000 00001111 00011110 00001010 01010100 00100100 00001010 00010001 00011110 00000001 01010100 01010010
+						</code></pre></small>
+					</section>
+					<section>
+						<h4><strong>Decrypted</strong> message</h4>
+						<ul>
+							<li>To <strong>decrypt</strong> the message, we apply the <strong>same operation</strong> again on the <strong>encrypted</strong> message</li>
+						</ul>
+						<small><pre><code>
+;        \x0      \xf      \x1e     \xa      T        $        \xa      \x11     \x1e     \x1      T        R
+00111011 00000000 00001111 00011110 00001010 01010100 00100100 00001010 00010001 00011110 00000001 01010100 01010010
+s        e        c        r        e        t        s        e        c        r        e        t        s
+01110011 01100101 01100011 01110010 01100101 01110100 01110011 01100101 01100011 01110010 01100101 01110100 01110011
+
+&oplus;
+
+H        e         l       l        o                 W        o        r        l        d                 !
+01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100 00100000 00100001
+						</code></pre></small>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3>T<strong>E</strong>chnical details</h3>
+						<h3><strong>Weaknesses</strong> of the basic encryption</h3>
 					</section>
 					<section>
-						<h4><strong>Implementation</strong> in a nutshell</h4>
-						<img src="reserve/TAM diagram.png" style="max-width: 40%;" />
-					</section>
-					<section>
-						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/configuration.js">configuration</a></h4>
-						<pre><code class="javascript">const { read } = require('reserve/configuration')
-read('reserve.json').then(configuration => /* ... */)</code></pre>
+						<h4>key <strong>length</strong></h4>
 						<ul>
-							<li><strong>reads</strong> configuration</li>
-							<li><i>(and / or)</i> <strong>validates</strong> consistency</li>
-							<li>supports <strong>reusability</strong> (<code>extend</code>)</li>
+							<li>Since the key is <strong>repeated</strong> to match the message length, the <strong>smaller</strong> the key, the <strong>weaker</strong> it is</li>
 						</ul>
 					</section>
 					<section>
-						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/serve.js">serve</a></h4>
-						<pre><code class="javascript">const reserve = require('reserve/serve')
-reserve({ /* configuration */ }).on('ready', ({ url }) => {
-	console.log(`Server running at ${url}`)
-})</code></pre>
+						<h4>key <strong>resilience</strong></h4>
 						<ul>
-							<li>instantiates the <a href="https://nodejs.org/api/events.html#events_class_eventemitter"><strong>EventEmitter</strong></a></li>
-							<li>initiates <strong>http<i>(s)</i></strong> server</li>
-							<li>transmits <strong>incoming requests</strong> to the dispatcher</li>
+							<li>When trying to <strong>guess</strong> the key, the <strong>more</strong> bytes are found, the <strong>more</strong> characters of the original message are <strong>readable</strong>.</li>
 						</ul>
-					</section>
-					<section>
-						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/dispatcher.js">dispatcher</a></h4>
-						<ul>
-							<li><strong>matches</strong> the incoming request URL with mappings' regular expressions</li>
-							<li><i>(when match found)</i> <strong>executes</strong> the handler</li>
-							<li>continue until the response is <strong>finalized</strong> (<a href="https://nodejs.org/dist/latest/docs/api/http.html#http_response_finished"><code>finished</code></a>)</li>
-							<li>if the executed handler <strong>internally redirects</strong>, <strong>restarts</strong> the matching process</li>
-					</section>
-					<section>
-						<h4>Handlers</h4>
-						<p>Each handler implements an <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"><strong>async</strong></a>
-							<code>redirect</code> method receiving <strong>request details</strong></p>
-						<br />
-					</section>
-					<section>
-						<h4><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/mock.js">mock</a></h4>
-						<pre><code class="javascript">require('reserve/mock')({
-	mappings: [{
-		match: /^\/(.*)/,
-		file: path.join(__dirname, '$1')
-	}]
-})
-	.then(mocked => mocked.request('GET', '/'))
-	.then(response => {
-		assert(response.statusCode === 200)
-		assert(response.toString() === '...')
-	})</code></pre>
-						<ul>
-							<li><strong>Self-sufficient</strong> test environment</li>
-							<li>Handlers can be <strong>mocked</strong></li>
-						</ul>
+						<small><pre><code>
+;        \x0      \xf      \x1e     \xa      T        $        \xa      \x11     \x1e     \x1      T        R
+00111011 00000000 00001111 00011110 00001010 01010100 00100100 00001010 00010001 00011110 00000001 01010100 01010010
+s        e        c        s        e        c        s        e        c        s        e        c        s
+01110011 01100101 01100011 01110011 01100101 01100011 01110011 01100101 01100011 01110011 01100101 01100011 01110011
+
+⊕
+
+H        e         l       m        o        7        W        o        r        m        d        7        !
+01001000 01100101 01101100 01101101 01101111 00110111 01010111 01101111 01110010 01101101 01100100 00110111 00100001
+						</code></pre></small>
 					</section>
 				</section>
-				<section>
-					<section>
-						<h3>T<strong>E</strong>sts and Quality</h3>
-					</section>
-					<section>
-						<h4><strong>Basic</strong> testing</h4>
-						<ul>
-							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/mappings.json"><code>mappings.json</code></a><br /><small> extended by <code>http.json</code>, <code>https.json</code></small></li>
-							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/assertions.js"><code>assertions.js</code></a> based on
-								<a href="https://arnaudbuchholz.github.io/gpf/doc/gpf.http.html#.get__anchor"><strong>gpf</strong></a>'s http helper</li>
-							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/index.html"><code>index.html</code></a> for <strong>browser</strong> testing</li>
-							<li><a href="https://github.com/ArnaudBuchholz/reserve/blob/master/tests/all.js"><code>all.js</code></a> for <strong>Node.js</strong> testing</li>
-						</ul>
-					</section>
-					<section>
-						<h4><strong>In-depth</strong> testing</h4>
-						<p><a href="https://github.com/ArnaudBuchholz/reserve/tree/master/tests/mocha"><strong>Test cases</strong></a> are defined and executed
-							<br />with
-</p><br />
-						<p>Node.js modules <i>(fs, http, ...)</i> <a href="https://github.com/ArnaudBuchholz/reserve/tree/master/tests/mocha/mocked_modules"><strong>mocking</strong></a> is possible
-							<br />with
-</p>
-					</section>
-					<section>
-						<h4><strong>Continous</strong> integration</h4>
-						<p>Every push <strong>triggers</strong> a job that <strong>runs the tests</strong> and updates coverage info</p>
-						<a href="https://travis-ci.org/ArnaudBuchholz/reserve">
-							<img async-src="https://travis-ci.org/ArnaudBuchholz/reserve.svg?branch=master" height="30px" />
-						</a>
-					</section>
-					<section>
-						<h4>Code coverage with <strong>Istanbul</strong></h4>
-						<p>Code coverage measurement is <a href="https://github.com/ArnaudBuchholz/reserve/blob/master/package.json"><strong>made simple</strong></a>
-							<br />with
- 						</p>
-						<br />
-						<p>Results are uploaded to <strong>Coveralls</strong> platform
-							<a href="https://coveralls.io/github/ArnaudBuchholz/reserve?branch=master">
-								<img async-src="https://coveralls.io/repos/github/ArnaudBuchholz/reserve/badge.svg?branch=master" alt="Coveralls" height="30px" />
-							</a>
-						</p>
-					</section>
-					<section>
-						<h4>Code <strong>smells</strong></h4>
-						<p><strong>Code Climate</strong> online platform performs code analysis to detect <strong>maintainability</strong> issues</p>
-						<a href="https://codeclimate.com/github/ArnaudBuchholz/reserve">
-							<img async-src="https://api.codeclimate.com/v1/badges/49e3adbc8f31ae2febf3/maintainability" height="30px" />
-						</a>
-					</section>
-					<section>
-						<h4><strong>Publishing</strong></h4>
-						<p>This project is my first experience<br />with <a href="https://www.npmjs.com/support"><strong>NPM support</strong></a>.</p>
-						<p>The name was taken by an <strong>empty</strong> project, it has been <strong>reassigned</strong> after contacting the <strong>original owner</strong>.</p>
-						<img src="reserve/NPM support.png"></img>
-						<a href="https://www.npmjs.com/package/reserve">
-							<img async-src="https://badge.fury.io/js/reserve.svg" height="30px" />
-						</a>
-					</section>
-				</section>
-			</div>
+			</section>
+		</div>
 		</div>
 		<script src="/gpf/last/gpf.js"></script>
 		<script src="deck.js"></script>
