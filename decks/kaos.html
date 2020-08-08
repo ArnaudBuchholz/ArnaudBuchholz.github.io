@@ -162,7 +162,7 @@ H        e         l       l        o                 W        o        r       
 						<h4>&#128077; key <strong>definition</strong></h4>
 						<ul>
 							<li>There is <strong>no constraint</strong> on the key<li>
-							</i>In particular, it can be of <strong>any size</strong></li>
+							</i>It can be of <strong>any type</strong> and <strong>any size</strong></li>
 						</ul>
 					</section>
 					<section>
@@ -208,9 +208,28 @@ H        e         l       m        o        7        W        o        r       
 					<section>
 						<h4><strong>Advanced</strong> algorithm</h4>
 						<ul>
-							<li>Several mechanisms are added to solve the <strong>weaknesses</strong> of the basic algorithm</li>
-							<li>The efforts are focused to <strong>strengthen</strong> the key</li>
+							<li>Several <strong>mechanisms</strong> are added to solve the <strong>weaknesses</strong> of the basic algorithm</li>
+							<li>The efforts are focused to <strong>strengthen</strong> the key :<ul>
+								<li>The <strong>exact</strong> key must be used to decrypt the message</li>
+								<li>The key itself is <strong>combined with a hash</strong> to generate the XOR mask</li>
+							</ul></li>
 						</ul>
+					</section>
+					<section>
+						<h4><strong>Salting</strong> the key</h4>
+					</section>
+					<section>
+						<h4><strong>Adjusting</strong> the salted key length</h4>
+					</section>
+					<section>
+						<h4><strong>Hashing</strong> the salted key</h4>
+						<a href="https://en.wikipedia.org/wiki/SHA-2">sha-512</a>
+					</section>
+					<section>
+						<h4><strong>Building</strong> the XOR mask</h4>
+					</section>
+					<section>
+						<h4><strong>Initial</strong> offset</h4>
 					</section>
 				</section>
 			</section>
