@@ -62,10 +62,18 @@
 							<li>Two consecutive encryptions with the same key generates <strong>different outputs</strong></li>
 						</ul>
 					</section>
+					<section>
+						<h4><strong>NPM</strong> Package</h4>
+						<a href="https://www.npmjs.com/package/kaos" target="_blank">&#975;&#592;&oplus;&sopf;</a>
+						<img async-src="https://img.shields.io/npm/dw/kaos.svg" height="30px" src="https://img.shields.io/npm/dw/kaos.svg">
+						<a href="https://packagephobia.now.sh/result?p=kaos" target="_blank" class="img-only">					
+							<img async-src="https://packagephobia.now.sh/badge?p=kaos" height="30px" src="https://packagephobia.now.sh/badge?p=kaos">
+						</a>							
+					</section>
 				</section>
 				<section>
 					<section>
-						<h3><strong>Basic</strong> encryption</h3>
+						<h3><strong>Basic</strong> algorithm</h3>
 					</section>
 					<section>
 						<h4>The <strong>message</strong></h4>
@@ -79,23 +87,23 @@
 						</ul>
 					</section>
 					<section>
-						<h4>Hello World !</h4>
+						<h4><q>Hello World !</q></h4>
 						<small><pre><code>
 H        e         l       l        o                 W        o        r        l        d                 !
 01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100 00100000 00100001
-						</code></pre></small>
+						</code></pre><i>Binary representation of the message</i></small>
 					</section>
 					<section>
 						<h4>The <strong>key</strong></h4>
 						<ul>
 							<li>Any <strong>binary data</strong> can be used as <strong>key</strong></li>
 							<li>A key is defined by its <strong>content</strong> and <strong>length</strong></li>
-							<li>Let's consider a simple example</li>
+							<li>Let's consider a simple example : <q>secret</q></li>
 						</ul>
 						<small><pre><code>
 s        e        c        r        e        t
 01110011 01100101 01100011 01110010 01100101 01110100
-						</code></pre></small>
+						</code></pre><i>Binary representation of the key</i></small>
 					</section>
 				 	<section>
 						<h4>The <strong>XOR</strong> binary operator</h4>
@@ -111,24 +119,24 @@ s        e        c        r        e        t
 						<small><pre><code>
 H        e         l       l        o                 W        o        r        l        d                 !
 01001000 01100101 01101100 01101100 01101111 00100000 01010111 01101111 01110010 01101100 01100100 00100000 00100001
-s        e        c        r        e        t        s        e        c        r        e        t        s
+s        e        c        r        e        t      | s        e        c        r        e        t      | s
 01110011 01100101 01100011 01110010 01100101 01110100 01110011 01100101 01100011 01110010 01100101 01110100 01110011
 
 &oplus;
 
 ;        \x0      \xf      \x1e     \xa      T        $        \xa      \x11     \x1e     \x1      T        R
 00111011 00000000 00001111 00011110 00001010 01010100 00100100 00001010 00010001 00011110 00000001 01010100 01010010
-						</code></pre></small>
+						</code></pre><i>Binary XOR between the message bits and the repeated key bits</i></small>
 					</section>
 					<section>
 						<h4><strong>Decrypted</strong> message</h4>
 						<ul>
-							<li>To <strong>decrypt</strong> the message, we apply the <strong>same operation</strong> again on the <strong>encrypted</strong> message</li>
+							<li>To <strong>decrypt</strong> the message, the <strong>same operation</strong> is repeated with the <strong>encrypted</strong> message</li>
 						</ul>
 						<small><pre><code>
 ;        \x0      \xf      \x1e     \xa      T        $        \xa      \x11     \x1e     \x1      T        R
 00111011 00000000 00001111 00011110 00001010 01010100 00100100 00001010 00010001 00011110 00000001 01010100 01010010
-s        e        c        r        e        t        s        e        c        r        e        t        s
+s        e        c        r        e        t      | s        e        c        r        e        t      | s
 01110011 01100101 01100011 01110010 01100101 01110100 01110011 01100101 01100011 01110010 01100101 01110100 01110011
 
 &oplus;
@@ -140,30 +148,69 @@ H        e         l       l        o                 W        o        r       
 				</section>
 				<section>
 					<section>
-						<h3><strong>Weaknesses</strong> of the basic encryption</h3>
+						<h3>&#128077; & &#128078; of the <strong>basic</strong> algorithm</h3>
 					</section>
 					<section>
-						<h4>key <strong>length</strong></h4>
+						<h4>&#128077; <strong>simplicity</strong> & almost <strong>context-free</strong></h4>
 						<ul>
-							<li>Since the key is <strong>repeated</strong> to match the message length, the <strong>smaller</strong> the key, the <strong>weaker</strong> it is</li>
+							<li>The algorithm is really <strong>simple to implement</strong> and, consequently, <strong>fast</strong></li>
+							<li>Since it does not require the <strong>whole message</strong> to encrypt one byte <i>(only the key offset is needed)</i>,
+								it works with <strong>chunks</strong></li>
 						</ul>
 					</section>
 					<section>
-						<h4>key <strong>resilience</strong></h4>
+						<h4>&#128077; key <strong>definition</strong></h4>
 						<ul>
-							<li>When trying to <strong>guess</strong> the key, the <strong>more</strong> bytes are found, the <strong>more</strong> characters of the original message are <strong>readable</strong>.</li>
+							<li>There is <strong>no constraint</strong> on the key<li>
+							</i>In particular, it can be of <strong>any size</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h4>&#128078; key <strong>resilience</strong></h4>
+						<ul>
+							<li>Even if the key is <strong>altered</strong>, the message can still be <strong>partially</strong> decrypted</li>
 						</ul>
 						<small><pre><code>
 ;        \x0      \xf      \x1e     \xa      T        $        \xa      \x11     \x1e     \x1      T        R
 00111011 00000000 00001111 00011110 00001010 01010100 00100100 00001010 00010001 00011110 00000001 01010100 01010010
-s        e        c        s        e        c        s        e        c        s        e        c        s
+s        e        c      | s        e        c      | s        e        c      | s        e        c      | s
 01110011 01100101 01100011 01110011 01100101 01100011 01110011 01100101 01100011 01110011 01100101 01100011 01110011
 
 ⊕
 
 H        e         l       m        o        7        W        o        r        m        d        7        !
 01001000 01100101 01101100 01101101 01101111 00110111 01010111 01101111 01110010 01101101 01100100 00110111 00100001
-						</code></pre></small>
+						</code></pre><i>decoding with the key <q>sec</q></i></small>
+						<ul>
+							<li>When trying to <strong>guess</strong> the key, the <strong>more</strong> bytes are found,
+								the <strong>more</strong> characters of the original message are <strong>correct</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h4>&#128078; key <strong>length</strong></h4>
+						<ul>
+							<li>Since the key is <strong>repeated</strong> to match the message length, the <strong>smaller</strong> the key, the <strong>weaker</strong> it is</li>
+							<li>If the key is <strong>longer</strong> than the message, it is <strong>not necessary</strong> to know the extra bytes</li>
+						</ul>
+					</section>
+					<section>
+						<h4>&#128078; Too <strong>simple</strong></h4>
+						<ul>
+							<li>Provided you <strong>can recognize</strong> the partially decrypted message,
+								a 2 bytes key requires a <strong>maximum</strong> of 256 + 256 attempts where one would expect 256 * 256</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3><strong>Advanced</strong> algorithm</h3>
+					</section>
+					<section>
+						<h4><strong>Advanced</strong> algorithm</h4>
+						<ul>
+							<li>Several mechanisms are added to solve the <strong>weaknesses</strong> of the basic algorithm</li>
+							<li>The efforts are focused to <strong>strengthen</strong> the key</li>
+						</ul>
 					</section>
 				</section>
 			</section>
