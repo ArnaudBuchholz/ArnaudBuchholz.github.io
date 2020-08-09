@@ -209,7 +209,7 @@ H        e         l       m        o        7        W        o        r       
 						<h4><strong>Advanced</strong> algorithm</h4>
 						<ul>
 							<li>Several <strong>mechanisms</strong> are added to solve the <strong>weaknesses</strong> of the basic algorithm</li>
-							<li>The efforts are focused to <strong>strengthen</strong> the key :<ul>
+							<li>The efforts are <strong>focused</strong> on the key :<ul>
 								<li>The <strong>exact</strong> key must be used to decrypt the message</li>
 								<li>The key itself is <strong>combined with a hash</strong> to generate the XOR mask</li>
 							</ul></li>
@@ -217,13 +217,24 @@ H        e         l       m        o        7        W        o        r       
 					</section>
 					<section>
 						<h4><strong>Salting</strong> the key</h4>
+						<ul>
+							<li>The key is <strong>concatenated</strong> with <strong>random</strong> bytes</li>
+							<li>Those bytes are <strong>saved</strong> in the encrypted message</li>
+						</ul>
 					</section>
 					<section>
-						<h4><strong>Adjusting</strong> the salted key length</h4>
+						<h4><strong>Adjusting</strong> the salted key <strong>length</strong></h4>
+						<ul>
+							<li>The <strong>number of bytes</strong> added to the key depend on its <strong>length</strong></li>
+							<li>The goal is to produce a salted key length where the <strong>modulo 64 equals 63</strong></li>
+						</ul>
 					</section>
 					<section>
 						<h4><strong>Hashing</strong> the salted key</h4>
-						<a href="https://en.wikipedia.org/wiki/SHA-2">sha-512</a>
+						<ul>
+							<li>The resulting key is <strong>digested</strong> to produce a <a href="https://en.wikipedia.org/wiki/SHA-2"><strong>sha-512</strong></a> <strong>hash</strong></li>
+							<li>This hash is 64 bytes long</li>
+						</ul>
 					</section>
 					<section>
 						<h4><strong>Building</strong> the XOR mask</h4>
