@@ -59,7 +59,7 @@
 							<li><strong>Small</strong> with <strong>no</strong> dependencies</li>
 							<li>Compatible with <strong>Node.js' streams</strong></li>
 							<li>Enables encryption / decryption by <strong>chunks</strong></li>
-							<li>Two consecutive encryptions with the same key generates <strong>different outputs</strong></li>
+							<li>Two encryptions with the same key generates <strong>different outputs</strong></li>
 						</ul>
 					</section>
 					<section>
@@ -197,7 +197,7 @@ H        e         l       m        o        7        W        o        r       
 						<h4>&#128078; Too <strong>simple</strong></h4>
 						<ul>
 							<li>Provided you <strong>can recognize</strong> the partially decrypted message,
-								a 2 bytes key requires a <strong>maximum</strong> of 256 + 256 attempts where one would expect 256 * 256</li>
+								a 2 bytes key requires a <strong>maximum</strong> of <strong>512</strong> attempts where one would expect <strong>65 536</strong></li>
 						</ul>
 					</section>
 				</section>
@@ -209,17 +209,17 @@ H        e         l       m        o        7        W        o        r       
 						<h4><strong>Advanced</strong> algorithm</h4>
 						<ul>
 							<li>Several <strong>mechanisms</strong> are added to solve the <strong>weaknesses</strong> of the basic algorithm</li>
-							<li>The efforts are <strong>focused</strong> on the key :<ul>
-								<li>The <strong>exact</strong> key must be used to decrypt the message</li>
-								<li>The key itself is <strong>combined with a hash</strong> to generate the XOR mask</li>
-							</ul></li>
+							<li>The efforts are <strong>focused</strong> on the key :<ol>
+								<li>The key is <strong>salted</strong> and combined with a <strong>hash</strong> to generate a <strong>wider</strong> XOR mask</li>
+								<li>Because of the <strong>hash</strong>, the <strong>exact</strong> key must be used to decrypt the message</li>
+							</ol></li>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>Salting</strong> the key</h4>
 						<ul>
 							<li>The key is <strong>concatenated</strong> with <strong>random</strong> bytes</li>
-							<li>Those bytes are <strong>saved</strong> in the encrypted message</li>
+							<li>These bytes are <strong>saved</strong> in the encrypted message</li>
 						</ul>
 					</section>
 					<section>
@@ -232,15 +232,82 @@ H        e         l       m        o        7        W        o        r       
 					<section>
 						<h4><strong>Hashing</strong> the salted key</h4>
 						<ul>
-							<li>The resulting key is <strong>digested</strong> to produce a <a href="https://en.wikipedia.org/wiki/SHA-2"><strong>sha-512</strong></a> <strong>hash</strong></li>
-							<li>This hash is 64 bytes long</li>
+							<li>The salted key is <strong>digested</strong> to produce a <a href="https://en.wikipedia.org/wiki/SHA-2"><strong>sha-512</strong></a> <strong>hash</strong></li>
+							<li>This hash is <strong>64</strong> bytes long</li>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>Building</strong> the XOR mask</h4>
+						<ul>
+							<li><strong>Unlike</strong> the basic algorithm, the XOR operation is <strong>not</strong> applied on the message and the key bytes</li>
+							<li>The salted key and the hash are <strong>combined</strong> to generate the <strong>XOR mask</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Building</strong> the XOR mask</h4>
+						<ul>
+							<li>As the salted key's length is <strong>adjusted</strong> to hash size <strong>- 1</strong>, the <strong>resulting</strong> mask is <strong>wider</strong></li>
+							<li>For a given offset, when the combination is <strong>null</strong>, a <strong>different operation</strong> is applied</li>
+						</ul>
+						<pre>
+message offset : <span id="offset">0</span>
+<span id="saltedKey"><u>k</u>eysalt</span>
+<span id="hash"><u>h</u>ash</span>
+mask :           <span id="mask"></span>
+</pre>
+<button id="reset">&#9194;</button><button id="step">&#9654;&#65039;</button>
+<script>
+function byId (id) {
+  return document.getElementById(id)
+}
+
+function underline (array, offset) {
+  const index = offset % array.length
+  const value = array[index]
+  array[index] = '<u>' + value + '</u>'
+  return value
+}
+
+function mask (increment) {
+  let offset
+  if (increment) {
+	offset = parseInt(byId('offset').innerHTML, 10) + 1
+  } else {
+    offset = 0
+  }
+  byId('offset').innerHTML = offset
+  const keysalt = 'keysalt'.split('')
+  const ck = underline(keysalt, offset)
+  const mk = ck.charCodeAt(0)
+  keysalt.push('          ', mk.toString(2).padStart(8, '0'))
+  const hash = 'hash'.split('')
+  const ch = underline(hash, offset)
+  const mh = ch.charCodeAt(0)
+  hash.push('             ', mh.toString(2).padStart(8, '0'))
+  const mask = mk ^ mh
+  if (mask === 0) {
+	byId('mask').innerHTML = '<span style="color: red;">' + (mk | mh).toString(2).padStart(8, '0') + '</span>'
+  } else {
+	byId('mask').innerHTML = mask.toString(2).padStart(8, '0')
+  }
+  byId('saltedKey').innerHTML = keysalt.join('')
+  byId('hash').innerHTML = hash.join('')
+}
+
+byId('reset').addEventListener('click', () => {
+  mask(0)
+})
+
+byId('step').addEventListener('click', () => {
+  mask(true)
+})
+</script>
 					</section>
 					<section>
 						<h4><strong>Initial</strong> offset</h4>
+						<ul>
+							<li>The offset is <strong>initialized</strong> with the <strong>last bytes</strong> of the salted key</li>
+						</ul>
 					</section>
 				</section>
 			</section>
