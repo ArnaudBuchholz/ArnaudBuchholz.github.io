@@ -12,6 +12,9 @@ https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html
 Article: My own super implementation
 https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html
 
+Object.create documentation
+https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object/create
+
 #1
 Subclassing an ES6 class
 ... or the art of JavaScript classes hybridization
@@ -87,46 +90,55 @@ So the following code was tried.
 
 #8
 Unfortunately, it failed with the error
-"Class constructor A cannot be invoked without 'new'
+"Class constructor A cannot be invoked without 'new'"
 
-#10
+#9
 To understand the error, we need to get back to what are classes in JavaScript.
 
-#11
-Before the introduction of the 'class' keyword,
+#10
+Before the introduction of the 'class' keyword in the language,
 there are several patterns to define a 'class' in JavaScript.
 
-Here is the pattern used in GPF-JS
+Here is the pattern used in GPF-JS.
 
-From a declaration point of view, a class is first define with a constructor.
-This constructor is a function, here OldA.
+From a declaration point of view, a class is first defined with a constructor.
+The constructor is a function.
+In this example it is named "OldA".
 
-Then, the function prototype is used to define all the members that will be
-inherited by the instances of the class.
+Then, the function prototype is altered to define members that will be
+inherited by the instances of that class.
 
-For instance, here two members are being defined :
-- The constructor method is a special method of a class for creating and
-  initializing an object of that class.
-- A method a that gives the value of the member _a
+For instance, two members are defined :
+- The constructor method.
+  This special member exists in all classes and it refers to the method being used to create and
+  initialize any object of that class.
+  In modern hosts, it is not necessary to define this member but keep in mind that very old hosts are supported by GPF-JS.
+
+- The second member is the method named "a" that gives the value of the member "_a".
 
 (click)
 
-When Subclassing, another constructor is defined (here OldB).
+When Subclassing, another constructor is defined, here it is named "OldB".
 To intialize the instance, the base constructor must be called,
 that is why we trigger the OldA method with apply to forward this and arguments.
 
 The prototype of the subclass is initialized with a new object which prototype
 equals the prototype of OldA. This is done using Object.create.
 
-Doing this, we build the prototype chain of OldB.
+This way, we build the prototype chain of OldB.
 Indeed, every instance of OldB has a prototype that contains OldB specific methods
 and since it is chained to the OldA prototype, it also contains OldA specific
 methods.
 
 Then, two members are defined.
-Note that the OldB constructor will shadow the OldA constructor.
+Quick notes about OldB constructor :
+- Since both prototypes contains the same member (named "constructor"), the one from OldB will shadow the one from OldA.
+- Even in modern javascript hosts, because of the way we build the prototype chain, it is necessary to define the constructor for subclass
+  or it would point to the one of OldA.
 
-#12
+Long story short, it is possible to create classes but it requires a lot of plumbing to make it work as expected.
+
+#11
 When we look at the way ES6 handles classes, it is simpler.
 
 To create a class, simply use the class keyword and define the constructor as
@@ -134,8 +146,71 @@ well as any other method.
 
 (click)
 
-When subclassing, just specify which class you subclass with extends and call
-the base constructor using super();
+When subclassing, just specify which class you subclass with the "extends" keyword
+and call the base constructor using "super()".
 
 In the end, it hides the complexity of building the prototype chain.
+
+#12
+If we try to extend an "old" class using the new syntax, it works smoothly.
+It is not even necessary to handle the base constructor in a special way,
+the "super()" call works transparently.
+
+This is interesting because it demonstrates that the way classes are defined without the keyword is close to (or at least compatible with) the new way.
+
+#13
+If, on the other hand, we try to subclass an ES6 class with the old pattern, then it fails with the error
+"Class constructor A cannot be invoked without 'new'"
+
+An obvious hint here is that we might not use the base class function the right way.
+
+#14
+So let's focus on this error.
+
+#15
+In JavaScript, any function may be a constructor.
+However, native functions (the ones implemented by the host) can't be used with new.
+
+```javascript
+new unescape()
+```
+
+Hence if you try to use "new unescape()" you will get the error "unescape is not a constructor".
+
+Besides this exception, the syntax is not enforced.
+The keyword this may be accessed without calling the parent constructor first.
+In a constructor, one may replace the allocated object (contained in this) by another object.
+
+This is typically how the singleton patterns can be implemented.
+
+On the other hand, when an ES6 class is created, it declares a constructor function.
+But, this time, the syntax is enforced meaning :
+- trying to call the constructor without the new keyword fails
+
+```javascript
+class A {}
+A()
+```
+
+- trying to access this before initializing it with the parent constructor generates the error "Must call super constructor in derived class before accessing 'this' or returning from derived constructor"
+
+```javascript
+class B extends A {
+  constructor () {
+    this._b = "B"
+  }
+}
+
+new B()
+```
+
+However, the good news is that ES6 constructors can be detected !
+
+```javascript
+B.toString().startsWith("class")
+```
+
+#16
+So let's try to 
+
 
