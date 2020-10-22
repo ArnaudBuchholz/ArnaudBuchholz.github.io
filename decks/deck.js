@@ -1,7 +1,11 @@
 "use strict";
 
+function isForYoutube () {
+    return location.search.includes('youtube');
+}
+
 function processIncludes () {
-    return Promise.all([].slice.call(document.querySelectorAll("*[include]")).map(function(include) {
+    return Promise.all([].map.call(document.querySelectorAll("*[include]"), function(include) {
         return gpf.http.get(include.getAttribute("include"))
             .then(function(response) {
                 include.innerHTML = response.responseText;
@@ -69,6 +73,15 @@ function reformatCodeSamples () {
 }
 
 function processMeInfo () {
+    if (isForYoutube()) {
+        const meSlide = [].filter.call(document.querySelectorAll("*[include]"), function (node) {
+            return node.getAttribute('include') === "me.html";
+        })[0];
+        if (meSlide) {
+            meSlide.parentNode.removeChild(meSlide);
+        }
+        return;
+    }
     var
         year = new Date().getFullYear(),
         years = {
@@ -156,7 +169,7 @@ function loadReveal () {
         Reveal: "reveal.js"
     }, function(require) {
         "use strict";
-        if (deckLength) {
+        if (deckLength && !isForYoutube()) {
             require.Reveal.configure({
                 slideNumber: "c/t",
                 allottedTime: deckLength * 60 * 1000,
