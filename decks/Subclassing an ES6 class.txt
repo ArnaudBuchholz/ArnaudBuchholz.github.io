@@ -1,0 +1,141 @@
+Links for the video :
+
+GPF-JS project homepage
+https://github.com/ArnaudBuchholz/gpf-js
+
+JavaScript & Development blog
+http://gpf-js.blogspot.com/
+
+Documentation: Entity definition
+https://arnaudbuchholz.github.io/gpf/doc/tutorial-DEFINE.html
+
+Article: My own super implementation
+https://gpf-js.blogspot.com/2017/02/my-own-super-implementation.html
+
+#1
+Subclassing an ES6 class
+... or the art of JavaScript classes hybridization
+
+The picture on the left illustrates the concept with a natural hybridization
+on flowers. As you can see, some have composite colors.
+
+#2
+This presentation will start with the motivation behind this experiment.
+
+It will also cover how classes can be defined in JavaScript.
+In particular, it will expose one implementation that was possible before
+the introduction of the ES6 class keyword.
+
+Then, we will see how and if old and new classes can be mixed.
+Mixing meaning here defining a new class by inheriting from an existing one.
+
+Because it will fail, we will analyze the reasons of the failure
+and see how we can workaround the problems.
+
+#3
+This presentation refers to some of my personal projects,
+in particular GPF-JS which is a multi-purpose JavaScript library
+
+and a blog named JavaScript & Development where I documented all the discoveries
+related to GPF-JS
+
+#4
+So...
+
+(click)
+
+What is the motivation of this experiment ?
+
+#5
+GPF-JS is a multi purpose JavaScript library.
+
+When I started the project, I had no clear idea of where I wanted to go
+but I set myself some expectations :
+- The library supports multiple hosts : besides the classical browsers and
+  Node.js, it also runs fine on cscript, Nashorn, Rhino and PhantomJS
+- The library implements a long list of interesting features, such as 
+  a class system, an interface layer, streams, a modularization helper,
+  attributes...
+
+It is fully tested and documented in the blog.
+
+#6
+Because all the target hosts are not supporting ES6,
+GPF-JS introduces a custom class system which relies on the syntax presented here.
+
+The gpf.define method takes a dictionary which specifies :
+- The class name with the property $class
+- The base class (if any), using the $extend
+- The constructor method
+- And you can also add any other method to this class definition.
+
+You may notice that the super keyword is somewhat simulated through the $super
+method that is used in the constructor.
+
+Without it, you would have to explicitely call A.apply(this, arguments)
+to initialize the instance.
+
+If you are interested, the links to the documentation and the related article
+are in the video notes.
+
+#7
+But, actually, gpf.define is also the place where lots of features are introduced
+in GPF-JS. At some point, it became necessary to validate that it could be used
+with an existing ES6 class.
+
+So the following code was tried.
+
+#8
+Unfortunately, it failed with the error
+"Class constructor A cannot be invoked without 'new'
+
+#10
+To understand the error, we need to get back to what are classes in JavaScript.
+
+#11
+Before the introduction of the 'class' keyword,
+there are several patterns to define a 'class' in JavaScript.
+
+Here is the pattern used in GPF-JS
+
+From a declaration point of view, a class is first define with a constructor.
+This constructor is a function, here OldA.
+
+Then, the function prototype is used to define all the members that will be
+inherited by the instances of the class.
+
+For instance, here two members are being defined :
+- The constructor method is a special method of a class for creating and
+  initializing an object of that class.
+- A method a that gives the value of the member _a
+
+(click)
+
+When Subclassing, another constructor is defined (here OldB).
+To intialize the instance, the base constructor must be called,
+that is why we trigger the OldA method with apply to forward this and arguments.
+
+The prototype of the subclass is initialized with a new object which prototype
+equals the prototype of OldA. This is done using Object.create.
+
+Doing this, we build the prototype chain of OldB.
+Indeed, every instance of OldB has a prototype that contains OldB specific methods
+and since it is chained to the OldA prototype, it also contains OldA specific
+methods.
+
+Then, two members are defined.
+Note that the OldB constructor will shadow the OldA constructor.
+
+#12
+When we look at the way ES6 handles classes, it is simpler.
+
+To create a class, simply use the class keyword and define the constructor as
+well as any other method.
+
+(click)
+
+When subclassing, just specify which class you subclass with extends and call
+the base constructor using super();
+
+In the end, it hides the complexity of building the prototype chain.
+
