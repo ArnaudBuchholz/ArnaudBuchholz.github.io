@@ -238,7 +238,7 @@ this.$super that is the first instruction of the constructorOfC.
 
 Obviously, we also need assertions, so here is a fiddle to see what is tested.
 
-(click)
+(open JSFiddle)
 
 In the last part, we instanciate the class C
 Then we assess that it is an instance of A
@@ -253,7 +253,7 @@ If we run the example as is, we see the result.
 
 Only c is an instance of C
 
-(close)
+(close JSFiddle)
 
 #19
 How do we fill the function C to leverage the constructorOfC and pass all
@@ -280,7 +280,7 @@ The whole thing is wrapped in a class definition that is returned where B is the
 parameter of the factory function.
 
 If we check the fiddle
-(click)
+(open JSFiddle)
 
 The result looks good !
 
@@ -296,7 +296,35 @@ in. If constructorOfC is a closure and use variables coming from the scope where
 it is define, this scope will not be reproduced in the new verion.
 
 #23
+Let's try a different approach.
+This time we will see what happens if we apply constructorOfC on this.
 
+#24
+Since the context of constructorOfC must not be lost, we must find a way to
+apply it as is. What will happen ?
 
+#25
+We know that "this.$super" is used to call super, so we can simply define
+a member on the class that maps $super to the proper call (super.constructor()).
+
+The constructor of class C simply calls constructorOfC with apply to pass this
+and the parameters (using the arguments object).
+
+(open JSFiddle)
+
+Let see the result
+
+(go to Result tab)
+
+We get an error
+
+(close JSFiddle)
+
+The error is "Uncaught ReferenceError: Must call super constructor in derived
+class before accessing 'this' or returning from derived constructor"
+
+Which means we tried to use this before it was properly initialized with super.
+
+Indeed, since we call this.$super to access the super function, it can't work.
 
 
