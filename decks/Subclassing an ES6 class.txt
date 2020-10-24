@@ -211,6 +211,92 @@ B.toString().startsWith("class")
 ```
 
 #16
-So let's try to 
+So for the rest of the presentation, let's try to see how we can make it work.
+
+#17
+Let's start by setting the context and expectations.
+
+Based on the GPF-JS class model, a constructor function is required to
+initialize the class instance. It might not be the same function as the class one.
+Meaning, it is acceptable to wrap the constructor function into another one.
+
+To respect the programming model, we will use this.$super to call the base
+constructor.
+
+Ideally, we have to ensure that this.$super is called before any use of this
+otherwise the construction should fail.
+
+#18
+To validate the expectations, a simple test case is created.
+
+We define two ES6 classes: A and B. B inherits from A the ES6 way.
+
+Finally we define the constructor function for a third class (named C).
+
+The class B constructor expects one parameter, we pass it through the use of
+this.$super that is the first instruction of the constructorOfC.
+
+Obviously, we also need assertions, so here is a fiddle to see what is tested.
+
+(click)
+
+In the last part, we instanciate the class C
+Then we assess that it is an instance of A
+(because of inheritance)
+And we validate that it contains the member _a
+(it checks that the constructor was called)
+We do the same with class B
+And then we assess everything related to class C
+
+If we run the example as is, we see the result.
+(click on Result)
+
+Only c is an instance of C
+
+(close)
+
+#19
+How do we fill the function C to leverage the constructorOfC and pass all
+the tests
+
+In this first attempt, we will use a technic that I name the copycat
+
+#20
+The whole idea consists of creating a new ES6 class where the constructor function
+body is based on the body of constructorOfC.
+But, this.$super is replaced with the ES6 keyword super.
+
+To do so, we use the new Function pattern which allows to build a function from 
+its textual body. But such a function does not have any context.
+To pass the base class, we will create a factory that takes the base
+class as a parameter.
+
+#21
+The code looks like that.
+
+A regular expression is used to capture the parameter list and the body of
+constructorOfC and we replace the occurence of "this.$super" with "super".
+The whole thing is wrapped in a class definition that is returned where B is the
+parameter of the factory function.
+
+If we check the fiddle
+(click)
+
+The result looks good !
+
+(close JSFiddle)
+
+#22
+It works, but...
+
+(click)
+
+By copying the body of constructorOfC, we lose the lexical scope it was defined
+in. If constructorOfC is a closure and use variables coming from the scope where
+it is define, this scope will not be reproduced in the new verion.
+
+#23
+
+
 
 
