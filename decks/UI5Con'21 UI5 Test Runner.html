@@ -142,7 +142,26 @@
 						<h3><strong>Serving</strong> an <strong>UI5</strong> application</h3>
 					</section>
 					<section>
+						<h4>Development setting</h4>
+						<ul>
+							<li>NPM dependencies</li>
+							<li>ui5 serve</il>
+						</ul>
+						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
+	src="../resources/sap-ui-core.js"
+	data-sap-ui-theme="sap_fiori_3"
+	data-sap-ui-libs="sap.m"
+	data-sap-ui-resourceroots='{"Demo": "./"}'
+	data-sap-ui-onInit="module:Demo/index"
+	data-sap-ui-compatVersion="edge"
+	data-sap-ui-async="true"&gt;
+&lt;/script&gt;</code></pre>
+					</section>
+					<section>
 						<h4>Using UI5 CDN</h4>
+						<ul>
+							<li>Web Server</li>
+						</ul>
 						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
 	src="https://openui5.hana.ondemand.com/1.76.0/resources/sap-ui-core.js"
 	data-sap-ui-theme="sap_fiori_3"
@@ -154,16 +173,17 @@
 &lt;/script&gt;</code></pre>
 					</section>
 					<section>
-						<h4>Development setting</h4>
-						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
-	src="../resources/sap-ui-core.js"
-	data-sap-ui-theme="sap_fiori_3"
-	data-sap-ui-libs="sap.m"
-	data-sap-ui-resourceroots='{"Demo": "./"}'
-	data-sap-ui-onInit="module:Demo/index"
-	data-sap-ui-compatVersion="edge"
-	data-sap-ui-async="true"&gt;
-&lt;/script&gt;</code></pre>
+						<h4>REserve</h4>
+						<pre><code class="json">{
+	"port": 8080,
+	"mappings": [{
+		"match": "^/$",
+		"file": "./webapp/index.html"
+	}, {
+		"match": "^/(.*)",
+		"file": "./webapp/$1"
+	}]
+}</code></pre>
 					</section>
 				</section>
 				<section>
