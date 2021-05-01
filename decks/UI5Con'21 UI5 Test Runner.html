@@ -72,14 +72,16 @@
 						<h4><strong>About</strong> the presentation</h4>
 						<ul>
 							<li class="fragment">UI5 <strong>ecosystem</strong> is growing</li>
-							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 development</li>
-							<li class="fragment"><strong>Innovation</strong> <i>sometimes</i> requires to <strong>ignore</strong> recommendations</li>
+							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 <strong>development</strong></li>
 						</ul>
+						<br/>
+						<p class="fragment"><strong>Innovation</strong> <i>sometimes</i> requires to <strong>ignore</strong> recommendations</p>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h3><strong>Context</strong></h3>
+						<q>Back to 2018...</q>
 					</section>
 					<section>
 						<h4>UI5Con<strong>'18</strong></h4>
@@ -109,12 +111,29 @@
 						<h4>Got the <strong>trend</strong> ?</h4>
 					</section>
 					<section>
-						<h4>Working as <strong>development expert</strong></h4>
+						<h4><strong>Quality</strong> focus</h4>
 						<ul>
-							<li>More than <strong>10</strong> applications</li>
-							<li>At least <strong>70%</strong> of coverage</li>
-							<li><strong>Strong</strong> quality focus</li>
-							<li class="fragment"><strong>Huge</strong> tests suites <i>(45 minutes)</i></li>
+							<li>Team is responsible of <strong>10+</strong> applications</li>
+							<li><strong>Requirement</strong> to have at least <strong>80%</strong> of coverage</li>
+							<li><strong>Huge</strong> tests suites <i>(up to 45 minutes)</i></li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Pipeline</strong> issues</h4>
+						<ul>
+							<li>CI pipeline uses the <strong>Karma</strong> runner</li>
+							<li>OPA tests based on the <strong>iFrame mode</strong></li>
+							<li><strong>Huge</strong> memory consumption</li>
+							<li>Tests are abruptly <strong>aborted</strong> <i>(browser crash)</i></li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Karma</strong> execution model</h4>
+						<ul>
+							<li><strong>All</strong> tests in <strong>one</strong> window</li>
+							<li>An iFrame to run them all</li>
+							<li><strong>Sequential</strong> execution</li>
+							<li>Coverage information</li>
 						</ul>
 					</section>
 				</section>
@@ -124,17 +143,27 @@
 					</section>
 					<section>
 						<h4>Using UI5 CDN</h4>
-						<pre><code class="html">
-<script id="sap-ui-bootstrap"
+						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
 	src="https://openui5.hana.ondemand.com/1.76.0/resources/sap-ui-core.js"
 	data-sap-ui-theme="sap_fiori_3"
 	data-sap-ui-libs="sap.m"
 	data-sap-ui-resourceroots='{"Demo": "./"}'
 	data-sap-ui-onInit="module:Demo/index"
 	data-sap-ui-compatVersion="edge"
-	data-sap-ui-async="true">
-</script>
-						</code></pre>
+	data-sap-ui-async="true"&gt;
+&lt;/script&gt;</code></pre>
+					</section>
+					<section>
+						<h4>Development setting</h4>
+						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
+	src="../resources/sap-ui-core.js"
+	data-sap-ui-theme="sap_fiori_3"
+	data-sap-ui-libs="sap.m"
+	data-sap-ui-resourceroots='{"Demo": "./"}'
+	data-sap-ui-onInit="module:Demo/index"
+	data-sap-ui-compatVersion="edge"
+	data-sap-ui-async="true"&gt;
+&lt;/script&gt;</code></pre>
 					</section>
 				</section>
 				<section>
