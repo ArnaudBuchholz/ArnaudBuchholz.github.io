@@ -92,7 +92,7 @@
 					</section>
 					<section>
 						<h4>UI5Con<strong>'19</strong></h4>
-						<img src="UI5Con'19 Advanced Testing with UI5/YouTube.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="UI5Con'19 Advanced Testing with UI5/YouTube.png" style="border: 1px solid black; max-width: 50%; max-height: 50%;" />
 						<br />
 						<p>Use <strong>UI5</strong> to <strong>test</strong> your <strong>ODATA</strong> service</p>
 						<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a> <a href="https://www.npmjs.com/package/node-ui5">node-ui5</a></small>
@@ -131,9 +131,9 @@
 						<h4><strong>Karma</strong> execution model</h4>
 						<ul>
 							<li><strong>All</strong> tests in <strong>one</strong> window</li>
-							<li>An iFrame to run them all</li>
+							<li>One iFrame to <strong>run</strong> them all</li>
 							<li><strong>Sequential</strong> execution</li>
-							<li>Coverage information</li>
+							<li><strong>Coverage</strong> information</li>
 						</ul>
 					</section>
 				</section>
@@ -142,10 +142,11 @@
 						<h3><strong>Serving</strong> an <strong>UI5</strong> application</h3>
 					</section>
 					<section>
-						<h4>Development setting</h4>
+						<h4><strong>Development</strong> setting</h4>
 						<ul>
-							<li>NPM dependencies</li>
-							<li>ui5 serve</il>
+							<li>UI5 <strong>loaded</strong> with <code>sap-ui-core.js</code></li>
+							<li>Path is <strong>relative</strong> to the project</li>
+							<li>No <strong>specific</strong> version</li>
 						</ul>
 						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
 	src="../resources/sap-ui-core.js"
@@ -158,9 +159,33 @@
 &lt;/script&gt;</code></pre>
 					</section>
 					<section>
-						<h4>Using UI5 CDN</h4>
+						<h4><strong>Running</strong> the application (<strong>WebIDE</strong>)</h4>
 						<ul>
-							<li>Web Server</li>
+							<li><strong>Mapping</strong> done with the <code>neo-app.json</code></li>
+							<li>Enables <strong>fast</strong> version selection</il>
+						</ul>
+						<h5>Put a screenshot of WebIDE</h5>
+						<ul>
+							<li><strong>No</strong> installation</li>
+							<li><strong>Hard</strong> to automate</il>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Running</strong> the application (<strong>@ui5/cli</strong>)</h4>
+						<ul>
+							<li>UI5 dependencies are installed <strong>locally</strong></li>
+							<li><strong>Fastidious</strong> version switch</il>
+						</ul>
+						<img src="UI5Con'21 UI5 Test Runner/ui5 serve verbose.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<ul>
+							<li><strong>Significant</strong> digital footprint</il>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Running</strong> the application (<strong>UI5 CDN</strong>)</h4>
+						<ul>
+							<li>Project files served with a <strong>web server</strong></li>
+							<li>Load UI5 from a <strong>Content Delivery Network</strong></li>
 						</ul>
 						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
 	src="https://openui5.hana.ondemand.com/1.76.0/resources/sap-ui-core.js"
@@ -171,15 +196,23 @@
 	data-sap-ui-compatVersion="edge"
 	data-sap-ui-async="true"&gt;
 &lt;/script&gt;</code></pre>
+					<ul>
+						<li><strong>Lite</strong> setup</li>
+						<li>Version selection requires <strong>bootstrap change</strong></li>
+					</ul>
 					</section>
 					<section>
-						<h4>REserve</h4>
+						<h4>Can we combine a <strong>small</strong> digital footprint and a <strong>fast</strong> version selection ?</h4>
+					</section>
+					<section>
+						<h4>Introducing <strong>REserve</strong></h4>
+						<p>Small, configurable <strong>and</strong> reusable</p>
 						<pre><code class="json">{
 	"port": 8080,
 	"mappings": [{
-		"match": "^/$",
-		"file": "./webapp/index.html"
-	}, {
+		"match": "/resources/(.*)",
+		"url": "https://openui5.hana.ondemand.com/1.76.0/resources/$1"
+	}, {		
 		"match": "^/(.*)",
 		"file": "./webapp/$1"
 	}]
