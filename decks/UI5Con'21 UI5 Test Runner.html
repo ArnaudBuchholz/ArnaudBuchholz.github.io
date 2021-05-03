@@ -188,7 +188,7 @@
 							<li>Load UI5 from a <strong>Content Delivery Network</strong></li>
 						</ul>
 						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
-	src="https://openui5.hana.ondemand.com/1.76.0/resources/sap-ui-core.js"
+	src="https://openui5.hana.ondemand.com/1.87.0/resources/sap-ui-core.js"
 	data-sap-ui-theme="sap_fiori_3"
 	data-sap-ui-libs="sap.m"
 	data-sap-ui-resourceroots='{"Demo": "./"}'
@@ -202,7 +202,7 @@
 					</ul>
 					</section>
 					<section>
-						<h4>Can we combine a <strong>small</strong> digital footprint and a <strong>fast</strong> version selection ?</h4>
+						<h4>Can we combine a <strong>small</strong> digital footprint and a <strong>fast / external</strong> version selection ?</h4>
 					</section>
 					<section>
 						<h4>Introducing <strong>REserve</strong></h4>
@@ -210,13 +210,24 @@
 						<pre><code class="json">{
 	"port": 8080,
 	"mappings": [{
-		"match": "/resources/(.*)",
-		"url": "https://openui5.hana.ondemand.com/1.76.0/resources/$1"
-	}, {		
+		"match": "/(test-)?resources/(.*)",
+		"url": "https://openui5.hana.ondemand.com/1.87.0/$1resources/$2"
+	}, {
+		"match": "^/(\\?.*)?$",
+		"file": "./webapp/index.html"
+	}, {
 		"match": "^/(.*)",
 		"file": "./webapp/$1"
 	}]
 }</code></pre>
+						<a href="https://www.npmjs.com/package/reserve" target="blank">reserve</a>
+						<img async-src="https://img.shields.io/npm/dw/reserve.svg" height="30px" src="https://img.shields.io/npm/dw/reserve.svg">
+						<a href="https://packagephobia.now.sh/result?p=reserve" target="_blank" class="img-only">
+							<img async-src="https://packagephobia.now.sh/badge?p=reserve" height="30px" src="https://packagephobia.now.sh/badge?p=reserve">
+						</a>
+					</section>
+					<section>
+						<h4>Demo</h4>
 					</section>
 				</section>
 				<section>
