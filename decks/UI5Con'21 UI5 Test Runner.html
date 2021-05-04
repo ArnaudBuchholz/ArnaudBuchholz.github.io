@@ -25,7 +25,7 @@
 									</small>
 								</td>
 								<td style="vertical-align: top;">
-									<h3 data-agenda="no"><strong>UI5</strong> Test Runner</h3>
+									<h3 data-agenda="no"><strong>UI5</strong> Test <strong>Runner</strong></h3>
 									<p>
 										<small>
 											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
@@ -75,7 +75,7 @@
 							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 <strong>development</strong></li>
 						</ul>
 						<br/>
-						<p class="fragment"><strong>Innovation</strong> <i>sometimes</i> requires to <strong>ignore</strong> recommendations</p>
+						<p class="fragment"><strong>Innovation</strong> <i>sometimes</i> requires to <strong>ignore</strong> recommendations &#128517;</p>
 					</section>
 				</section>
 				<section>
@@ -136,6 +136,10 @@
 							<li><strong>Coverage</strong> information</li>
 						</ul>
 					</section>
+					<section>
+						<h4><strong>Demo</strong></h4>
+						<code>npm run karma</code>
+					</section>
 				</section>
 				<section>
 					<section>
@@ -145,10 +149,9 @@
 						<h4><strong>Development</strong> setting</h4>
 						<ul>
 							<li>UI5 <strong>loaded</strong> with <code>sap-ui-core.js</code></li>
-							<li>Path is <strong>relative</strong> to the project</li>
 							<li>No <strong>specific</strong> version</li>
-						</ul>
-						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
+							<li>Path is <strong>relative</strong> to the project
+<pre><code class="html">&lt;script id="sap-ui-bootstrap"
 	src="../resources/sap-ui-core.js"
 	data-sap-ui-theme="sap_fiori_3"
 	data-sap-ui-libs="sap.m"
@@ -157,37 +160,36 @@
 	data-sap-ui-compatVersion="edge"
 	data-sap-ui-async="true"&gt;
 &lt;/script&gt;</code></pre>
+							</li>
+							<li>All <strong>dependencies</strong> are under <code>/resources/</code> <small>or <code>/test-resources/</code></small></li>
+						</ul>
 					</section>
 					<section>
 						<h4><strong>Running</strong> the application (<strong>WebIDE</strong>)</h4>
 						<ul>
-							<li><strong>Mapping</strong> done with the <code>neo-app.json</code></li>
-							<li>Enables <strong>fast</strong> version selection</il>
-						</ul>
-						<h5>Put a screenshot of WebIDE</h5>
-						<ul>
-							<li><strong>No</strong> installation</li>
-							<li><strong>Hard</strong> to automate</il>
+							<li><strong>Mapping</strong> configured with <code>neo-app.json</code></li>
+							<li>Enables <strong>fast</strong> version selection
+								<img src="UI5Con'21 UI5 Test Runner/WebIDE.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+							</il>
+							<li><strong>No</strong> installation, <strong>hard</strong> to automate</il>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>Running</strong> the application (<strong>@ui5/cli</strong>)</h4>
 						<ul>
-							<li>UI5 dependencies are installed <strong>locally</strong></li>
-							<li><strong>Fastidious</strong> version switch</il>
-						</ul>
-						<img src="UI5Con'21 UI5 Test Runner/ui5 serve verbose.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<ul>
-							<li><strong>Significant</strong> digital footprint</il>
+							<li>UI5 <strong>packages</strong> are installed <strong>locally</strong></li>
+							<li><strong>Fastidious</strong> version switch
+								<img src="UI5Con'21 UI5 Test Runner/ui5 serve verbose.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+							</il>
+							<li>Significant <strong>digital footprint</strong>, <strong>automated</strong></il>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>Running</strong> the application (<strong>UI5 CDN</strong>)</h4>
 						<ul>
-							<li>Project files served with a <strong>web server</strong></li>
-							<li>Load UI5 from a <strong>Content Delivery Network</strong></li>
-						</ul>
-						<pre><code class="html">&lt;script id="sap-ui-bootstrap"
+							<li>Load UI5 from a <strong>Content Delivery Network</strong>
+							<li>Project files <strong>must</strong> be served with a <strong>web server</strong>
+								<pre><code class="html">&lt;script id="sap-ui-bootstrap"
 	src="https://openui5.hana.ondemand.com/1.87.0/resources/sap-ui-core.js"
 	data-sap-ui-theme="sap_fiori_3"
 	data-sap-ui-libs="sap.m"
@@ -196,13 +198,14 @@
 	data-sap-ui-compatVersion="edge"
 	data-sap-ui-async="true"&gt;
 &lt;/script&gt;</code></pre>
-					<ul>
+						</li>
 						<li><strong>Lite</strong> setup</li>
 						<li>Version selection requires <strong>bootstrap change</strong></li>
 					</ul>
 					</section>
 					<section>
-						<h4>Can we combine a <strong>small</strong> digital footprint and a <strong>fast / external</strong> version selection ?</h4>
+						<h4>Can we combine a <strong>lightweight</strong> setup<br/>
+							and a <strong>fast &amp; external</strong> version selection ?</h4>
 					</section>
 					<section>
 						<h4>Introducing <strong>REserve</strong></h4>
@@ -228,6 +231,10 @@
 					</section>
 					<section>
 						<h4>Demo</h4>
+						<code>npm run reserve</code><br />
+						<small>
+							<a href="http://localhost:8080/test/testsuite.qunit.html">Test suite</a>
+						</small>
 					</section>
 				</section>
 				<section>
