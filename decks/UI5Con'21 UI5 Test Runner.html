@@ -144,6 +144,7 @@
 				<section>
 					<section>
 						<h3><strong>Serving</strong> an <strong>UI5</strong> application</h3>
+						<img src="UI5Con'21 UI5 Test Runner/serving.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4><strong>Development</strong> setting</h4>
@@ -204,8 +205,8 @@
 					</ul>
 					</section>
 					<section>
-						<h4>Can we combine a <strong>lightweight</strong> setup<br/>
-							and a <strong>fast &amp; external</strong> version selection ?</h4>
+						<p>Can we combine a <strong>lightweight</strong> setup<br/>
+							and a <strong>fast &amp; external</strong> version selection ?</p>
 					</section>
 					<section>
 						<h4>Introducing <strong>REserve</strong></h4>
@@ -236,27 +237,73 @@
 							<a href="http://localhost:8080/test/testsuite.qunit.html">Test suite</a>
 						</small>
 					</section>
+					<section>
+						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<br/>
+						<small>
+							<a jref="https://arnaud-buchholz.medium.com/reserve-serving-an-openui5-application-2f0211f057e2" target="_blank">
+								REserve — Serving an OpenUI5 application
+							</a>
+						</small>
+					</section>
 				</section>
 				<section>
 					<section>
 						<h3><strong>Building</strong> a test platform</h3>
+						<img src="UI5Con'21 UI5 Test Runner/platform.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4>Defining the <strong>options</strong></h4>
+						<p>To be <strong>flexible</strong>, the platform must offer a wide range of options :</p>
+						<ul>
+							<li><strong>Location</strong> of the <code>webapp</code> folder</li>
+							<li><strong>URL</strong> of the <code>UI5</code> CDN</li>
+							<li><strong>Libraries</strong></li>
+							<li>Number of <strong>parallel</strong> execution</li>
+							<li><strong>Timeout</strong> (page &amp; global)</li>
+							<li>...</li>
+						</ul>
 					</section>
 					<section>
 						<h4><strong>Serving</strong> the application</h4>
+						<pre><code class="javascript">const { check, serve } = require('reserve')
+
+check({
+		port: job.port,
+		mappings: [{
+			method: ['GET', 'HEAD'],
+			match: '/(test-)?resources/(.*)', // UI5 mapping
+			url: `${job.ui5}/$1`
+		}, {
+			match: /^\/(.*)/, // Project mapping
+			file: join(job.webapp, '$1')
+		}]
+	})
+		.then(configuration => serve(configuration))
+}</code></pre>
 					</section>
 					<section>
 						<h4><strong>Spawning</strong> a browser</h4>
+						<p>To automate the tests execution, the platform needs a way to <strong>start</strong> a browser
+							and <strong>stop</strong> it when the tests are done <i>(or the timeout is reached)</i></p>
 					</section>
 					<section>
 						<h4>Custom <strong>endpoints</strong></h4>
+					</section>
+					<section>
+						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<br/>
+						<small>
+							<a jref="https://arnaud-buchholz.medium.com/reserve-testing-ui5-building-a-platform-e86727b41ec4" target="_blank">
+								REserve — Testing UI5 — Building a platform
+							</a>
+						</small>
 					</section>
 				</section>
 				<section>
 					<section>
 						<h3><strong>Probing</strong> the tests</h3>
+						<img src="UI5Con'21 UI5 Test Runner/7658449002_0646d75738_c.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4><strong>Declaring</strong> the tests</h4>
@@ -264,10 +311,20 @@
 					<section>
 						<h4>Test suite <strong>extraction</strong></h4>
 					</section>
+					<section>
+						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<br/>
+						<small>
+							<a jref="https://arnaud-buchholz.medium.com/reserve-testing-ui5-probing-the-tests-5ad68ac8c93" target="_blank">
+								REserve — Testing UI5 — Probing the tests
+							</a>
+						</small>
+					</section>
 				</section>
 				<section>
 					<section>
 						<h3><strong>Executing</strong> the tests</h3>
+						<img src="UI5Con'21 UI5 Test Runner/slot-car-racing-Melbourne.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4>QUnit <strong>hooks</strong></h4>
@@ -279,10 +336,20 @@
 					<section>
 						<h4>Execution <strong>queue</strong></h4>
 					</section>
+					<section>
+						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<br/>
+						<small>
+							<a jref="https://arnaud-buchholz.medium.com/reserve-testing-ui5-executing-tests-294322d41b60" target="_blank">
+								REserve — Testing UI5 — Executing tests
+							</a>
+						</small>
+					</section>
 				</section>
 				<section>
 					<section>
 						<h3><strong>Measuring</strong> code coverage</h3>
+						<img src="UI5Con'21 UI5 Test Runner/nyc.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4><strong>Understanding</strong> code coverage</h4>
@@ -299,10 +366,26 @@
 					<section>
 						<h4><strong>Consolidating</strong> code coverage</h4>
 					</section>
+					<section>
+						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<br/>
+						<small>
+							<a jref="https://arnaud-buchholz.medium.com/reserve-testing-ui5-measuring-code-coverage-ef303af051ef" target="_blank">
+								REserve — Testing UI5 — Measuring code coverage
+							</a>
+						</small>
+					</section>
 				</section>
 				<section>
 					<section>
 						<h3><code>ui5-test-runner</code></h3>
+					</section>
+					<section>
+						<h4>Roadmap ?</h4>
+						<ul>
+							<li><strong>Smarter</strong> watch <br/><small>(test only what is impacted by the change)</small></li>
+							<li><strong>Selenium</strong> integration</li>
+						</ul>
 					</section>
 				</section>
 			</div>
