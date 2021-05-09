@@ -254,18 +254,21 @@
 					</section>
 					<section>
 						<h4>Defining the <strong>options</strong></h4>
-						<p>To be <strong>flexible</strong>, the platform must offer a wide range of options :</p>
+						<p>Every aspect of is <strong>configurable</strong> through options :</p>
 						<ul>
 							<li><strong>Location</strong> of the <code>webapp</code> folder</li>
 							<li><strong>URL</strong> of the <code>UI5</code> CDN</li>
-							<li><strong>Libraries</strong></li>
-							<li>Number of <strong>parallel</strong> execution</li>
-							<li><strong>Timeout</strong> (page &amp; global)</li>
+							<li><strong>Serving</strong> port</li>
 							<li>...</li>
 						</ul>
+						<br/>
+						<br/>
+						<a href="https://www.npmjs.com/package/ui5-test-runner" target="blank">ui5-test-runner</a>
+						<img async-src="https://img.shields.io/npm/dw/ui5-test-runner.svg" height="30px" src="https://img.shields.io/npm/dw/ui5-test-runner.svg">
 					</section>
 					<section>
 						<h4><strong>Serving</strong> the application</h4>
+						<p>REserve is <strong>Embedded</strong></p>
 						<pre><code class="javascript">const { check, serve } = require('reserve')
 
 check({
@@ -283,9 +286,43 @@ check({
 }</code></pre>
 					</section>
 					<section>
-						<h4><strong>Spawning</strong> a browser</h4>
-						<p>To automate the tests execution, the platform needs a way to <strong>start</strong> a browser
-							and <strong>stop</strong> it when the tests are done <i>(or the timeout is reached)</i></p>
+						<h4><strong>Spawning</strong> a browser (1/3)</h4>
+						<p>To <strong>automate</strong> the tests execution, the platform needs a way to <strong>start</strong> a browser
+							and <strong>stop</strong> it when the tests are <strong>done</strong> <i>(or the <strong>timeout</strong> is reached).</i></p>
+						<p>To remain <strong>flexible</strong>, this operation is deferred to a <strong>configurable</strong> script that is <strong>spawned</strong> by the platform.</p>
+					</section>
+					<section>
+						<h4><strong>Spawning</strong> a browser (2/3)</h4>
+						<p>By default, a <code>puppeteer</code> is provided</p>
+						<pre><code class="javascript">const puppeteer = require('puppeteer')
+let browser
+
+const url = process.argv[2]
+
+process.on('message', async message => {
+  if (message.command === 'stop') {
+    await browser.close()
+    process.exit(0)
+  }
+})
+  
+async function main () {
+  browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      url,
+	  '--no-sandbox',
+	  '--disable-gpu',
+	  '--disable-extensions'
+	]
+  })
+  page = (await browser.pages())[0]
+}
+  
+main()</code></pre>				
+					</section>
+					<section>
+						<h4><strong>Spawning</strong> a browser (2/3)</h4>
 					</section>
 					<section>
 						<h4>Custom <strong>endpoints</strong></h4>
