@@ -241,7 +241,7 @@
 						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<br/>
 						<small>
-							<a jref="https://arnaud-buchholz.medium.com/reserve-serving-an-openui5-application-2f0211f057e2" target="_blank">
+							<a href="https://arnaud-buchholz.medium.com/reserve-serving-an-openui5-application-2f0211f057e2" target="_blank">
 								REserve — Serving an OpenUI5 application
 							</a>
 						</small>
@@ -254,7 +254,7 @@
 					</section>
 					<section>
 						<h4>Defining the <strong>options</strong></h4>
-						<p>Every aspect of is <strong>configurable</strong> through options :</p>
+						<p>Every aspect is <strong>configurable</strong> through options :</p>
 						<ul>
 							<li><strong>Location</strong> of the <code>webapp</code> folder</li>
 							<li><strong>URL</strong> of the <code>UI5</code> CDN</li>
@@ -293,45 +293,59 @@ check({
 					</section>
 					<section>
 						<h4><strong>Spawning</strong> a browser (2/3)</h4>
-						<p>By default, a <code>puppeteer</code> is provided</p>
+						<p>By default, a <code>puppeteer</code> script is provided :</p>
 						<pre><code class="javascript">const puppeteer = require('puppeteer')
-let browser
-
 const url = process.argv[2]
-
+let browser
 process.on('message', async message => {
   if (message.command === 'stop') {
     await browser.close()
     process.exit(0)
   }
 })
-  
 async function main () {
   browser = await puppeteer.launch({
     headless: true,
-    args: [
-      url,
-	  '--no-sandbox',
-	  '--disable-gpu',
-	  '--disable-extensions'
-	]
+    args: [ url, '--no-sandbox' /* ... */]
   })
   page = (await browser.pages())[0]
 }
-  
-main()</code></pre>				
+main()</code></pre>
 					</section>
 					<section>
-						<h4><strong>Spawning</strong> a browser (2/3)</h4>
+						<h4><strong>Spawning</strong> a browser (3/3)</h4>
+						<p>Tests were conducted to validate that <strong>multiple instances</strong> do not <strong>interfer</strong> with each other<br />
+							<small><i>(for instance : local storage)</i></small></p>
 					</section>
 					<section>
-						<h4>Custom <strong>endpoints</strong></h4>
+						<h4>Custom <strong>endpoints</strong> (1/2)</h4>
+						<p>During the tests execution, the platform needs to <strong>receive feedback</strong> from the browsers.</p>
+						<p>Specific <strong>endpoints</strong> are created using the <code>referer</code> header to <strong>identify</strong> from which test <i>(URL)</i> the <strong>request</strong> comes.</p>
 					</section>
+					<section>
+						<h4>Custom <strong>endpoints</strong> (2/2)</h4>
+						<pre><code class="javascript">const { body } = require('reserve')
+function endpoint (implementation) {
+  return async function (request, response) {
+    response.writeHead(200)
+    response.end()
+    const url = request.headers.referer
+    const data = JSON.parse(await body(request))
+    try {
+      await implementation.call(this, url, data)
+    } catch (e) {
+      console.error(`Exception when processing ${url}`)
+      console.error(data)
+      console.error(e)
+    }
+  }
+}</code></pre>
+												</section>
 					<section>
 						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<br/>
 						<small>
-							<a jref="https://arnaud-buchholz.medium.com/reserve-testing-ui5-building-a-platform-e86727b41ec4" target="_blank">
+							<a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-building-a-platform-e86727b41ec4" target="_blank">
 								REserve — Testing UI5 — Building a platform
 							</a>
 						</small>
@@ -352,7 +366,7 @@ main()</code></pre>
 						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<br/>
 						<small>
-							<a jref="https://arnaud-buchholz.medium.com/reserve-testing-ui5-probing-the-tests-5ad68ac8c93" target="_blank">
+							<a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-probing-the-tests-5ad68ac8c93" target="_blank">
 								REserve — Testing UI5 — Probing the tests
 							</a>
 						</small>
@@ -377,7 +391,7 @@ main()</code></pre>
 						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<br/>
 						<small>
-							<a jref="https://arnaud-buchholz.medium.com/reserve-testing-ui5-executing-tests-294322d41b60" target="_blank">
+							<a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-executing-tests-294322d41b60" target="_blank">
 								REserve — Testing UI5 — Executing tests
 							</a>
 						</small>
@@ -407,7 +421,7 @@ main()</code></pre>
 						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<br/>
 						<small>
-							<a jref="https://arnaud-buchholz.medium.com/reserve-testing-ui5-measuring-code-coverage-ef303af051ef" target="_blank">
+							<a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-measuring-code-coverage-ef303af051ef" target="_blank">
 								REserve — Testing UI5 — Measuring code coverage
 							</a>
 						</small>
