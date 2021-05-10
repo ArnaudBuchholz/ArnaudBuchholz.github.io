@@ -25,7 +25,7 @@
 									</small>
 								</td>
 								<td style="vertical-align: top;">
-									<h3 data-agenda="no"><strong>UI5</strong> Test <strong>Runner</strong></h3>
+									<h3 data-agenda="no">A <strong>different</strong> approach to UI5 <strong>tests execution</strong></h3>
 									<p>
 										<small>
 											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
@@ -108,7 +108,7 @@
 						<br />
 					</section>
 					<section>
-						<h4>Got the <strong>trend</strong> ?</h4>
+						<q>Got the <strong>trend</strong> ?</q>
 					</section>
 					<section>
 						<h4><strong>Quality</strong> focus</h4>
@@ -124,8 +124,15 @@
 							<li>CI pipeline uses the <strong>Karma</strong> runner</li>
 							<li>OPA tests based on the <strong>iFrame mode</strong></li>
 							<li><strong>Huge</strong> memory consumption</li>
-							<li>Tests are abruptly <strong>aborted</strong> <i>(browser crash)</i></li>
+							<li>Tests are abruptly <strong>aborted</strong> <i class="fragment">(browser crash)</i></li>
 						</ul>
+					</section>
+					<section>
+						<h4><strong>Give</strong> me a &#128077; if...</h4>
+						<p class="fragment">You <strong>use</strong> Karma</p>
+						<p class="fragment">You <strong>understand</strong> how Karma <strong>executes</strong> tests</p>
+						<br />
+						<p class="fragment">... I do <strong>not</strong> understand &#128561;</p>
 					</section>
 					<section>
 						<h4><strong>Karma</strong> execution model</h4>
@@ -170,7 +177,7 @@
 						<ul>
 							<li><strong>Mapping</strong> configured with <code>neo-app.json</code></li>
 							<li>Enables <strong>fast</strong> version selection
-								<img src="UI5Con'21 UI5 Test Runner/WebIDE.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+								<img src="UI5Con'21 UI5 Test Runner/WebIDE.gif" style="border: 0; max-width: 50%; max-height: 50%;" />
 							</il>
 							<li><strong>No</strong> installation, <strong>hard</strong> to automate</il>
 						</ul>
@@ -180,7 +187,7 @@
 						<ul>
 							<li>UI5 <strong>packages</strong> are installed <strong>locally</strong></li>
 							<li><strong>Fastidious</strong> version switch
-								<img src="UI5Con'21 UI5 Test Runner/ui5 serve verbose.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+								<img src="UI5Con'21 UI5 Test Runner/ui5 serve.gif" style="border: 0; max-width: 50%; max-height: 50%;" />
 							</il>
 							<li>Significant <strong>digital footprint</strong>, <strong>automated</strong> (karma)</il>
 						</ul>
@@ -206,7 +213,8 @@
 					</section>
 					<section>
 						<p>Can we combine a <strong>lightweight</strong> setup<br/>
-							and a <strong>fast &amp; external</strong> version selection ?</p>
+							with a <strong>fast &amp; external</strong> version selection ?</p>
+						<small class="fragment">And - ideally - easy to <strong>automate</strong> ?</small>
 					</section>
 					<section>
 						<h4>Introducing <strong>REserve</strong></h4>
@@ -295,10 +303,10 @@ check({
 						<h4><strong>Spawning</strong> a browser (2/3)</h4>
 						<p>By default, a <code>puppeteer</code> script is provided :</p>
 						<pre><code class="javascript">const puppeteer = require('puppeteer')
-const url = process.argv[2]
+const url = process.argv[2] // Test page to open
 let browser
 process.on('message', async message => {
-  if (message.command === 'stop') {
+  if (message.command === 'stop') { // End signal
     await browser.close()
     process.exit(0)
   }
@@ -319,8 +327,9 @@ main()</code></pre>
 					</section>
 					<section>
 						<h4>Custom <strong>endpoints</strong> (1/2)</h4>
-						<p>During the tests execution, the platform needs to <strong>receive feedback</strong> from the browsers.</p>
-						<p>Specific <strong>endpoints</strong> are created using the <code>referer</code> header to <strong>identify</strong> from which test <i>(URL)</i> the <strong>request</strong> comes.</p>
+						<p>During the tests execution, the platform needs to <strong>receive feedback</strong> from the browsers :<br />
+						   dedicated <strong>endpoints</strong> are created.<br/><small>(base URL : <code>/_/</code>)</small><p>
+						<p>The endpoints leverage the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer"><code>referer</code></a> header to <strong>identify</strong> from which test <i>(URL)</i> the <strong>request</strong> comes.</p>
 					</section>
 					<section>
 						<h4>Custom <strong>endpoints</strong> (2/2)</h4>
