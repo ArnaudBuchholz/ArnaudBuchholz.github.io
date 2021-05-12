@@ -1,6 +1,8 @@
 gpf.require.define({
     dom: "/res/dom.js",
     cdnStyles: "styles.json",
+    cdnThemes: "themes.json",
+    cdnPrint: "print.json",
     cdnScripts: "scripts.json",
     cdnPlugins: "plugins.json",
     cfgPlugins: "plugins.js"
@@ -21,7 +23,22 @@ gpf.require.define({
         return url;
     }
 
-    require.cdnStyles.forEach(function (attributes) {
+    var cdnStyles = [].concat(require.cdnStyles);
+
+    var meta = document.head.querySelector("meta[name='deck-theme']");
+    var theme;
+    if (meta) {
+        theme = meta.getAttribute("content");
+    } else {
+        theme = "sky";
+    }
+    cdnStyles.push(require.cdnThemes[theme])
+
+    if (location.toString().match(/\bprint-pdf\b/)) {
+        cdnStyles.push(require.cdnPrint)
+    }
+
+    cdnStyles.forEach(function (attributes) {
         dom.link({
             rel: "stylesheet",
             crossorigin: "anonymous",
