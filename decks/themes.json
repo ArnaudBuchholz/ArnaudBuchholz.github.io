@@ -1,0 +1,10 @@
+{
+  "sky": {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/sky.min.css",
+    "integrity": "sha256-5Wuqy8aSzReNhqwX5eDQlDZkMT18OJMzvXthwHGKl4o="
+  },
+  "night": {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/css/theme/night.min.css",
+    "integrity": "sha512-/OahNoquApSf+ZODsGbrJpUPv3blMbpeXJ0hYxTFF3WybIe54+BJ9n+6W0QwrBp4gVSjes55GTZY8AQt9mBmiQ=="
+  }
+}
