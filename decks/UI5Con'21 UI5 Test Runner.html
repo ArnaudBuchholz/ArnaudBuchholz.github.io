@@ -10,18 +10,48 @@
 		<meta name="deck-duration" content="40">
 		<meta name="deck-theme" content="night">
 		<link rel="stylesheet" type="text/css" href="styles.css">
+		<style>
+section > section {
+	background-image: url("UI5Con'21 UI5 Test Runner/UI5con logo.png");
+	background-repeat: no-repeat;
+	background-size: 15%;
+	background-position: bottom right;
+}
+
+section.title {
+	background-image: none;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+section.title h3 {
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+section.divider {
+	background-image: url("UI5Con'21 UI5 Test Runner/UI5con divider.png");
+	background-size: 30%;
+}
+
+section.divider h3 {
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.reveal.center .slides section {
+    min-height: 90%!important;
+}
+		</style>
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
 				<section>
-					<section>
+					<section class="title">
 						<table>
 							<tr>
 								<td width="50%">
 									<small>
-										<a href="https://www.imdb.com/title/tt0120201/">Starship Troopers
-											<img src="UI5Con'21 UI5 Test Runner/good_bug.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+										<a href="https://www.imdb.com/title/tt0120201/"><small>Starship Troopers</small>
+											<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
 										</a>
 									</small>
 								</td>
@@ -35,8 +65,7 @@
 										</small>
 									</p>
 									<br />
-									<img src="UI5Con'18 A journey with OPA/OpenUI5_new_big_side.png" height="75px" style="border: 0;" />
-									<img src="UI5Con'18 A journey with OPA/UI5Con.png" height="75px" style="border: 0;" />
+									<img src="UI5Con'21 UI5 Test Runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
 								</td>
 							</tr>
 						</table>
@@ -47,7 +76,7 @@
 						<ul id="agenda"></ul>
 					</section>
 					<section>
-						<h4>Presented <img src="/gfx/GitHub.png" style="margin: 0; border: 0; box-shadow: unset;" /><strong>projects</strong></h4>
+						<h4>Presented <img src="/gfx/GitHub_w.png" style="margin: 0; border: 0; box-shadow: unset;" /><strong>projects</strong></h4>
 						<ul>
 							<li>
 								<a href="https://openui5.org/">OpenUI5</a><br />
@@ -76,17 +105,19 @@
 							<li class="fragment"><a href="https://github.com/SAP/ui5-tooling"><strong>UI5 tooling</strong></a> is the <strong>recommended</strong> solution for UI5 <strong>development</strong></li>
 						</ul>
 						<br/>
+						<br/>
+						<br/>
 						<p class="fragment"><strong>Innovation</strong> <i>sometimes</i> requires to <strong>ignore</strong> recommendations &#128517;</p>
 					</section>
 				</section>
 				<section>
-					<section>
+					<section class="divider">
 						<h3><strong>Context</strong></h3>
 						<q>Back to 2018...</q>
 					</section>
 					<section>
 						<h4>UI5Con<strong>'18</strong></h4>
-						<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 40%; max-height: 40%;" />
 						<br />
 						<p>A journey with <strong>OPA</strong></p>
 						<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a> <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a></small>
@@ -150,7 +181,7 @@
 					</section>
 				</section>
 				<section>
-					<section>
+					<section class="divider">
 						<h3><strong>Serving</strong> an <strong>UI5</strong> application</h3>
 						<img src="UI5Con'21 UI5 Test Runner/serving.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
@@ -160,13 +191,11 @@
 							<li>UI5 <strong>loaded</strong> with <code>sap-ui-core.js</code></li>
 							<li>No <strong>specific</strong> version</li>
 							<li>Path is <strong>relative</strong> to the project
-<pre><code class="html">&lt;script id="sap-ui-bootstrap"
-	src="../resources/sap-ui-core.js"
+<pre><code class="html">&lt;script id="sap-ui-bootstrap" src="../resources/sap-ui-core.js"
 	data-sap-ui-theme="sap_fiori_3"
 	data-sap-ui-libs="sap.m"
 	data-sap-ui-resourceroots='{"Demo": "./"}'
 	data-sap-ui-onInit="module:Demo/index"
-	data-sap-ui-compatVersion="edge"
 	data-sap-ui-async="true"&gt;
 &lt;/script&gt;</code></pre>
 							</li>
@@ -247,8 +276,8 @@
 						</small>
 					</section>
 					<section>
-						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<br/>
+						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<h4>Whould you like to know <strong>more</strong> ?</h4>
 						<small>
 							<a href="https://arnaud-buchholz.medium.com/reserve-serving-an-openui5-application-2f0211f057e2" target="_blank">
 								REserve — Serving an OpenUI5 application
@@ -257,7 +286,7 @@
 					</section>
 				</section>
 				<section>
-					<section>
+					<section class="divider">
 						<h3><strong>Building</strong> a test platform</h3>
 						<img src="UI5Con'21 UI5 Test Runner/platform.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
@@ -304,7 +333,6 @@ check({
 						<h4><strong>Spawning</strong> a browser (2/3)</h4>
 						<p>By default, a <code>puppeteer</code> script is provided :</p>
 						<pre><code class="javascript">const puppeteer = require('puppeteer')
-const url = process.argv[2] // Test page to open
 let browser
 process.on('message', async message => {
   if (message.command === 'stop') { // End signal
@@ -313,11 +341,11 @@ process.on('message', async message => {
   }
 })
 async function main () {
-  browser = await puppeteer.launch({
+  browser = await 
+  puppeteer.launch({
     headless: true,
-    args: [ url, '--no-sandbox' /* ... */]
+    args: [process.argv[2] /* Test page to open */, '--no-sandbox' /* ... */]
   })
-  page = (await browser.pages())[0]
 }
 main()</code></pre>
 					</section>
@@ -352,8 +380,8 @@ function endpoint (implementation) {
 }</code></pre>
 												</section>
 					<section>
-						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<br/>
+						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<h4>Whould you like to know <strong>more</strong> ?</h4>
 						<small>
 							<a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-building-a-platform-e86727b41ec4" target="_blank">
 								REserve — Testing UI5 — Building a platform
@@ -362,7 +390,7 @@ function endpoint (implementation) {
 					</section>
 				</section>
 				<section>
-					<section>
+					<section class="divider">
 						<h3><strong>Probing</strong> the tests</h3>
 						<img src="UI5Con'21 UI5 Test Runner/7658449002_0646d75738_c.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
@@ -392,12 +420,9 @@ function endpoint (implementation) {
 		function suite() {
 			var oSuite = new parent.jsUnitTestSuite(),
 				iLastSep = location.pathname.lastIndexOf("/") + 1,
-				sContextPath = location.pathname.substring(0, iLastSep),
-				sBaseOpa = sContextPath + "integration/opaTests.qunit.html?journey=";
+				sContextPath = location.pathname.substring(0, iLastSep);
 			oSuite.addTestPage(sContextPath + "unit/unitTests.qunit.html");
-			oSuite.addTestPage(sBaseOpa  + "TodoListJourney");
-			oSuite.addTestPage(sBaseOpa  + "SearchJourney");
-			/* ... */
+			oSuite.addTestPage(sContextPath + "integration/opaTests.qunit.html");
 			return oSuite;
 		}
 		&lt;/script&gt;
@@ -427,8 +452,8 @@ window.addEventListener('load', function () {
 })</code></pre>
 					</section>
 					<section>
-						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<br/>
+						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<h4>Whould you like to know <strong>more</strong> ?</h4>
 						<small>
 							<a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-probing-the-tests-5ad68ac8c93" target="_blank">
 								REserve — Testing UI5 — Probing the tests
@@ -437,7 +462,7 @@ window.addEventListener('load', function () {
 					</section>
 				</section>
 				<section>
-					<section>
+					<section class="divider">
 						<h3><strong>Executing</strong> the tests</h3>
 						<img src="UI5Con'21 UI5 Test Runner/slot-car-racing-Melbourne.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
@@ -452,8 +477,8 @@ window.addEventListener('load', function () {
 						<h4>Execution <strong>queue</strong></h4>
 					</section>
 					<section>
-						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<br/>
+						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<h4>Whould you like to know <strong>more</strong> ?</h4>
 						<small>
 							<a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-executing-tests-294322d41b60" target="_blank">
 								REserve — Testing UI5 — Executing tests
@@ -462,7 +487,7 @@ window.addEventListener('load', function () {
 					</section>
 				</section>
 				<section>
-					<section>
+					<section class="divider">
 						<h3><strong>Measuring</strong> code coverage</h3>
 						<img src="UI5Con'21 UI5 Test Runner/nyc.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
@@ -482,8 +507,8 @@ window.addEventListener('load', function () {
 						<h4><strong>Consolidating</strong> code coverage</h4>
 					</section>
 					<section>
-						<img src="UI5Con'21 UI5 Test Runner/know more.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<br/>
+						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<h4>Whould you like to know <strong>more</strong> ?</h4>
 						<small>
 							<a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-measuring-code-coverage-ef303af051ef" target="_blank">
 								REserve — Testing UI5 — Measuring code coverage
@@ -492,7 +517,7 @@ window.addEventListener('load', function () {
 					</section>
 				</section>
 				<section>
-					<section>
+					<section class="divider">
 						<h3><code>ui5-test-runner</code></h3>
 					</section>
 					<section>
