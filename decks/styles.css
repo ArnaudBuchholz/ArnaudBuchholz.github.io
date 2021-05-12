@@ -60,9 +60,10 @@ q {
 }
 
 .reveal section img {
-  margin: 0;
+	margin: 0;
 	border: 0;
 	box-shadow: unset;
+	background: unset;
 }
 
 .reveal .screenshot {
