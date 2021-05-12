@@ -9,7 +9,7 @@ var templates = {
         */},
     "deck": function () {/*
         <li><a href="%link%"><img src="/gfx/slides.svg" align="left" width="64px"/></a>
-            %title%<br/>
+            %title% <a href="%link%?print-pdf"><img src="/gfx/pdf-download.svg" align="left" width="64px"/></a><br/>
             <small><i>%subtitle%</i></small>
         </li>
     */},
