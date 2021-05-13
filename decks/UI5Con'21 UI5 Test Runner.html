@@ -399,7 +399,8 @@ main()</code></pre>
 						<h4>Custom <strong>endpoints</strong> (1/2)</h4>
 						<p>During the tests execution, the platform needs to <strong>receive feedback</strong> from the browsers :<br/>
 						   dedicated <strong>endpoints</strong> are created.<br/><small>(base URL : <code>/_/</code>)</small><p>
-						<p>The endpoints leverage the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer"><code>referer</code></a> header to <strong>identify</strong> from which test <i>(URL)</i> the <strong>request</strong> comes.</p>
+						<p>The endpoints leverage the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer"><code>referer</code></a> header to <br/>
+							<strong>identify</strong> which test <i>(test page URL)</i> initiated the <strong>request</strong>.</p>
 					</section>
 					<section>
 						<h4>Custom <strong>endpoints</strong> (2/2)</h4>
@@ -448,7 +449,7 @@ function endpoint (implementation) {
 					</section>
 					<section>
 						<h4><strong>Declaring</strong> the tests (2/3)</h4>
-						<p>When running, a <strong>redirection</strong> occurs <br/> and the UI5 test <strong>executes</strong> the declared tests.</p>
+						<p>When opening the page, a <strong>redirection</strong> occurs <br/> and a runner <strong>executes</strong> the declared tests.</p>
 						<img src="UI5Con'21 UI5 Test Runner/UI5 runner.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption>UI5 test runner</figcaption>
 					</section>
@@ -492,6 +493,10 @@ window.addEventListener('load', function () {
 	xhr.open('POST', '/_/addTestPages')
 	xhr.send(JSON.stringify(pages))
 })</code></pre>
+<figcaption>Custom <code>qunit-redirect.js</code> used to extract test pages</figcaption>
+						<small>
+							<a href="http://localhost:8080/resources/sap/ui/qunit/qunit-redirect.js"><code>qunit-redirect.js</code></a>
+						</small>
 					</section>
 					<section>
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
@@ -510,13 +515,14 @@ window.addEventListener('load', function () {
 					</section>
 					<section>
 						<h4>QUnit <strong>hooks</strong></h4>
-						<p>The OPA framework is built <strong>on top of</strong> <code>QUnit</code>. <br/>
-							It exposes <strong>hooks</strong> to <strong>monitor</strong> the tests execution :</p>
+						<p>The OPA framework is built <strong>on top of</strong> <code>QUnit</code>.</p>
+						<p><code>QUnit</code> exposes <strong>hooks</strong> to <strong>monitor</strong> the tests :</p>
 						<ul>
 							<li><a href="https://api.qunitjs.com/callbacks/QUnit.begin/"><code>QUnit.begin</code></a></li>
 							<li><a href="https://api.qunitjs.com/callbacks/QUnit.testDone"><code>QUnit.testDone</code></a></li>
 							<li><a href="https://api.qunitjs.com/callbacks/QUnit.done/"><code>QUnit.done</code></a></li>
 						</ul>
+						<p>They provide information about <strong>progress</strong> and <strong>status</strong>.</p>
 					</section>
 					<section>
 						<h4><strong>Injecting</strong> the hooks</h4>
@@ -530,8 +536,9 @@ window.addEventListener('load', function () {
 					</section>
 					<section>
 						<h4>Execution <strong>queue</strong> (1/2)</h4>
-						<p>After <strong>probing</strong> the tests, the platform owns a <strong>list</strong> of test page URL.</p>
-						<p>Based on the <code>parallel</code> option, it instantiates concurrent browsers to run <strong>each</strong> page.</p>
+						<p>After <strong>probing</strong> the tests, the platform knows the <strong>list</strong> of test page URL.</p>
+						<p>Then, it instantiates concurrent browsers to run <strong>each</strong> page <strong>individually</strong>. <br/>
+						<small>The number of concurrent browsers is given by the option <code>parallel</code>.</small></p>
 						<p>The test page is <strong>stopped</strong> when the test is done <i>(<code>QUnit.testDone</code>)</i> or when the <strong>timeout</strong> is reached.</p>
 					</section>
 					<section>
@@ -547,11 +554,15 @@ async function runTestPage () {
 		return // No more tests to run
 	}
 	const url = job.testPageUrls[job.testPagesStarted++]
-	await start(url) // Resolved when the browser is stopped
+	await start(url) // Resolved when the browser is stopped (or timed out)
 	++job.testPagesCompleted
 	runTestPage()
 }</code></pre>
 <figcaption>Execution queue simplified implementation</figcaption>
+					</section>
+					<section>
+						<h4><strong>Demo</strong></h4>
+						<code>ui5-test-runner -parallel:2 -port:8080</code>
 					</section>
 					<section>
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
@@ -598,6 +609,10 @@ async function runTestPage () {
 						<h3><code>ui5-test-runner</code></h3>
 					</section>
 					<section>
+						<h4>Tips & Tricks</h4>
+						To benefit from parallelization, split the OPA tests by journeys (see <code>training-ui5Con18-opa</code>)
+					</section>
+					<section>
 						<h4>Roadmap ?</h4>
 						<ul>
 							<li><strong>Smarter</strong> watch <br/><small>(test only what is impacted by the change)</small></li>
@@ -608,7 +623,6 @@ async function runTestPage () {
 			</div>
 		</div>
 		<script src="/gpf/last/gpf.js"></script>
-		<script src="training-ui5con18-opa.js"></script>
 		<script src="deck.js"></script>
 	</body>
 </html>
