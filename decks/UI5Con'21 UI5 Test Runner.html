@@ -188,7 +188,8 @@ img.rounded {
 					</section>
 					<section>
 						<h4><strong>Demo</strong></h4>
-						<code>npm run karma</code>
+						<img src="UI5Con'21 UI5 Test Runner/Karma demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<figcaption><code>npm run karma</code></figcaption>
 					</section>
 				</section>
 				<section>
@@ -304,8 +305,9 @@ img.rounded {
 					</a>
 					</section>
 					<section>
-						<h4>Demo</h4>
-						<code>npm run reserve</code><br/>
+						<h4><strong>Demo</strong></h4>
+						<img src="UI5Con'21 UI5 Test Runner/REserve demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<figcaption><code>npm run reserve</code></figcaption>
 						<small>
 							<a href="http://localhost:8080/test/testsuite.qunit.html">Test suite</a>
 						</small>
@@ -421,6 +423,14 @@ function endpoint (implementation) {
 <figcaption>Reusable endpoint implementation</figcaption>
 					</section>
 					<section>
+						<h4><strong>Demo</strong></h4>
+						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner platform.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<figcaption><code>ui5-test-runner -parallel:0 -port:8080</code></figcaption>
+						<small>
+							<a href="http://localhost:8080/test/testsuite.qunit.html">Test suite</a>
+						</small>
+					</section>
+					<section>
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<h4>Whould you like to know <strong>more</strong> ?</h4>
 						<small>
@@ -522,7 +532,8 @@ window.addEventListener('load', function () {
 							<li><a href="https://api.qunitjs.com/callbacks/QUnit.testDone"><code>QUnit.testDone</code></a></li>
 							<li><a href="https://api.qunitjs.com/callbacks/QUnit.done/"><code>QUnit.done</code></a></li>
 						</ul>
-						<p>They provide information about <strong>progress</strong> and <strong>status</strong>.</p>
+						<p>They provide information about <br/>
+							<strong>progress</strong> and <strong>status</strong>.</p>
 					</section>
 					<section>
 						<h4><strong>Injecting</strong> the hooks</h4>
@@ -562,7 +573,11 @@ async function runTestPage () {
 					</section>
 					<section>
 						<h4><strong>Demo</strong></h4>
-						<code>ui5-test-runner -parallel:2 -port:8080</code>
+						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5</code></figcaption>
+						<small>
+							<a href="http://localhost:8080/_/progress.html">Progress report</a>
+						</small>
 					</section>
 					<section>
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
@@ -609,8 +624,20 @@ async function runTestPage () {
 						<h3><code>ui5-test-runner</code></h3>
 					</section>
 					<section>
+						<h4>Output files</h4>
+						<ul>
+							<li>Report</li>
+							<li>Code coverage</li>
+							<li>Screenshot</li>
+							<li>Traces</li>
+						</ul>
+					</section>
+					<section>
 						<h4>Tips & Tricks</h4>
-						To benefit from parallelization, split the OPA tests by journeys (see <code>training-ui5Con18-opa</code>)
+						<ul>
+							<li>To benefit from parallelization, split the OPA tests by journeys (see <code>training-ui5Con18-opa</code>)</li>
+							<li>Cache UI5 locally to speed up page execution</li>
+						</ul>
 					</section>
 					<section>
 						<h4>Roadmap ?</h4>
