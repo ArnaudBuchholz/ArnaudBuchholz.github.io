@@ -39,6 +39,17 @@ section.divider h3 {
 .reveal.center .slides section {
     min-height: 90%!important;
 }
+
+img.rounded {
+	margin: 0;
+	border: 0;
+	box-shadow: unset;
+	border-radius: 16px;
+}
+
+.reveal pre {
+	margin-bottom: 0;
+}
 		</style>
 	</head>
 	<body>
@@ -51,7 +62,7 @@ section.divider h3 {
 								<td width="50%">
 									<small>
 										<a href="https://www.imdb.com/title/tt0120201/"><small>Starship Troopers</small>
-											<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+											<img src="UI5Con'21 UI5 Test Runner/good_bug.png" class="rounded"></img>
 										</a>
 									</small>
 								</td>
@@ -183,14 +194,19 @@ section.divider h3 {
 				<section>
 					<section class="divider">
 						<h3><strong>Serving</strong> an <strong>UI5</strong> application</h3>
-						<img src="UI5Con'21 UI5 Test Runner/serving.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="UI5Con'21 UI5 Test Runner/serving.jpg" class="rounded" style="max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4><strong>Development</strong> setting</h4>
 						<ul>
-							<li>UI5 <strong>loaded</strong> with <code>sap-ui-core.js</code></li>
-							<li>No <strong>specific</strong> version</li>
-							<li>Path is <strong>relative</strong> to the project
+							<li>UI5 <strong>loaded</strong> with <code>sap-ui-core.js</code>
+								<small>
+									<ul>
+										<li>No <strong>specific</strong> version</li>
+										<li>Path is <strong>relative</strong> to the project
+									</ul>
+								</small>
+							</li>
 <pre><code class="html">&lt;script id="sap-ui-bootstrap" src="../resources/sap-ui-core.js"
 	data-sap-ui-theme="sap_fiori_3"
 	data-sap-ui-libs="sap.m"
@@ -198,6 +214,7 @@ section.divider h3 {
 	data-sap-ui-onInit="module:Demo/index"
 	data-sap-ui-async="true"&gt;
 &lt;/script&gt;</code></pre>
+<figcaption>Example of UI5 bootstrap</figcaption>
 							</li>
 							<li>All <strong>dependencies</strong> are under <code>/resources/</code> <small>or <code>/test-resources/</code></small></li>
 						</ul>
@@ -205,9 +222,16 @@ section.divider h3 {
 					<section>
 						<h4><strong>Running</strong> the application (<strong>WebIDE</strong>)</h4>
 						<ul>
-							<li><strong>Mapping</strong> configured with <code>neo-app.json</code></li>
-							<li>Enables <strong>fast</strong> version selection
-								<img src="UI5Con'21 UI5 Test Runner/WebIDE.gif" style="border: 0; max-width: 50%; max-height: 50%;" />
+							<li><strong>Mapping</strong> configured with <code>neo-app.json</code>
+								<small>
+									<ul>
+										<li>Enables <strong>fast</strong> version selection</li>
+									</ul>
+								</small>
+								<div style="text-align: center;">
+									<img src="UI5Con'21 UI5 Test Runner/WebIDE.gif" style="border: 0; max-width: 50%; max-height: 50%;" />
+									<figcaption>WebIDE</figcaption>
+								</div>
 							</il>
 							<li><strong>No</strong> installation but <strong>hard</strong> to automate</il>
 						</ul>
@@ -215,36 +239,49 @@ section.divider h3 {
 					<section>
 						<h4><strong>Running</strong> the application (<strong>@ui5/cli</strong>)</h4>
 						<ul>
-							<li>UI5 <strong>packages</strong> are installed <strong>locally</strong></li>
-							<li><strong>Fastidious</strong> version switch
-								<img src="UI5Con'21 UI5 Test Runner/ui5 serve.gif" style="border: 0; max-width: 50%; max-height: 50%;" />
+							<li>UI5 <strong>packages</strong> are installed <strong>locally</strong>
+								<small>
+									<ul>
+										<li><strong>Fastidious</strong> version switch</li>
+									</ul>
+								</small>
+								<div style="text-align: center;">
+									<img src="UI5Con'21 UI5 Test Runner/ui5 serve.gif" style="border: 0; max-width: 50%; max-height: 50%;" />
+									<figcaption>ui5 serve -o</figcaption>
+								</div>
 							</il>
-							<li>Significant <strong>digital footprint</strong> but <strong>automated</strong></il>
+							<li><strong>Heavy</strong> but <strong>automated</strong></il>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>Running</strong> the application (<strong>UI5 CDN</strong>)</h4>
 						<ul>
 							<li>Load UI5 from a <strong>Content Delivery Network</strong>
-							<li>Project files <strong>must</strong> be served with a <strong>web server</strong>
+								<small>
+									<ul>
+										<li>Version selection requires <strong>bootstrap change</strong></li>										
+										<li>Project files <strong>must</strong> be served with a <strong>web server</strong></li>
+									</ul>
+								</small>
 								<pre><code class="html">&lt;script id="sap-ui-bootstrap"
 	src="https://openui5.hana.ondemand.com/1.87.0/resources/sap-ui-core.js"
 	data-sap-ui-theme="sap_fiori_3"
 	data-sap-ui-libs="sap.m"
 	data-sap-ui-resourceroots='{"Demo": "./"}'
 	data-sap-ui-onInit="module:Demo/index"
-	data-sap-ui-compatVersion="edge"
 	data-sap-ui-async="true"&gt;
 &lt;/script&gt;</code></pre>
+<figcaption>UI5 bootstrap from CDN</figcaption>
 						</li>
-						<li>Version selection requires <strong>bootstrap change</strong></li>
 						<li><strong>Lite</strong> setup but <strong>how</strong> do we automate ?</li>
 					</ul>
 					</section>
 					<section>
 						<p>Can we combine a <strong>lightweight</strong> setup<br/>
 							with a <strong>fast &amp; external</strong> version selection ?</p>
-						<small class="fragment">And - ideally - that is easy to <strong>automate</strong> ?</small>
+						<br/>
+						<br/>
+						<p class="fragment">...And easy to <strong>automate</strong> ?</p>
 					</section>
 					<section>
 						<h4>Introducing <strong>REserve</strong></h4>
@@ -255,18 +292,16 @@ section.divider h3 {
 		"match": "/(test-)?resources/(.*)",
 		"url": "https://openui5.hana.ondemand.com/1.87.0/$1resources/$2"
 	}, {
-		"match": "^/(\\?.*)?$",
-		"file": "./webapp/index.html"
-	}, {
 		"match": "^/(.*)",
 		"file": "./webapp/$1"
 	}]
 }</code></pre>
-						<a href="https://www.npmjs.com/package/reserve" target="blank">reserve</a>
-						<img async-src="https://img.shields.io/npm/dw/reserve.svg" height="30px" src="https://img.shields.io/npm/dw/reserve.svg">
-						<a href="https://packagephobia.now.sh/result?p=reserve" target="_blank" class="img-only">
-							<img async-src="https://packagephobia.now.sh/badge?p=reserve" height="30px" src="https://packagephobia.now.sh/badge?p=reserve">
-						</a>
+<figcaption>Example JSON configuration file to serve an UI5 application</figcaption>
+					<a href="https://www.npmjs.com/package/reserve" target="blank">reserve</a>
+					<img async-src="https://img.shields.io/npm/dw/reserve.svg" height="30px" src="https://img.shields.io/npm/dw/reserve.svg">
+					<a href="https://packagephobia.now.sh/result?p=reserve" target="_blank" class="img-only">
+						<img async-src="https://packagephobia.now.sh/badge?p=reserve" height="30px" src="https://packagephobia.now.sh/badge?p=reserve">
+					</a>
 					</section>
 					<section>
 						<h4>Demo</h4>
@@ -288,7 +323,7 @@ section.divider h3 {
 				<section>
 					<section class="divider">
 						<h3><strong>Building</strong> a test platform</h3>
-						<img src="UI5Con'21 UI5 Test Runner/platform.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="UI5Con'21 UI5 Test Runner/platform.jpg" class="rounded" style="max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4>Defining the <strong>options</strong></h4>
@@ -306,7 +341,6 @@ section.divider h3 {
 					</section>
 					<section>
 						<h4><strong>Serving</strong> the application</h4>
-						<p>REserve is <strong>embedded</strong></p>
 						<pre><code class="javascript">const { check, serve } = require('reserve')
 
 check({
@@ -322,6 +356,7 @@ check({
 	})
 		.then(configuration => serve(configuration))
 }</code></pre>
+<figcaption>REserve can be embedded inside an application</figcaption>
 					</section>
 					<section>
 						<h4><strong>Spawning</strong> a browser (1/3)</h4>
@@ -331,7 +366,6 @@ check({
 					</section>
 					<section>
 						<h4><strong>Spawning</strong> a browser (2/3)</h4>
-						<p>By default, a <code>puppeteer</code> script is provided :</p>
 						<pre><code class="javascript">const puppeteer = require('puppeteer')
 let browser
 process.on('message', async message => {
@@ -341,17 +375,19 @@ process.on('message', async message => {
   }
 })
 async function main () {
-  browser = await 
-  puppeteer.launch({
+  browser = await puppeteer.launch({
     headless: true,
-    args: [process.argv[2] /* Test page to open */, '--no-sandbox' /* ... */]
+    args: [process.argv[2] /* Test page to open */, /* ... */]
   })
 }
 main()</code></pre>
+<figcaption>By default, a <a href="https://www.npmjs.com/package/puppeteer"><code>puppeteer</code></a> script is provided</figcaption>
 					</section>
 					<section>
 						<h4><strong>Spawning</strong> a browser (3/3)</h4>
-						<p>Tests were conducted to validate that <strong>multiple instances</strong> do not <strong>interfer</strong> with each other<br />
+						<p>Tests were conducted to validate that <br/>
+							<strong>multiple and concurrent instances</strong> <br/>
+							do not <strong>interfer</strong> with each other<br />
 							<small><i>(for instance : local storage)</i></small></p>
 					</section>
 					<section>
@@ -372,13 +408,12 @@ function endpoint (implementation) {
     try {
       await implementation.call(this, url, data)
     } catch (e) {
-      console.error(`Exception when processing ${url}`)
-      console.error(data)
-      console.error(e)
+      console.error(`Exception when processing ${url}`, e)
     }
   }
 }</code></pre>
-												</section>
+<figcaption>Reusable endpoint implementation</figcaption>
+					</section>
 					<section>
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<h4>Whould you like to know <strong>more</strong> ?</h4>
@@ -392,7 +427,7 @@ function endpoint (implementation) {
 				<section>
 					<section class="divider">
 						<h3><strong>Probing</strong> the tests</h3>
-						<img src="UI5Con'21 UI5 Test Runner/7658449002_0646d75738_c.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="UI5Con'21 UI5 Test Runner/7658449002_0646d75738_c.jpg" class="rounded" style="max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4><strong>Declaring</strong> the tests (1/3)</h4>
@@ -432,8 +467,9 @@ function endpoint (implementation) {
 					</section>
 					<section>
 						<h4>Test suite <strong>extraction</strong> (1/2)</h4>
-						<p>By <strong>substituting</strong> <code>qunit-redirect.js</code> with a <strong>custom script</strong>
-							and opening <code>testsuite.qunit.html</code>,
+						<p>By <strong>substituting</strong> <code>qunit-redirect.js</code> <br />
+							with a <strong>custom script</strong> and <br />
+							opening <code>testsuite.qunit.html</code>, <br />
 							the platform <strong>captures</strong> the <strong>list</strong> of test pages.</p>
 						</section>
 					<section>
@@ -443,9 +479,9 @@ function jsUnitTestSuite () {}
 jsUnitTestSuite.prototype.addTestPage = function (url) {
 	pages.push(url)
 }
-window.jsUnitTestSuite = jsUnitTestSuite
+window.jsUnitTestSuite = jsUnitTestSuite // Expose
 window.addEventListener('load', function () {
-	suite()
+	suite() // Trigger
 	const xhr = new XMLHttpRequest()
 	xhr.open('POST', '/_/addTestPages')
 	xhr.send(JSON.stringify(pages))
@@ -464,17 +500,46 @@ window.addEventListener('load', function () {
 				<section>
 					<section class="divider">
 						<h3><strong>Executing</strong> the tests</h3>
-						<img src="UI5Con'21 UI5 Test Runner/slot-car-racing-Melbourne.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="UI5Con'21 UI5 Test Runner/slot-car-racing-Melbourne.jpg" class="rounded" style="max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4>QUnit <strong>hooks</strong></h4>
+						<p>The OPA framework is built <strong>on top of</strong> <code>QUnit</code>, <br/>
+							it exposes some hooks to <strong>monitor</strong> <br/>
+							the tests execution :</p>
+						<ul>
+							<li><code>QUnit.begin</code></li>
+							<li><code>QUnit.testDone</code></li>
+							<li><code>QUnit.done</code></li>
+						</ul>
 					</section>
 					<section>
 						<h4><strong>Injecting</strong> the hooks</h4>
-						Not much details about the how but show the result
+						<p>When the test page <strong>loads</strong> the <code>QUnit</code> module, <br/>
+							the platform <strong>injects</strong> code to <strong>leverage the hooks</strong> <br/>
+							and trigger specific <strong>endpoints</strong>.</p>
+						<small>
+							<a href="http://localhost:8080/resources/sap/ui/thirdparty/qunit.js"><code>qunit.js</code></a><br/>
+							<a href="http://localhost:8080/resources/sap/ui/thirdparty/qunit-2.js"><code>qunit-2.js</code></a>
+						</small>
 					</section>
 					<section>
 						<h4>Execution <strong>queue</strong></h4>
+<pre><code class="javascript">for (let i = 0; i &lt; job.parallel; ++i) runTestPage()
+
+async function runTestPage () {
+	const { length } = job.testPageUrls
+	if (job.testPagesCompleted === length) { 
+		return generateReport() // Last test completed
+	}
+	if (job.testPagesStarted === length) {
+		return // No more tests to run
+	}
+	const url = job.testPageUrls[job.testPagesStarted++]
+	await start(url) // Resolved when the browser is stopped
+	++job.testPagesCompleted
+	runTestPage()
+}</code></pre>
 					</section>
 					<section>
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
@@ -489,7 +554,7 @@ window.addEventListener('load', function () {
 				<section>
 					<section class="divider">
 						<h3><strong>Measuring</strong> code coverage</h3>
-						<img src="UI5Con'21 UI5 Test Runner/nyc.jpg" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="UI5Con'21 UI5 Test Runner/nyc.jpg" class="rounded" style="max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4><strong>Understanding</strong> code coverage</h4>
