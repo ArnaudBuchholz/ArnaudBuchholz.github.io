@@ -120,3 +120,11 @@ td.social a img {
 td.social a img:hover {
 	box-shadow: unset;
 }
+
+.reveal figcaption {
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	font-size: .5em;
+	font-style: italic;
+}
