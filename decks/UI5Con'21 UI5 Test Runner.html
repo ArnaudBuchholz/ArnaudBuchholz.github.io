@@ -596,9 +596,23 @@ async function runTestPage () {
 					</section>
 					<section>
 						<h4><strong>Understanding</strong> code coverage</h4>
+						<p>The process usually consists in three steps :</p>
+						<ul>
+							<li><strong>Instrumentation</strong> of the code</li>
+							<li><strong>Evaluation</strong> of the code</li>
+							<li><strong>Extraction</strong> and <strong>consolidation</strong> of measurement</li>
+						</ul>
 					</section>
 					<section>
 						<h4><strong>NYC</strong></h4>
+						<p><code>nyc</code> is a command line <strong>wrapper</strong> for <code>Istanbul</code>, <br/>
+							a javascript code coverage tool.</p>
+						<p>The platform leverage <code>nyc</code> by <strong>spawning</strong> commands and <strong>waiting</strong> for their termination.</p>
+						<a href="https://www.npmjs.com/package/nyc" target="blank">nyc</a>
+						<img async-src="https://img.shields.io/npm/dw/nyc.svg" height="30px" src="https://img.shields.io/npm/dw/nyc.svg">
+						<a href="https://packagephobia.now.sh/result?p=nyc" target="_blank" class="img-only">
+							<img async-src="https://packagephobia.now.sh/badge?p=nyc" height="30px" src="https://packagephobia.now.sh/badge?p=nyc">
+						</a>
 					</section>
 					<section>
 						<h4><strong>Instrumenting</strong> sources</h4>
