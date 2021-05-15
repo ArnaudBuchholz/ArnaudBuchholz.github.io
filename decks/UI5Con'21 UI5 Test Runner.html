@@ -585,6 +585,7 @@ async function runTestPage () {
 					</section>
 					<section>
 						<h4><strong>Demo</strong></h4>
+						<p>Executing the tests in parallel</p>
 						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5</code></figcaption>
 						<small>
@@ -628,12 +629,25 @@ async function runTestPage () {
 					</section>
 					<section>
 						<h4><strong>Instrumenting</strong> sources</h4>
+						<p>The instrumentation step is triggered <strong>before</strong> executing the tests.
+							By default, the test files are <strong>excluded</strong> from the coverage report.</p>
+						<p>NYC <strong>aggregates</strong> the collected coverage information at the <strong>window level</strong>.
+							Because of the <strong>IFrame</strong> usage in OPA, this is changed to the <strong>top window</strong> by the platform.</p>
 					</section>
 					<section>
 						<h4><strong>Injecting</strong> instrumented sources</h4>
+						<p>When an instrumented file <strong>exists</strong> for a source file, it is <strong>substituted</strong>.</p>
 					</section>
 					<section>
 						<h4><strong>Consolidating</strong> code coverage</h4>
+						<p>Each test page is executed <strong>separately</strong> : corresponding coverage data is <strong>saved</strong> at the end of each test page.</p>
+						<p>When all the tests are <strong>completed</strong>, NYC is used to <strong>merge</strong> the coverage information and <strong>generate</strong> the coverage report.</p>
+					</section>
+					<section>
+						<h4><strong>Demo</strong></h4>
+						<p>Coverage measurement</p>
+						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5</code></figcaption>
 					</section>
 					<section>
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
@@ -650,7 +664,7 @@ async function runTestPage () {
 						<h3><code>ui5-test-runner</code></h3>
 					</section>
 					<section>
-						<h4>Output files</h4>
+						<h4><strong>Output</strong> files</h4>
 						<ul>
 							<li>Report</li>
 							<li>Code coverage</li>
@@ -659,14 +673,15 @@ async function runTestPage () {
 						</ul>
 					</section>
 					<section>
-						<h4>Tips & Tricks</h4>
+						<h4><strong>Tips</strong> & Tricks</h4>
 						<ul>
-							<li>To benefit from parallelization, split the OPA tests by journeys (see <code>training-ui5Con18-opa</code>)</li>
-							<li>Cache UI5 locally to speed up page execution</li>
+							<li>To benefit from parallelization, <strong>split</strong> the OPA tests by <strong>journeys</strong>.<br/>
+								<small>(see <code>training-ui5Con18-opa</code>)</small></li>
+							<li><strong>Cache</strong> UI5 locally to <strong>speed up</strong> page execution.</li>
 						</ul>
 					</section>
 					<section>
-						<h4>Roadmap ?</h4>
+						<h4></strong>Roadmap</strong> <i>?</i></h4>
 						<ul>
 							<li><strong>Smarter</strong> watch <br/><small>(test only what is impacted by the change)</small></li>
 							<li><strong>Selenium</strong> integration</li>
