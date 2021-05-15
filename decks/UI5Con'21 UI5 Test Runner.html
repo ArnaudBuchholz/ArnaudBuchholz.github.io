@@ -453,14 +453,13 @@ function endpoint (implementation) {
 					<section>
 						<h4><strong>Declaring</strong> the tests (1/3)</h4>
 						<p>The <strong>test suite</strong> page<br/>
-							<small>
-								(<a href="https://sapui5.hana.ondemand.com/#/topic/07c97a2e497d443eb6fa74bb9445ab9c">
-									<code>webapp/test/testsuite.qunit.html</code>
-								</a>)
-							</small>
-							<br/>
 							<strong>declares every</strong> unit and OPA tests<br/>contained in the project.
 						</p>
+						<small>
+							<a href="https://sapui5.hana.ondemand.com/#/topic/07c97a2e497d443eb6fa74bb9445ab9c">
+								<code>webapp/test/testsuite.qunit.html</code>
+							</a>
+						</small>
 					</section>
 					<section>
 						<h4><strong>Declaring</strong> the tests (2/3)</h4>
@@ -509,8 +508,16 @@ window.addEventListener('load', function () {
 	xhr.send(JSON.stringify(pages))
 })</code></pre>
 <figcaption>Custom <code>qunit-redirect.js</code> used to extract test pages</figcaption>
+					</section>
+					<section>
+						<h4><strong>Demo</strong></h4>
+						<p>Substituting <code>qunit-redirect.js</code></p>
+						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner platform.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<figcaption><code>ui5-test-runner -parallel:-1 -port:8080</code></figcaption>
 						<small>
-							<a href="http://localhost:8080/resources/sap/ui/qunit/qunit-redirect.js"><code>qunit-redirect.js</code></a>
+							<a href="https://openui5.hana.ondemand.com/1.87.0/resources/sap/ui/qunit/qunit-redirect.js">original <code>qunit-redirect.js</code></a>
+							<br/>
+							<a href="http://localhost:8080/resources/sap/ui/qunit/qunit-redirect.js">substituted <code>qunit-redirect.js</code></a>
 						</small>
 					</section>
 					<section>
