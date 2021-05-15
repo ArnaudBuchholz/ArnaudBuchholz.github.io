@@ -188,6 +188,7 @@ img.rounded {
 					</section>
 					<section>
 						<h4><strong>Demo</strong></h4>
+						<p>Karma tests runner</p>
 						<img src="UI5Con'21 UI5 Test Runner/Karma demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>npm run karma</code></figcaption>
 					</section>
@@ -306,6 +307,7 @@ img.rounded {
 					</section>
 					<section>
 						<h4><strong>Demo</strong></h4>
+						<p>Serving an UI5 application with REserve</p>
 						<img src="UI5Con'21 UI5 Test Runner/REserve demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>npm run reserve</code></figcaption>
 						<small>
@@ -400,8 +402,9 @@ main()</code></pre>
 					</section>
 					<section>
 						<h4>Custom <strong>endpoints</strong> (1/2)</h4>
-						<p>During the tests execution, the platform needs to <strong>receive feedback</strong> from the browsers :<br/>
-						   dedicated <strong>endpoints</strong> are created.<br/><small>(base URL : <code>/_/</code>)</small><p>
+						<p>During the tests execution, the platform needs to <strong>receive feedback</strong> from the browsers.<br/>
+							<small><i>For instance : to know when a test ends</i></small></p>
+						<p>Dedicated <strong>endpoints</strong> are created.<br/><small>(base URL : <code>/_/</code>)</small><p>
 						<p>The endpoints leverage the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer"><code>referer</code></a> header to <br/>
 							<strong>identify</strong> which test <i>(test page URL)</i> initiated the <strong>request</strong>.</p>
 					</section>
@@ -425,6 +428,7 @@ function endpoint (implementation) {
 					</section>
 					<section>
 						<h4><strong>Demo</strong></h4>
+						<p>Serving an UI5 application with the platform</p>
 						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner platform.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>ui5-test-runner -parallel:0 -port:8080</code></figcaption>
 						<small>
