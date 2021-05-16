@@ -587,7 +587,7 @@ async function runTestPage () {
 						<h4><strong>Demo</strong></h4>
 						<p>Executing the tests in parallel</p>
 						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5</code></figcaption>
+						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5 -keepAlive:true</code></figcaption>
 						<small>
 							<a href="http://localhost:8080/_/progress.html">Progress report</a>
 						</small>
@@ -609,7 +609,7 @@ async function runTestPage () {
 					</section>
 					<section>
 						<h4><strong>Understanding</strong> code coverage</h4>
-						<p>The process usually consists in three steps :</p>
+						<p>The process requires three steps :</p>
 						<ul>
 							<li><strong>Instrumentation</strong> of the code</li>
 							<li><strong>Evaluation</strong> of the code</li>
@@ -637,6 +637,15 @@ async function runTestPage () {
 					<section>
 						<h4><strong>Injecting</strong> instrumented sources</h4>
 						<p>When an instrumented file <strong>exists</strong> for a source file, it is <strong>substituted</strong>.</p>
+<pre><code class="javascript">/* Reserve mappings : */ [{
+  match: /^\/(.*\.js)$/,
+  file: join(instrumentedSourceDir, '$1'),
+  'ignore-if-not-found': true
+}, {
+  match: /^\/(.*)/,
+  file: join(job.webapp, '$1')
+}]</code></pre>
+<figcaption>Injecting instrumented files if they exist</figcaption>
 					</section>
 					<section>
 						<h4><strong>Consolidating</strong> code coverage</h4>
@@ -647,7 +656,10 @@ async function runTestPage () {
 						<h4><strong>Demo</strong></h4>
 						<p>Coverage measurement</p>
 						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5</code></figcaption>
+						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5 -keepAlive:true</code></figcaption>
+						<small>
+							<a href="http://localhost:8080/_/coverage/lcov-report/index.html">Coverage report</a>
+						</small>
 					</section>
 					<section>
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
@@ -676,7 +688,7 @@ async function runTestPage () {
 						<h4><strong>Tips</strong> & Tricks</h4>
 						<ul>
 							<li>To benefit from parallelization, <strong>split</strong> the OPA tests by <strong>journeys</strong>.<br/>
-								<small>(see <code>training-ui5Con18-opa</code>)</small></li>
+								<small>(see <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/webapp/test/testsuite.qunit.html"><code>training-ui5Con18-opa</code></a>)</small></li>
 							<li><strong>Cache</strong> UI5 locally to <strong>speed up</strong> page execution.</li>
 						</ul>
 					</section>
