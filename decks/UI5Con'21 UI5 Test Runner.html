@@ -589,7 +589,7 @@ async function runTestPage () {
 						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5 -keepAlive:true</code></figcaption>
 						<small>
-							<a href="http://localhost:8080/_/progress.html">Progress report</a>
+							<a href="http://localhost:8080/_/progress.html">Progress</a> <a href="http://localhost:8080/_/report.html">report</a>
 						</small>
 					</section>
 					<section>
@@ -676,12 +676,22 @@ async function runTestPage () {
 						<h3><code>ui5-test-runner</code></h3>
 					</section>
 					<section>
-						<h4><strong>Output</strong> files</h4>
+						<h4><strong>Karma</strong> execution model</h4>
 						<ul>
-							<li>Report</li>
-							<li>Code coverage</li>
-							<li>Screenshot</li>
-							<li>Traces</li>
+							<li><strong>All</strong> tests in <strong>one</strong> window</li>
+							<li><strong>One</strong> iFrame to <strong>run</strong> them all</li>
+							<li><strong>Sequential</strong> execution</li>
+							<li><strong>Coverage</strong> information</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>ui5-test-runner</strong> execution model</h4>
+						<ul>
+							<li><strong>Specific</strong> to UI5</li>
+							<li><strong>Each</strong> test page in a <strong>distinct</strong> window</li>
+							<li><strong>Parallel</strong> execution</li>
+							<li><strong>Coverage</strong> information</li>
+							<li>global / page <strong>timeout</strong></li>
 						</ul>
 					</section>
 					<section>
