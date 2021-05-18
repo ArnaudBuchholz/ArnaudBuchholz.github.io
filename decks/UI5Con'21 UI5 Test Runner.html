@@ -192,6 +192,12 @@ img.rounded {
 						<img src="UI5Con'21 UI5 Test Runner/Karma demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>npm run karma</code></figcaption>
 					</section>
+					<section>
+						<h4><strong>Demo</strong></h4>
+						<p>Karma tests runner (CI)</p>
+						<img src="UI5Con'21 UI5 Test Runner/Karma ci demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<figcaption><code>npm run karma-ci</code></figcaption>
+					</section>
 				</section>
 				<section>
 					<section class="divider">
@@ -512,7 +518,7 @@ window.addEventListener('load', function () {
 					<section>
 						<h4><strong>Demo</strong></h4>
 						<p>Substituting <code>qunit-redirect.js</code></p>
-						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner platform.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner list pages.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>ui5-test-runner -parallel:-1 -port:8080</code></figcaption>
 						<small>
 							<a href="https://openui5.hana.ondemand.com/1.87.0/resources/sap/ui/qunit/qunit-redirect.js">original <code>qunit-redirect.js</code></a>
@@ -655,7 +661,7 @@ async function runTestPage () {
 					<section>
 						<h4><strong>Demo</strong></h4>
 						<p>Coverage measurement</p>
-						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<img src="UI5Con'21 UI5 Test Runner/ui5-test-runner coverage.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>ui5-test-runner -parallel:2 -port:8080 -cache:.ui5 -keepAlive:true</code></figcaption>
 						<small>
 							<a href="http://localhost:8080/_/coverage/lcov-report/index.html">Coverage report</a>
@@ -678,11 +684,20 @@ async function runTestPage () {
 					<section>
 						<h4><strong>Karma</strong> execution model</h4>
 						<ul>
-							<li><strong>All</strong> tests in <strong>one</strong> window</li>
-							<li><strong>One</strong> iFrame to <strong>run</strong> them all</li>
+							<li><strong>Generic</strong> but <strong>adapted</strong> to UI5</li>
+							<li><strong>All</strong> tests in <strong>one</strong> window <br/>
+								<small><strong>One</strong> iFrame to <strong>run</strong> them all</small></li>
 							<li><strong>Sequential</strong> execution</li>
 							<li><strong>Coverage</strong> information</li>
+							<br/>
+							<li><strong>Obscure</strong> implementation</li>
 						</ul>
+						<br/>
+						<a href="https://www.npmjs.com/package/karma" target="blank">karma</a>
+						<img async-src="https://img.shields.io/npm/dw/karma.svg" height="30px" src="https://img.shields.io/npm/dw/karma.svg">
+						<a href="https://packagephobia.now.sh/result?p=karma" target="_blank" class="img-only">
+							<img async-src="https://packagephobia.now.sh/badge?p=karma" height="30px" src="https://packagephobia.now.sh/badge?p=karma">
+						</a>
 					</section>
 					<section>
 						<h4><strong>ui5-test-runner</strong> execution model</h4>
@@ -691,22 +706,31 @@ async function runTestPage () {
 							<li><strong>Each</strong> test page in a <strong>distinct</strong> window</li>
 							<li><strong>Parallel</strong> execution</li>
 							<li><strong>Coverage</strong> information</li>
-							<li>global / page <strong>timeout</strong></li>
+							<br/>
+							<li><strong>Crystal clear</strong> implementation</li>
 						</ul>
+						<br/>
+						<a href="https://www.npmjs.com/package/ui5-test-runner" target="blank">ui5-test-runner</a>
+						<img async-src="https://img.shields.io/npm/dw/ui5-test-runner.svg" height="30px" src="https://img.shields.io/npm/dw/ui5-test-runner.svg">
+<!--
+						<a href="https://packagephobia.now.sh/result?p=ui5-test-runner" target="_blank" class="img-only">
+							<img async-src="https://packagephobia.now.sh/badge?p=ui5-test-runner" height="30px" src="https://packagephobia.now.sh/badge?p=ui5-test-runner">
+						</a>
+-->
 					</section>
 					<section>
 						<h4><strong>Tips</strong> & Tricks</h4>
 						<ul>
-							<li>To benefit from parallelization, <strong>split</strong> the OPA tests by <strong>journeys</strong>.<br/>
+							<li>To benefit from <strong>parallelization</strong>, <strong>split</strong> the OPA tests by <strong>journeys</strong> <br/>
 								<small>(see <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa/blob/master/webapp/test/testsuite.qunit.html"><code>training-ui5Con18-opa</code></a>)</small></li>
-							<li><strong>Cache</strong> UI5 locally to <strong>speed up</strong> page execution.</li>
+							<li><strong>Cache</strong> UI5 locally to <strong>speed up</strong> page execution</li>
 						</ul>
 					</section>
 					<section>
-						<h4></strong>Roadmap</strong> <i>?</i></h4>
+						<h4></strong>Roadmap</strong> <i><strong>?</strong></i></h4>
 						<ul>
 							<li><strong>Smarter</strong> watch <br/><small>(test only what is impacted by the change)</small></li>
-							<li><strong>Selenium</strong> integration</li>
+							<li>Test <strong>grids</strong> <br/><small>(using <strong>Selenium</strong> integration)</small></li>
 						</ul>
 					</section>
 				</section>
