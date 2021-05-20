@@ -73,6 +73,10 @@ gpf.require.define({
                 }, require.cfgPlugins[name]);
             })
         });
+        Reveal.configure({
+            pdfMaxPagesPerSlide: 1,
+            pdfSeparateFragments: false
+        });
         return Reveal;
     });
 
