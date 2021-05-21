@@ -102,22 +102,27 @@ q {
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 
-td.social a {
+.reveal .social {
+	padding-top: 64px;
+	text-align: left;
+}
+
+.social a {
 	padding: 16px;
 	border-radius: 50%;
 	background-color: white;
 }
 
-td.social a:hover {
+.social a:hover {
 	box-shadow: unset;
 }
 
-td.social a img {
+.social a img {
 	position: relative;
 	top: 16px;
 }
 
-td.social a img:hover {
+.social a img:hover {
 	box-shadow: unset;
 }
 
