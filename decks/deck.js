@@ -121,6 +121,21 @@ function updateLinks () {
     });
 }
 
+var version = "";
+
+function processVersion () {
+    var versionMatch = location.search.toString().match(/\bversion\b=(\w+)/)
+    if (versionMatch) {
+        version = versionMatch[1]
+    }
+    [].map.call(document.querySelectorAll("*[version]"), function(node) {
+        const expectedVersion = node.getAttribute("version");
+        if (expectedVersion !== version) {
+            node.parentNode.removeChild(node);
+        }
+    });
+}
+
 function loadNotes () {
     var currentPath = location.pathname;
     if (currentPath.indexOf(".html") !== -1) {
@@ -190,6 +205,7 @@ window.addEventListener("load", function () {
         .then(reformatCodeSamples)
         .then(processMeInfo)
         .then(updateLinks)
+        .then(processVersion)
         .then(loadNotes)
         .then(loadReveal);
 });
