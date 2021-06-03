@@ -115,7 +115,7 @@ img.rounded {
 						<h3 data-agenda="no"><strong>Agenda</strong></h3>
 						<ul id="agenda"></ul>
 					</section>
-					<section>
+					<section version="">
 						<h4>Presented <img src="/gfx/GitHub_w.png" style="margin: 0; border: 0; box-shadow: unset;" /><strong>projects</strong></h4>
 						<ul>
 							<li>
@@ -155,21 +155,21 @@ img.rounded {
 						<h3><strong>Context</strong></h3>
 						<q>Back to 2018...</q>
 					</section>
-					<section>
+					<section version="">
 						<h4>UI5Con<strong>'18</strong></h4>
 						<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 40%; max-height: 40%;" />
 						<br/>
 						<p>A journey with <strong>OPA</strong></p>
 						<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a> <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a></small>
 					</section>
-					<section>
+					<section version="">
 						<h4>UI5Con<strong>'19</strong></h4>
 						<img src="UI5Con'19 Advanced Testing with UI5/YouTube.png" style="border: 1px solid black; max-width: 50%; max-height: 50%;" />
 						<br/>
 						<p>Use <strong>UI5</strong> to <strong>test</strong> your <strong>ODATA</strong> service</p>
 						<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a> <a href="https://www.npmjs.com/package/node-ui5">node-ui5</a></small>
 					</section>
-					<section>
+					<section version="">
 						<s><h4>UI5Con<strong>'20</strong></h4></s>
 						<div class="fragment">
 							<img src="UI5Con'21 UI5 Test Runner/9781493219513_267_2d.png" style="border: 0; max-width: 50%; max-height: 50%;" />
@@ -177,10 +177,34 @@ img.rounded {
 							<p><strong>Testing</strong> UI5 applications</p>
 							<small><a href="https://www.sap-press.com/testing-sapui5-applications_5056/">e-book</a></small>
 						</div>
-						<br/>
 					</section>
-					<section>
+					<section version="">
 						<q>Got the <strong>trend</strong> ?</q>
+					</section>
+					<section version="shortened">
+						<div style="display: flex; justify-content: space-around;">
+							<div style="margin: 16px;">
+								<h4>UI5Con<strong>'18</strong></h4>
+								<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 40%; max-height: 40%;" />
+								<br/>
+								<p>A journey with <strong>OPA</strong></p>
+								<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a><br/><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a></small>
+							</div>
+							<div style="margin: 16px;">
+								<h4>UI5Con<strong>'19</strong></h4>
+								<img src="UI5Con'19 Advanced Testing with UI5/YouTube.png" style="border: 1px solid black; max-width: 50%; max-height: 50%;" />
+								<br/>
+								<p>Use <strong>UI5</strong> to <strong>test</strong> your <strong>ODATA</strong> service</p>
+								<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a><br/><a href="https://www.npmjs.com/package/node-ui5">node-ui5</a></small>
+							</div>
+							<div style="margin: 16px;">
+								<s><h4>UI5Con<strong>'20</strong></h4></s>
+								<img src="UI5Con'21 UI5 Test Runner/9781493219513_267_2d.png" style="border: 0; max-width: 60%; max-height: 50%;" />
+								<br/>
+								<p><strong>Testing</strong> UI5 applications</p>
+								<small><a href="https://www.sap-press.com/testing-sapui5-applications_5056/">e-book</a></small>
+							</div>
+						</div>
 					</section>
 					<section>
 						<h4><strong>Quality</strong> focus</h4>
@@ -221,7 +245,7 @@ img.rounded {
 						<img src="UI5Con'21 UI5 Test Runner/Karma demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<figcaption><code>npm run karma</code></figcaption>
 					</section>
-					<section>
+					<section version="">
 						<h4><strong>Demo</strong></h4>
 						<p>Karma tests runner (CI)</p>
 						<img src="UI5Con'21 UI5 Test Runner/Karma ci demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
@@ -349,7 +373,7 @@ img.rounded {
 							<a href="http://localhost:8080/test/testsuite.qunit.html">Test suite</a>
 						</small>
 					</section>
-					<section>
+					<section version="">
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<h4>Would you like to know <strong>more</strong> ?</h4>
 						<small>
@@ -436,14 +460,14 @@ main()</code></pre>
 						</ul>
 					</section>
 					<section>
-						<h4>Custom <strong>endpoints</strong> (1/2)</h4>
+						<h4>Custom <strong>endpoints</strong><span version=""> (1/2)</span></h4>
 						<p>During the tests execution, the platform needs to <strong>receive feedback</strong> from the browsers.<br/>
 							<small><i>For instance : to know when a test ends</i></small></p>
 						<p>Dedicated <strong>endpoints</strong> are created.<br/><small>(base URL : <code>/_/</code>)</small><p>
 						<p>The endpoints leverage the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer"><code>referer</code></a> header to <br/>
 							<strong>identify</strong> which test <i>(test page URL)</i> initiated the <strong>request</strong>.</p>
 					</section>
-					<section>
+					<section version="">
 						<h4>Custom <strong>endpoints</strong> (2/2)</h4>
 						<pre><code class="javascript">const { body } = require('reserve')
 function endpoint (implementation) {
@@ -470,7 +494,7 @@ function endpoint (implementation) {
 							<a href="http://localhost:8080/test/testsuite.qunit.html">Test suite</a>
 						</small>
 					</section>
-					<section>
+					<section version="">
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<h4>Would you like to know <strong>more</strong> ?</h4>
 						<small>
@@ -555,7 +579,7 @@ window.addEventListener('load', function () {
 							<a href="http://localhost:8080/resources/sap/ui/qunit/qunit-redirect.js">substituted <code>qunit-redirect.js</code></a>
 						</small>
 					</section>
-					<section>
+					<section version="">
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<h4>Would you like to know <strong>more</strong> ?</h4>
 						<small>
@@ -627,7 +651,7 @@ async function runTestPage () {
 							<a href="http://localhost:8080/_/progress.html">Progress</a> <a href="http://localhost:8080/_/report.html">report</a>
 						</small>
 					</section>
-					<section>
+					<section version="">
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<h4>Would you like to know <strong>more</strong> ?</h4>
 						<small>
@@ -696,7 +720,7 @@ async function runTestPage () {
 							<a href="http://localhost:8080/_/coverage/lcov-report/index.html">Coverage report</a>
 						</small>
 					</section>
-					<section>
+					<section version="">
 						<img src="UI5Con'21 UI5 Test Runner/good_bug.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 						<h4>Would you like to know <strong>more</strong> ?</h4>
 						<small>
