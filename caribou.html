@@ -1,0 +1,64 @@
+<html>
+  <head>
+    <style>
+input {
+    width: 4rem;
+}
+    </style>
+  </head>
+  <body>
+    L <input type="number" id="L" value="23.6">
+    P <input type="number" id="P" value="5">
+    H <input type="number" id="H" value="5">
+    <hr>
+    Rang 0 Escalier <input type="number" id="E0" readonly> Lila <input type="number" id="L0" readonly><br>
+    Rang 1 Escalier <input type="number" id="E1" readonly> Lila <input type="number" id="L1" readonly><br>
+    Nombre de rangs <input type="number" id="N" readonly> Total <input type="number" id="T" readonly>
+    <script>
+const byId = x => document.getElementById(x)
+byId('L').addEventListener('change', compute)
+byId('P').addEventListener('change', compute)
+byId('H').addEventListener('change', compute)
+function compute () {
+  const L = byId('L').value
+  const P = byId('P').value
+  const H = byId('H').value
+  // Rang 0
+  const E0 = Math.ceil(148.5 / L)
+  const CE0 = 148.5 - Math.floor(148.5 / L) * L
+  byId('E0').value = E0
+  const R0 = 125.5 - P
+  let L0 = Math.ceil(R0 / L)
+  const CL0 = R0 - Math.floor(R0 / L) * L
+  if (CE0 + CL0 < L) {
+    --L0
+  }
+  byId('L0').value = L0
+  // Rang 1
+  const R1 = 148.5 - P
+  const E1 = Math.ceil(R1 / L)
+  const CE1 = R1 - Math.floor(R1 / L) * L
+  byId('E1').value = E1
+  let L1 = Math.ceil(125.5 / L)
+  const CL1 = 125.5 - Math.floor(125.5 / L) * L
+  if (CE1 + CL1 < L) {
+    --L1
+  }
+  byId('L1').value = L1
+  // Nombre de rangs
+  const N = Math.floor(22 / H)
+  byId('N').value = N
+  let T = 0
+  for (i = 0; i < N; ++i) {
+    if (i % 2 === 0) {
+      T += E0 + L0
+    } else {
+      T += E1 + L1
+    }
+  }
+  byId('T').value = T
+}
+compute()
+    </script>
+  </body>
+</html>
