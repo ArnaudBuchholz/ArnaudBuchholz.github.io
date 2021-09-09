@@ -10,7 +10,7 @@
 		<meta name="deck-duration" content="40">
 		<meta name="deck-theme" content="night">
 		<link rel="stylesheet" type="text/css" href="styles.css">
-		<style>
+		<style version=" shortened">
 section > section {
 	background-image: url("UI5Con'21 UI5 Test Runner/UI5con logo.png");
 	background-repeat: no-repeat;
@@ -20,6 +20,20 @@ section > section {
 
 .print-pdf section > div > section {
 	background-image: url("UI5Con'21 UI5 Test Runner/UI5con logo.png");
+	background-repeat: no-repeat;
+	background-size: 15%;
+	background-position: bottom right;
+}
+
+section.divider {
+	background-image: url("UI5Con'21 UI5 Test Runner/UI5con divider.png");
+	background-repeat: no-repeat;
+	background-size: 30%;
+	background-position: bottom right;
+}
+
+.print-pdf section.divider {
+	background-image: url("UI5Con'21 UI5 Test Runner/UI5con divider.png");
 	background-repeat: no-repeat;
 	background-size: 15%;
 	background-position: bottom right;
@@ -43,20 +57,6 @@ section.title h3 {
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black !important;
 }
 
-section.divider {
-	background-image: url("UI5Con'21 UI5 Test Runner/UI5con divider.png");
-	background-repeat: no-repeat;
-	background-size: 30%;
-	background-position: bottom right;
-}
-
-.print-pdf section.divider {
-	background-image: url("UI5Con'21 UI5 Test Runner/UI5con divider.png");
-	background-repeat: no-repeat;
-	background-size: 15%;
-	background-position: bottom right;
-}
-
 section.divider h3 {
 	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
@@ -68,7 +68,8 @@ section.divider h3 {
 .print-pdf .reveal.center .slides section {
     min-height: unset!important;
 }
-
+	</style>
+	<style>
 img.rounded {
 	margin: 0;
 	border: 0;
@@ -105,7 +106,7 @@ img.rounded {
 										</small>
 									</p>
 									<br/>
-									<img src="UI5Con'21 UI5 Test Runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
+									<img version=" shortened" src="UI5Con'21 UI5 Test Runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
 								</td>
 							</tr>
 						</table>
@@ -115,7 +116,7 @@ img.rounded {
 						<h3 data-agenda="no"><strong>Agenda</strong></h3>
 						<ul id="agenda"></ul>
 					</section>
-					<section version="">
+					<section version=" ecosystem">
 						<h4>Presented <img src="/gfx/GitHub_w.png" style="margin: 0; border: 0; box-shadow: unset;" /><strong>projects</strong></h4>
 						<ul>
 							<li>
@@ -178,10 +179,7 @@ img.rounded {
 							<small><a href="https://www.sap-press.com/testing-sapui5-applications_5056/">e-book</a></small>
 						</div>
 					</section>
-					<section version="">
-						<q>Got the <strong>trend</strong> ?</q>
-					</section>
-					<section version="shortened">
+					<section version="ecosystem shortened">
 						<div style="display: flex; justify-content: space-around;">
 							<div style="margin: 16px;">
 								<h4>UI5Con<strong>'18</strong></h4>
@@ -206,10 +204,71 @@ img.rounded {
 							</div>
 						</div>
 					</section>
+					<section version="">
+						<q>Got the <strong>trend</strong> ?</q>
+					</section>
+					<section version="ecosystem">
+						<q>If it's not tested, it does <strong>not</strong> work</q>
+						<p>
+							<i class="fragment" style="font-size: smaller;">Need I say more ?</i>
+						</p>
+					</section>
+					<section version="ecosystem">
+						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
+						<div style="display: flex; justify-content: space-around;">
+							<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
+							<div>
+								<strong>Maximize</strong> unit testing : they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.<br/>
+								<strong>Leverage</strong> integration testing : check the <strong>happy path</strong> then <strong>edge cases</strong>.
+							</div>
+						</div>
+					</section>
+					<section version="ecosystem">
+						<h4><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h4>
+						<ul>
+							<li><strong>UI behavior</strong> testing</li>
+							<li><strong>JavaScript</strong> based</li>
+							<li>Tightly <strong>integrated</strong> with UI5</li>
+							<li><strong>Asynchronous</strong> with <strong>active polling</strong> mechanisms</li>
+							<li>Backend is <strong>mocked</strong></li>
+						</ul>
+					</section>
+					<section version="ecosystem">
+						<h4>Compared to other <strong>automation frameworks</strong></h4>
+						<p>Selenium, Marionette or Puppeteer are <strong>framework agnostic</strong>,
+							one must rely on the <strong>generated HTML</strong> to code automation.
+							They are designed for <strong>End 2 End</strong> testing.
+						</p>
+						<br />
+						<p>OPA is designed <strong>by and for</strong> UI5 developers: one manipulates <strong>UI5 controls</strong>.
+						</p>
+					</section>
+					<section version="ecosystem">
+						<h4><strong>Executing</strong> qUnit &amp; OPA tests</h4>
+						<ul>
+							<li>As <strong>simple</strong> as running a web page</li>
+							<li>A <strong>report</strong> documents execution results</li>
+							<li><strong>Coverage</strong> can be extracted</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>Demo</strong></h4>
+						<p>Tests execution</p>
+						<img src="UI5Con'21 UI5 Test Runner/UI5%20runner.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+						<figcaption><code>npm start</code></figcaption>
+						<small>
+							<a href="http://localhost:8080/test">Test structure</a><br/>
+						</small>
+					</section>
+					<section version="ecosystem">
+						<h4><strong>Continuous</strong> Integration &amp; Delivery</h4>
+						<p>These tests can be automated in a <strong>pipeline</strong> to validate the code
+							<strong>before</strong> merging and / or shipping the new version.</p>
+					</section>
 					<section>
 						<h4><strong>Quality</strong> focus</h4>
 						<ul>
-							<li>Team is responsible of <strong>10+</strong> applications</li>
+							<li><span version="ecosystem">My t</span><span version=" shortend">T</span>eam is responsible of <strong>10+</strong> applications</li>
 							<li><strong>Requirement</strong> to have at least <strong>80%</strong> of coverage</li>
 							<li><strong>Huge</strong> tests suites <i>(up to 45 minutes)</i></li>
 						</ul>
@@ -280,7 +339,7 @@ img.rounded {
 							<li>All <strong>dependencies</strong> are under <code>/resources/</code> <small>or <code>/test-resources/</code></small></li>
 						</ul>
 					</section>
-					<section>
+					<section version=" shortened">
 						<h4><strong>Running</strong> the application (<strong>WebIDE</strong>)</h4>
 						<ul>
 							<li><strong>Mapping</strong> configured with <code>neo-app.json</code>
@@ -297,7 +356,7 @@ img.rounded {
 							<li><strong>No</strong> installation but <strong>hard</strong> to automate</il>
 						</ul>
 					</section>
-					<section>
+					<section version=" shortened">
 						<h4><strong>Running</strong> the application (<strong>@ui5/cli</strong>)</h4>
 						<ul>
 							<li>UI5 <strong>packages</strong> are installed <strong>locally</strong>
@@ -314,7 +373,7 @@ img.rounded {
 							<li><strong>Heavy</strong> but <strong>automated</strong></il>
 						</ul>
 					</section>
-					<section>
+					<section version=" shortened">
 						<h4><strong>Running</strong> the application (<strong>UI5 CDN</strong>)</h4>
 						<ul>
 							<li>Load UI5 from a <strong>Content Delivery Network</strong>
@@ -337,7 +396,7 @@ img.rounded {
 						<li><strong>Lite</strong> setup but <strong>how</strong> do we automate ?</li>
 					</ul>
 					</section>
-					<section>
+					<section version=" shortened">
 						<p>Can we combine a <strong>lightweight</strong> setup<br/>
 							with a <strong>fast &amp; external</strong> version selection ?</p>
 						<br/>
@@ -422,12 +481,15 @@ check({
 <figcaption>Embedding REserve inside an application</figcaption>
 					</section>
 					<section>
-						<h4><strong>Spawning</strong> a browser (1/3)</h4>
+						<h4><strong>Spawning</strong> a browser<span version=" shortened"> (1/3)</span></h4>
 						<p>To <strong>automate</strong> the tests execution, the platform needs a way to <strong>start</strong> a browser
 							and <strong>stop</strong> it when the tests are <strong>done</strong> <i>(or the <strong>timeout</strong> is reached).</i></p>
 						<p>The <strong>browser instantiation</strong> is deferred to a <strong>configurable</strong> script that is <strong>spawned</strong> by the platform.</p>
+						<p version="ecosystem">
+							<a href="https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/defaults/chromium.js">default script</a>
+						</p>
 					</section>
-					<section>
+					<section version=" shortened">
 						<h4><strong>Spawning</strong> a browser (2/3)</h4>
 						<p>By <strong>default</strong>, a <a href="https://www.npmjs.com/package/puppeteer"><code>puppeteer</code></a> script is provided</p>
 						<pre><code class="javascript">const puppeteer = require('puppeteer')
@@ -447,7 +509,7 @@ async function main () {
 main()</code></pre>
 <figcaption>Browser instantiation script</figcaption>
 					</section>
-					<section>
+					<section version=" shortened">
 						<h4><strong>Spawning</strong> a browser (3/3)</h4>
 						<p>Tests were conducted to validate that <br/>
 							<strong>multiple and concurrent instances</strong> <br/>
@@ -546,13 +608,16 @@ function endpoint (implementation) {
 <figcaption>Tests declaration in the <code>testsuite.qunit.html</code></figcaption>
 					</section>
 					<section>
-						<h4>Test suite <strong>extraction</strong> (1/2)</h4>
+						<h4>Test suite <strong>extraction</strong><span version=" shortened"> (1/2)</span></h4>
 						<p>By <strong>substituting</strong> <code>qunit-redirect.js</code> <br/>
 							with a <strong>custom script</strong> and <br/>
 							opening <code>testsuite.qunit.html</code>, <br/>
 							the platform <strong>captures</strong> the <strong>list</strong> of test pages.</p>
-						</section>
-					<section>
+						<p version="ecosystem">
+							<a href="https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/src/inject/qunit-redirect.js">custom script</a>
+						</p>
+					</section>
+					<section version=" shortened">
 						<h4>Test suite <strong>extraction</strong> (2/2)</h4>
 <pre><code class="javascript">const pages = []
 function jsUnitTestSuite () {}
@@ -617,13 +682,13 @@ window.addEventListener('load', function () {
 						</small>
 					</section>
 					<section>
-						<h4>Execution <strong>queue</strong> (1/2)</h4>
+						<h4>Execution <strong>queue</strong><span version=" shortened"> (1/2)</span></h4>
 						<p>After <strong>probing</strong> the tests, the platform knows the <strong>list</strong> of test page URL.</p>
 						<p>Then, it instantiates concurrent browsers to run <strong>each</strong> page <strong>individually</strong>. <br/>
 						<small>The number of concurrent browsers is given by the option <code>parallel</code>.</small></p>
 						<p>The test page is <strong>stopped</strong> when the test is done <i>(<code>QUnit.testDone</code>)</i> or when the <strong>timeout</strong> is reached.</p>
 					</section>
-					<section>
+					<section version=" shortened">
 						<h4>Execution <strong>queue</strong> (2/2)</h4>
 <pre><code class="javascript">for (let i = 0; i &lt; job.parallel; ++i) runTestPage()
 
@@ -661,7 +726,7 @@ async function runTestPage () {
 						</small>
 					</section>
 				</section>
-				<section>
+				<section version=" shortened">
 					<section class="divider">
 						<h3><strong>Measuring</strong> code coverage</h3>
 						<img src="UI5Con'21 UI5 Test Runner/nyc.jpg" class="rounded" style="max-width: 50%; max-height: 50%;" />
@@ -783,6 +848,7 @@ async function runTestPage () {
 						<h4>Ideas to <strong>improve</strong> the platform</h4>
 						<ul>
 							<li><strong>Smarter</strong> watch <br/><small>(test only what is impacted by the change)</small></li>
+							<li><strong>Smart</strong> timeout <br/><small>(detect browser inactivity)</small></li>
 							<li>Test <strong>grids</strong> <br/><small>(using <strong>Selenium</strong> integration)</small></li>
 						</ul>
 					</section>
@@ -797,7 +863,7 @@ async function runTestPage () {
 								<a href="https://www.npmjs.com/package/ui5-test-runner" target="blank">npm ui5-test-runner</a>
 							</small>
 						</div>
-						<img src="UI5Con'21 UI5 Test Runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
+						<img version=" shortened" src="UI5Con'21 UI5 Test Runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
 					</section>
 				</section>
 			</div>
