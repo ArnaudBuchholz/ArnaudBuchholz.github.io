@@ -129,8 +129,8 @@ function processVersion () {
         version = versionMatch[1]
     }
     [].map.call(document.querySelectorAll("*[version]"), function(node) {
-        const expectedVersion = node.getAttribute("version");
-        if (expectedVersion !== version) {
+        const expectedVersions = node.getAttribute("version").split(" ");
+        if (!expectedVersions.includes(version)) {
             node.parentNode.removeChild(node);
         }
     });
