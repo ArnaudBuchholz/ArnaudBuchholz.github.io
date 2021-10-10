@@ -20,14 +20,17 @@ byId('L').addEventListener('change', compute)
 byId('P').addEventListener('change', compute)
 byId('H').addEventListener('change', compute)
 function compute () {
+  const longueurTerrasseEscalier = 148.5
+  const longueurTerrasseLila = 125.5
+
   const L = byId('L').value
   const P = byId('P').value
   const H = byId('H').value
   // Rang 0
-  const E0 = Math.ceil(148.5 / L)
-  const CE0 = 148.5 - Math.floor(148.5 / L) * L
+  const E0 = Math.ceil(longueurTerrasseEscalier / L)
+  const CE0 = longueurTerrasseEscalier - Math.floor(longueurTerrasseEscalier / L) * L
   byId('E0').value = E0
-  const R0 = 125.5 - P
+  const R0 = longueurTerrasseLila - P
   let L0 = Math.ceil(R0 / L)
   const CL0 = R0 - Math.floor(R0 / L) * L
   if (CE0 + CL0 < L) {
@@ -35,12 +38,12 @@ function compute () {
   }
   byId('L0').value = L0
   // Rang 1
-  const R1 = 148.5 - P
+  const R1 = longueurTerrasseEscalier - P
   const E1 = Math.ceil(R1 / L)
   const CE1 = R1 - Math.floor(R1 / L) * L
   byId('E1').value = E1
-  let L1 = Math.ceil(125.5 / L)
-  const CL1 = 125.5 - Math.floor(125.5 / L) * L
+  let L1 = Math.ceil(longueurTerrasseLila / L)
+  const CL1 = longueurTerrasseLila - Math.floor(longueurTerrasseLila / L) * L
   if (CE1 + CL1 < L) {
     --L1
   }
