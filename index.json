@@ -1,23 +1,33 @@
 [{
-  "type": "app",
-  "link": "bubu-timer/index.html",
-  "title": "A configurable *timer*",
-  "subtitle": "My first webpack app"
-}, {
-  "type": "deck",
-  "link": "decks/reserve.html",
-  "title": "*RE*serve",
-  "subtitle": "A *lightweight* but *configurable* web server"
-}, {
   "type": "deck",
   "link": "decks/Subclassing an ES6 class.html",
   "title": "*Subclassing* an *ES6* class",
   "subtitle": "Or the art of JavaScript classes *hybridization*"
 }, {
+  "type": "app",
+  "link": "https://www.npmjs.com/package/reserve",
+  "title": "*RE*serve, a *lightweight* web server",
+  "subtitle": "Fits in 66Kb with *no* dependencies"
+}, {
   "type": "deck",
-  "link": "decks/NodeJS handbook.html",
-  "title": "*Node.js* handbook",
-  "subtitle": "Work in Progress"
+  "link": "decks/reserve.html",
+  "title": "*RE*serve presentation",
+  "subtitle": "Everything you *want* to know about it"
+}, {
+  "type": "app",
+  "link": "https://arnaudbuchholz.github.io/locrypto/",
+  "title": "A browser-only *encryption* helper",
+  "subtitle": "Using Crypto.subtle object"
+}, {
+  "type": "app",
+  "link": "https://arnaudbuchholz.github.io/md2word/#Hello%20World",
+  "title": "A Markdown to Word *converter*",
+  "subtitle": "Because I am too lazy to learn MS Word"
+}, {
+  "type": "app",
+  "link": "https://www.npmjs.com/package/ui5-test-runner",
+  "title": "A self-sufficient *test runner* for UI5 applications",
+  "subtitle": "Enabling parallel execution and screenshots"
 }, {
   "type": "deck",
   "link": "decks/UI5Con'18 A journey with OPA.html",
@@ -33,4 +43,14 @@
   "link": "decks/UI5Con'21 UI5 Test Runner.html",
   "title": "A *different* approach to UI5 *tests execution*",
   "subtitle": "Presented during UI5Con'21"
+}, {
+  "type": "app",
+  "link": "bubu-timer/index.html",
+  "title": "A configurable *timer*",
+  "subtitle": "My first webpack app"
+}, {
+  "type": "deck",
+  "link": "decks/NodeJS handbook.html",
+  "title": "*Node.js* handbook",
+  "subtitle": "Work in Progress"
 }]
