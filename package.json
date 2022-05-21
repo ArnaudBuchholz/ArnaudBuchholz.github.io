@@ -6,8 +6,8 @@
   "dependencies": {},
   "devDependencies": {
     "colors": "^1.4.0",
-    "mime": "^2.4.4",
-    "reserve": "^1.2.0"
+    "mime": "^3.0.0",
+    "reserve": "^1.15.0"
   },
   "scripts": {
     "start": "reserve"
