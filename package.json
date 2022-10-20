@@ -7,7 +7,7 @@
   "devDependencies": {
     "colors": "^1.4.0",
     "mime": "^3.0.0",
-    "reserve": "^1.15.0"
+    "reserve": "^1.15.2"
   },
   "scripts": {
     "start": "reserve"
