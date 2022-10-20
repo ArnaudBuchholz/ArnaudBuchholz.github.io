@@ -104,7 +104,7 @@ function processMeInfo () {
 }
 
 function readDeckMeta (name, defaultValue) {
-  var meta = document.head.querySelector('meta[name='deck-' + name + '']'),
+  var meta = document.head.querySelector('meta[name=\'deck-' + name + '\']'),
     value;
   if (meta) {
     value = meta.getAttribute('content');
