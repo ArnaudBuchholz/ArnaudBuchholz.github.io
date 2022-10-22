@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="☕ Singleton">
+    <meta name="author" content="Arnaud Buchholz">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="deck-duration" content="5">
+    <meta name="deck-theme" content="night">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="WUC/styles.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <section>
+            <table>
+              <tr>
+                <td width="50%">
+                  <div>
+                    <img src="WUC/logo.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+                  </div>
+                </td>
+                <td style="vertical-align: top;">
+                  <h3>The <strong>singleton</strong> pattern</h3>
+                  <div>
+                    <small>
+                      While you <strong>caffeinate</strong> serie<br/>
+                      Offered by ☕ Arnaud <strong>Buchholz</strong>
+                    </small>
+                    <div class="social">
+                      <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" /></a>
+                      <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" /></a>
+                      <a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" /></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </section>
+          <section>
+            <p>
+              The singleton pattern restricts the <strong>instantiation</strong> of a class to a <strong>single instance</strong>.
+            </p>
+            <p>
+              It is useful when <strong>one object</strong> is needed to <strong>coordinate</strong> actions in a software.
+              <small>(Without storing it in a global variable)</small>
+            </p>
+          </section>
+          <section>
+            <p>
+              There are different ways to <strong>implement</strong> a singleton in JavaScript :
+              <ul>
+                <li>Using the <strong>factory pattern</strong></li>
+                <li>Using the JavaScript <strong>constructor function</strong></li>
+                <li>And many more...</li>
+              </ul>
+            </p>
+          </section>
+          <section>
+            <p>
+              A <strong>factory function</strong><br/>is usually designed to build instances of a class.<br/>
+            </p>
+            <pre><code class="javascript">let instance;
+
+class Singleton {
+  constructor () {
+    // Initialization
+  }
+};
+
+module.exports = function singletonFactory () {
+  if (!instance) {
+    instance = new Singleton();
+  }
+  return instance;
+};</code></pre>
+            <p>
+              By returning the <strong>previously allocated object</strong>, the factory function returns a <strong>singleton</strong>.
+            </p>
+          </section>
+          <section>
+            <p>
+              Usage / Test of the <strong>factory function</strong>
+            </p>
+            <pre><code class="javascript">const singletonFactory = require('./singletonFactory.cjs');
+const assert = require('node:assert/strict');
+
+const instance1 = singletonFactory();
+const instance2 = singletonFactory();
+
+assert.strictEqual(instance1, instance2);</code></pre>
+            <small>Sources available in <a href="https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/tree/master/decks/WUC/singleton">GitHub</a>.</small>
+          </section>
+          <section>
+            <p>
+              In JavaScript, the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/constructor"><strong>constructor function</strong></a>
+              is invoked with the created instance (<code>this</code>).
+            </p>
+            <p>Thanks to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields#returning_overriding_object"><strong>return overriding</strong></a>,
+              it is possible to replace it with a <strong>previously allocated object</strong>.</p>
+            <pre><code class="javascript">class Singleton {
+  static #instance
+
+  constructor () {
+    if (!Singleton.instance) {
+      // Initialization
+      Singleton.instance = this;
+    }
+    return Singleton.instance;
+  }
+};
+
+module.exports = Singleton;</code></pre>
+          </section>
+          <section>
+            <p>
+              Usage / Test of the <strong>constructor function</strong>
+            </p>
+            <pre><code class="javascript">const singletonFactory = require('./singletonFactory');
+const Singleton = require('./singleton');
+
+const instance1 = new Singleton();
+const instance2 = new Singleton();
+
+assert.strictEqual(instance1, instance2);</code></pre>
+            <small>Sources available in <a href="https://github.com/ArnaudBuchholz/ArnaudBuchholz.github.io/tree/master/decks/WUC/singleton">GitHub</a>.</small>
+          </section>
+        </section>
+      </div>
+    </div>
+    <script src="/gpf/last/gpf.js"></script>
+    <script src="deck.js"></script>
+  </body>
+</html>
