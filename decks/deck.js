@@ -121,6 +121,7 @@ function readDeckMeta (name, defaultValue) {
 function updateLinks () {
   [].slice.call(document.querySelectorAll('a')).forEach(function (a) {
     a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
     // If the link includes only one image, specify it
     if (a.querySelectorAll(':not(img)').length === 0 && !a.innerText.trim()) {
       a.classList.add('img-only');
