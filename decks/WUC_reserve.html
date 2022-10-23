@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="☕ REserve">
+    <meta name="author" content="Arnaud Buchholz">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="deck-duration" content="5">
+    <meta name="deck-theme" content="night">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="WUC/styles.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <section>
+            <table>
+              <tr>
+                <td width="50%">
+                  <div>
+                    <img src="WUC/logo.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+                  </div>
+                </td>
+                <td style="vertical-align: top;">
+                  <h3><strong>RE</strong>serve</h3>
+                  <p>
+                    A <strong>lightweight</strong> and <strong>versatile</strong> web server
+                  </p>
+                  <br/>
+                  <div>
+                    <small>
+                      While you <strong>caffeinate</strong> serie<br/>
+                      Offered by ☕ Arnaud <strong>Buchholz</strong>
+                    </small>
+                    <div class="social">
+                      <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" /></a>
+                      <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" /></a>
+                      <a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" /></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </section>
+          <section>
+            <h4><strong>Why</strong> ?</h4>
+            <p>Which <strong>package</strong> do you use to serve <strong>static files</strong>,<br />
+              <strong>experiment</strong> a website or build a <strong>minimalistic</strong> service ?</p>
+            <ul>
+<script>
+
+function gitHubProjectTemplate () {/*
+  <a href="https://www.npmjs.com/package/PACKAGE">PACKAGE</a>
+  <img async-src="https://img.shields.io/npm/dw/PACKAGE.svg" height="30px" />
+  <a href="https://packagephobia.now.sh/result?p=PACKAGE">
+    <img async-src="https://packagephobia.now.sh/badge?p=PACKAGE" height="30px" />
+  </a>
+*/}
+
+function templateToString (template) {
+  return /\/\*((?:[^*]|\*[^/])+)\*\//.exec(template.toString())[1];
+}
+
+function gitHubProjectHTML (packagePath) {
+  var parts = packagePath.split("/");
+  return gitHubProjectHTML.templateString
+    .replace(/PACKAGE/g, parts[1])
+    .replace(/ACCOUNT/g, parts[0])
+}
+gitHubProjectHTML.templateString = templateToString(gitHubProjectTemplate);
+
+"expressjs/express,koajs/koa,zeit/serve"
+  .split(",")
+  .forEach(function (packagePath) {
+    document.write("<li>" + gitHubProjectHTML(packagePath) + "</li>");
+  });
+
+</script>
+            </ul>
+          </section>
+          <section>
+            <p><strong>REserve</strong> has <strong>no</strong> dependencies,<br/>is versatile <strong>and</strong> customizable.</p>
+            <br/>
+<script>
+document.write(gitHubProjectHTML("ArnaudBuchholz/reserve"));
+</script>
+            <br/>
+            <br/>
+            <p>It also comes with <strong>mocking helpers</strong><br/> and <strong>TypeScript</strong> definitions.</p>
+          </section>
+          <section>
+            <h4><strong>Basic</strong> usage</h4>
+            <p>
+              To start serving a <strong>static</strong> website :
+            </p>
+            <pre><code>> npm install -g reserve
+> serve
+Server running at http://0.0.0.0:5000/</code></pre>
+            <p>
+              <a href="https://github.com/ArnaudBuchholz/reserve/blob/main/doc/configuration.md">Configuration</a> may be defined inside a file named <code>reserve.json</code>.
+            </p>
+          </section>
+          <section>
+            <h4><strong>Programmatic</strong> usage</h4>
+						<pre><code class="javascript">const { serve } = require('reserve');
+
+serve({ /* configuration */ })
+  .on('ready', ({ url }) => {
+    console.log(`Server running at ${url}`);
+  })
+  .on('error', ({ reason }) => {
+    console.error(reason);
+  });</code></pre>
+          </section>
+          <section>
+            <h4><strong>How</strong> ?</h4>
+            <p>
+              REserve is based on a <strong>simple</strong> <a href="https://github.com/ArnaudBuchholz/reserve/blob/main/doc/technical%20details.md">architecture</a>.
+            </p>
+            <img src="reserve/TAM diagram neg.png" style="max-width: 40%;" />
+          </section>
+          <section>
+            <p>
+              Handlers are <strong>inbuilt</strong> for the most common tasks :
+              <ul>
+<script>
+  (function () {
+    function template () {/*
+                <li>
+                  <a href="https://github.com/ArnaudBuchholz/reserve/blob/main/doc/HANDLER.md">HANDLER</a> : EXPLANATION
+                </li>
+    */}
+    var templateString = templateToString(template),
+      explanations = {
+        custom: "enables <strong>custom</strong> endpoints",
+        status: "<strong>ends</strong> the request with a given status<br/><small>(supports <a href=\"https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages\">redirection messages</a> with location)</small>",
+        file: "<strong>answers</strong> the request using <strong>file system</strong><br/><small>(supports caching, streaming and virtual file system)</small>",
+        url: "<strong>forwards</strong> the request to a different URL<br/><small>(enables reverse proxy)</small>",
+        use: "supports <code>express</code> <strong>middlewares</strong><br/><small><i>(experimental)</i></small>"
+      };
+    "status,file,url,use,custom"
+      .split(",")
+      .forEach(function (handler) {
+        document.write(templateString
+          .replace(/HANDLER/g, handler)
+          .replace("EXPLANATION", explanations[handler])
+        );
+      });
+  }())
+  </script>
+              </ul>
+            </p>
+          </section>
+          <section>
+            <h4>Want to know <strong>more</strong> ?</h4>
+            <ul>
+              <li><a href="https://www.npmjs.com/package/reserve">REserve</a></li>
+              <li><a href="https://arnaud-buchholz.medium.com/reserve-cache-and-proxy-9b951caee872">Cache and Proxy</a></li>
+              <li><a href="https://arnaud-buchholz.medium.com/reserve-serving-an-openui5-application-2f0211f057e2">Serving an OpenUI5 application</a></li>
+              <li><a href="https://arnaud-buchholz.medium.com/reserve-testing-ui5-85187d5eb7f1">Testing UI5</a></li>
+            </ul>
+          </section>
+        </section>
+      </div>
+    </div>
+    <script src="/gpf/last/gpf.js"></script>
+    <script src="deck.js"></script>
+  </body>
+</html>
