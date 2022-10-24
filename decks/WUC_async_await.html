@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="☕ Async / Await">
+    <meta name="author" content="Arnaud Buchholz">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="deck-duration" content="5">
+    <meta name="deck-theme" content="night">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="WUC/styles.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <section>
+            <table>
+              <tr>
+                <td width="50%">
+                  <div>
+                    <img src="WUC/logo.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+                  </div>
+                </td>
+                <td style="vertical-align: top;">
+                  <h3><strong>async</strong> / <strong>await</strong></h3>
+                  <div>
+                    <small>
+                      While you <strong>caffeinate</strong> serie<br/>
+                      Offered by ☕ Arnaud <strong>Buchholz</strong>
+                    </small>
+                    <div class="social">
+                      <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" /></a>
+                      <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" /></a>
+                      <a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" /></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </section>
+          <section>
+            <p>
+              An <strong>async</strong> function <strong>always</strong> returns a
+              <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><strong>promise</strong></a>.
+            </p>
+            <pre><code class="javascript">async function hello() {
+  return 'world';
+}
+
+// is equivalent to
+
+function hello() {
+  return Promise.resolve('world');
+}</code></pre>
+          </section>
+          <section>
+            <p>
+              Any <strong>uncaught exception</strong> occurring inside the function body is automatically converted into a <strong>rejected promise</strong>.
+            </p>
+            <pre><code class="javascript">async function hello() {
+  return transform('world');
+}
+
+// is equivalent to
+
+function hello() {
+  try {
+    return Promise.resolve(transform('world'));
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}</code></pre>
+          </section>
+          <section>
+            <h4><strong>Important</strong> notes</h4>
+            <p>
+              An <strong>async</strong> function does not <strong>magically</strong><br/>
+              become <strong>asynchronous</strong> :<br/>
+              it solely depends on the <strong>function body</strong>.
+            </p>
+            <br/>
+            <p>
+              Every rejected promise <strong>must</strong> be handled.
+            </p>
+            <img src="WUC/async_await/uncaught%20rejected%20promise.png" style="margin: 0; border: 0; box-shadow: unset; border-radius: 4px;"></img>
+          </section>
+          <section>
+            <p>
+              The <strong>await</strong> keyword is available only* inside an <strong>async</strong> function.
+            </p>
+            <br/>
+            <p>
+              It waits for a <strong>promise</strong> to be <strong>settled</strong> :
+              <ul>
+                <li>When <strong>fulfilled</strong>, the value is <strong>returned</strong> and the next statement <strong>executed</strong>.</li>
+                <li>When <strong>rejected</strong>, the <strong>await</strong> keyword <strong>throws</strong> an exception with the <strong>rejection reason</strong>.</li>
+              </ul>
+            </p>
+            <br/>
+            <p><small>
+              * Inside a module, you might use a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await">top level await</a>
+            </small></p>
+          </section>
+          <section>
+            <p>
+              <strong>await</strong> can be used with <strong>any</strong> value but it makes sense mostly with promises.
+            </p>
+            <pre><code class="JavaScript">async function examples () {
+  console.log(await 'Hello World!'); // valid
+}</code></pre>
+            <br/>
+            <p>
+              It works with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise#thenables"><strong>Thenable</strong> objects</a>.
+            </p>
+          </section>
+          <section>
+            <h4><strong>Sequential</strong> vs <strong>Parallel</strong></h4>
+            <pre><code class="JavaScript">async function sequential () {
+  const result1 = await asyncMethod1();
+  const result2 = await asyncMethod2(); // asyncMethod1 completed
+}
+
+async function parallel () {
+  const promise1 = asyncMethod1();
+  const promise2 = asyncMethod2(); // asyncMethod1 still in progress
+  const result1 = await promise1;
+  const result2 = await promise2;
+}
+
+async function parallelAndDestructuring () {
+  const [result1, result2] = await Promise.all([
+    asyncMethod1(),
+    asyncMethod2()
+  ]);
+}</code></pre>
+          </section>
+        </section>
+      </div>
+    </div>
+    <script src="/gpf/last/gpf.js"></script>
+    <script src="deck.js"></script>
+  </body>
+</html>
