@@ -2,3 +2,4 @@
 * [The singleton pattern](..\WUC_singleton.html)
 * [REserve](..\WUC_reserve.html)
 * [async / await](..\WUC_async_await.html)
+* [Mutation testing](..\WUC_mutation_testing.html)
