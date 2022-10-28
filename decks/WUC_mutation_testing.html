@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="☕ Mutation testing">
+    <meta name="author" content="Arnaud Buchholz">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="deck-duration" content="5">
+    <meta name="deck-theme" content="night">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="WUC/styles.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <section>
+            <table>
+              <tr>
+                <td width="50%">
+                  <div>
+                    <img src="WUC/logo.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
+                  </div>
+                </td>
+                <td style="vertical-align: top;">
+                  <h3>Introduction to <strong>Mutation</strong> testing</h3>
+                  <div>
+                    <small>
+                      While you <strong>caffeinate</strong> serie<br/>
+                      Offered by ☕ Arnaud <strong>Buchholz</strong>
+                    </small>
+                    <div class="social">
+                      <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" /></a>
+                      <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" /></a>
+                      <a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" /></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </section>
+          <section>
+            <p>Considering the <strong>function</strong> to test :</p>
+            <pre><code class="JavaScript">function div (a, b) {
+  if (b === 0) {
+    throw new Error('Do not divide by 0');
+  }
+  return a / b;
+}</code></pre>
+            <br/>
+            <p>And the following <strong>test code</strong> :</p>
+            <pre><code class="JavaScript">assert.throws(() => div(1,0));
+assert.notEqual(div(1,2), 0);</code></pre>
+            <br/>
+            <p>It generates a code <strong>coverage</strong> of <strong>100%</strong></p>
+          </section>
+          <section>
+            <p>But what does it really <strong>mean</strong> ?</p>
+            <br />
+            <p>All statements are <strong>evaluated<br/>during</strong> the tests.</p>
+            <br/>
+            <p>It does <strong>not</strong> guarantee that the code was <strong>thoroughly checked</strong>.</p>
+          </section>
+          <section>
+            <p>In particular :
+              <ul>
+                <li>The exception is not <strong>validated</strong>,<br/><small>(type and message)</small></li>
+                <li>The result of the division is not compared with an <strong>expected value</strong>.</li>
+              </ul>
+            </p>
+          </section>
+          <section>
+            <h4>What is <strong>mutation</strong> testing ?</h4>
+            <p>For each <strong>covered statement</strong> :
+              <ul>
+                <li>The source code is modified with a single <strong>mutation</strong> to generate a <strong>mutant</strong>,</li>
+                <li>The tests are executed to check if they <strong>still pass</strong>.</li>
+              </ul>
+            </p>
+            <br/>
+            <p>
+              If a mutant <strong>survives</strong> the tests,<br/>
+              it means that a <strong>defect</strong> is not <strong>detected</strong> !<br/>
+              <small>the tests are not good !</small>
+            </p>
+          </p>
+          </section>
+          <section>
+            Type of <strong>mutations</strong>
+            <ul>
+              <li>Removing a statement</li>
+              <li>Forcing conditions to <code>true</code> or <code>false</code></li>
+              <li>Changing operators</li>
+              <li>Changing static content <i>(strings, numbers...)</i></li>
+            </ul>
+          </section>
+          <section>
+            PROs and CONS of mutation testing
+            <ul>
+              <li>Assess the quality of the tests</li>
+              <li>Increase code quality and robustness</li>
+            </ul>
+            <ul>
+              <li>Resource consuming (time / CPU)</li>
+              <li>Must be limited to unit tests (with proper decoupling to external resources)</li>
+            </ul>
+          </section>
+          <section>
+            <h4>Want to know <strong>more</strong> ?</h4>
+            <ul>
+              <li><a href="https://en.wikipedia.org/wiki/Mutation_testing">Mutation testing on wikipedia</a></li>
+              <li><a href="https://stryker-mutator.io/docs/stryker-js/introduction/">Stryker Mutator</a></li>
+            </ul>
+          </section>
+        </section>
+      </div>
+    </div>
+    <script src="/gpf/last/gpf.js"></script>
+    <script src="deck.js"></script>
+  </body>
+</html>
