@@ -42,11 +42,20 @@
             </table>
           </section>
           <section>
-            Powerful tools to match AND parse values
+            They offer two syntaxes :
+
+            <pre><code class="JavaScript">const fromConstructor = new RegExp('a*', 'g');
+const fromLiteral = /a*/g;</code></pre>
           </section>
           <section>
-            Reduce code cyclomatic 
-          </section>
+
+            Reduce code cyclomatic complexity
+            const includes = (value.includes('abc') || value.includes('def')
+            const reIncludes = value.match(/abc|def/)
+
+            const startAndEndWith = value.startsWith('abc') && value.endsWith('def')
+            const reStartAndEndWith = value.match(/^abc.*def$/)
+           </section>
           <section>
             Capturing groups
           </section>
