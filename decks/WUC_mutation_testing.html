@@ -42,6 +42,7 @@
             </table>
           </section>
           <section>
+            <h4>Context</h4>
             <p>Considering the <strong>function</strong> to test :</p>
             <pre><code class="JavaScript">function div (a, b) {
   if (b === 0) {
@@ -49,27 +50,27 @@
   }
   return a / b;
 }</code></pre>
-            <br/>
-            <p>And the following <strong>test code</strong> :</p>
+            <p>And the <strong>test code</strong> :</p>
             <pre><code class="JavaScript">assert.throws(() => div(1,0));
 assert.notEqual(div(1,2), 0);</code></pre>
             <br/>
-            <p>It generates a code <strong>coverage</strong> of <strong>100%</strong></p>
+            <p>Code <strong>coverage</strong> is <strong>100%</strong></p>
           </section>
           <section>
-            <p>But what does it really <strong>mean</strong> ?</p>
+            <h4>What does it <strong>really</strong> mean ?</h4>
             <br />
-            <p>All statements are <strong>evaluated<br/>during</strong> the tests.</p>
+            <p>✔️ All statements are <strong>evaluated<br/>during</strong> the tests.</p>
             <br/>
-            <p>It does <strong>not</strong> guarantee that the code was <strong>thoroughly checked</strong>.</p>
+            <p>❌ It does <strong>not</strong> guarantee that the code was <strong>thoroughly checked</strong>.</p>
           </section>
           <section>
-            <p>In particular :
-              <ul>
-                <li>The exception is not <strong>validated</strong>,<br/><small>(type and message)</small></li>
-                <li>The result of the division is not compared with an <strong>expected value</strong>.</li>
-              </ul>
-            </p>
+            <h4>In the example</h4>
+            <ul>
+              <pre><code class="JavaScript">assert.throws(() => div(1,0));</code></pre>
+              <li>The exception is not <strong>validated</strong>,<br/><small>(type and message)</small></li>
+              <pre><code class="JavaScript">assert.notEqual(div(1,2), 0);</code></pre>
+              <li>The result is not <strong>compared</strong> with any meaningful value.</li>
+            </ul>
           </section>
           <section>
             <h4>What is <strong>mutation</strong> testing ?</h4>
@@ -82,29 +83,55 @@ assert.notEqual(div(1,2), 0);</code></pre>
             <br/>
             <p>
               If a mutant <strong>survives</strong> the tests,<br/>
-              it means that a <strong>defect</strong> is not <strong>detected</strong> !<br/>
-              <small>the tests are not good !</small>
+              a <strong>defect</strong> is not <strong>detected</strong> !<br/>
+              <small>Tests are <strong>incomplete</strong> !</small>
             </p>
           </p>
           </section>
           <section>
-            Type of <strong>mutations</strong>
+            <h4>Examples of <strong>mutations</strong> (1/2)</h4>
             <ul>
-              <li>Removing a statement</li>
-              <li>Forcing conditions to <code>true</code> or <code>false</code></li>
-              <li>Changing operators</li>
-              <li>Changing static content <i>(strings, numbers...)</i></li>
+              <li><strong>Removing</strong> a statement</li>
+              <pre><code class="JavaScript">function div (a, b) {
+  if (b === 0) {}
+  return a / b;
+}</code></pre>
+              <li>Forcing <strong>conditions</strong> to <code>true</code> or <code>false</code></li>
+              <pre><code class="JavaScript">function div (a, b) {
+  if (true) {
+    throw new Error('Do not divide by 0');
+  }
+  return a / b;
+}</code></pre>
             </ul>
           </section>
           <section>
-            PROs and CONS of mutation testing
+            <h4>Examples of <strong>mutations</strong> (2/2)</h4>
             <ul>
-              <li>Assess the quality of the tests</li>
-              <li>Increase code quality and robustness</li>
+              <li>Changing <strong>operators</strong></li>
+              <pre><code class="JavaScript">function div (a, b) {
+  if (b === 0) {
+    throw new Error('Do not divide by 0');
+  }
+  return a * b;
+}</code></pre>
+              <li>Changing <strong>static content</strong> <i>(strings, numbers...)</i></li>
+              <pre><code class="JavaScript">function div (a, b) {
+  if (b === 0) {
+    throw new Error('I am a mutant');
+  }
+  return a / b;
+}</code></pre>
             </ul>
+          </section>
+          <section>
+            <h4><strong>Benefits</strong> and <strong>drawbacks</strong></h4>
             <ul>
-              <li>Resource consuming (time / CPU)</li>
-              <li>Must be limited to unit tests (with proper decoupling to external resources)</li>
+              <li>✔️ <strong>Automatically</strong> measure the quality <strong>&</strong> relevance of the tests,</li>
+              <li>✔️ <strong>Increase</strong> the code quality and robustness.</li>
+              <br/>
+              <li>❌ <strong>Consume</strong> resources (time / CPU / storage),<br/><small>Do not automate in the CI/CD pipeline</small></small></li>
+              <li>❌ <strong>Must</strong> be limited to <strong>unit tests</strong>.<br/><small>With proper isolation from external dependencies</small></li>
             </ul>
           </section>
           <section>
@@ -112,6 +139,7 @@ assert.notEqual(div(1,2), 0);</code></pre>
             <ul>
               <li><a href="https://en.wikipedia.org/wiki/Mutation_testing">Mutation testing on wikipedia</a></li>
               <li><a href="https://stryker-mutator.io/docs/stryker-js/introduction/">Stryker Mutator</a></li>
+              <li><a href="https://github.com/ArnaudBuchholz/reserve">REserve</a> mutation testing <a href="https://arnaudbuchholz.github.io/decks/WUC/mutation_testing/reserve.html">report</a></li>
             </ul>
           </section>
         </section>
