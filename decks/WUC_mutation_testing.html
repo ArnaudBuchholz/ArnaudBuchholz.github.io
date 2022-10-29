@@ -64,12 +64,12 @@ assert.notEqual(div(1,2), 0);</code></pre>
             <p>❌ It does <strong>not</strong> guarantee that the code was <strong>thoroughly checked</strong>.</p>
           </section>
           <section>
-            <h4>In the example</h4>
+            <h4>In the <strong>example</strong></h4>
             <ul>
               <pre><code class="JavaScript">assert.throws(() => div(1,0));</code></pre>
               <li>The exception is not <strong>validated</strong>,<br/><small>(type and message)</small></li>
               <pre><code class="JavaScript">assert.notEqual(div(1,2), 0);</code></pre>
-              <li>The result is not <strong>compared</strong> with any meaningful value.</li>
+              <li>The result is not <strong>compared</strong> with any <strong>meaningful</strong> value.</li>
             </ul>
           </section>
           <section>
@@ -77,14 +77,14 @@ assert.notEqual(div(1,2), 0);</code></pre>
             <p>For each <strong>covered statement</strong> :
               <ul>
                 <li>The source code is modified with a single <strong>mutation</strong> to generate a <strong>mutant</strong>,</li>
-                <li>The tests are executed to check if they <strong>still pass</strong>.</li>
+                <li>The tests are <strong>executed</strong> to check if they <strong>still pass</strong>.</li>
               </ul>
             </p>
             <br/>
             <p>
               If a mutant <strong>survives</strong> the tests,<br/>
-              a <strong>defect</strong> is not <strong>detected</strong> !<br/>
-              <small>Tests are <strong>incomplete</strong> !</small>
+              a <strong>defect</strong> is <strong>not detected</strong> !<br/>
+              <small>Tests are <strong>incomplete</strong>.</small>
             </p>
           </p>
           </section>
@@ -125,6 +125,19 @@ assert.notEqual(div(1,2), 0);</code></pre>
             </ul>
           </section>
           <section>
+            <h4>Mutation <strong>report</strong> and <strong>score</strong></h4>
+            <p>
+              A report details, for each source, the <strong>generated mutants</strong> and their associated <strong>tests result</strong>.<br/>
+              <small>(killed, survived or timed out)</small>
+            </p>
+            <br/>
+            <p>
+              The <strong>mutation score</strong> evaluates the <strong>percentage</strong> of mutants <strong>detected</strong> during the process :<br/>
+              the <strong>highest</strong> the value, the <strong>better</strong> the tests.<br/>
+              <small>(timed out usually means detected)</small>
+            </p>
+          </section>
+          <section>
             <h4><strong>Benefits</strong> and <strong>drawbacks</strong></h4>
             <ul>
               <li>✔️ <strong>Automatically</strong> measure the quality <strong>&</strong> relevance of the tests,</li>
@@ -138,6 +151,7 @@ assert.notEqual(div(1,2), 0);</code></pre>
             <h4>Want to know <strong>more</strong> ?</h4>
             <ul>
               <li><a href="https://en.wikipedia.org/wiki/Mutation_testing">Mutation testing on wikipedia</a></li>
+              <li><a href="https://medium.com/digio-australia/introduction-to-mutation-testing-with-stryker-1338451ad4e5">Introduction to Mutation Testing with Stryker</a></li>
               <li><a href="https://stryker-mutator.io/docs/stryker-js/introduction/">Stryker Mutator</a></li>
               <li><a href="https://github.com/ArnaudBuchholz/reserve">REserve</a> mutation testing <a href="https://arnaudbuchholz.github.io/decks/WUC/mutation_testing/reserve.html">report</a></li>
             </ul>
