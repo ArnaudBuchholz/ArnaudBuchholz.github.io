@@ -25,7 +25,7 @@
                   </div>
                 </td>
                 <td style="vertical-align: top;">
-                  <h3>Regular <strong>expressions</strong></h3>
+                  <h3>Regular <strong>expressions</strong> &amp; <strong>capturing</strong> groups</h3>
                   <div>
                     <small>
                       While you <strong>caffeinate</strong> serie<br/>
@@ -42,27 +42,84 @@
             </table>
           </section>
           <section>
-            They offer two syntaxes :
-
-            <pre><code class="JavaScript">const fromConstructor = new RegExp('a*', 'g');
-const fromLiteral = /a*/g;</code></pre>
+            <p>
+              <q>Regular expressions are only for <strong>matching</strong> strings</q><br/>
+              is a common <strong>misconception</strong>.
+            </p>
+            <br/>
+            <p>
+              It is a <strong>powerful</strong> too that
+              can also <strong>extract</strong> values from the matched string.
+            </p>
+            <br />
+            <p>
+              Regular expressions <strong>and</strong> capturing groups are tightly <strong>integrated</strong>
+              in the JavaScript language.
+            </p>
           </section>
           <section>
-
-            Reduce code cyclomatic complexity
-            const includes = (value.includes('abc') || value.includes('def')
-            const reIncludes = value.match(/abc|def/)
-
-            const startAndEndWith = value.startsWith('abc') && value.endsWith('def')
-            const reStartAndEndWith = value.match(/^abc.*def$/)
-           </section>
-          <section>
-            Capturing groups
+            <h4>What is a <strong>capturing</strong> group ?</h4>
+            <p>
+              A pair of <strong>parenthesis</strong>* define a capturing group.
+            </p>
+            <pre><code class="JavaScript">const imageDescription = 'Image resolution is 1440×900 pixels.';
+const regexpSize = /([0-9]+)x([0-9]+)/;
+const match = imageDescription.match(regexpSize);
+console.log(`Width: ${match[1]} / Height: ${match[2]}.`);
+// expected output: "Width: 1440 / Height: 900."</code></pre>
+            <br/>
+            <small><p>
+              <b>NOTE : </b> to capture a <strong>repeated</strong> pattern,
+              make sure the repetition is <strong>enclosed</strong> inside
+              parenthesis or it will capture only the <strong>last</strong> occurrence.
+            </p></small>
+            <br/>
+            <small><p>
+              * The specific syntax <code>(?: )</code> defines a non-capturing group.
+            </p></small>
           </section>
           <section>
+            <p>
+              The result of a match is an <strong>array-like</strong> where :
+              <ul>
+                <li><code>match[0]</code> contains the matching string,</li>
+                <li><code>match[1]</code> contains the value of the <strong>first</strong> capturing group,</li>
+                <li><code>match[2]</code> contains the value of the <strong>second</strong> capturing group,</li>
+                <li>...</li>
+                <li>And additional <strong>properties</strong>.</li>
+              </ul>
+            </p>
+            <pre><code class="JavaScript">[
+  '1440x900',
+  '1440',
+  '900',
+  index: 31,
+  input: 'This image has a resolution of 1440x900 pixels.'
+]</code></pre>
+          </section>
+          <section>
+            <h4>string.<strong>replace</strong></h4>
+            <p>
+              Used with string.replace and a replacer function,
+              the capturing group values are provided as additional parameters.
+            </p>
+
             string.replace(regexp, function (match, capturing groups))
-            string.split(regexp) with or without capturing groups
           </section>
+          <section>
+            <h4>string.split</h4>
+            <p>
+              Used with string.split, the resulting array contains the value it was split on.
+            </p>
+            <pre><code class="JavaScript">"arnaud was here".split(/([aeiouy]+)| /)
+[
+  '',        'a', 'rn',
+  'au',      'd', undefined,
+  'w',       'a', 's',
+  undefined, 'h', 'e',
+  'r',       'e', ''
+]</code></pre>
+                      </section>
           <section>
             <h4>Want to know <strong>more</strong> ?</h4>
             https://regex101.com/#javascript
