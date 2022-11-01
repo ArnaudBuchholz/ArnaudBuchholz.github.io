@@ -102,7 +102,6 @@ console.log(`Width: ${match[1]} / Height: ${match[2]}.`);
               Used with a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_function_as_the_replacement">replacer function</a>,
               the capturing group values are provided as <strong>additional parameters</strong>.
             </p>
-            <br />
             <pre><code class="JavaScript">// <h1>Title</h1> => <div class="h1">Title</div>
 
 html.replace(/&lt;(h\d)>([^&lt;]*)&lt;\/h\d>/ig, (match, titleTag, content) =>
@@ -125,8 +124,7 @@ html.replace(/&lt;(h\d)>([^&lt;]*)&lt;\/h\d>/ig, (match, titleTag, content) =>
 
 "Arnaud was here".split(/([aeiouy]+)/i).filter((_, pos) => pos % 2);
 // [ 'A', 'au', 'a', 'e', 'e' ] ✌</code></pre>
-
-                      </section>
+          </section>
           <section>
             <h4>Want to know <strong>more</strong> ?</h4>
             <ul>
