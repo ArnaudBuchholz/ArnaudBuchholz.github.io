@@ -3,3 +3,4 @@
 * [REserve](..\WUC_reserve.html)
 * [async / await](..\WUC_async_await.html)
 * [Introduction to Mutation testing](..\WUC_mutation_testing.html)
+* [Regular expressions &amp; capturing groups](..\WUC_regexp_capturing.html)
