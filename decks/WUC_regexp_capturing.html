@@ -54,7 +54,7 @@
             <br />
             <p>
               Regular expressions <strong>and</strong> capturing groups are tightly <strong>integrated</strong>
-              in the JavaScript language.
+              with the JavaScript language.
             </p>
           </section>
           <section>
@@ -71,58 +71,70 @@ console.log(`Width: ${match[1]} / Height: ${match[2]}.`);
             <small><p>
               <b>NOTE : </b> to capture a <strong>repeated</strong> pattern,
               make sure the repetition is <strong>enclosed</strong> inside
-              parenthesis or it will capture only the <strong>last</strong> occurrence.
+              parenthesis or the regexp captures only the <strong>last</strong> occurrence.
             </p></small>
             <br/>
             <small><p>
-              * The specific syntax <code>(?: )</code> defines a non-capturing group.
+              * The specific syntax <code>(?: )</code> defines a <strong>non-capturing</strong> group.
             </p></small>
           </section>
           <section>
             <p>
               The result of a match is an <strong>array-like</strong> where :
-              <ul>
-                <li><code>match[0]</code> contains the matching string,</li>
-                <li><code>match[1]</code> contains the value of the <strong>first</strong> capturing group,</li>
-                <li><code>match[2]</code> contains the value of the <strong>second</strong> capturing group,</li>
-                <li>...</li>
-                <li>And additional <strong>properties</strong>.</li>
-              </ul>
-            </p>
-            <pre><code class="JavaScript">[
+              <pre><code class="JavaScript">[
   '1440x900',
   '1440',
   '900',
   index: 31,
   input: 'This image has a resolution of 1440x900 pixels.'
 ]</code></pre>
+              <ul>
+                <li><code>match[0]</code> contains the matching string,</li>
+                <li><code>match[1]</code> contains the value of the <strong>first</strong> capturing group,</li>
+                <li><code>match[2]</code> contains the value of the <strong>second</strong> capturing group,</li>
+                <li>...</li>
+              </ul>
+            </p>
           </section>
           <section>
             <h4>string.<strong>replace</strong></h4>
             <p>
-              Used with string.replace and a replacer function,
-              the capturing group values are provided as additional parameters.
+              Used with a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_function_as_the_replacement">replacer function</a>,
+              the capturing group values are provided as <strong>additional parameters</strong>.
             </p>
+            <br />
+            <pre><code class="JavaScript">// <h1>Title</h1> => <div class="h1">Title</div>
 
-            string.replace(regexp, function (match, capturing groups))
+html.replace(/&lt;(h\d)>([^&lt;]*)&lt;\/h\d>/ig, (match, titleTag, content) =>
+  `&lt;div class="${titleTag}">${content}&lt;/div>`
+);</code></pre>
+            <p><small><a href="https://regex101.com/r/BRStjr/1">Regular expression explanation and matching example</a></small></p>
           </section>
           <section>
-            <h4>string.split</h4>
+            <h4>string.<strong>split</strong></h4>
             <p>
-              Used with string.split, the resulting array contains the value it was split on.
+              The resulting array<br/><strong>includes</strong> the capturing group values.
             </p>
-            <pre><code class="JavaScript">"arnaud was here".split(/([aeiouy]+)| /)
-[
-  '',        'a', 'rn',
-  'au',      'd', undefined,
-  'w',       'a', 's',
-  undefined, 'h', 'e',
-  'r',       'e', ''
-]</code></pre>
+            <pre><code class="JavaScript">// Extracting all vowels from a string
+
+"Arnaud was here".split(/[aeiouy]+/i); // no capturing group
+// [ '', 'rn', 'd w', 's h', 'r', '' ]
+
+"Arnaud was here".split(/([aeiouy]+)/i); // captures vowels
+// [ '', 'A', 'rn', 'au', 'd w', 'a', 's h', 'e', 'r', 'e', '']
+
+"Arnaud was here".split(/([aeiouy]+)/i).filter((_, pos) => pos % 2);
+// [ 'A', 'au', 'a', 'e', 'e' ] ✌</code></pre>
+
                       </section>
           <section>
             <h4>Want to know <strong>more</strong> ?</h4>
-            https://regex101.com/#javascript
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">MDN RegExp</a></li>
+              <li><a href="https://regex101.com/">RegEx101</a><br/>
+                <small>Make sure to select the <strong>ECMAScript</strong> flavor</small>
+              </li>
+            </ul>
           </section>
         </section>
       </div>
