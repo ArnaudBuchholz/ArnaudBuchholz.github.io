@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="description" content="☕ Mixing async &amp; sync code">
+    <meta name="description" content="☕ Dates & Timezones">
     <meta name="author" content="Arnaud Buchholz">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -25,7 +25,7 @@
                   </div>
                 </td>
                 <td style="vertical-align: top;">
-                  <h3><strong>Mixing</strong> async &amp; sync code</h3>
+                  <h3>Dates <strong>and</strong> Timezones</h3>
                   <div>
                     <small>
                       While you <strong>caffeinate</strong> serie<br/>
@@ -42,23 +42,48 @@
             </table>
           </section>
           <section>
-            <h4>Reminder</h4>
-            >> see async await
-            <p>All promises must be handled the right way</p>
-            <p>When passing a callback to an API, this one might not expect an asynchronous function</p>
-            <p>For instance Node.js callback (fileRead...)</p>
+            The JavaScript Date object is a complex one
+              https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+            It handles multiple representation
+              getTime() => number of milliseconds since January 1, 1970, UTC https://en.wikipedia.org/wiki/Unix_time
+              Local date/time => date and time is adjusted to the system timezone
+              UTC date/time => date and time is 
           </section>
           <section>
-            <h4>Reminder</h4>
-            <pre><code class="JavaScript">// api accepts a callback, not expecting an asynchronous one
-let result
-api(() => {
-  result = (async () => {
+            Difference between date and time
 
-  }())
-})
-return result
-            </code></pre>
+            When something happens at 13:00 in Montreal, it is 19:00 in Paris !
+            The same way, when French people celebrates the new year, we still have to wait 6 hours in Montreal
+
+            &#128506;&#65039;
+          </section>
+          <section>
+            Timezone
+
+            https://en.wikipedia.org/wiki/Time_zone
+            https://en.wikipedia.org/wiki/File:World_Time_Zones_Map.png
+
+            https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+          </section>
+          <section>
+            Daylight saving time
+              Not all countries use DST
+
+            https://jsfiddle.net/ArnaudBuchholz/op1t4gbk/1/
+          </section>
+          <section>
+            Good to know
+            * new Date() => now
+            * new Date(1671926400000) => Xmas ad midnight UTC (using Unix)
+            * new Date('2022-12-25') => Xmas at midnight UTC ==> POSSIBLY NOT THE RIGHT DATE !!!
+            * new Date('2022-12-25T00:00:00.000Z') => Xmas at midnight UTC
+            * new Date('2022-12-25 00:00:00') => Xmas at local UTC
+          </section>
+          <section>
+            Advices
+            * If time is relevant, make sure to store the information in UTC 
+            * If you want to manipulate a date only, make sure to to initialize the date object appropriately
           </section>
         </section>
       </div>
