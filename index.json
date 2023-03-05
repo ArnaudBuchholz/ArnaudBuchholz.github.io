@@ -38,7 +38,7 @@
   "link": "decks/UI5Con'19 Advanced Testing with UI5.html",
   "title": "Use *UI5* to *test* your *ODATA* service",
   "subtitle": "Presented during UI5Con'19"
-  }, {
+}, {
   "type": "deck",
   "link": "decks/UI5Con'21 UI5 Test Runner.html",
   "title": "A *different* approach to UI5 *tests execution*",
