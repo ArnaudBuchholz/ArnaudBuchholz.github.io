@@ -1,0 +1,82 @@
+section > section {
+	background-image: url("UI5con logo.png");
+	background-repeat: no-repeat;
+	background-size: 15%;
+	background-position: bottom right;
+}
+
+.print-pdf section > div > section {
+	background-image: url("UI5con logo.png");
+	background-repeat: no-repeat;
+	background-size: 15%;
+	background-position: bottom right;
+}
+
+section.divider {
+	background-image: url("UI5con divider.png");
+	background-repeat: no-repeat;
+	background-size: 30%;
+	background-position: bottom right;
+}
+
+.print-pdf section.divider {
+	background-image: url("UI5con divider.png");
+	background-repeat: no-repeat;
+	background-size: 15%;
+	background-position: bottom right;
+}
+
+section.title {
+	background-image: none;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.print-pdf section.title {
+	background-image: none;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+section.title h3 {
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.print-pdf section.title h3 {
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black !important;
+}
+
+section.divider h3 {
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.reveal.center .slides section {
+    min-height: 90%!important;
+}
+
+.print-pdf .reveal.center .slides section {
+    min-height: unset!important;
+}
+
+img.rounded {
+	margin: 0;
+	border: 0;
+	box-shadow: unset;
+	border-radius: 16px;
+}
+
+.reveal pre {
+	margin-bottom: 0;
+}
+
+.reveal table tr {
+    border: none;
+}
+
+.reveal table td {
+    border: none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.reveal table h4 {
+    padding-bottom: 1rem;
+}
