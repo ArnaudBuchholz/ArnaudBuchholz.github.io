@@ -10,87 +10,9 @@
 		<meta name="deck-duration" content="40">
 		<meta name="deck-theme" content="night">
 		<link rel="stylesheet" type="text/css" href="styles.css">
-		<style version=" shortened">
-section > section {
-	background-image: url("UI5Con'21 UI5 Test Runner/UI5con logo.png");
-	background-repeat: no-repeat;
-	background-size: 15%;
-	background-position: bottom right;
-}
-
-.print-pdf section > div > section {
-	background-image: url("UI5Con'21 UI5 Test Runner/UI5con logo.png");
-	background-repeat: no-repeat;
-	background-size: 15%;
-	background-position: bottom right;
-}
-
-section.divider {
-	background-image: url("UI5Con'21 UI5 Test Runner/UI5con divider.png");
-	background-repeat: no-repeat;
-	background-size: 30%;
-	background-position: bottom right;
-}
-
-.print-pdf section.divider {
-	background-image: url("UI5Con'21 UI5 Test Runner/UI5con divider.png");
-	background-repeat: no-repeat;
-	background-size: 15%;
-	background-position: bottom right;
-}
-
-section.title {
-	background-image: none;
-	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-
-.print-pdf section.title {
-	background-image: none;
-	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-
-section.title h3 {
-	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-
-.print-pdf section.title h3 {
-	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black !important;
-}
-
-section.divider h3 {
-	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-}
-
-.reveal.center .slides section {
-    min-height: 90%!important;
-}
-
-.print-pdf .reveal.center .slides section {
-    min-height: unset!important;
-}
-	</style>
-	<style>
-img.rounded {
-	margin: 0;
-	border: 0;
-	box-shadow: unset;
-	border-radius: 16px;
-}
-
-.reveal pre {
-	margin-bottom: 0;
-}
-		</style>
+		<link rel="stylesheet" type="text/css" href="ui5-test-runner/styles.css">
 	</head>
 	<body>
-<!--
-	No heavy/additional config
-	Parallel execution
-	Typescript / libraries / any env
-	Complete report with screenshots
-	Multiple browsers support (chrome, firefox, edge)
-	Better feedback (traces)
--->
 		<div class="reveal">
 			<div class="slides">
 				<section>
@@ -100,12 +22,13 @@ img.rounded {
 								<td width="50%">
 									<small>
 										<a href="https://www.imdb.com/title/tt0120201/"><small>Starship Troopers</small>
-											<img src="UI5Con'21 UI5 Test Runner/good_bug.png" class="rounded"></img>
+											<img src="ui5-test-runner/good_bug.png" class="rounded"></img>
 										</a>
 									</small>
 								</td>
 								<td style="vertical-align: top;">
-									<h3 data-agenda="no">ui5-test-runner <strong>v2</strong></h3>
+									<h3 data-agenda="no"><strong>ui5</strong>-test-runner <strong>v2</strong></h3>
+									<br/>
 									<p>
 										<small>
 											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
@@ -114,7 +37,7 @@ img.rounded {
 										</small>
 									</p>
 									<br/>
-									<img version=" shortened" src="UI5Con'21 UI5 Test Runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
+									<img src="ui5-test-runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
 								</td>
 							</tr>
 						</table>
@@ -130,74 +53,88 @@ img.rounded {
 						<h3><strong>Context</strong></h3>
 						<q>Back to 2018...</q>
 					</section>
-					<section version="">
-						<h4>UI5Con<strong>'18</strong></h4>
-						<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 40%; max-height: 40%;" />
-						<br/>
-						<p>A journey with <strong>OPA</strong></p>
-						<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a> <a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a></small>
+					<section>
+						<table>
+							<tr>
+								<td><h4>UI5Con<strong>'18</strong></h4></td>
+								<td><h4>UI5Con<strong>'19</strong></h4></td>
+								<td><s><h4>UI5Con<strong>'20</strong></h4></s></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 50%; max-height: 50%;" />
+								</td>
+								<td>
+									<img src="UI5Con'19 Advanced Testing with UI5/YouTube.png" style="border: 1px solid black; max-width: 60%; max-height: 50%;" />
+								</td>
+								<td>
+									<img src="ui5-test-runner/9781493219513_800_2d.png" style="border: 0; max-width: 30%; max-height: 10%;" />
+								</td>
+							</tr>
+							<tr>
+								<td>A journey with <strong>OPA</strong></td>
+								<td>Use <strong>UI5</strong> to <strong>test</strong> your <strong>ODATA</strong> service</td>
+								<td><strong>Testing</strong> UI5 applications</td>
+							</tr>
+							<tr>
+								<td><small>
+									<a href="https://youtu.be/HiZq-kuIbt0">recording</a><br/>
+									<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a>
+								</small></td>
+								<td><small>
+									<a href="https://youtu.be/HiZq-kuIbt0">recording</a><br/><a href="https://www.npmjs.com/package/node-ui5">node-ui5</a>
+								</small></td>
+								<td><small>
+									<a href="https://www.sap-press.com/testing-sapui5-applications_5056/">e-book</a>
+								</small></td>
+							</tr>
+						</table>
 					</section>
-					<section version="">
-						<h4>UI5Con<strong>'19</strong></h4>
-						<img src="UI5Con'19 Advanced Testing with UI5/YouTube.png" style="border: 1px solid black; max-width: 50%; max-height: 50%;" />
-						<br/>
-						<p>Use <strong>UI5</strong> to <strong>test</strong> your <strong>ODATA</strong> service</p>
-						<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a> <a href="https://www.npmjs.com/package/node-ui5">node-ui5</a></small>
+					<section>
+						<table>
+							<tr>
+								<td><h4>UI5Con<strong>'21</strong></h4></td>
+								<td><s><h4>UI5Con<strong>'22</strong></h4></s></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="ui5-test-runner/YouTube.v1.png" style="border: 0; max-width: 40%; max-height: 40%;" />
+								</td>
+								<td>
+									<img src="ui5-test-runner/9781493222285_800_2d.png" style="border: 0; max-width: 30%; max-height: 10%;" />
+								</td>
+							</tr>
+							<tr>
+								<td>A <strong>different</strong> approach to UI5 <strong>tests execution</strong></td>
+								<td><strong>Clean</strong> SAPUI5</td>
+							</tr>
+							<tr>
+								<td><small>
+									<a href="https://youtu.be/EBp0bdIqu4s">recording</a><br/>
+									<a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a>
+								</small></td>
+								<td><small>
+									<a href="https://www.sap-press.com/clean-sapui5_5479/">book</a><br/>
+									<a href="https://youtu.be/rb3_io0OdO0">recording <span style="font-size: small;">(DEVTOBERFEST'22)</span></a><br/>
+									<a href="https://clean-ui5.github.io/samples/">samples</a>
+								</small></td>
+							</tr>
+						</table>
 					</section>
-					<section version="">
-						<s><h4>UI5Con<strong>'20</strong></h4></s>
-						<div class="fragment">
-							<img src="UI5Con'21 UI5 Test Runner/9781493219513_267_2d.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-							<br/>
-							<p><strong>Testing</strong> UI5 applications</p>
-							<small><a href="https://www.sap-press.com/testing-sapui5-applications_5056/">e-book</a></small>
-						</div>
-					</section>
-					<section version="ecosystem shortened">
+					<section>
+						<h4><q>If it's not tested, it does <strong>not</strong> work</q></h4>
 						<div style="display: flex; justify-content: space-around;">
-							<div style="margin: 16px;">
-								<h4>UI5Con<strong>'18</strong></h4>
-								<img src="From OPA to Node-UI5/UI5con@SAP 2018 - A journey with OPA.png" style="border: 0; max-width: 40%; max-height: 40%;" />
-								<br/>
-								<p>A journey with <strong>OPA</strong></p>
-								<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a><br/><a href="https://github.com/ArnaudBuchholz/training-ui5con18-opa">training-ui5con18-opa</a></small>
-							</div>
-							<div style="margin: 16px;">
-								<h4>UI5Con<strong>'19</strong></h4>
-								<img src="UI5Con'19 Advanced Testing with UI5/YouTube.png" style="border: 1px solid black; max-width: 50%; max-height: 50%;" />
-								<br/>
-								<p>Use <strong>UI5</strong> to <strong>test</strong> your <strong>ODATA</strong> service</p>
-								<small><a href="https://youtu.be/HiZq-kuIbt0">recording</a><br/><a href="https://www.npmjs.com/package/node-ui5">node-ui5</a></small>
-							</div>
-							<div style="margin: 16px;">
-								<s><h4>UI5Con<strong>'20</strong></h4></s>
-								<img src="UI5Con'21 UI5 Test Runner/9781493219513_267_2d.png" style="border: 0; max-width: 60%; max-height: 50%;" />
-								<br/>
-								<p><strong>Testing</strong> UI5 applications</p>
-								<small><a href="https://www.sap-press.com/testing-sapui5-applications_5056/">e-book</a></small>
-							</div>
-						</div>
-					</section>
-					<section version="">
-						<q>Got the <strong>trend</strong> ?</q>
-					</section>
-					<section version="ecosystem">
-						<q>If it's not tested, it does <strong>not</strong> work</q>
-						<p>
-							<i class="fragment" style="font-size: smaller;">Need I say more ?</i>
-						</p>
-					</section>
-					<section version="ecosystem">
-						<h4><strong>Unit</strong> testing vs <strong>Integration</strong> testing</h4>
-						<div style="display: flex; justify-content: space-around;">
-							<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 50%; max-height: 50%;" align="left" />
+							<img src="UI5Con'18%20A%20journey%20with%20OPA/test%20pyramid.png" style="border: 0; max-width: 30%; max-height: 30%;" />
 							<div>
-								<strong>Maximize</strong> unit testing : they must be <strong>fast</strong> and they ensure <strong>code modularity</strong>.<br/>
-								<strong>Leverage</strong> integration testing : check the <strong>happy path</strong> then <strong>edge cases</strong>.
+								UI5 is shipped with <strong>testing</strong> tools :
+								<ul>
+									<li>qUnit: <strong>unit</strong> testing</li>
+									<li>OPA: <strong>component</strong> and <strong>integration</strong> testing</li>
+								</ul>
 							</div>
 						</div>
 					</section>
-					<section version="ecosystem">
+					<section>
 						<h4><strong>O</strong>ne <strong>P</strong>age <strong>A</strong>cceptance Tests</h4>
 						<ul>
 							<li><strong>UI behavior</strong> testing</li>
@@ -207,45 +144,27 @@ img.rounded {
 							<li>Backend is <strong>mocked</strong></li>
 						</ul>
 					</section>
-					<section version="ecosystem">
+					<section>
 						<h4>Compared to other <strong>automation frameworks</strong></h4>
-						<p>Selenium, Marionette or Puppeteer are <strong>framework agnostic</strong>,
+						<p>Puppeteer, Selenium or Webdriver.io are <strong>framework agnostic</strong>,
 							one must rely on the <strong>generated HTML</strong> to code automation.
 							They are designed for <strong>End 2 End</strong> testing.
 						</p>
-						<br />
-						<p>OPA is designed <strong>by and for</strong> UI5 developers: one manipulates <strong>UI5 controls</strong>.
-						</p>
+						<p>OPA is designed <strong>by and for</strong> UI5 developers: one manipulates <strong>UI5 controls</strong>.</p>
+						<p>🆕<a href="https://ui5-community.github.io/wdi5/"><strong>WDI5</strong></a> is built on top of Webdriver.io to enable <strong>UI5 controls</strong> selection.</p>
 					</section>
-					<section version="ecosystem">
+					<section>
 						<h4><strong>Executing</strong> qUnit &amp; OPA tests</h4>
 						<ul>
 							<li>As <strong>simple</strong> as running a web page</li>
 							<li>A <strong>report</strong> documents execution results</li>
-							<li><strong>Coverage</strong> can be extracted</li>
 						</ul>
+						<img src="ui5-test-runner/UI5%20runner.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
-						<h4><strong>Demo</strong></h4>
-						<p>Tests execution</p>
-						<img src="UI5Con'21 UI5 Test Runner/UI5%20runner.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<figcaption><code>npm start</code></figcaption>
-						<small>
-							<a href="http://localhost:8080/test">Test structure</a><br/>
-						</small>
-					</section>
-					<section version="ecosystem">
 						<h4><strong>Continuous</strong> Integration &amp; Delivery</h4>
 						<p>These tests can be automated in a <strong>pipeline</strong> to validate the code
 							<strong>before</strong> merging and / or shipping the new version.</p>
-					</section>
-					<section>
-						<h4><strong>Quality</strong> focus</h4>
-						<ul>
-							<li><span version="ecosystem">My t</span><span version=" shortend">T</span>eam is responsible of <strong>10+</strong> applications</li>
-							<li><strong>Requirement</strong> to have at least <strong>80%</strong> of coverage</li>
-							<li><strong>Huge</strong> tests suites <i>(up to 45 minutes)</i></li>
-						</ul>
 					</section>
 					<section>
 						<h4><strong>Pipeline</strong> issues</h4>
@@ -257,13 +176,6 @@ img.rounded {
 						</ul>
 					</section>
 					<section>
-						<h4><strong>Give</strong> me a &#128077; if...</h4>
-						<p class="fragment">You <strong>use</strong> Karma</p>
-						<p class="fragment">You <strong>understand</strong> how Karma <strong>executes</strong> the tests</p>
-						<br/>
-						<p class="fragment">... I do <strong>not</strong> understand &#128561;</p>
-					</section>
-					<section>
 						<h4><strong>Karma</strong> execution model</h4>
 						<ul>
 							<li><strong>All</strong> tests in <strong>one</strong> window</li>
@@ -272,23 +184,10 @@ img.rounded {
 							<li><strong>Coverage</strong> information</li>
 						</ul>
 					</section>
-					<section>
-						<h4><strong>Demo</strong></h4>
-						<p>Karma tests runner</p>
-						<img src="UI5Con'21 UI5 Test Runner/Karma demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<figcaption><code>npm run karma</code></figcaption>
-					</section>
-					<section version="">
-						<h4><strong>Demo</strong></h4>
-						<p>Karma tests runner (CI)</p>
-						<img src="UI5Con'21 UI5 Test Runner/Karma ci demo.png" style="border: 0; max-width: 50%; max-height: 50%;" />
-						<figcaption><code>npm run karma-ci</code></figcaption>
-					</section>
 				</section>
 				<section>
 					<section class="divider">
 						<h3>The <strong>current</strong> situation</h3>
-						<img src="UI5Con'21 UI5 Test Runner/serving.jpg" class="rounded" style="max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4>Why is testing an issue ?</h4>
@@ -305,16 +204,24 @@ img.rounded {
 							<li>Parallel execution of test pages</li>
 						</ul>
 					</section>
+					<section>
+						<h4><strong>Limits</strong> of version 1</h4>
+						<ul>
+							<li>Built as a POC</li>
+							<li>Problems are not easy to diagnose</li>
+							<li>Inbuilt server not as good as ui5/cli</li>
+						</ul>
+					</section>
 				</section>
 				<section>
 					<section class="divider">
 						<h3>From <strong>v1</strong> to <strong>v2</strong></h3>
-						<img src="UI5Con'21 UI5 Test Runner/serving.jpg" class="rounded" style="max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4>Better <strong>feedback</strong></h4>
 						* interactive report
 						* traces & network captured
+						* configurable report generation (jsunit-xml)
 					</section>
 					<section>
 						<h4>More <strong>browsers</strong></h4>
@@ -338,7 +245,7 @@ img.rounded {
 								<a href="https://www.npmjs.com/package/ui5-test-runner" target="blank">npm ui5-test-runner</a>
 							</small>
 						</div>
-						<img version=" shortened" src="UI5Con'21 UI5 Test Runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
+						<img src="ui5-test-runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
 					</section>
 				</section>
 			</div>
