@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta name="description" content="UI5Con'23 ui5-test-runner v2">
+		<meta name="description" content="ui5-test-runner v3">
 		<meta name="author" content="Arnaud Buchholz">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -10,7 +10,6 @@
 		<meta name="deck-duration" content="40">
 		<meta name="deck-theme" content="night">
 		<link rel="stylesheet" type="text/css" href="styles.css">
-		<link rel="stylesheet" type="text/css" href="ui5-test-runner/styles.css">
 	</head>
 	<body>
 		<div class="reveal">
@@ -27,7 +26,7 @@
 									</small>
 								</td>
 								<td style="vertical-align: top;">
-									<h3 data-agenda="no"><strong>ui5</strong>-test-runner <strong>v2</strong></h3>
+									<h3 data-agenda="no"><strong>ui5</strong>-test-runner <strong>v3</strong></h3>
 									<br/>
 									<p>
 										<small>
@@ -36,8 +35,6 @@
 											Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
 										</small>
 									</p>
-									<br/>
-									<img src="ui5-test-runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
 								</td>
 							</tr>
 						</table>
@@ -145,15 +142,6 @@
 						</ul>
 					</section>
 					<section>
-						<h4>Compared to other <strong>automation frameworks</strong></h4>
-						<p>Puppeteer, Selenium or Webdriver.io are <strong>framework agnostic</strong>,
-							one must rely on the <strong>generated HTML</strong> to code automation.
-							They are designed for <strong>End 2 End</strong> testing.
-						</p>
-						<p>OPA is designed <strong>by and for</strong> UI5 developers: one manipulates <strong>UI5 controls</strong>.</p>
-						<p>🆕<a href="https://ui5-community.github.io/wdi5/"><strong>WDI5</strong></a> is built on top of Webdriver.io to enable <strong>UI5 controls</strong> selection.</p>
-					</section>
-					<section>
 						<h4><strong>Executing</strong> qUnit &amp; OPA tests</h4>
 						<ul>
 							<li>As <strong>simple</strong> as running a web page</li>
@@ -162,17 +150,35 @@
 						<img src="ui5-test-runner/UI5%20runner.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
-						<h4><strong>Continuous</strong> Integration &amp; Delivery</h4>
-						<p>These tests can be automated in a <strong>pipeline</strong> to validate the code
-							<strong>before</strong> merging and / or shipping the new version.</p>
+						<h4>Compared to other <strong>automation frameworks</strong></h4>
+						<p><code>Puppeteer</code>, <code>Selenium</code> or <code>Webdriver.io</code> are <strong>framework agnostic</strong>,
+							one must rely on the <strong>generated HTML</strong> to code automation.
+							They are generally designed for <strong>End 2 End</strong> testing.
+						</p>
+						<br/>
+						<p>OPA is designed <strong>by and for</strong> UI5 developers: one manipulates <strong>UI5 controls</strong>, it enables <strong>integration</strong> testing.</p>
 					</section>
 					<section>
-						<h4><strong>Pipeline</strong> issues</h4>
+						<h4>Compared to other <strong>automation frameworks 🆕</strong></h4>
+						<p><a href="https://ui5-community.github.io/wdi5/"><strong>WDI5</strong></a> is built on top of <code>Webdriver.io</code> to enable <strong>UI5 controls</strong> selection in the context of <strong>End 2 End</strong> testing.</p>
+					</section>
+					<section>
+						<h4><strong>Continuous</strong> Integration &amp; Delivery</h4>
+						<p>The tests <strong>must</strong> be automated in a <strong>pipeline</strong> to validate the code
+							<strong>before</strong> merging and / or shipping the new version.</p>
+					</section>
+				</section>
+				<section>
+					<section class="divider">
+						<h3>The <strong>current</strong> situation</h3>
+					</section>
+					<section>
+						<h4>Introducing <strong>Karma</strong></h4>
 						<ul>
-							<li>CI pipeline uses the <strong>Karma</strong> runner</li>
-							<li>OPA tests based on the <strong>iFrame mode</strong></li>
+							<li>CI pipeline based on the <strong>Karma</strong> runner</li>
+							<li>OPA tests may use the <strong>iFrame mode</strong></li>
 							<li><strong>Huge</strong> memory consumption</li>
-							<li>Tests are abruptly <strong>aborted</strong> <i class="fragment">(browser crash)</i></li>
+							<li>On big suites, the tests are abruptly <strong>aborted</strong> <i class="fragment">(browser crash)</i></li>
 						</ul>
 					</section>
 					<section>
@@ -184,21 +190,16 @@
 							<li><strong>Coverage</strong> information</li>
 						</ul>
 					</section>
-				</section>
-				<section>
-					<section class="divider">
-						<h3>The <strong>current</strong> situation</h3>
-					</section>
 					<section>
-						<h4>Why is testing an issue ?</h4>
-						<ul>
-							<li>Development mode: use the browser</li>
-							<li>CI/CD pipeline: need a tool with heavy configuration</li>
-						</ul>
+						<h4><strong>Karma</strong> is <strong>deprecated</strong></h4>
+						<p>
+							The Karma development team <a href="https://github.com/karma-runner/karma#karma-is-deprecated-and-is-not-accepting-new-features-or-general-bug-fixes">announced</a> the <strong>deprecation</strong> of the tool.
+						</p>
+						<img src="ui5-test-runner/karma%20deprecation.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
 						<h4>The <strong>solution</strong> ?</h4>
-						<p>Put simply, ui5-test-runner is the fastest way to automate your tests :</p>
+						<p>Put simply, <code>ui5-test-runner</code> is the fastest way to automate your tests :</p>
 						<ul>
 							<li>Almost no configuration</li>
 							<li>Parallel execution of test pages</li>
@@ -209,13 +210,13 @@
 						<ul>
 							<li>Built as a POC</li>
 							<li>Problems are not easy to diagnose</li>
-							<li>Inbuilt server not as good as ui5/cli</li>
+							<li>Inbuilt server not as good as <code>@ui5/cli</code></li>
 						</ul>
 					</section>
 				</section>
 				<section>
 					<section class="divider">
-						<h3>From <strong>v1</strong> to <strong>v2</strong></h3>
+						<h3>From <strong>v1</strong> to <strong>v2+</strong></h3>
 					</section>
 					<section>
 						<h4>Better <strong>feedback</strong></h4>
@@ -245,7 +246,6 @@
 								<a href="https://www.npmjs.com/package/ui5-test-runner" target="blank">npm ui5-test-runner</a>
 							</small>
 						</div>
-						<img src="ui5-test-runner/UI5con title.png" style="position: absolute; bottom: 0px; right: 0px; z-index: -1; height: 80%;" />
 					</section>
 				</section>
 			</div>
