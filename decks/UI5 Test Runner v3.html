@@ -198,19 +198,29 @@
 						<img src="ui5-test-runner/karma%20deprecation.png" style="border: 0; max-width: 50%; max-height: 50%;" />
 					</section>
 					<section>
-						<h4>The <strong>solution</strong> ?</h4>
-						<p>Put simply, <code>ui5-test-runner</code> is the fastest way to automate your tests :</p>
+						<h4>The <strong>alternative</strong> ?</h4>
+						<p>Put simply, <code>ui5-test-runner</code> is the <i>fastest</i> way to automate qUnit & OPA tests :</p>
 						<ul>
-							<li>Almost no configuration</li>
-							<li>Parallel execution of test pages</li>
+							<li>Almost <strong>no</strong> configuration</li>
+							<li><strong>Parallel</strong> execution of test pages</li>
+							<li>Code coverage <strong>ready</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>DEMO</strong></h4>
+						<ul>
+							<li>How to install and use</li>
+							<li>Monitoring, coverage and parallelism</li>
 						</ul>
 					</section>
 					<section>
 						<h4><strong>Limits</strong> of version 1</h4>
 						<ul>
-							<li>Built as a POC</li>
-							<li>Problems are not easy to diagnose</li>
-							<li>Inbuilt server not as good as <code>@ui5/cli</code></li>
+							<li>Built as a <strong>proof</strong> of concept</li>
+							<li>Delivered with <strong>puppeteer</strong> only</li>
+							<li>Failures are not easy to <strong>diagnose</strong><br>
+								<small>(missing traces, incomplete screenshots...)</small></li>
+							<li><strong>Inbuilt</strong> server not as good as <code>@ui5/cli</code></li>
 						</ul>
 					</section>
 				</section>
@@ -219,24 +229,54 @@
 						<h3>From <strong>v1</strong> to <strong>v2+</strong></h3>
 					</section>
 					<section>
-						<h4>Better <strong>feedback</strong></h4>
-						* interactive report
-						* traces & network captured
-						* configurable report generation (jsunit-xml)
+						<h4>More <strong>feedback</strong></h4>
+						<ul>
+							<li>Standard option parsing</li>
+							<li>Interactive & standalone report</li>
+							<li>Browser traces (console, network)</li>
+							<li>Custom report generation</li>
+						</ul>
 					</section>
 					<section>
 						<h4>More <strong>browsers</strong></h4>
-						* puppeteer
-						* selenium-webdriver (chrome, firefox, edge)
-						* jsdom
+						<ul>
+							<li><code>puppeteer</code></li>
+							<li><code>selenium-webdriver</code> <i>(chrome, firefox, edge)</i></li>
+							<li><code>jsdom</code> <i>(experimental)</i></li>
+							<br/>
+							<li>Capabilities tester for browsers</li>
+						</ul>
 					</section>
 					<section>
-						<h4>Better <strong>integration</strong></h4>
-						* legacy mode (explain why)
-						* url mode (supports @ui5/cli, typescript or any special environment)
+						<h4>More <strong>flexibility</strong></h4>
+						<ul>
+							<li><strong>legacy</strong> mode : the runner serves the application</li>
+							<br/>
+							<li><strong>remote</strong> mode : the application is already served and accessible through an URL
+								<small>(supports <code>@ui5/cli</code>, typescript or any special environment)</small>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>DEMO</strong></h4>
+						<ul>
+							<li>Test UI5 sample application</li>
+							<li>Test an application served with <code>@ui5/cli</code></li>
+						</ul>
 					</section>
 				</section>
 				<section>
+					<section class="divider">
+						<h3>Key <strong>Take-Aways</strong></h3>
+						<ul>
+							<li><q>If it's not tested, it does <strong>not</strong> work</q></li>
+							<li><code>karma</code> is <strong>deprecated</strong></li>
+							<li><code>ui5-test-runner</code> runs the qUnit & OPA tests
+								and is <strong>flexible</strong> enough to adapt to your scenario<br/>
+								<small>(or may if you ask politely)</small>
+							</li>
+						</ul>
+					</section>
 					<section class="title">
 						<div style="text-align: left;">
 							<h3 data-agenda="no"><strong>Thank you !</strong></h3>
