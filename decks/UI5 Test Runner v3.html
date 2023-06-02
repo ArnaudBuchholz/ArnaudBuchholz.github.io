@@ -102,7 +102,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td>A <strong>different</strong> approach to UI5 <strong>tests execution</strong></td>
+								<td>A <strong>different</strong> approach<br/>to UI5 <strong>tests execution</strong></td>
 								<td><strong>Clean</strong> SAPUI5</td>
 							</tr>
 							<tr>
@@ -125,8 +125,8 @@
 							<div>
 								UI5 is shipped with <strong>testing</strong> tools :
 								<ul>
-									<li>qUnit: <strong>unit</strong> testing</li>
-									<li>OPA: <strong>component</strong> and <strong>integration</strong> testing</li>
+									<li>qUnit: <strong>unit</strong></li>
+									<li>OPA: <strong>component</strong> / <strong>integration</strong></li>
 								</ul>
 							</div>
 						</div>
@@ -176,9 +176,12 @@
 						<h4>Introducing <strong>Karma</strong></h4>
 						<ul>
 							<li>CI pipeline based on the <strong>Karma</strong> runner</li>
-							<li>OPA tests may use the <strong>iFrame mode</strong></li>
-							<li><strong>Huge</strong> memory consumption</li>
-							<li>On big suites, the tests are abruptly <strong>aborted</strong> <i class="fragment">(browser crash)</i></li>
+							<li>OPA tests may use the <strong>iFrame mode</strong>
+								<ul style="list-style: none; padding: 0px;">
+									<li>&#8658; <strong>Huge</strong> memory consumption</li>
+									<li>&#8658; On big suites, the tests are abruptly <strong>aborted</strong> <i class="fragment">(browser crash)</i></li>
+								</ul>
+							</li>
 						</ul>
 					</section>
 					<section>
@@ -231,26 +234,30 @@
 					<section>
 						<h4>More <strong>feedback</strong></h4>
 						<ul>
-							<li>Standard option parsing</li>
-							<li>Interactive & standalone report</li>
-							<li>Browser traces (console, network)</li>
-							<li>Custom report generation</li>
+							<li><strong>Standard</strong> option parsing</li>
+							<li>Interactive & <strong>standalone</strong> report</li>
+							<li>Browser <strong>traces</strong>* (console, network)</li>
+							<li>Custom report <strong>generation</strong> (junit-xml-report)</li>
 						</ul>
+						<br/>
+						<br/>
+						<small><i>* depends on browser</i></small>
 					</section>
 					<section>
 						<h4>More <strong>browsers</strong></h4>
 						<ul>
-							<li><code>puppeteer</code></li>
+							<li><code>puppeteer</code> <i>(chrome)</i></li>
 							<li><code>selenium-webdriver</code> <i>(chrome, firefox, edge)</i></li>
 							<li><code>jsdom</code> <i>(experimental)</i></li>
 							<br/>
-							<li>Capabilities tester for browsers</li>
+							<li>Open & documented browser <strong>framework</strong><br/>
+								<small>Including a capabilities tester</small></li>
 						</ul>
 					</section>
 					<section>
 						<h4>More <strong>flexibility</strong></h4>
 						<ul>
-							<li><strong>legacy</strong> mode : the runner serves the application</li>
+							<li><strong>legacy</strong> mode : the runner <strong>serves</strong> the application</li>
 							<br/>
 							<li><strong>remote</strong> mode : the application is already served and accessible through an URL
 								<small>(supports <code>@ui5/cli</code>, typescript or any special environment)</small>
@@ -260,8 +267,8 @@
 					<section>
 						<h4><strong>DEMO</strong></h4>
 						<ul>
-							<li>Test UI5 sample application</li>
-							<li>Test an application served with <code>@ui5/cli</code></li>
+							<li>UI5 sample application</li>
+							<li><code>@ui5/cli</code> integration</li>
 						</ul>
 					</section>
 				</section>
@@ -272,9 +279,7 @@
 							<li><q>If it's not tested, it does <strong>not</strong> work</q></li>
 							<li><code>karma</code> is <strong>deprecated</strong></li>
 							<li><code>ui5-test-runner</code> runs the qUnit & OPA tests
-								and is <strong>flexible</strong> enough to adapt to your scenario<br/>
-								<small>(or may if you ask politely)</small>
-							</li>
+								and is <strong>flexible</strong> enough to adapt to your scenario</li>
 						</ul>
 					</section>
 					<section class="title">
