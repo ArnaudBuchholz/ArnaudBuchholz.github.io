@@ -8,6 +8,9 @@
     "file": "./local.dev.json"
   }, {
     "match": "^/(.*)",
-    "file": "./$1"
+    "file": "./$1",
+    "static": false
+  }, {
+    "status": 404
   }]
 }
