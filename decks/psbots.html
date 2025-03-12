@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="psbots, a PostScript engine developped in TypeScript">
+		<meta name="author" content="Arnaud Buchholz">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta name="deck-duration" content="45">
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section>
+						<table>
+							<tr>
+								<td width="50%">
+									<small>
+										<img src="psbots/wolf.png" style="border-radius: 16px;"></img>
+									</small>
+								</td>
+								<td style="vertical-align: top;">
+									<h3 data-agenda="no" style="text-transform: unset;"><strong>ps</strong>bots</h3>
+									<p>
+									  A <strong>PostScript</strong> engine developped in <strong>TypeScript</strong>
+									</p>
+									<br />
+									<p>
+										<small>
+											<br/>
+											Presented by <a href="https://github.com/ArnaudBuchholz">Arnaud Buchholz</a>
+											<br/>
+	  										Presentation made with <a href="https://github.com/hakimel/reveal.js">Reveal.js</a>
+										</small>
+									</p>
+								</td>
+							</tr>
+						</table>
+					</section>
+					<section include="me.html"></section>
+					<section>
+						<h3 data-agenda="no"><strong>Agenda</strong></h3>
+						<ul id="agenda"></ul>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3>What <strong>PDF</strong> and <strong>PONG</strong> have in common ?</h3>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3><strong>PostScript</strong> engine</h3>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h3><strong>PONG</strong></h3>
+					</section>
+				</section>
+			</div>
+		</div>
+<!--
+What is the link between PDF and PONG ? psbots is a Postscript interpreter designed to be small (no dependencies), fast, secure and flexible. In this presentation, you will discover the Postscript language, learn about the psbots implementation and see one example of PONG where paddles are programmatically controlled.
+
+Portable document format
+Adobe created PDF on the shoulders of PostScript which was invented 50 years ago. A PDF document is a structure program in which each page is rendered using a language. This language inherits many concepts from PostScript. 
+
+https://www.inkjetwholesale.com.au/blog/printer-education/what-is-postscript-printing/
+
+Why PostScript ?
+20 years ago I learned PostScript as it was required by my job to process printing streams. Indeed, PostScript is still used today to print documents. 
+I was surprised by the power and simplicity of this language. 
+
+Small examples (from the web)
+
+PostScript engine
+The PostScript engine relies on very basic concepts :
+- stacks
+    Dictionary stack for the execution context (system, user and host)
+Operand
+Calls
+
+PostScript particularities
+no variables
+Shared operand stack
+operator shadowing by redefining names in dictionaries
+Performance using bind
+Super simple syntax : [ 1 ] is actually three instructions
+
+Psbot implementation
+Subset of PostScript (no rendering instruction)
+And superset of PostScript (finally / catch)
+Memory tracking (simulated but relevant) : leak detection
+Interruptible (most important characteristic)
+
+Psbots examples
+1 2 add
+Factorial
+Debug
+Cli / wi
+
+Pong
+Last year, I have been invited to a gaming challenge where people could code the paddle using JavaScript
+Cool, but !
+not real time
+No constraint on JavaScript implementation (people could take any time)
+Difficult to secure the algorithm
+Unfair
+
+My idea
+real time
+Use psbot for fair time sharing
+One tick equals: ball moves and one cycle per paddle
+
+Demo
+
+Future ideas
+energy management / pause operator
+Increase ball speed
+…
+
+-->
+		<script src="/gpf/last/gpf.js"></script>
+		<script src="deck.js"></script>
+	</body>
+</html>
