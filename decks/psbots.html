@@ -19,7 +19,7 @@
 							<tr>
 								<td width="50%">
 									<small>
-										<img src="psbots/wolf.png" style="border-radius: 16px;"></img>
+										<img src="psbots/designer-pong-1.jpeg" style="border-radius: 16px; max-height: 70vh;"></img>
 									</small>
 								</td>
 								<td style="vertical-align: top;">
@@ -49,16 +49,111 @@
 				<section>
 					<section>
 						<h3>What <strong>PDF</strong> and <strong>PONG</strong> have in common ?</h3>
+						<p class="fragment">Nothing <strong>but</strong>...</p>
+						<p class="fragment">🤔 They start with <strong>P</strong>...</p>
+						<p class="fragment">👴 They were both created in the <strong>last century</strong>.</p>
+					</section>
+					<section>
+						<h4><strong>P</strong>ortable <strong>D</strong>ocument <strong>F</strong>ormat</h3>
+						<p>In 1992, Adobe created <a href="https://en.wikipedia.org/wiki/PDF">PDF</a><br/>
+							on top of <strong>concepts</strong> introduced by...<br/>
+							<a href="https://en.wikipedia.org/wiki/PostScript">PostScript</a> which was <strong>invented</strong> in 1976.
+						</p>
+					</section>
+					<section>
+						<p>A PDF document is a <strong>structured algorithm</strong> in which pages are <strong>rendered</strong> using a <strong>program</strong>.</p>
+						<pre style="font-size: small">
+%PDF-1.4
+% <i>...skipping document attributes ...</i>
+3 0 obj&lt;&lt;/Type/Pages/Kids[4 0 R]/Count 1/MediaBox[0 0 595.32 841.92]>>
+endobj
+4 0 obj&lt;&lt;/Type/Page/Parent 3 0 R/Resources&lt;&lt;/Font&lt;&lt;/F0 6 0 R>>>>/Contents 5 0 R>>
+endobj
+<span style="background-color: bisque;">5 0 obj&lt;&lt;/Length 59>>stream
+BT
+/F0 12 Tf                     % <b>Font selection</b>
+1 0 0 1 100 702.7366667 Tm    % <b>Position</b>
+(Hello World!)Tj              % <b>Write Hello World!</b>
+ET
+endstream
+endobj</span>
+% <i>...skipping objects (including font descriptor)...</i>
+xref
+0 9
+0000000000 65535 f 
+0000000015 00000 n 
+0000000059 00000 n 
+0000000179 00000 n 
+0000000257 00000 n 
+0000000346 00000 n 
+0000000451 00000 n 
+0000000573 00000 n 
+0000000773 00000 n 
+trailer
+&lt;&lt;/Root 1 0 R/ID[<9392A59F3BE7B840805D62746E8A4F29><9392A59F3BE7B840805D62746E8A4F29>]/Info 2 0 R/Size 9>>
+startxref
+988
+%%EOF
+						</pre>
+						<a style="font-size: x-small;" href="psbots/Hello%20World.pdf">Hello World.pdf</a>
+					</section>
+					<section>
+						<h4><strong>PostScript</strong></h4>
+						<p>PostScript is a <strong>dynamically typed</strong>,
+							<strong>stack-based</strong> programming language.<br/>
+							It is most commonly used in the publishing world,
+							but as a <strong>Turing complete programming language</strong>,
+							it can be used for <strong>many other</strong> purposes.
+						</p>
+					</section>
+					<section>
+						<h4><strong>Why</strong> PostScript ?</h4>
+						<p>A long time ago, I learned PostScript to be able to <strong>process*</strong> printing streams.</p>
+						<div style="font-size: x-small;"><strong>*</strong> process : reformat, add / remove margins, extract text...</div>
+						<p>I have been fascinated by the <strong>power</strong> and the <strong>simplicity</strong> of this language.</p>
+					</section>
+					<section>
+						<h4><strong>PostScript</strong> Examples</h4>
+						<a href="https://www.ivank.net/veci/pdfi/">PDFI.js</a>
+					</section>
+					<section>
+						<h4>The <strong>PostScript</strong> language</h4>
+						<p>The engine relies on basic concepts :
+							<ul>
+								<li>Organized in <strong>stacks</strong> :
+									<span style="font-size: smaller;">operands, call stack, the execution context is a stack of dictionaries</span></li>
+								<li><strong>No</strong> variables :
+									<span style="font-size: smaller;">values are either stored in a dictionary or in the operand stack</span></li>
+								<li><strong>Simple</strong> syntax :
+									<span style="font-size: smaller;">only needs a lexical parser, no grammar</span></li>
+							</ul>
+						</p>
+					</section>
+					<section>
+						<h4>The <strong>PostScript</strong> language<br/>Example 1</h4>
+						<p>To make an addition, push the operands first and then call the operator : <code>1 2 add</code>.</p>
+					</section>
+					<section>
+						<h4>The <strong>PostScript</strong> language<br/>Example 2</h4>
+						<p>The following array declaration <code>[ 1 ]</code> consists of :
+							<ul>
+								<li><code>[</code> : array begin ➜ pushes <code>mark</code> on the operand stack</li>
+								<li><code>1</code> : pushes the integer 1 on the operand stack</li>
+								<li><code>]</code> : array close ➜ checks where is the first <code>mark</code>, collects values, clears the operand stack and pushes an array containing collected values.</li>
+							</ul>
+						</p>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3><strong>PostScript</strong> engine</h3>
+						<h3>A <strong>PostScript</strong> engine implemented in <strong>TypeScript</strong></h3>
+						<p class="fragment"><strong>Not</strong> complete...</p>
+						<p class="fragment">...And with <strong>deviations</strong></p>
 					</section>
 				</section>
 				<section>
 					<section>
-						<h3><strong>PONG</strong></h3>
+						<h3>A <strong>PONG</strong> game automated with <strong>PostScript</strong></h3>
 					</section>
 				</section>
 			</div>
