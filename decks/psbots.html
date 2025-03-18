@@ -139,7 +139,7 @@ startxref
 							<ul>
 								<li><code>[</code> : array begin ➜ pushes <code>mark</code> on the operand stack</li>
 								<li><code>1</code> : pushes the integer 1 on the operand stack</li>
-								<li><code>]</code> : array close ➜ checks where is the first <code>mark</code>, collects values, clears the operand stack and pushes an array containing collected values.</li>
+								<li><code>]</code> : array close ➜ checks where is the first <code>mark</code>, collects values, clears the operand stack and pushes an array containing collected values</li>
 							</ul>
 						</p>
 					</section>
@@ -149,6 +149,26 @@ startxref
 						<h3>A <strong>PostScript</strong> engine implemented in <strong>TypeScript</strong></h3>
 						<p class="fragment"><strong>Not</strong> complete...</p>
 						<p class="fragment">...And with <strong>deviations</strong></p>
+					</section>
+					<section>
+						<h4><strong>ps</strong>bots</h4>
+						<ul>
+							<li class="fragment"><strong>No</strong> dependencies</li>
+							<li class="fragment"><strong>No</strong> graphical instructions</li>
+							<li class="fragment"><strong>Interruptible</strong>: execution by cycles</li>
+							<li class="fragment"><strong>Memory leak</strong> detection</li>
+							<li class="fragment"><strong>Deviations</strong>: Host dictionary, <code>finally</code>...</li>
+						</ul>
+					</section>
+					<section>
+						<h4><strong>ps</strong>bots<br/>Examples</h4>
+						<div>
+							<a href="https://arnaudbuchholz.github.io/psbots/repl/index.html">Web <strong>R</strong>ead-<strong>E</strong>val-<strong>P</strong>rint <strong>L</strong>oop</a>
+						</div>
+						<ul>
+							<li><code>1 2 add</code></li>
+							<li><code>[ 1 ]</code></li>
+						</ul>
 					</section>
 				</section>
 				<section>
