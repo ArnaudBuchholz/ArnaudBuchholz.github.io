@@ -95,7 +95,7 @@ startxref
 988
 %%EOF
 						</pre>
-						<a style="font-size: x-small;" href="psbots/Hello%20World.pdf">Hello World.pdf</a>
+						<a style="font-size: small;" href="psbots/Hello%20World.pdf">Hello World.pdf</a>
 					</section>
 					<section>
 						<h4><strong>PostScript</strong></h4>
@@ -109,7 +109,7 @@ startxref
 					<section>
 						<h4><strong>Why</strong> PostScript ?</h4>
 						<p>A long time ago, I learned PostScript to be able to <strong>process*</strong> printing streams.</p>
-						<div style="font-size: x-small;"><strong>*</strong> process : reformat, add / remove margins, extract text...</div>
+						<div style="font-size: small;"><strong>*</strong> reformat, add / remove margins, extract text...</div>
 						<p>I have been fascinated by the <strong>power</strong> and the <strong>simplicity</strong> of this language.</p>
 					</section>
 					<section>
@@ -118,20 +118,22 @@ startxref
 					</section>
 					<section>
 						<h4>The <strong>PostScript</strong> language</h4>
-						<p>The engine relies on basic concepts :
+						<p>The language relies on <strong>simple</strong> concepts :
 							<ul>
-								<li>Organized in <strong>stacks</strong> :
-									<span style="font-size: smaller;">operands, call stack, the execution context is a stack of dictionaries</span></li>
-								<li><strong>No</strong> variables :
-									<span style="font-size: smaller;">values are either stored in a dictionary or in the operand stack</span></li>
-								<li><strong>Simple</strong> syntax :
-									<span style="font-size: smaller;">only needs a lexical parser, no grammar</span></li>
+								<li class="fragment">Organized in <strong>stacks</strong> and <strong>dictionaries</strong>
+									<div style="font-size: small;">operand stack, call stack, dictionary stack</div></li>
+								<li class="fragment"><strong>Operators</strong> are stored in the <strong>system</strong> dictionary</li>
+								<li class="fragment"><strong>No</strong> variables
+									<div style="font-size: small;">values are either stored in a dictionary or in the operand stack</div></li>
+								<li class="fragment"><strong>Simple</strong> syntax
+									<div style="font-size: small;">only needs a lexical parser, no grammar</div></li>
 							</ul>
 						</p>
 					</section>
 					<section>
 						<h4>The <strong>PostScript</strong> language<br/>Example 1</h4>
 						<p>To make an addition, push the operands first and then call the operator : <code>1 2 add</code>.</p>
+						<p style="font-size: smaller;"><a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish Notation</a></p>
 					</section>
 					<section>
 						<h4>The <strong>PostScript</strong> language<br/>Example 2</h4>
@@ -155,90 +157,85 @@ startxref
 						<ul>
 							<li class="fragment"><strong>No</strong> dependencies</li>
 							<li class="fragment"><strong>No</strong> graphical instructions</li>
-							<li class="fragment"><strong>Interruptible</strong>: execution by cycles</li>
-							<li class="fragment"><strong>Memory leak</strong> detection</li>
-							<li class="fragment"><strong>Deviations</strong>: Host dictionary, <code>finally</code>...</li>
+							<li class="fragment"><strong>Interruptible</strong>: execution by cycles
+								<div style="font-size: small;">Some instructions might require <strong>several</strong> cycles</div>
+							</li>
+							<li class="fragment"><strong>Memory</strong> monitoring and <strong>leak</strong> detection
+								<div style="font-size: small;">💡To be improved with loop detection</div>
+							</li>
+							<li class="fragment"><strong>Extensions</strong>: Host dictionary, <code>finally</code>...</li>
 						</ul>
+						<br/>
+						<br/>
+						<div style="font-size: small;">
+							<a href="https://github.com/ArnaudBuchholz/psbots/tree/main/engine"><img src="/gfx/GitHub.png" style="max-height: 16px;"/>psbots</a>
+						</div>
 					</section>
 					<section>
 						<h4><strong>ps</strong>bots<br/>Examples</h4>
-						<div>
-							<a href="https://arnaudbuchholz.github.io/psbots/repl/index.html">Web <strong>R</strong>ead-<strong>E</strong>val-<strong>P</strong>rint <strong>L</strong>oop</a>
+						<div style="font-size: smaller;">
+							<a href="https://arnaudbuchholz.github.io/psbots/repl/index.html">🧑‍💻 Online <strong>R</strong>ead-<strong>E</strong>val-<strong>P</strong>rint <strong>L</strong>oop</a>
 						</div>
 						<ul>
 							<li><code>1 2 add</code></li>
 							<li><code>[ 1 ]</code></li>
 						</ul>
 					</section>
+					<section>
+						<h4><strong>ps</strong>bots<br/>Factorial Example</h4>
+						<div style="font-size: smaller;">
+							<a href="https://arnaudbuchholz.github.io/psbots/repl/index.html">🧑‍💻 Online <strong>R</strong>ead-<strong>E</strong>val-<strong>P</strong>rint <strong>L</strong>oop</a>
+						</div>
+						<pre><code>/factorial
+{
+	%% check stack
+	count 1 lt { stackunderflow } if
+	dup type /integer neq { typecheck } if
+
+	1 exch
+	%% result n
+	{
+		dup 2 lt { pop stop } if
+		dup 3 1 roll mul
+		exch
+		1 sub
+	} loop
+} bind def</code></pre>
+					<div style="font-size: small;">
+						<a href="https://github.com/ArnaudBuchholz/psbots/blob/main/engine/SAMPLES.md">source</a>
+					</div>
+				</section>
 				</section>
 				<section>
 					<section>
-						<h3>A <strong>PONG</strong> game automated with <strong>PostScript</strong></h3>
+						<h3>What <strong>PDF</strong> and <strong>PONG</strong> have in common !</h3>
+						<h4 class="fragment">A <strong>PONG</strong> game scripted with <strong>PostScript</strong></h4>
+					</section>
+					<section>
+						<h4><strong>Why ?</strong></h4>
+						<p>Last year, I have been invited to a <strong>gaming challenge</strong> where people could code
+						the PONG's paddle using <strong>JavaScript</strong>.</p>
+						<ul style="font-size: smaller;">
+							<li class="fragment">👎Not <strong>real time</strong></li>
+							<li class="fragment">👎No <strong>constraint</strong> on JavaScript implementation</li>
+							<li class="fragment">👎Difficult to <strong>secure</strong> the algorithm</li>
+							<li class="fragment">👎<strong>Unfair</strong></li>
+						</ul>
+					</section>
+					<section>
+						<h3><strong>psbots</strong>'PONG</h3>
+						<ul style="font-size: smaller;">
+							<li class="fragment">👍<strong>real time</strong></li>
+							<li class="fragment">👍<strong>isolated</strong> environments</li>
+							<li class="fragment">👍<strong>Fair</strong> time share (through </li>
+						</ul>
+						<div class="fragment" style="font-size: small;">
+							<a href="https://arnaudbuchholz.github.io/psbots/">🏓Demo</a>
+						</div>
 					</section>
 				</section>
 			</div>
 		</div>
-<!--
-What is the link between PDF and PONG ? psbots is a Postscript interpreter designed to be small (no dependencies), fast, secure and flexible. In this presentation, you will discover the Postscript language, learn about the psbots implementation and see one example of PONG where paddles are programmatically controlled.
-
-Portable document format
-Adobe created PDF on the shoulders of PostScript which was invented 50 years ago. A PDF document is a structure program in which each page is rendered using a language. This language inherits many concepts from PostScript. 
-
-https://www.inkjetwholesale.com.au/blog/printer-education/what-is-postscript-printing/
-
-Why PostScript ?
-20 years ago I learned PostScript as it was required by my job to process printing streams. Indeed, PostScript is still used today to print documents. 
-I was surprised by the power and simplicity of this language. 
-
-Small examples (from the web)
-
-PostScript engine
-The PostScript engine relies on very basic concepts :
-- stacks
-    Dictionary stack for the execution context (system, user and host)
-Operand
-Calls
-
-PostScript particularities
-no variables
-Shared operand stack
-operator shadowing by redefining names in dictionaries
-Performance using bind
-Super simple syntax : [ 1 ] is actually three instructions
-
-Psbot implementation
-Subset of PostScript (no rendering instruction)
-And superset of PostScript (finally / catch)
-Memory tracking (simulated but relevant) : leak detection
-Interruptible (most important characteristic)
-
-Psbots examples
-1 2 add
-Factorial
-Debug
-Cli / wi
-
-Pong
-Last year, I have been invited to a gaming challenge where people could code the paddle using JavaScript
-Cool, but !
-not real time
-No constraint on JavaScript implementation (people could take any time)
-Difficult to secure the algorithm
-Unfair
-
-My idea
-real time
-Use psbot for fair time sharing
-One tick equals: ball moves and one cycle per paddle
-
-Demo
-
-Future ideas
-energy management / pause operator
-Increase ball speed
-…
-
--->
 		<script src="/gpf/last/gpf.js"></script>
 		<script src="deck.js"></script>
 	</body>
