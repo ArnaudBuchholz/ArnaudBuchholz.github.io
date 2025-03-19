@@ -78,24 +78,10 @@ ET
 endstream
 endobj</span>
 % <i>...skipping objects (including font descriptor)...</i>
-xref
-0 9
-0000000000 65535 f 
-0000000015 00000 n 
-0000000059 00000 n 
-0000000179 00000 n 
-0000000257 00000 n 
-0000000346 00000 n 
-0000000451 00000 n 
-0000000573 00000 n 
-0000000773 00000 n 
-trailer
-&lt;&lt;/Root 1 0 R/ID[<9392A59F3BE7B840805D62746E8A4F29><9392A59F3BE7B840805D62746E8A4F29>]/Info 2 0 R/Size 9>>
-startxref
-988
-%%EOF
+% <i>...skipping object reference table...</i>
 						</pre>
-						<a style="font-size: small;" href="psbots/Hello%20World.pdf">Hello World.pdf</a>
+						<a style="font-size: smaller;" href="psbots/Hello%20World.pdf">Hello World.pdf</a><br/>
+						<a style="font-size: smaller;" href="psbots/Hello%20World.txt">Hello World.pdf (as text)</a>
 					</section>
 					<section>
 						<h4><strong>PostScript</strong></h4>
@@ -120,7 +106,7 @@ startxref
 						<h4>The <strong>PostScript</strong> language</h4>
 						<p>The language relies on <strong>simple</strong> concepts :
 							<ul>
-								<li class="fragment">Organized in <strong>stacks</strong> and <strong>dictionaries</strong>
+								<li class="fragment">Context composed of <strong>stacks</strong> and <strong>dictionaries</strong>
 									<div style="font-size: small;">operand stack, call stack, dictionary stack</div></li>
 								<li class="fragment"><strong>Operators</strong> are stored in the <strong>system</strong> dictionary</li>
 								<li class="fragment"><strong>No</strong> variables
@@ -148,12 +134,13 @@ startxref
 				</section>
 				<section>
 					<section>
-						<h3>A <strong>PostScript</strong> engine implemented in <strong>TypeScript</strong></h3>
+						<h3><strong>ps</strong>bots</h3>
+						<h4>A <strong>PostScript</strong> engine</h3>
 						<p class="fragment"><strong>Not</strong> complete...</p>
 						<p class="fragment">...And with <strong>deviations</strong></p>
 					</section>
 					<section>
-						<h4><strong>ps</strong>bots</h4>
+						<h4>A <strong>PostScript</strong> engine implemented in <strong>TypeScript</strong></h3>
 						<ul>
 							<li class="fragment"><strong>No</strong> dependencies</li>
 							<li class="fragment"><strong>No</strong> graphical instructions</li>
@@ -161,14 +148,14 @@ startxref
 								<div style="font-size: small;">Some instructions might require <strong>several</strong> cycles</div>
 							</li>
 							<li class="fragment"><strong>Memory</strong> monitoring and <strong>leak</strong> detection
-								<div style="font-size: small;">💡To be improved with loop detection</div>
+								<div style="font-size: small;">💡To be improved with reference loop detection</div>
 							</li>
 							<li class="fragment"><strong>Extensions</strong>: Host dictionary, <code>finally</code>...</li>
 						</ul>
 						<br/>
 						<br/>
-						<div style="font-size: small;">
-							<a href="https://github.com/ArnaudBuchholz/psbots/tree/main/engine"><img src="/gfx/GitHub.png" style="max-height: 16px;"/>psbots</a>
+						<div style="font-size: smaller;">
+							<a href="https://github.com/ArnaudBuchholz/psbots/tree/main/engine"><img src="/gfx/GitHub.png" style="max-height: 32px;"/><strong>ps</strong>bots</a>
 						</div>
 					</section>
 					<section>
@@ -184,7 +171,7 @@ startxref
 					<section>
 						<h4><strong>ps</strong>bots<br/>Factorial Example</h4>
 						<div style="font-size: smaller;">
-							<a href="https://arnaudbuchholz.github.io/psbots/repl/index.html">🧑‍💻 Online <strong>R</strong>ead-<strong>E</strong>val-<strong>P</strong>rint <strong>L</strong>oop</a>
+							<a href="https://github.com/ArnaudBuchholz/psbots/blob/main/engine/SAMPLES.md">source</a>
 						</div>
 						<pre><code>/factorial
 {
@@ -201,9 +188,6 @@ startxref
 		1 sub
 	} loop
 } bind def</code></pre>
-					<div style="font-size: small;">
-						<a href="https://github.com/ArnaudBuchholz/psbots/blob/main/engine/SAMPLES.md">source</a>
-					</div>
 				</section>
 				</section>
 				<section>
@@ -213,8 +197,9 @@ startxref
 					</section>
 					<section>
 						<h4><strong>Why ?</strong></h4>
-						<p>Last year, I have been invited to a <strong>gaming challenge</strong> where people could code
+						<p>I have been invited to a <strong>gaming challenge</strong> where people could code
 						the PONG's paddle using <strong>JavaScript</strong>.</p>
+						<p>It was <strong>fun</strong> but...</p>
 						<ul style="font-size: smaller;">
 							<li class="fragment">👎Not <strong>real time</strong></li>
 							<li class="fragment">👎No <strong>constraint</strong> on JavaScript implementation</li>
@@ -223,13 +208,16 @@ startxref
 						</ul>
 					</section>
 					<section>
-						<h3><strong>psbots</strong>'PONG</h3>
+						<h4><strong>psbots</strong>'PONG</h4>
 						<ul style="font-size: smaller;">
 							<li class="fragment">👍<strong>real time</strong></li>
 							<li class="fragment">👍<strong>isolated</strong> environments</li>
-							<li class="fragment">👍<strong>Fair</strong> time share (through </li>
+							<li class="fragment">👍<strong>Fair</strong> time share
+								<div style="font-size: smaller;">one tick = one cycle per paddle, ball move</div>
+							</li>
 						</ul>
-						<div class="fragment" style="font-size: small;">
+						<br/><br/>
+						<div class="fragment">
 							<a href="https://arnaudbuchholz.github.io/psbots/">🏓Demo</a>
 						</div>
 					</section>
