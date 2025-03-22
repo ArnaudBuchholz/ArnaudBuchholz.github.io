@@ -66,12 +66,17 @@ experience:
       en:
         - Team lead
         - Full-Stack developer in an agile team (SCRUM / XP)
-        - Design, implement, test, deploy and manage microservices (Node.js, Express / Koa, Angular / Vue, Rest APIs, JWT, Big Query ...)
-        - Worked on the AI-assisted Report Builder (GPT-4o integration, prompt engineering, testing)
-        - Ensure high-quality deliverables with TDD: unit testing (mocha / jest), integration testing (cypress) and end-to-end testing (WebDriver.io, NightWatch)
-        - DevOps (Google Application Platform, Kubernetes, Kibana, Elastalert, Telemetry)
+        - Design, implement, test, deploy and monitor microservices
+        - Worked on the AI-assisted Report Builder
+        - Ensure high-quality deliverables with TDD
         - Security Expert
-        - Provide technical expertise on JavaScript and Node.js
-        - Trainer for the SAP Cloud curriculum      
+        - Technical expertise on JavaScript and Node.js
+        - Trainer for the SAP Cloud curriculum
     start: 2022-01
-    skills: Node.js Cloud TypeScript Full_Stack AI Prompt_Engineering DevOps OOP Express Fastify Koa Vue Rest BigQuery
+    skills: |
+      Node.js Cloud TypeScript Full_Stack AI Prompt_Engineering DevOps OOP
+      Express Fastify Koa Vue Rest GCP BigQuery Kubernetes Kibana Elastalert Telemetry GPT-4
+      TDD mocha jest vitest cypress WebDriverIO NightWatch
+    media:
+      - title: SAP Emarsys Q1 2025 Product Release 2 - Intelligent, Omnichannel Innovations
+        link: https://vimeo.com/1053396987/21eec4a860
