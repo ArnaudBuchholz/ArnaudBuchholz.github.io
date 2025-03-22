@@ -1,0 +1,77 @@
+name: Arnaud Buchholz
+links:
+  - portfolio: http://arnaudbuchholz.github.io/
+  - linkedin: https://www.linkedin.com/in/arnaudbuchholz/
+  - github: https://github.com/ArnaudBuchholz
+  - youtube: https://www.youtube.com/@arnaudbuchholz1405
+  - bluesky: https://bsky.app/profile/abubuhh.bsky.social
+  - medium: https://medium.com/@arnaud-buchholz
+  - books:
+      - title: Testing SAPUI5 Applications
+        link: https://www.sap-press.com/testing-sapui5-applications_5056/
+      - title: Clean SAPUI5
+        link: https://www.sap-press.com/clean-sapui5_5479/
+      - title: Clean SAPUI5 (German Edition)
+        link: https://www.rheinwerk-verlag.de/clean-sapui5-lesbarer-und-wartbarer-sapui5-code/
+headline:
+  en: Development Expert @ SAP | Full Stack Development, AI Integration
+  fr: Expert en Développement @ SAP | Développement full stack, Intégration IA
+about:
+  en: |
+    Arnaud Buchholz is a development expert at SAP,
+    dedicated to creating innovative solutions within the SAP ecosystem.
+    With extensive experience in frontend development using the SAPUI5 framework, he has co-authored two books:
+    "Testing SAPUI5 Applications" and "Clean SAPUI5".
+
+    Arnaud has also a robust background in backend development, specializing in microservices with Node.js.
+    His diverse skill set allows him to effectively bridge the gap between frontend and backend technologies, driving successful project outcomes.
+
+    With over 20 years of experience in the software development field,
+    Arnaud has participated in numerous cloud projects, including one that processes over 1 billion transactions annually.
+    
+    Throughout his career, he has embraced various roles, from hands-on coding to customer-facing teaching.
+    Arnaud is passionate and curious, always thinking outside the box to work smarter, not harder.
+    He maintains a strong focus on quality and enjoys sharing his JavaScript expertise with others.
+  fr: |
+    Arnaud Buchholz est un expert en développement chez SAP,
+    dédié à la création de solutions innovantes au sein de l'écosystème SAP.
+    Avec une grande expérience en développement frontend utilisant le framework SAPUI5,
+    il a coécrit deux livres : "Testing SAPUI5 Applications" et "Clean SAPUI5".
+
+    Arnaud possède aussi une solide expérience en développement backend, se spécialisant dans les microservices avec Node.js.
+    Ses compétences diversifiées lui permettent de relier efficacement les technologies frontend et backend, garantissant le succès des projets.
+
+    Avec plus de 20 ans d'expérience dans le domaine du développement logiciel,
+    Arnaud a participé à de nombreux projets cloud, dont un qui traite plus d'un milliard de transactions par an.
+
+    Tout au long de sa carrière, il a occupé divers rôles, allant du codage chevronné à la formation cliente.
+    Arnaud est passionné et curieux, pensant de manière créative pour travailler plus efficacement sans se fatiguer inutilement.
+    Il est toujours concentré sur la qualité et aime partager son expertise en JavaScript avec les autres.
+experience:
+  - company:
+      name: SAP Emarsys
+      link: https://emarsys.com/
+    location:
+      type: hybrid
+      city: Montreal
+      state: Quebec
+      country: Canada
+    title:
+      en: Development Expert
+      fr: Expert en Développement
+    summary:
+      en: Design, development and maintenance of strategic reporting tools of the Emarsys marketing platform.
+      fr: Conception, développement et maintenance des outils d'analyse stratégique de la plateforme marketing Emarsys.
+    highlights:
+      en:
+        - Team lead
+        - Full-Stack developer in an agile team (SCRUM / XP)
+        - Design, implement, test, deploy and manage microservices (Node.js, Express / Koa, Angular / Vue, Rest APIs, JWT, Big Query ...)
+        - Worked on the AI-assisted Report Builder (GPT-4o integration, prompt engineering, testing)
+        - Ensure high-quality deliverables with TDD: unit testing (mocha / jest), integration testing (cypress) and end-to-end testing (WebDriver.io, NightWatch)
+        - DevOps (Google Application Platform, Kubernetes, Kibana, Elastalert, Telemetry)
+        - Security Expert
+        - Provide technical expertise on JavaScript and Node.js
+        - Trainer for the SAP Cloud curriculum      
+    start: 2022-01
+    skills: Node.js Cloud TypeScript Full_Stack AI Prompt_Engineering DevOps OOP Express Fastify Koa Vue Rest BigQuery
