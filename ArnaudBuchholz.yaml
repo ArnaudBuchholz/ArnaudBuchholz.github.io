@@ -48,7 +48,7 @@ about:
     Arnaud est passionné et curieux, pensant de manière créative pour travailler plus efficacement sans se fatiguer inutilement.
     Il est toujours concentré sur la qualité et aime partager son expertise en JavaScript avec les autres.
 experience:
-  - company:
+  - company: # SAP Emarsys / Development Expert / 2022-01
       name: SAP Emarsys
       link: https://emarsys.com/
     location:
@@ -56,6 +56,7 @@ experience:
       city: Montreal
       state: Quebec
       country: Canada
+    start: 2022-01
     title:
       en: Development Expert
       fr: Expert en Développement
@@ -64,19 +65,141 @@ experience:
       fr: Conception, développement et maintenance des outils d'analyse stratégique de la plateforme marketing Emarsys.
     highlights:
       en:
-        - Team lead
-        - Full-Stack developer in an agile team (SCRUM / XP)
+        - Full-Stack developer in an agile team
+        - Technical lead on JavaScript, TypeScript and Node.js
         - Design, implement, test, deploy and monitor microservices
-        - Several reporting applications, in particular the AI-assisted Report Builder
-        - Ensure high-quality deliverables with TDD
+        - Marketing reporting applications
+        - AI-assisted Report Builder
+        - Ensure high-quality deliverables using TDD
         - Security Expert
-        - Technical expertise on JavaScript and Node.js
         - Trainer for the SAP Cloud curriculum
-    start: 2022-01
+      fr:
+        - Développeur Full-Stack au sein d'une équipe agile
+        - Expertise technique sur JavaScript, TypeScript et Node.js
+        - Conception, implémentation, test, déploiement et administration de microservices
+        - Applications d'analyse opérationelle marketing
+        - Générateur de rapports assisté par IA
+        - Respect de la qualité en utilisant TDD
+        - Expert en sécurité
+        - Formateur pour le programme SAP Cloud
     skills: |
-      Node.js Cloud TypeScript Full_Stack AI Prompt_Engineering DevOps OOP
-      Express Fastify Koa Vue Rest GCP BigQuery Kubernetes Kibana Elastalert Telemetry GPT-4
-      TDD mocha jest vitest cypress WebDriverIO NightWatch
+      Node.js TypeScript Full_Stack Cloud Microservices AI Prompt_Engineering DevOps Object_Oriented_Programming
+      Express.js Fastify Koa.js Vue.js REST_APIs GCP BigQuery Kubernetes Kibana Elastalert Telemetry GPT-4
+      Test-Driven_Development mocha jest vitest cypress WebDriverIO NightWatch.js
+      SCRUM Extreme_Programming
+      Security Training_Delivery Software_Design Software_Development
     media:
       - title: SAP Emarsys Q1 2025 Product Release 2 - Intelligent, Omnichannel Innovations
         link: https://vimeo.com/1053396987/21eec4a860
+      - title: ui5-test-runner v3
+        link: https://www.youtube.com/live/kxmmdy1tho4
+  - company: # SAP / Development Expert / 2018-04 - 2022-01
+      name: SAP
+      link: https://www.sap.com/
+    location:
+      type: hybridon-site
+      city: Montreal
+      state: Quebec
+      country: Canada
+    start: 2018-04
+    end: 2022-01
+    title:
+      en: Development Expert
+      fr: Expert en Développement
+    summary:
+      en: Design, development and maintenance of the SAP Marketing Cloud platform.
+      fr: Conception, développement et maintenance de la plateforme SAP Marketing Cloud.
+    highlights:
+      en:
+        - Full-Stack developer in an agile team
+        - Technical lead on JavaScript
+        - Design, implement and test frontend cross-device and cross-browser web applications
+        - Design, implement and test backend services for the HANA Cloud Platform
+        - Ensure high-quality deliverables using TDD
+        - Speaker on UI5 international events
+      fr:
+        - Développeur Full-Stack au sein d'une équipe agile
+        - Expertise technique sur JavaScript
+        - Conception, implémentation et test d'applications web multiplateformes et multi-navigateurs
+        - Conception, implémentation et test de services backend pour la plateforme HANA Cloud
+        - Respect de la qualité en utilisant TDD
+        - Conférencier sur des événements UI5 internationaux
+    skills: |
+      JavaScript SapUI5 Full_Stack Cloud HANA_Cloud_Platform ABAP ODATA REST_APIs QUnit OPA5
+      Node.js SAP_Fiori Object_Oriented_Programming Test-Driven_Development
+      SCRUM Training_Delivery Software_Design Software_Development
+    media:
+      - title: UI5con@SAP 2018 - A journey with OPA
+        link: https://youtu.be/HiZq-kuIbt0
+  - company: # SAP / Senior Software Developer / 2015-09 - 2028-04
+      name: SAP
+      link: https://www.sap.com/
+    location:
+      type: hybridon-site
+      city: Montreal
+      state: Quebec
+      country: Canada
+    start: 2015-09
+    end: 2018-04
+    title:
+      en: Senior Software Developer
+      fr: Développeur logiciel senior
+    summary:
+      en: Design, development and maintenance of the SAP Marketing Cloud platform.
+      fr: Conception, développement et maintenance de la plateforme SAP Marketing Cloud.
+    highlights:
+      en:
+        - Frontend developer in an agile team
+        - Technical lead on JavaScript
+        - Design, implement and test frontend cross-device and cross-browser web applications
+        - Ensure high-quality deliverables using TDD
+      fr:
+        - Développeur frontend au sein d'une équipe agile
+        - Expertise technique sur JavaScript
+        - Conception, implémentation et test d'applications web multiplateformes et multi-navigateurs
+        - Respect de la qualité en utilisant TDD
+    skills: |
+      JavaScript SapUI5 Frontend_Development Cloud HANA_Cloud_Platform ODATA REST_APIs QUnit OPA5
+      Node.js SAP_Fiori Object_Oriented_Programming Test-Driven_Development
+      SCRUM Training_Delivery Software_Design Software_Development
+  - company: # Etelesolv / UX Architect / 2015-03 - 2015-09
+      name: Cimpl (formerly Etelesolv)
+      link: https://uplandsoftware.com/cimpl/
+    location:
+      type: on-site
+      city: Montreal
+      state: Quebec
+      country: Canada
+    start: 2015-03
+    end: 2015-09
+    title:
+      en: UX Architect / Technical Lead
+      fr: Architecte UX / Responsable Technique
+    summary:
+      en: Technical Lead and architect of the frontend team.
+      fr: Responsable technique et architected de l'équipe frontend.
+    highlights:
+      en:
+        - Lead the Front-end Team to build high-quality software using agile and automated methodologies
+        - Design and implement visual designs and layouts for delivering exceptional user/customer experiences with high usability
+        - Create and deliver solid software designs with quality cross-device and cross-browser performance,
+
+        - Ensure high-quality deliverables using TDD
+        - JavaScript training and expertise
+      fr:
+        - Développeur Full-Stack au sein d'une équipe agile
+        - Expertise technique sur JavaScript, TypeScript et Node.js
+        - Conception, implémentation, test, déploiement et administration de microservices
+        - Applications d'analyse opérationelle marketing
+        - Générateur de rapports assisté par IA
+
+        - Respect de la qualité en utilisant TDD
+        - Formation et expertise JavaScript
+    skills: |
+      Node.js JavaScript Angular.js Foundation_framework
+
+       Full_Stack Cloud Microservices AI Prompt_Engineering DevOps Object_Oriented_Programming
+      Express.js Fastify Koa.js Vue.js REST_APIs GCP BigQuery Kubernetes Kibana Elastalert Telemetry GPT-4
+      Test-Driven_Development mocha jest vitest cypress WebDriverIO NightWatch.js
+      SCRUM Extreme_Programming
+      Security Training_Delivery Software_Design Software_Development
