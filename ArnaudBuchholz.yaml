@@ -61,8 +61,8 @@ experience:
       en: Development Expert
       fr: Expert en Développement
     summary:
-      en: Design, development and maintenance of strategic reporting tools of the Emarsys marketing platform.
-      fr: Conception, développement et maintenance des outils d'analyse stratégique de la plateforme marketing Emarsys.
+      en: Design, development and maintenance of strategic reporting tools of the Emarsys marketing platform
+      fr: Conception, développement et maintenance des outils d'analyse stratégique de la plateforme marketing Emarsys
     highlights:
       en:
         - Full-Stack developer in an agile team
@@ -83,11 +83,12 @@ experience:
         - Expert en sécurité
         - Formateur pour le programme SAP Cloud
     skills: |
-      Node.js TypeScript Full_Stack Cloud Microservices AI Prompt_Engineering DevOps Object_Oriented_Programming
-      Express.js Fastify Koa.js Vue.js REST_APIs GCP BigQuery Kubernetes Kibana Elastalert Telemetry GPT-4
+      Node.js TypeScript JavaScript Full_Stack Cloud Microservices AI Prompt_Engineering DevOps Object_Oriented_Programming
+      Express.js Fastify Koa.js Vue.js REST_APIs Redis GCP BigQuery MongoDB Kubernetes Kibana Elastalert Telemetry GPT-4
       Test-Driven_Development mocha jest vitest cypress WebDriverIO NightWatch.js
       SCRUM Extreme_Programming
       Security Training_Delivery Software_Design Software_Development
+      git GitHub GitHub_Actions Continuous_Integration_and_Continuous_Delivery
     media:
       - title: SAP Emarsys Q1 2025 Product Release 2 - Intelligent, Omnichannel Innovations
         link: https://vimeo.com/1053396987/21eec4a860
@@ -107,8 +108,8 @@ experience:
       en: Development Expert
       fr: Expert en Développement
     summary:
-      en: Design, development and maintenance of the SAP Marketing Cloud platform.
-      fr: Conception, développement et maintenance de la plateforme SAP Marketing Cloud.
+      en: Design, development and maintenance of the SAP Marketing Cloud platform
+      fr: Conception, développement et maintenance de la plateforme SAP Marketing Cloud
     highlights:
       en:
         - Full-Stack developer in an agile team
@@ -116,6 +117,7 @@ experience:
         - Design, implement and test frontend cross-device and cross-browser web applications
         - Design, implement and test backend services for the HANA Cloud Platform
         - Ensure high-quality deliverables using TDD
+        - Trainer for the SAP Agile Software Engineering curriculum
         - Speaker on UI5 international events
       fr:
         - Développeur Full-Stack au sein d'une équipe agile
@@ -123,15 +125,17 @@ experience:
         - Conception, implémentation et test d'applications web multiplateformes et multi-navigateurs
         - Conception, implémentation et test de services backend pour la plateforme HANA Cloud
         - Respect de la qualité en utilisant TDD
+        - Formateur pour le programme de formation en ingénierie logicielle Agile SAP
         - Conférencier sur des événements UI5 internationaux
     skills: |
       JavaScript SapUI5 Full_Stack Cloud HANA_Cloud_Platform ABAP ODATA REST_APIs QUnit OPA5
       Node.js SAP_Fiori Object_Oriented_Programming Test-Driven_Development
       SCRUM Training_Delivery Software_Design Software_Development
+      git GitHub Continuous_Integration_and_Continuous_Delivery
     media:
       - title: UI5con@SAP 2018 - A journey with OPA
         link: https://youtu.be/HiZq-kuIbt0
-  - company: # SAP / Senior Software Developer / 2015-09 - 2028-04
+  - company: # SAP / Senior Software Developer / 2015-09 - 2018-04
       name: SAP
       link: https://www.sap.com/
     location:
@@ -145,8 +149,8 @@ experience:
       en: Senior Software Developer
       fr: Développeur logiciel senior
     summary:
-      en: Design, development and maintenance of the SAP Marketing Cloud platform.
-      fr: Conception, développement et maintenance de la plateforme SAP Marketing Cloud.
+      en: Design, development and maintenance of the SAP Marketing Cloud platform
+      fr: Conception, développement et maintenance de la plateforme SAP Marketing Cloud
     highlights:
       en:
         - Frontend developer in an agile team
@@ -162,6 +166,7 @@ experience:
       JavaScript SapUI5 Frontend_Development Cloud HANA_Cloud_Platform ODATA REST_APIs QUnit OPA5
       Node.js SAP_Fiori Object_Oriented_Programming Test-Driven_Development
       SCRUM Training_Delivery Software_Design Software_Development
+      git GitHub Continuous_Integration_and_Continuous_Delivery
   - company: # Etelesolv / UX Architect / 2015-03 - 2015-09
       name: Cimpl (formerly Etelesolv)
       link: https://uplandsoftware.com/cimpl/
@@ -177,23 +182,86 @@ experience:
       fr: Architecte UX / Responsable Technique
     summary:
       en: Technical Lead and architect of the frontend team.
-      fr: Responsable technique et architected de l'équipe frontend.
+      fr: Responsable technique et architecte de l'équipe frontend.
     highlights:
       en:
-        - Lead the Front-end Team to build high-quality software using agile and automated methodologies
-        - Design and implement visual designs and layouts for delivering exceptional user/customer experiences with high usability
-        - Create and deliver solid software designs with quality cross-device and cross-browser performance,
-
+        - Managed a team of 7 developers (one remote)
         - Ensure high-quality deliverables using TDD
         - JavaScript training and expertise
       fr:
-        - Développeur Full-Stack au sein d'une équipe agile
-        - Expertise technique sur JavaScript, TypeScript et Node.js
-        - Conception, implémentation, test, déploiement et administration de microservices
-        - Applications d'analyse opérationelle marketing
-        - Générateur de rapports assisté par IA
-
+        - Gestion d'une équipe de 7 développeurs (dont 1 à distance)
         - Respect de la qualité en utilisant TDD
         - Formation et expertise JavaScript
     skills: |
       Node.js JavaScript Angular.js Foundation_framework
+      Frontend_Development REST_APIs karma
+      Object_Oriented_Programming Test-Driven_Development
+      SCRUM Training_Delivery Software_Design Software_Development
+      git Continuous_Integration_and_Continuous_Delivery
+  - company: # Helix / UI Architect / 2013-10 - 2015-02
+      name: Helix Enterprise Collaboration Systems Inc.
+      link: https://www.linkedin.com/in/helix-montreal-27ab4311a/
+    location:
+      type: on-site
+      city: Montreal
+      state: Quebec
+      country: Canada
+    start: 2015-03
+    end: 2015-09
+    title:
+      en: UI Architect
+      fr: Architecte UI
+    summary:
+      en: Design and development of the frontend application
+      fr: Conception et développement de l'application frontend
+    highlights:
+      en:
+        - User interface design and build
+        - JavaScript API layer design and build to decouple the UI and the server API
+        - Ensure high-quality deliverables using TDD
+        - JavaScript training and expertise
+      fr:
+        - Définition et réalisation de l'interface utilisateur
+        - Création d'une API JavaScript pour découpler l'interface des APIs
+        - Respect de la qualité en utilisant TDD
+        - Formation et expertise JavaScript
+    skills: |
+      Node.js JavaScript ExtJS
+      Frontend_Development REST_APIs Cucumber
+      Object_Oriented_Programming Test-Driven_Development
+      SCRUM Training_Delivery Software_Design Software_Development
+      git Continuous_Integration_and_Continuous_Delivery
+  - company: # Esker / International Technical Support / 2010-01 - 2013-09
+      name: Esker
+      link: https://www.esker.fr
+    location:
+      type: on-site
+      city: Lyon
+      country: France
+    start: 2010-01
+    end: 2013-09
+    title:
+      en: International Technical Support
+      fr: Support Technique International
+    summary:
+      en: Help customers to get the maximum of Esker's products
+      fr: Aider les clients a maximiser les produits Esker
+    highlights:
+      en:
+        - User interface design and build
+        - JavaScript API layer design and build to decouple the UI and the server API
+        - Ensure high-quality deliverables using TDD
+        - JavaScript training and expertise
+      fr:
+        - Définition et réalisation de l'interface utilisateur
+        - Création d'une API JavaScript pour découpler l'interface des APIs
+        - Respect de la qualité en utilisant TDD
+        - Formation et expertise JavaScript
+    skills: |
+      Technical_Support Customer_Relationship
+      Training_Delivery 
+      JavaScript 
+      REST_APIs 
+      Object_Oriented_Programming
+      SCRUM Software_Design Software_Development
+      
