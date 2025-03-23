@@ -285,10 +285,9 @@ experience:
         - Formation des consultants internes et externes
         - Formation des clients
     skills: |
-      Customer_Relationship
+      Customer_Support Customer_Experience
       Training_Delivery
-      JavaScript Web_Services XML REST_APIs
-      SAP_RFC
+      JavaScript Web_Services XML REST_APIs SAP_RFC
   - company: # Esker / Software Engineer / 1999-08 - 2005-10
       name: Esker
       link: https://www.esker.fr
