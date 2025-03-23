@@ -61,9 +61,8 @@ experience:
       en: Development Expert
       fr: Expert en Développement
     summary:
-      en: Design, development and maintenance of strategic reporting tools of the Emarsys marketing platform
-      fr: Conception, développement et maintenance des outils d'analyse stratégique de la plateforme marketing Emarsys
-    highlights:
+      en: Helping decision-makers improve their strategy by providing reports analyzing overall marketing performance
+      fr: Aider les décideurs à améliorer leur stratégie en fournissant des rapports analysant la performance globale du marketing
       en:
         - Full-Stack developer in an agile team
         - Technical lead on JavaScript, TypeScript and Node.js
@@ -84,11 +83,12 @@ experience:
         - Formateur pour le programme SAP Cloud
     skills: |
       Node.js TypeScript JavaScript Full_Stack Cloud Microservices AI Prompt_Engineering DevOps Object_Oriented_Programming
-      Express.js Fastify Koa.js Vue.js REST_APIs Redis GCP BigQuery MongoDB Kubernetes Kibana Elastalert Telemetry GPT-4
+      REST_APIs Vue.js Redis GCP BigQuery MongoDB Kubernetes GPT-4
       Test-Driven_Development mocha jest vitest cypress WebDriverIO NightWatch.js
       SCRUM Extreme_Programming
       Security Training_Delivery Software_Design Software_Development
       git GitHub GitHub_Actions Continuous_Integration_and_Continuous_Delivery
+      Express.js Fastify Koa.js Kibana Elastalert Telemetry
     media:
       - title: SAP Emarsys Q1 2025 Product Release 2 - Intelligent, Omnichannel Innovations
         link: https://vimeo.com/1053396987/21eec4a860
@@ -108,8 +108,8 @@ experience:
       en: Development Expert
       fr: Expert en Développement
     summary:
-      en: Design, development and maintenance of the SAP Marketing Cloud platform
-      fr: Conception, développement et maintenance de la plateforme SAP Marketing Cloud
+      en: Helping marketing experts plan, build and execute their strategy by providing a comprehensive set of tools
+      fr: Aider les experts marketing à planifier, construire et exécuter leur stratégie en fournissant une suite intégrée d'outils
     highlights:
       en:
         - Full-Stack developer in an agile team
@@ -149,8 +149,8 @@ experience:
       en: Senior Software Developer
       fr: Développeur logiciel senior
     summary:
-      en: Design, development and maintenance of the SAP Marketing Cloud platform
-      fr: Conception, développement et maintenance de la plateforme SAP Marketing Cloud
+      en: Helping marketing experts plan, build and execute their strategy by providing a comprehensive set of tools
+      fr: Aider les experts marketing à planifier, construire et exécuter leur stratégie en fournissant une suite intégrée d'outils
     highlights:
       en:
         - Frontend developer in an agile team
@@ -181,23 +181,26 @@ experience:
       en: UX Architect / Technical Lead
       fr: Architecte UX / Responsable Technique
     summary:
-      en: Technical Lead and architect of the frontend team.
-      fr: Responsable technique et architecte de l'équipe frontend.
+      en: Building the next generation asset management system to track and manage technology expenses
+      fr: Construire une nouvelle génération de système de gestion d'actifs pour surveiller et gérer les dépenses technologiques
     highlights:
       en:
+        - Technical Lead and architect of the frontend team
         - Managed a team of 7 developers (one remote)
         - Ensure high-quality deliverables using TDD
         - JavaScript training and expertise
       fr:
+        - Responsable technique et architecte de l'équipe frontend
         - Gestion d'une équipe de 7 développeurs (dont 1 à distance)
         - Respect de la qualité en utilisant TDD
         - Formation et expertise JavaScript
     skills: |
       Node.js JavaScript Angular.js Foundation_framework
-      Frontend_Development REST_APIs karma
+      Frontend_Development REST_APIs
       Object_Oriented_Programming Test-Driven_Development
       SCRUM Training_Delivery Software_Design Software_Development
       git Continuous_Integration_and_Continuous_Delivery
+      karma
   - company: # Helix / UI Architect / 2013-10 - 2015-02
       name: Helix Enterprise Collaboration Systems Inc.
       link: https://www.linkedin.com/in/helix-montreal-27ab4311a/
@@ -212,8 +215,8 @@ experience:
       en: UI Architect
       fr: Architecte UI
     summary:
-      en: Design and development of the frontend application
-      fr: Conception et développement de l'application frontend
+      en: Helping organizations manage their complex business processes no matter what services or products they provide
+      fr: Aider les organisations à gérer leurs processus métier complexes, peu importe les services ou les produits offerts
     highlights:
       en:
         - User interface design and build
@@ -244,26 +247,114 @@ experience:
       en: International Technical Support
       fr: Support Technique International
     summary:
-      en: Help customers to get the maximum of Esker's products
-      fr: Aider les clients a maximiser les produits Esker
+      en: Helping internal and external customers to get the maximum of Esker's products
+      fr: Aider les clients internes et externes à profiter au maximum des produits Esker
     highlights:
-      en:
-        - User interface design and build
-        - JavaScript API layer design and build to decouple the UI and the server API
-        - Ensure high-quality deliverables using TDD
-        - JavaScript training and expertise
-      fr:
-        - Définition et réalisation de l'interface utilisateur
-        - Création d'une API JavaScript pour découpler l'interface des APIs
-        - Respect de la qualité en utilisant TDD
-        - Formation et expertise JavaScript
+      en: |
+        - Internal and external consultants training
+        - Customer training
+      fr: |
+        - Formation des consultants internes et externes
+        - Formation des clients
     skills: |
-      Technical_Support Customer_Relationship
-      Training_Delivery 
-      JavaScript 
-      REST_APIs 
+      Technical_Support Customer_Support Customer_Experience
+      Training_Delivery
+      JavaScript Web_Services XML REST_APIs
+  - company: # Esker / International Trainer / SAP Integration Expert / 2005-10 - 2010-01
+      name: Esker
+      link: https://www.esker.fr
+    location:
+      type: on-site
+      city: Lyon
+      country: France
+    start: 2005-10
+    end: 2010-01
+    title:
+      en: International Trainer / SAP Integration Expert
+      fr: Formateur International / Expert intégration SAP
+    summary:
+      en: Helping internal and external customers to get the maximum of Esker's products
+      fr: Aider les clients internes et externes à profiter au maximum des produits Esker
+    highlights:
+      en: |
+        - SAP Sales Orders automation
+        - Internal and external consultants training
+        - Customer training
+      fr: |
+        - Automatisation des bons de commande SAP
+        - Formation des consultants internes et externes
+        - Formation des clients
+    skills: |
+      Customer_Relationship
+      Training_Delivery
+      JavaScript Web_Services XML REST_APIs
+      SAP_RFC
+  - company: # Esker / Software Engineer / 1999-08 - 2005-10
+      name: Esker
+      link: https://www.esker.fr
+    location:
+      type: on-site
+      city: Lyon
+      country: France
+    start: 1999-08
+    end: 2005-10
+    title:
+      en: Software Engineer
+      fr: Ingénieur Développement
+    summary:
+      en: Building an innovative cloud inbound and outbound document automation platform
+      fr: Construire une platforme cloud innovante d'automatisation de documents entrants et sortants
+    highlights:
+      en: |
+        - Design and development of multi-tier applications: rule editor, document converters, diagnostic tools
+        - Design and development of the Web user interface
+        - Design and development of two certified SAP interfaces
+      fr: |
+        - Conception et développement d'applications multi-tiers: éditeur de règles, convertisseurs
+          de documents, outils de diagnostic
+        - Conception et développement de l'interface utilisateur Web
+        - Conception et développement de deux interfaces certifiées par SAP
+    skills: |
+      Windows_Development C C++ ASP.NET C# XML XSL
+      Backend Cloud
       Object_Oriented_Programming
-      SCRUM Software_Design Software_Development
+      Software_Design Software_Development
+    media:
+      - title: Connecting an external Output Management System to SAP
+        link: https://community.sap.com/t5/additional-blogs-by-sap/connecting-an-external-output-management-system-to-sap/ba-p/13545963
+      - title: SAPconnect (BC-SRV-COM) 
+        link: https://help.sap.com/doc/saphelp_aii710/7.1/en-US/2b/d925bf4b8a11d1894c0000e8323c4f/frameset.htm
+  - company: # Sopra / Software Engineer / 1998-08 - 1999-08
+      name: Sopra
+      link: https://www.soprasteria.com/
+    location:
+      type: on-site
+      city: Lyon
+      country: France
+    start: 1998-08
+    end: 1999-08
+    title:
+      en: Software Engineer
+      fr: Ingénieur Développement
+    summary:
+      en: Various missions on customers' site
+      fr: Missions diverses sur site clients
+    highlights:
+      en: |
+        - Oracle Gemms programmatic interfaces and migration
+        - Y2K and EURO projects
+        - Oracle Financials reporting tools
+        - Computer-Assisted Production Management (CAPM)
+      fr: |
+        - Interfaces programmatiques & migration d'Oracle Gemms
+        - Projets An 2000 et EURO
+        - Reporting de gestion autour de Oracle Financials
+        - Gestion de la Production Assitée par Ordinateur (GPAO)
+    skills: |
+      Windows_Development Unix_Development 
+      C Pro*C VB5 Access SQL_Server Database_Development
+      Object_Oriented_Programming
+      Software_Design Software_Development
 
 education:
 certifications:
