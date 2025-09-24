@@ -201,6 +201,28 @@ function loadReveal () {
         pausedBarColor: deckProgressBarPausedColor
       });
     }
+    // Fix markdown plugin to generate sections based on titles
+    // TODO: wait for markdown plugin
+    const markdown = document.querySelector('section[data-markdown]');
+    let mainSection = markdown.parentElement.appendChild(document.createElement('section'));
+    let section = mainSection.appendChild(document.createElement('section'));
+    for (const node of markdown.childNodes) {
+      if (node.tagName && node.tagName.toLowerCase() === 'hr') {
+        section = undefined;
+      }
+      if (node.tagName && node.tagName.toLowerCase() === 'h3' && !section) {
+        mainSection = markdown.parentElement.appendChild(document.createElement('section'));
+      }
+      if (!section) {
+        section = mainSection.appendChild(document.createElement('section'));
+      }
+      section.appendChild(node.cloneNode(true));
+    }
+    require.Reveal.sync();
+    require.Reveal.slide(0);
+    const agenda = document.getElementById('agenda');
+    agenda.innerHTML = '';
+    buildAgenda();
   });
 }
 
