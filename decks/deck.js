@@ -202,7 +202,7 @@ function loadReveal () {
       });
     }
     // Fix markdown plugin to generate sections based on titles
-    // TODO: wait for markdown plugin
+    // TODO: wait for markdown plugin (data-markdown-parsed)
     const markdown = document.querySelector('section[data-markdown]');
     let mainSection = markdown.parentElement.appendChild(document.createElement('section'));
     let section = mainSection.appendChild(document.createElement('section'));
