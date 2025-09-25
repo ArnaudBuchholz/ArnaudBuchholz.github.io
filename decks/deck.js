@@ -202,27 +202,43 @@ function loadReveal () {
       });
     }
     // Fix markdown plugin to generate sections based on titles
-    // TODO: wait for markdown plugin (data-markdown-parsed)
     const markdown = document.querySelector('section[data-markdown]');
-    let mainSection = markdown.parentElement.appendChild(document.createElement('section'));
-    let section = mainSection.appendChild(document.createElement('section'));
-    for (const node of markdown.childNodes) {
-      if (node.tagName && node.tagName.toLowerCase() === 'hr') {
-        section = undefined;
-      }
-      if (node.tagName && node.tagName.toLowerCase() === 'h3' && !section) {
-        mainSection = markdown.parentElement.appendChild(document.createElement('section'));
-      }
-      if (!section) {
-        section = mainSection.appendChild(document.createElement('section'));
-      }
-      section.appendChild(node.cloneNode(true));
+    if (markdown) {
+      const waitAndPatch = () => {
+        const markdown = document.querySelector('section[data-markdown-parsed]');
+        if (!markdown) {
+          setTimeout(waitAndPatch, 100);
+          return;
+        }
+        let mainSection = markdown.parentElement.appendChild(document.createElement('section'));
+        let section = mainSection.appendChild(document.createElement('section'));
+        for (const node of markdown.childNodes) {
+          if (node.tagName && node.tagName.toLowerCase() === 'hr') {
+            section = undefined;
+            continue;
+          }
+          if (node.tagName && node.tagName.toLowerCase() === 'h3' && !section) {
+            mainSection = markdown.parentElement.appendChild(document.createElement('section'));
+            mainSection.className = 'future';
+          }
+          if (!section) {
+            if (node.nodeType === 3 /* TEXT */ && !node.textContent.trim()) {
+              continue;
+            }
+            section = mainSection.appendChild(document.createElement('section'));
+            section.className = 'future';
+          }
+          section.appendChild(node.cloneNode(true));
+        }
+        markdown.remove();
+        require.Reveal.sync();
+        require.Reveal.slide(0);
+        const agenda = document.getElementById('agenda');
+        agenda.innerHTML = '';
+        buildAgenda();
+      };
+      waitAndPatch();
     }
-    require.Reveal.sync();
-    require.Reveal.slide(0);
-    const agenda = document.getElementById('agenda');
-    agenda.innerHTML = '';
-    buildAgenda();
   });
 }
 
