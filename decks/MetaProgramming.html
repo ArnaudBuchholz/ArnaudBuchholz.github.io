@@ -43,15 +43,15 @@
 				</section>
 				<section data-markdown>
 					<textarea data-template>
-### The **5 W**
+### The 5 **W**
 
 |||
 |---|---|
 |**Who**|Me|
 |**When**|Over the last 5 months|
 |**Where**|The [`psbots`](https://github.com/ArnaudBuchholz/psbots) project|
-|**What**|**Manipulate** *transpiled* JavaScript through **Abstract Syntax Tree**|
-|**Why**|**Analysis** & **Optimization**|
+|**What**|**Generate** TypeScript and <br/>**Manipulate** *transpiled* JavaScript|
+|**Why**|**Efficiency**, **Analysis** and **Optimization**|
 
 ---
 
@@ -59,6 +59,16 @@
 
 * PostScript **interpreter**
 * Developped in **TypeScript** *(no dependencies)*
+* Focused on **maintainability** and **performances**
+* Heavily **tested** (example: [`repeat`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/flow/repeat.ts#L45))
+
+---
+
+#### `psbots` **demo**
+
+* wi : `debug 4 "abc" repeat`
+
+* cli : `100 performances`
 
 ---
 
@@ -70,13 +80,70 @@ According to [wiki](https://en.wikipedia.org/wiki/Metaprogramming)
 
 ---
 
-### Analysis
+#### Examples
 
-[Sources](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/sources.md)
+|||
+|---|---|
+|**Compilers**|C, Java, TypeScript...|
+|**Linters**|eslint, dpdm...|
+|**Bundlers**|webpack, vite...|
+|**Security Scanners**|BlackDuck, Renovate...|
 
 ---
 
-### Optimization
+#### **A**bstract **S**yntax **T**ree
+
+According to [wiki](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
+
+> An abstract syntax tree (AST) is a **data structure** used in computer science to represent the structure of a **program**.
+
+---
+
+#### AST **Explorer**
+
+* [Hello World!](https://astexplorer.net/#/gist/a34712863759bfe13d9df5be1e9fa775/6af937770e063e15f5f6e255817adbce901dd64b)
+  * `"Hello " + "World!"`
+  * `const msg = "Hello World!"`
+
+* Different **parsers**, *almost* the same result
+  * `babel`
+  * `esprima`
+  * `uglify-js`
+
+---
+
+### Beginner : **Generation**
+
+Some source files are **generated**<br/>using a dedicated [script](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/makeSources.mjs) :
+
+* Barrel imports (i.e. [`index.ts`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/index.ts))
+
+* Exceptions files (i.e. [`dictStackUnderflow.ts`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/exceptions/dictStackUnderflow.ts))
+  * from [`system-exceptions.json`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/system-exceptions.json)
+
+---
+
+#### PROs / CONs
+
+---
+
+### Intermediate : **Analysis**
+
+*When the codebase **grows** significantly,*
+
+*how do you **navigate** the sources ?*
+
+---
+
+#### Dependencies
+
+[Sources](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/sources.md)
+
+* Built with 
+
+---
+
+### Advanced : **Optimization**
 
 [Ideas](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/Optimizations.md)
 
