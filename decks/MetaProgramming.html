@@ -114,7 +114,13 @@ According to [wiki](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
 
 ### Beginner : **Generation**
 
-Some source files are **generated**<br/>using a dedicated [script](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/makeSources.mjs) :
+*When sources are same / same but different...*
+
+--- 
+
+#### Example : Source **Automation**
+
+Source files are **generated** using a [script](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/makeSources.mjs) :
 
 * Barrel imports (i.e. [`index.ts`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/index.ts))
 
@@ -127,8 +133,9 @@ Some source files are **generated**<br/>using a dedicated [script](https://githu
 
 * 👍 **Automated** during the build
 * 👍 One **source** of truth
+* 👍 Easier to **maintain**
 
-* 👎 Risk of **overwriting**
+* 👎 Risk of **overwriting** *(warning added)*
 
 ---
 
@@ -136,15 +143,25 @@ Some source files are **generated**<br/>using a dedicated [script](https://githu
 
 *When the codebase **grows** significantly,*
 
-*how do you **navigate** the sources ?*
+*how do you **get insights** from the sources ?*
 
 ---
 
-#### Dependencies
+#### Example : **Dependency** Analysis
 
-[Sources](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/sources.md)
+Documentation of [sources' dependencies](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/sources.md) :
 
-* Built with 
+* Source [`engineSources.mjs`](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/build/engineSources.mjs)
+* **Parsing** using [`@babel/parser`](https://www.npmjs.com/package/@babel/parser) and [`@babel/traverse`](https://www.npmjs.com/package/@babel/traverse)
+* **Rendering** using [`mermaid`](https://mermaid.js.org/)
+
+---
+
+#### PROs / CONs
+
+* 👍 Custom **insight** on the codebase
+* 👎 Must handle **all** syntaxes *(for instance: function definition and call)*
+* 👎 Very **bad** documentation of `@babel/traverse`, used LLMs to figure out API
 
 ---
 
