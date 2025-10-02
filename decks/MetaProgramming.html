@@ -173,9 +173,39 @@ Documentation of [sources' dependencies](https://github.com/ArnaudBuchholz/psbot
 
 ---
 
-#### Example : Optimizations
+#### Example : **Removing** Assertions (1/2)
 
-[Ideas](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/Optimizations.md)
+```typescript
+function assert<T>(result: Result<T>):
+  asserts result is { success: true; value: T };
+function assert(condition: boolean, message?: string, cause?: unknown):
+  asserts condition;
+```
+
+The `assert` function is used to :
+
+* **Validate** that a function call succeeded<br/>(use of [`Result`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/api/Result.ts) type)
+* **Assess** a condition
+
+* [Examples](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/stacks/operand/roll.ts#L33)
+
+---
+
+#### Example : **Removing** Assertions (2/2)
+
+* The `assert` function **throws** exceptions which **fail** the engine
+
+* **On build**, the `assert` function is **useless**
+
+---
+
+#### Example : **Inlining** `toValue` Functions
+
+* The engine **manipulates** values<br/>which structure follows a **strict** [definition](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/api/values/Value.ts)
+
+* To avoid error while using **literal** objects,<br/>**helper** functions do the **conversion**
+
+* **On build**, the functions are **inlined**
 
 ---
 
@@ -186,6 +216,16 @@ Documentation of [sources' dependencies](https://github.com/ArnaudBuchholz/psbot
 
 * Inlining `toIntegerValue`
   * `src/core/operators/stacks/operand/roll.ts`
+
+---
+
+#### Example : All The **Ideas**
+
+* [Documented ideas](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/Optimizations.md)
+
+* And others :
+  * `for(of)` ➟ `for(index;;)`
+  * `if/else` ➟ `switch`
 
 ---
 
