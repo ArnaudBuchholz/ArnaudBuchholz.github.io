@@ -236,6 +236,7 @@ function loadReveal () {
         const agenda = document.getElementById('agenda');
         agenda.innerHTML = '';
         buildAgenda();
+        updateLinks();
       };
       waitAndPatch();
     }
