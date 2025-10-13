@@ -116,6 +116,8 @@ Source files are **generated** using a [script](https://github.com/ArnaudBuchhol
 
 * 👎 Risk of **overwriting** *(warning added)*
 
+* 💡 Leverage the **linter**
+
 ---
 
 ### **A**bstract **S**yntax **T**ree
@@ -161,7 +163,8 @@ Documentation of [sources' dependencies](https://github.com/ArnaudBuchholz/psbot
 
 * 👍 Custom **insight** on the codebase
 * 👎 Must handle **all** syntaxes *(for instance: function definition and call)*
-* 👎 Very **bad** documentation of `@babel/traverse`, used LLMs to figure out API
+* 👎 Very **bad** documentation of `@babel/traverse`
+* 💡 Use **LLMs** to figure out API
 
 ---
 
@@ -170,6 +173,16 @@ Documentation of [sources' dependencies](https://github.com/ArnaudBuchholz/psbot
 *Code is **linted** and **maintainable**,*
 
 *but is it **fast** ?*
+
+---
+
+#### How To **Measure** JavaScript Performances ?
+
+* Understand the **host**
+* Understand the **platform**
+* Collect and eliminate **aberrant** values
+
+[test](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/test.mjs) and [TimeBucket](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/TimeBucket.mjs)
 
 ---
 
@@ -226,6 +239,16 @@ The `assert` function is used to :
 * And others :
   * `for(of)` ➟ `for(index;;)`
   * `if/else` ➟ `switch`
+
+---
+
+#### PROs / CONs
+
+* 👍 Keep the code **readable** and **maintainable**
+* 👍 Prioritize functionality **over** optimization
+
+* 👎 Complex and **expensive** to implement
+* 👎 Not **all** ideas are good
 
 ---
 
