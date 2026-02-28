@@ -234,8 +234,10 @@ function loadReveal () {
         require.Reveal.sync();
         require.Reveal.slide(0);
         const agenda = document.getElementById('agenda');
-        agenda.innerHTML = '';
-        buildAgenda();
+        if (agenda) {
+          agenda.innerHTML = '';
+          buildAgenda();
+        }
         updateLinks();
       };
       waitAndPatch();
@@ -243,7 +245,7 @@ function loadReveal () {
   });
 }
 
-window.addEventListener('load', function () {
+window.deck = function () {
   processIncludes()
     .then(removeHiddenElements)
     .then(loadAsyncImages)
@@ -255,4 +257,6 @@ window.addEventListener('load', function () {
     .then(processVersion)
     .then(loadNotes)
     .then(loadReveal);
-});
+};
+
+window.addEventListener('load', deck);

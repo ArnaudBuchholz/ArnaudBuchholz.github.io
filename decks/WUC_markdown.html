@@ -1,0 +1,222 @@
+<meta charset="utf-8">
+<!--
+|property|value|
+|---|---|
+|title|This is a **test**|
+|author|Arnaud Buchholz|
+
+### The 5 **W**
+
+|||
+|---|---|
+|**Who**|Me|
+|**When**|Over the last 5 months|
+|**Where**|The [`psbots`](https://github.com/ArnaudBuchholz/psbots) project|
+|**What**|**Generate** TypeScript and <br/>**Manipulate** *transpiled* JavaScript|
+|**Why**|**Efficiency**, **Analysis** and **Optimization**|
+
+---
+
+#### A **Brief** Introduction To `psbots`
+
+* PostScript **interpreter**
+* Developed in **TypeScript** *(no dependencies)*
+* Focused on **maintainability** and **performance**
+* Heavily **tested** (example: [`repeat`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/flow/repeat.ts#L45))
+
+---
+
+#### `psbots` **demo**
+
+* wi : `debug 4 "abc" repeat`
+
+* cli : `100 perf`
+
+---
+
+### **Meta**programming
+
+According to [wiki](https://en.wikipedia.org/wiki/Metaprogramming)
+
+> Metaprogramming is a computer programming **technique** in which computer programs have the ability to treat other programs as their **data**.
+
+---
+
+#### Examples
+
+|||
+|---|---|
+|**Compilers**|C, Java, TypeScript...|
+|**Linters**|eslint, dpdm...|
+|**Bundlers**|webpack, vite...|
+|**Security Scanners**|BlackDuck, Renovate...|
+
+---
+
+### Beginner : **Generation**
+
+*When sources are same / same but different...*
+
+--- 
+
+#### Example : Source **Automation**
+
+Source files are **generated** using a [script](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/makeSources.mjs) :
+
+* Barrel imports (i.e. [`index.ts`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/index.ts))
+
+* Exceptions files (i.e. [`dictStackUnderflow.ts`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/exceptions/dictStackUnderflow.ts))
+  * from [`system-exceptions.json`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/system-exceptions.json)
+
+---
+
+#### PROs / CONs
+
+* 👍 **Automated** during the build
+* 👍 One **source** of truth
+* 👍 Easier to **maintain**
+
+* 👎 Risk of **overwriting** *(warning added)*
+
+* 💡 Leverage the **linter**
+
+---
+
+### **A**bstract **S**yntax **T**ree
+
+According to [wiki](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
+
+> An abstract syntax tree (AST) is a **data structure** used in computer science to represent the structure of a **program**.
+
+---
+
+#### AST **Explorer**
+
+* [Hello World!](https://astexplorer.net/#/gist/a34712863759bfe13d9df5be1e9fa775/6af937770e063e15f5f6e255817adbce901dd64b)
+  * `"Hello " + "World!"`
+  * `const msg = "Hello World!"`
+
+* Different **parsers**, *almost* the same result
+  * `babel`
+  * `esprima`
+  * `uglify-js`
+
+---
+
+### Intermediate : **Analysis**
+
+*When the codebase **grows** significantly,*
+
+*how do you **get insights** from the sources ?*
+
+---
+
+#### Example : **Dependency** Analysis
+
+Documentation of [sources' dependencies](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/sources.md) :
+
+* Source [`engineSources.mjs`](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/build/engineSources.mjs)
+* **Parsing** using [`@babel/parser`](https://www.npmjs.com/package/@babel/parser) and [`@babel/traverse`](https://www.npmjs.com/package/@babel/traverse)
+* **Rendering** using [`mermaid`](https://mermaid.js.org/)
+
+---
+
+#### PROs / CONs
+
+* 👍 Custom **insight** on the codebase
+* 👎 Must handle **all** syntaxes *(for instance: function definition and call)*
+* 👎 Very **bad** documentation of `@babel/traverse`
+* 💡 Use **LLMs** to figure out API
+
+---
+
+### Advanced : **Optimization**
+
+*Code is **linted** and **maintainable**,*
+
+*but is it **fast** ?*
+
+---
+
+#### How To **Measure** JavaScript Performances ?
+
+* Understand the **host**
+* Understand the **platform**
+* Collect and eliminate **aberrant** values
+
+[test](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/test.mjs) and [TimeBucket](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/tools/TimeBucket.mjs)
+
+---
+
+#### Example : **Removing** Assertions (1/2)
+
+```typescript
+function assert<T>(result: Result<T>):
+  asserts result is { success: true; value: T };
+function assert(condition: boolean, message?: string, cause?: unknown):
+  asserts condition;
+```
+
+The `assert` function is used to :
+
+* **Validate** that a function call succeeded<br/>(use of [`Result`](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/api/Result.ts) type)
+* **Assess** a condition
+
+* [Examples](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/core/operators/stacks/operand/roll.ts#L33)
+
+---
+
+#### Example : **Removing** Assertions (2/2)
+
+* The `assert` function **throws** exceptions which **fail** the engine
+
+* **On build**, the `assert` function is **useless**
+
+---
+
+#### Example : **Inlining** `toValue` Functions
+
+* The engine **manipulates** values<br/>which structure follows a **strict** [definition](https://github.com/ArnaudBuchholz/psbots/blob/main/engine/src/api/values/Value.ts)
+
+* To avoid error while using **literal** objects,<br/>**helper** functions do the **conversion**
+
+* **On build**, the functions are **inlined**
+
+---
+
+#### Demo
+
+* Removing `assert`
+  * `src/api/parser.ts`
+
+* Inlining `toIntegerValue`
+  * `src/core/operators/stacks/operand/roll.ts`
+
+---
+
+#### Example : All The **Ideas**
+
+* [Documented ideas](https://github.com/ArnaudBuchholz/psbots/blob/main/docs/engine/Optimizations.md)
+
+* And others :
+  * `for(of)` ➟ `for(index;;)`
+  * `if/else` ➟ `switch`
+
+---
+
+#### PROs / CONs
+
+* 👍 Keep the code **readable** and **maintainable**
+* 👍 Prioritize functionality **over** optimization
+
+* 👎 Complex and **expensive** to implement
+* 👎 Not **all** ideas are good
+
+---
+
+### Key **Take-Aways**
+
+* Metaprogramming is a **powerful tool**
+* **Steep** learning curve but **rewarding**
+-->
+<script src="WUC_markdown.js"></script>
