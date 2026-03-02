@@ -7,6 +7,18 @@
 
 ### The **Problem**
 
+Every algorithm needs a **context**,<br>
+it may come from :
+
+* An inbound HTTP request
+* An incoming Pub/Sub message
+* A command line parameters
+* ...
+
+---
+
+#### Example
+
 ```TypeScript
 async function processOrder(
   orderId: string,
@@ -23,7 +35,7 @@ async function validateOrder(
   customerId: number,
   correlationId: string
 ) {
-  // ... more nested calls
+  /* ... more nested calls */
 }
 ```
 
@@ -31,10 +43,10 @@ async function validateOrder(
 
 #### The **Problems**
 
-- ❌ Context **parameters** passed through **every** function
-- ❌ Function signatures become **bloated**
-- ❌ Easy to **forget** passing context down
-- ❌ Hard to add new context values *(change all intermediate functions !)*
+- ❌ Context **parameters** are passed through **every** function
+- ❌ Function **signatures** become **bloated**
+- ❌ It's easy to **forget** passing context down
+- ❌ It's hard to add **new** context values<br><small>*(change all intermediate functions !)*</small>
 
 ---
 
