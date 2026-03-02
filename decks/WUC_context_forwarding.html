@@ -1,0 +1,145 @@
+<!doctype html>
+<meta charset="utf-8">
+<!--
+|key|value|
+|---|---|
+|title|context **forwarding**|
+
+### The **Problem**
+
+```TypeScript
+async function processOrder(
+  orderId: string,
+  customerId: number,
+  correlationId: string
+) {
+  logEvent('Processing order', customerId, correlationId);
+  await validateOrder(orderId, customerId, correlationId);
+  // ... more calls
+}
+
+async function validateOrder(
+  orderId: string,
+  customerId: number,
+  correlationId: string
+) {
+  // ... more nested calls
+}
+```
+
+---
+
+#### The **Problems**
+
+- ❌ Context **parameters** passed through **every** function
+- ❌ Function signatures become **bloated**
+- ❌ Easy to **forget** passing context down
+- ❌ Hard to add new context values *(change all intermediate functions !)*
+
+---
+
+### The Solution: **Forwarded** context
+
+```TypeScript
+async function processOrder(orderId: string) {
+  logEvent('Processing order', getCustomerId(), getCorrelationId());
+  await validateOrder(orderId);
+  // ... more calls
+}
+
+async function validateOrder(orderId: string) {
+  // ... more nested calls
+}
+```
+
+---
+
+### `AsyncLocalStorage`
+
+Node.js provides [`AsyncLocalStorage`](https://nodejs.org/api/async_context.html), a sort of "thread-local storage" for **async** operations.
+
+```TypeScript
+import { AsyncLocalStorage } from 'node:async_hooks';
+const storage = new AsyncLocalStorage<{ userId: number }>();
+storage.run({ userId: 123 }, async () => {
+  console.log(storage.getStore()?.userId); // 123
+  
+  async function deepFunction() {
+    console.log(storage.getStore()?.userId); // Still 123!
+  }
+  await deepFunction();
+});
+
+console.log(storage.getStore()?.userId); // undefined
+```
+
+<small>Express example : [training-nodejs-async-local-storage](https://github.com/ArnaudBuchholz/training-nodejs-async-local-storage)</small>
+
+---
+
+#### Pattern Architecture (1/3) : Context **Manager**
+
+```TypeScript
+import { AsyncLocalStorage } from 'node:async_hooks';
+import type { Context } from 'Context.js';
+
+const storage = new AsyncLocalStorage<Context>();
+
+/** throws if no context exists */
+export const getContextStore = () => {
+  const store = storage.getStore();
+  if (!store) {
+    throw new Error('No context available !');
+  }
+  return store;
+};
+
+export const getContextAsyncLocalStorage = () => storage;
+```
+
+---
+
+#### Pattern Architecture (2/3) : Context **Setter**
+
+A middleware **sets** the context at the beginning of each request.
+
+```TypeScript
+app.use((req, res, next) => {
+  const context = {
+    customerId: extractCustomerId(req),
+    correlationId: req.headers['x-correlation-id'],
+  };
+  
+  // Everything inside this callback has access to context
+  getContextAsyncLocalStorage().run(context, () => {
+    next();
+  });
+});
+```
+
+---
+
+#### Pattern Architecture (3/3) : Context **Getters**
+
+```TypeScript
+export const getCustomerId = (): number => {
+  const { customerId } = getContextStore();
+  return customerId;
+};
+
+export const getCorrelationId = (): string => {
+  const { correlationId } = getContextStore();
+  return correlationId;
+};
+```
+
+---
+
+#### PROs/CONs
+
+- ✅ **Centralized** context handling
+- ✅ **Efficient** with small **digital footprint**
+- ❌ Hard to **mock** and **test**
+
+-->
+<script src="WUC_markdown.js"></script>
