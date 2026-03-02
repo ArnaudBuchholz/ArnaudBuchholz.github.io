@@ -1,164 +1,146 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="description" content="☕ Mutation testing">
-    <meta name="author" content="Arnaud Buchholz">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-    <meta name="deck-duration" content="5">
-    <meta name="deck-theme" content="night">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" type="text/css" href="WUC/styles.css">
-  </head>
-  <body>
-    <div class="reveal">
-      <div class="slides">
-        <section>
-          <section>
-            <table>
-              <tr>
-                <td width="50%">
-                  <div>
-                    <img src="WUC/logo.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
-                  </div>
-                </td>
-                <td style="vertical-align: top;">
-                  <h3>Introduction to <strong>Mutation</strong> testing</h3>
-                  <div>
-                    <small>
-                      While you <strong>caffeinate</strong> serie<br/>
-                      Offered by ☕ Arnaud <strong>Buchholz</strong>
-                    </small>
-                    <div class="social">
-                      <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" /></a>
-                      <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" /></a>
-                      <a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" /></a>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </section>
-          <section>
-            <h4>Context</h4>
-            <p>Considering the <strong>function</strong> to test :</p>
-            <pre><code class="JavaScript">function div (a, b) {
+<meta charset="utf-8">
+<!--
+|key|value|
+|---|---|
+|title|Introduction to **Mutation** testing|
+
+### Context
+
+Considering the **function** to test :
+
+```JavaScript
+function div (a, b) {
   if (b === 0) {
     throw new Error('Do not divide by 0');
   }
   return a / b;
-}</code></pre>
-            <p>And the <strong>test code</strong> :</p>
-            <pre><code class="JavaScript">assert.throws(() => div(1,0));
-assert.notEqual(div(1,2), 0);</code></pre>
-            <p>Code <strong>coverage</strong> is <strong>100%</strong></p>
-          </section>
-          <section>
-            <h4>What does it <strong>really</strong> mean ?</h4>
-            <br />
-            <p>✔️ All statements are <strong>evaluated<br/>during</strong> the tests.</p>
-            <br/>
-            <p>❌ It does <strong>not</strong> guarantee that the code was <strong>thoroughly checked</strong>.</p>
-          </section>
-          <section>
-            <h4>In the <strong>example</strong></h4>
-            <ul>
-              <pre><code class="JavaScript">assert.throws(() => div(1,0));</code></pre>
-              <li>The exception is not <strong>validated</strong>,<br/><small>(type and message)</small></li>
-              <pre><code class="JavaScript">assert.notEqual(div(1,2), 0);</code></pre>
-              <li>The result is not <strong>compared</strong> with any <strong>meaningful</strong> value.</li>
-            </ul>
-          </section>
-          <section>
-            <h4>What is <strong>mutation</strong> testing ?</h4>
-            <p>For each <strong>covered statement</strong> :
-              <ul>
-                <li>The source code is modified with a single <strong>mutation</strong> to generate a <strong>mutant</strong>,</li>
-                <li>The tests are <strong>executed</strong> to check if they <strong>still pass</strong>.</li>
-              </ul>
-            </p>
-            <br/>
-            <p>
-              If a mutant <strong>survives</strong> the tests,<br/>
-              a <strong>defect</strong> is <strong>not detected</strong> !<br/>
-              <small>Tests are <strong>incomplete</strong>.</small>
-            </p>
-          </p>
-          </section>
-          <section>
-            <h4>Examples of <strong>mutations</strong> (1/2)</h4>
-            <ul>
-              <li><strong>Removing</strong> a statement</li>
-              <pre><code class="JavaScript">function div (a, b) {
-  if (b === 0) {}
-  return a / b;
-}</code></pre>
-              <li>Forcing <strong>conditions</strong> to <code>true</code> or <code>false</code></li>
-              <pre><code class="JavaScript">function div (a, b) {
-  if (true) {
-    throw new Error('Do not divide by 0');
+}
+```
+
+And the **test code** :
+
+```JavaScript
+assert.throws(() => div(1,0));
+assert.notEqual(div(1,2), 0);
+```
+
+Code **coverage** is **100%**
+
+---
+
+#### What does it **really** mean ?
+
+✔️ All statements are **evaluated during** the tests.
+
+❌ It does **not** guarantee that the code was **thoroughly checked**.
+
+---
+
+#### In the **example**
+
+```JavaScript
+assert.throws(() => div(1,0));
+```
+
+* The exception is not **validated** *(type and message)*,
+
+```JavaScript
+assert.notEqual(div(1,2), 0);
+```
+
+* The result is not **compared** with any **meaningful** value.
+
+---
+
+### What is **mutation** testing ?
+
+For each **covered statement** :
+
+* The source code is modified with a single **mutation** to generate a **mutant**,
+
+* The tests are **executed** to check if they **still pass**.
+
+If a mutant **survives** the tests, a **defect** is **not detected** !
+Meaning tests are **incomplete**.
+
+---
+
+#### Examples of **mutations** (1/2)
+
+* **Removing** a statement
+
+  ```JavaScript
+  function div (a, b) {
+    if (b === 0) {}
+    return a / b;
   }
-  return a / b;
-}</code></pre>
-            </ul>
-          </section>
-          <section>
-            <h4>Examples of <strong>mutations</strong> (2/2)</h4>
-            <ul>
-              <li>Changing <strong>operators</strong></li>
-              <pre><code class="JavaScript">function div (a, b) {
-  if (b === 0) {
-    throw new Error('Do not divide by 0');
+  ```
+
+* Forcing **conditions** to `true` or `false`
+
+  ```JavaScript
+  function div (a, b) {
+    if (true) {
+      throw new Error('Do not divide by 0');
+    }
+    return a / b;
   }
-  return a * b;
-}</code></pre>
-              <li>Changing <strong>static content</strong> <i>(strings, numbers...)</i></li>
-              <pre><code class="JavaScript">function div (a, b) {
-  if (b === 0) {
-    throw new Error('I am a mutant');
+  ```
+
+---
+
+#### Examples of **mutations** (2/2)
+
+* Changing **operators**
+
+  ```JavaScript
+  function div (a, b) {
+    if (b === 0) {
+      throw new Error('Do not divide by 0');
+    }
+    return a * b;
   }
-  return a / b;
-}</code></pre>
-            </ul>
-          </section>
-          <section>
-            <h4>Mutation <strong>report</strong> and <strong>score</strong></h4>
-            <p>
-              A report details, for each source, the <strong>generated mutants</strong> and their associated <strong>tests result</strong>.<br/>
-              <small>(killed, survived or timed out)</small>
-            </p>
-            <br/>
-            <p>
-              The <strong>mutation score</strong> evaluates the <strong>percentage</strong> of mutants <strong>detected</strong> during the process :<br/>
-              the <strong>highest</strong> the value, the <strong>better</strong> the tests.<br/>
-              <small>(timed out usually means detected)</small>
-            </p>
-          </section>
-          <section>
-            <h4><strong>Benefits</strong> and <strong>drawbacks</strong></h4>
-            <ul>
-              <li>✔️ <strong>Automatically</strong> measure the quality <strong>&</strong> relevance of the tests,</li>
-              <li>✔️ <strong>Increase</strong> the code quality and robustness.</li>
-              <br/>
-              <li>❌ <strong>Consume</strong> resources (time / CPU / storage),<br/><small>Do not automate in the CI/CD pipeline</small></small></li>
-              <li>❌ <strong>Must</strong> be limited to <strong>unit tests</strong>.<br/><small>With proper isolation from external dependencies</small></li>
-            </ul>
-          </section>
-          <section>
-            <h4>Want to know <strong>more</strong> ?</h4>
-            <ul>
-              <li><a href="https://en.wikipedia.org/wiki/Mutation_testing">Mutation testing on wikipedia</a></li>
-              <li><a href="https://medium.com/digio-australia/introduction-to-mutation-testing-with-stryker-1338451ad4e5">Introduction to Mutation Testing with Stryker</a></li>
-              <li><a href="https://stryker-mutator.io/docs/stryker-js/introduction/">Stryker Mutator</a></li>
-              <li><a href="https://github.com/ArnaudBuchholz/reserve">REserve</a> mutation testing <a href="https://arnaudbuchholz.github.io/decks/WUC/mutation_testing/reserve.html">report</a></li>
-            </ul>
-          </section>
-        </section>
-      </div>
-    </div>
-    <script src="/gpf/last/gpf.js"></script>
-    <script src="deck.js"></script>
-  </body>
-</html>
+  ```
+
+* Changing **static content** *(strings, numbers...)*
+
+  ```JavaScript
+  function div (a, b) {
+    if (b === 0) {
+      throw new Error('I am a mutant');
+    }
+    return a / b;
+  }
+  ```
+
+#### Mutation **report** and **score**
+
+A report details, for each source, the **generated mutants** and their associated **tests result** *(killed, survived or timed out)*.
+
+
+The **mutation score** evaluates the **percentage** of mutants **detected** during the process :
+the **highest** the value, the **better** the tests.
+
+*(timed out usually means detected)*
+
+---
+
+#### **Benefits** and **drawbacks**
+
+* ✔️ **Automatically** measure the quality **and** relevance of the tests,
+* ✔️ **Increase** the code quality and robustness.
+* ❌ **Consume** resources *(time / CPU / storage, do not automate in the CI/CD pipeline)*,
+* ❌ **Must** be limited to **unit tests** with proper isolation from external dependencies.
+
+---
+
+### Want to know **more** ?
+
+* [Mutation testing on wikipedia](https://en.wikipedia.org/wiki/Mutation_testing)
+* [Introduction to Mutation Testing with Stryker](https://medium.com/digio-australia/introduction-to-mutation-testing-with-stryker-1338451ad4e5)
+* [Stryker Mutator](https://stryker-mutator.io/docs/stryker-js/introduction/)
+* [REserve](https://github.com/ArnaudBuchholz/reserve) mutation testing [report](https://arnaudbuchholz.github.io/decks/WUC/mutation_testing/reserve.html)
+
+-->
+<script src="WUC_markdown.js"></script>
