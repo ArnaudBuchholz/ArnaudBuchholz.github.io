@@ -14,6 +14,16 @@
   const markdown = document.createElement('template')
   markdown.innerHTML = marked.parse(source)
 
+  const settings = {};
+  const settingsTable = markdown.content.querySelector('table')
+  settingsTable.parentNode.removeChild(settingsTable)
+  for (const tr of settingsTable.querySelectorAll('tr')) {
+    const [key, value] = tr.querySelectorAll('td')
+    if (key && value) {
+      settings[key.innerText] = value.innerHTML
+    }
+  }
+
   const sections = document.createElement('template')
 
   let mainSection = sections.content.appendChild(document.createElement('section'));
@@ -46,6 +56,18 @@
     .replaceAll('</head>', '</div>')
     .replaceAll('<body>', '<div id="body">')
     .replaceAll('</body>', '</div>')
+
+  if (settings.title) {
+    const h3 = wuc.content.querySelector('h3')
+    h3.innerHTML = settings.title
+    wuc.content.querySelector('meta[name=description]').setAttribute('content', '☕ ' + h3.innerText)
+  }
+  const metaDuration = wuc.content.querySelector('meta[name=deck-duration]')
+  if (settings.duration) {
+    metaDuration.setAttribute('content', settings.duration)
+  } else {
+    metaDuration.parentNode.removeChild(metaDuration)
+  }
 
   const links = wuc.content.querySelectorAll('link')
   const cssHrefs = []
