@@ -10,9 +10,9 @@
 Every algorithm needs a **context**,<br>
 it may come from :
 
-* An inbound HTTP request
-* An incoming Pub/Sub message
-* A command line parameters
+* An inbound **HTTP request**
+* An incoming **Pub/Sub message**
+* **Command line** parameters
 * ...
 
 ---
@@ -46,11 +46,15 @@ async function validateOrder(
 - ❌ Context **parameters** are passed through **every** function
 - ❌ Function **signatures** become **bloated**
 - ❌ It's easy to **forget** passing context down
-- ❌ It's hard to add **new** context values<br><small>*(change all intermediate functions !)*</small>
+- ❌ It's hard to add **new** context values<br><small>*as it means changing all intermediate functions !*</small>
+
+<small>💡 *Passing one huge object through all fonctions (like the `request` object)<br>is **not** a solution.*</small>
 
 ---
 
-### The Solution: **Forwarded** context
+### **Forwarded** context
+
+What if we could access the context<br>**without** passing it ?
 
 ```TypeScript
 async function processOrder(orderId: string) {
@@ -68,7 +72,8 @@ async function validateOrder(orderId: string) {
 
 ### `AsyncLocalStorage`
 
-Node.js provides [`AsyncLocalStorage`](https://nodejs.org/api/async_context.html), a sort of "thread-local storage" for **async** operations.
+Node.js' [`AsyncLocalStorage`](https://nodejs.org/api/async_context.html) is like a *"thread-local storage"*
+for **async** *and* **sync** operations.
 
 ```TypeScript
 import { AsyncLocalStorage } from 'node:async_hooks';
@@ -98,7 +103,7 @@ import type { Context } from 'Context.js';
 const storage = new AsyncLocalStorage<Context>();
 
 /** throws if no context exists */
-export const getContextStore = () => {
+export const getContextStore = (): Context => {
   const store = storage.getStore();
   if (!store) {
     throw new Error('No context available !');
@@ -106,14 +111,14 @@ export const getContextStore = () => {
   return store;
 };
 
-export const getContextAsyncLocalStorage = () => storage;
+export const getContextManager = () => storage;
 ```
 
 ---
 
 #### Pattern Architecture (2/3) : Context **Setter**
 
-A middleware **sets** the context at the beginning of each request.
+A middleware **sets** the context<br>at the **beginning** of each inbound request.
 
 ```TypeScript
 app.use((req, res, next) => {
@@ -121,9 +126,9 @@ app.use((req, res, next) => {
     customerId: extractCustomerId(req),
     correlationId: req.headers['x-correlation-id'],
   };
-  
-  // Everything inside this callback has access to context
-  getContextAsyncLocalStorage().run(context, () => {
+
+  getContextManager().run(context, () => {
+    // Everything inside this callback has access to context
     next();
   });
 });
@@ -133,16 +138,11 @@ app.use((req, res, next) => {
 
 #### Pattern Architecture (3/3) : Context **Getters**
 
-```TypeScript
-export const getCustomerId = (): number => {
-  const { customerId } = getContextStore();
-  return customerId;
-};
+As `getContextStore()` throws when context is missing, the getters are **easy** to write :
 
-export const getCorrelationId = (): string => {
-  const { correlationId } = getContextStore();
-  return correlationId;
-};
+```TypeScript
+export const getCustomerId = () => getContextStore().customerId;
+export const getCorrelationId = () => getContextStore().correlationId;
 ```
 
 ---
@@ -151,7 +151,208 @@ export const getCorrelationId = (): string => {
 
 - ✅ **Centralized** context handling
 - ✅ **Efficient** with small **digital footprint**
+- ❌ **Must** use `AsyncLocalStorage` for all use case
 - ❌ Hard to **mock** and **test**
+
+---
+
+### **Simple** Use Case
+
+When dealing with command lines,<br>it *should* not be so **complicated**.
+
+```TypeScript
+const context = {
+  customerId: getCustomerIdFromCmdLine(),
+  correlationId: '', // This is not even used !
+};
+
+getContextManager().run(context, () => {
+  executeCmdLine()
+});
+```
+
+---
+
+### Context **Container** 
+
+A layer of **abstraction** to **access** the context.
+
+```TypeScript
+class ContextContainer {
+  static _customerIdProvider?: () => number;
+  static registerCustomerIdProvider(provider: () => number) {
+    this._customerIdProvider = provider;
+    return Registry; // Enable chaining
+  }
+  static getCustomerId(): number {
+     if (!this._customerIdProvider) {
+      throw new Error('No customer ID provider registered');
+    }
+    return provider();
+  }
+  
+  // same pattern for correlationId
+}
+```
+
+---
+
+#### Usage
+
+Usage remains *almost* the **same**.
+
+```TypeScript
+async function processOrder(orderId: string) {
+  logEvent(
+    'Processing order',
+    ContextContainer.getCustomerId(),
+    ContextContainer.getCorrelationId()
+  );
+  await validateOrder(orderId);
+  // ... more calls
+}
+```
+
+---
+
+#### Setup (1/2)
+
+But it requires a **setup**,<br>for instance when using the middleware :
+
+```TypeScript
+// Before starting the server
+ContextContainer
+  .registerCustomerIdProvider(getCustomerId)
+  .registerCorrelationIdProvider(getCorrelationId);
+```
+
+---
+
+#### Setup (2/2)
+
+And for the **command line** use case :
+
+```TypeScript
+const customerId = getCustomerIdFromCmdLine()
+ContextContainer
+  .registerCustomerIdProvider(() => customerId));
+// No need to care about correlationId or wrap the following with run
+executeCmdLine()
+```
+
+---
+
+#### PROs/CONs
+
+- ✅ Removes the need for `AsyncLocalStorage` for simple use cases
+- ✅ Simplifies tests by registering test providers
+- ❌ Requires setup
+- ❌ Can not mix use cases (unless you create complex providers)
+
+---
+
+### Mixing Use Case (1/2)
+
+A service *may* handle **both** inbound requests and PubSub messages.
+
+```TypeScript
+// Global setup because of the middleware
+ContextContainer
+  .registerCustomerIdProvider(getCustomerId)
+  .registerCorrelationIdProvider(getCorrelationId);
+```
+
+---
+
+#### Mixing Use Case (2/2)
+
+Because providers are **global**,<br>the PubSub message is **enclosed** within :
+
+```TypeScript
+async function onIncomingPubSubMessage (message: PubSubMessage) {
+  const context = {
+    customerId: extractCustomerId(message),
+    correlationId: extractCorrelationId(message),
+  };
+
+  await getContextManager().run(context, () => {
+    handlePubSubMessage(message);
+  });
+});
+```
+
+---
+
+### ContextContainer.**runWith**
+
+What if we could **temporarily override** the providers for a **given call chain** ?
+something like :
+
+```TypeScript
+async function onIncomingPubSubMessage (message: PubSubMessage) {
+  ContextContainer.runWith({
+    customerId: () => extractCustomerId(message),
+    correlationId: () => extractCorrelationId(message), 
+  }, () => handlePubSubMessage(message))
+});
+```
+
+Looks **familiar** ?
+
+---
+
+#### Using `AsyncLocalStorage` within `ContextContainer` (1/2)
+
+```TypeScript
+class ContextContainer {
+  static async runWith (
+    providers: Providers,
+    callback: callback: () => void | Promise<void>
+  ) {
+    const storage = getRunWithManager();
+    await storage.run(providers, callback);
+  }
+  /* ... */
+}
+```
+
+<small>💡 `Providers` type members *may* be optional *(i.e. setting `customerId` only)*</small>
+
+---
+
+#### Using `AsyncLocalStorage` within `ContextContainer` (2/2)
+
+```TypeScript
+class ContextContainer {
+  static getCustomerId(): number {
+    const store = getRunWithManager().getStore();
+    if (store?.customerId) {
+      return store?.customerId();
+    }
+    if (!this._customerIdProvider) {
+      throw new Error('No customer ID provider registered');
+    }
+    return provider();
+  }
+  /* ... */
+}
+```
+
+---
+
+#### PROs/CONs
+
+- ✅ Enables **mixing** of use cases in a **flexible** way
+- ❌ Makes the `ContainerContext` implementation more **complex**
+- ❌ Must **secure** this mechanism against **uncontrolled nested** calls
+
+---
+
+### Key **Take-Aways**
+
+- Context handled by a **central** manager
+- Foster **reusability** of codebase<br><small>*(same function can be used in different scenarios)*</small>
+- Improves **testability**
 
 -->
 <script src="WUC_markdown.js"></script>
