@@ -44,7 +44,7 @@ async function validateOrder(
 #### The **Problems**
 
 - ❌ Context **parameters** are passed through **every** function
-- ❌ Function **signatures** become **bloated**
+- ❌ Function **signatures** become **bloated**, increasing the **cognitive** complexity<br><small>*The developper may hardcode values not knowing what to pass*</small>
 - ❌ It's easy to **forget** passing context down
 - ❌ It's hard to add **new** context values<br><small>*as it means changing all intermediate functions !*</small>
 
@@ -218,6 +218,11 @@ async function processOrder(orderId: string) {
 #### Setup (1/2)
 
 But it requires a **setup**,<br>for instance when using the middleware :
+
+```TypeScript
+export const getCustomerId = () => getContextStore().customerId;
+export const getCorrelationId = () => getContextStore().correlationId;
+```
 
 ```TypeScript
 // Before starting the server
