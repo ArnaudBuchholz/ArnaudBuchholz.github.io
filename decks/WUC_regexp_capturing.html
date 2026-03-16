@@ -1,143 +1,104 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="description" content="☕ Regular expressions">
-    <meta name="author" content="Arnaud Buchholz">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-    <meta name="deck-duration" content="5">
-    <meta name="deck-theme" content="night">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" type="text/css" href="WUC/styles.css">
-  </head>
-  <body>
-    <div class="reveal">
-      <div class="slides">
-        <section>
-          <section>
-            <table>
-              <tr>
-                <td width="50%">
-                  <div>
-                    <img src="WUC/logo.jpg" style="margin: 0; border: 0; box-shadow: unset; border-radius: 16px;"></img>
-                  </div>
-                </td>
-                <td style="vertical-align: top;">
-                  <h3>Regular <strong>expressions</strong> &amp; <strong>capturing</strong> groups</h3>
-                  <div>
-                    <small>
-                      While you <strong>caffeinate</strong> serie<br/>
-                      Offered by ☕ Arnaud <strong>Buchholz</strong>
-                    </small>
-                    <div class="social">
-                      <a href="https://ca.linkedin.com/in/arnaudbuchholz"><img src="/gfx/LinkedIn.png" /></a>
-                      <a href="https://github.com/ArnaudBuchholz"><img src="/gfx/GitHub.png" /></a>
-                      <a href="http://gpf-js.blogspot.com"><img src="/gfx/Blogger.png" /></a>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </section>
-          <section>
-            <p>
-              <q>Regular expressions are only for <strong>matching</strong> strings</q><br/>
-              is a common <strong>misconception</strong>.
-            </p>
-            <br/>
-            <p>
-              It is a <strong>powerful</strong> too that
-              can also <strong>extract</strong> values from the matched string.
-            </p>
-            <br />
-            <p>
-              Regular expressions <strong>and</strong> capturing groups are tightly <strong>integrated</strong>
-              with the JavaScript language.
-            </p>
-          </section>
-          <section>
-            <h4>What is a <strong>capturing</strong> group ?</h4>
-            <p>
-              A pair of <strong>parenthesis</strong>* define a capturing group.
-            </p>
-            <pre><code class="JavaScript">const imageDescription = 'Image resolution is 1440×900 pixels.';
-const regexpSize = /([0-9]+)x([0-9]+)/;
+<meta charset="utf-8">
+<!--
+|key|value|
+|---|---|
+|title|Regular **expressions** &amp; **capturing** groups|
+
+*"Regular expressions are **only** for **matching** strings"*
+
+is a common **misconception**.
+
+<br/>
+
+It is a **powerful** too that
+can also **extract** values from the matched string.
+
+<br/>
+
+Regular expressions **and** capturing groups are tightly **integrated**
+with the JavaScript language.
+
+---
+
+### What is a **capturing** group ?
+
+A pair of **parenthesis** define a capturing group.
+
+```JavaScript
+const imageDescription = 'Image resolution is 1440×900 pixels.';
+const regexpSize = /(\d+)×(\d+)/;
 const match = imageDescription.match(regexpSize);
 console.log(`Width: ${match[1]} / Height: ${match[2]}.`);
-// expected output: "Width: 1440 / Height: 900."</code></pre>
-            <br/>
-            <small><p>
-              <b>NOTE : </b> to capture a <strong>repeated</strong> pattern,
-              make sure the repetition is <strong>enclosed</strong> inside
-              parenthesis or the regexp captures only the <strong>last</strong> occurrence.
-            </p></small>
-            <br/>
-            <small><p>
-              * The specific syntax <code>(?: )</code> defines a <strong>non-capturing</strong> group.
-            </p></small>
-          </section>
-          <section>
-            <p>
-              The result of a match is an <strong>array-like</strong> where :
-              <pre><code class="JavaScript">[
-  '1440x900',
-  '1440',
-  '900',
+// expected output: "Width: 1440 / Height: 900."
+```
+
+<small>[🧪 try it](https://regex101.com/r/00tSLd/1)</small>
+
+<small>💡 to capture a **repeated** pattern,
+make sure the repetition is **enclosed** inside
+parenthesis or the regexp captures only the **last** occurrence.
+</small>
+
+---
+
+The result of a match is an **array-like** object :
+
+```JavaScript
+{
+  '0': '1440x900',
+  '1': '1440',
+  '2': '900',
   index: 31,
   input: 'This image has a resolution of 1440x900 pixels.'
-]</code></pre>
-              <ul>
-                <li><code>match[0]</code> contains the matching string,</li>
-                <li><code>match[1]</code> contains the value of the <strong>first</strong> capturing group,</li>
-                <li><code>match[2]</code> contains the value of the <strong>second</strong> capturing group,</li>
-                <li>...</li>
-              </ul>
-            </p>
-          </section>
-          <section>
-            <h4>string.<strong>replace</strong></h4>
-            <p>
-              Used with a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_function_as_the_replacement">replacer function</a>,
-              the capturing group values are provided as <strong>additional parameters</strong>.
-            </p>
-            <pre><code class="JavaScript">// <h1>Title</h1> => <div class="h1">Title</div>
+}
+```
 
-html.replace(/&lt;(h\d)>([^&lt;]*)&lt;\/h\d>/ig, (match, titleTag, content) =>
-  `&lt;div class="${titleTag}">${content}&lt;/div>`
-);</code></pre>
-            <p><small><a href="https://regex101.com/r/BRStjr/1">Regular expression explanation and matching example</a></small></p>
-          </section>
-          <section>
-            <h4>string.<strong>split</strong></h4>
-            <p>
-              The resulting array<br/><strong>includes</strong> the capturing group values.
-            </p>
-            <pre><code class="JavaScript">// Extracting all vowels from a string
+* `match[0]` contains the matching string,
+* `match[1]` contains the value of the **first** capturing group,
+* `match[2]` contains the value of the **second** capturing group,</li>
+* ...
 
+---
+
+### String.**replaceAll**
+
+Used with a [replacer function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_function_as_the_replacement),
+the capturing group values are provided as **additional parameters**.
+
+```JavaScript
+// <h1>Title</h1> => <div class="h1">Title</div>
+
+html.replaceAll(
+  /&lt;(h\d)>([^<]*)<\/h\d>/ig,
+  (match, titleTag, content) =>
+    `<div class="${titleTag}">${content}</div>`
+);
+```
+
+<small>[🧪 try it](https://regex101.com/r/BRStjr/1)</small>
+
+---
+
+#### String.**split**
+
+The resulting array<br/>**includes** the capturing group values.
+
+```JavaScript
 "Arnaud was here".split(/[aeiouy]+/i); // no capturing group
 // [ '', 'rn', 'd w', 's h', 'r', '' ]
 
-"Arnaud was here".split(/([aeiouy]+)/i); // captures vowels
+"Arnaud was here".split(/([aeiouy]+)/i); // keeps vowels
 // [ '', 'A', 'rn', 'au', 'd w', 'a', 's h', 'e', 'r', 'e', '']
+```
 
-"Arnaud was here".split(/([aeiouy]+)/i).filter((_, pos) => pos % 2);
-// [ 'A', 'au', 'a', 'e', 'e' ] ✌</code></pre>
-          </section>
-          <section>
-            <h4>Want to know <strong>more</strong> ?</h4>
-            <ul>
-              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">MDN RegExp</a></li>
-              <li><a href="https://regex101.com/">RegEx101</a><br/>
-                <small>Make sure to select the <strong>ECMAScript</strong> flavor</small>
-              </li>
-            </ul>
-          </section>
-        </section>
-      </div>
-    </div>
-    <script src="/gpf/last/gpf.js"></script>
-    <script src="deck.js"></script>
-  </body>
-</html>
+---
+
+### Want to know **more** ?
+
+* [MDN RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+* [RegEx101](https://regex101.com/)<br/>
+  <small>Make sure to select the **ECMAScript** flavor</small>
+
+-->
+<script src="WUC_markdown.js"></script>
