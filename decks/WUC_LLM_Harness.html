@@ -23,11 +23,11 @@
 
 > <small>The model is doing pattern completion over text, **not** retrieving facts from a database or thinking like a human.</small>
 
-![Google Example](https://thunderdungeon.com/wp-content/uploads/2025/12/funny-google-searches-11-12-27-2025.jpg)
+![Google example of statistical text](https://thunderdungeon.com/wp-content/uploads/2025/12/funny-google-searches-11-12-27-2025.jpg)
 
 ---
 
-#### Why it feels Conversational ?
+#### Why it feels conversational ?
 
 - It follows patterns in the **prompt**
 - It **imitates** dialogue structure
@@ -50,7 +50,7 @@
 #### Context Window
 
 - The model can only see a **limited** amount at once
-- Older context **can** be dropped
+- Older context **can** be dropped *(by the caller)*
 - What is **included** matters
 
 > <small>This is why long conversations degrade and why summarization, retrieval, and prompt design matter.</small>
@@ -110,9 +110,9 @@ Everything **around** the model that makes it **useful**: orchestration, memory,
 
 #### MCP and skills
 
-Both are ways to wrap **useful capability** around the model:
-- **MCP**: a standard way to expose capabilities
-- **Skills**: packaged task behaviors or reusable workflows
+Both are **standardized** ways to wrap **useful capability** around the model:
+- **MCP**: a standard way to expose capabilities<br><small>Learn more : [Model Context Protocol](https://modelcontextprotocol.io)</small>
+- **Skills**: packaged task behaviors or reusable workflows<br><small>Learn more : [Agent Skills](https://agentskills.io)</small>
 
 ---
 
