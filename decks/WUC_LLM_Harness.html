@@ -5,9 +5,134 @@
 |---|---|
 |title|**LLM** and **Harness**|
 
-LLMs are pure word probability machines
-(Show google with what is an LLM)
+### Goal of this presentation
 
-https://www.mindstudio.ai/blog/what-is-agent-harness-architecture-explained
+- LLMs are powerful, but **incomplete** on their own
+- Real products need **structure** around the model
+- That structure is the **harness**
+
+> <small>The important shift is from “chatting with a model” to “building a system”. The model is only **one** part of the experience.</small>
+
+---
+
+#### What is an LLM ?
+
+- A **statistical** text generator
+- **Predicts** the next **token**
+- Produces useful text, **not** guaranteed truth
+
+> <small>The model is doing pattern completion over text, **not** retrieving facts from a database or thinking like a human.</small>
+
+![Google Example](https://thunderdungeon.com/wp-content/uploads/2025/12/funny-google-searches-11-12-27-2025.jpg)
+
+---
+
+#### Why it feels Conversational ?
+
+- It follows patterns in the **prompt**
+- It **imitates** dialogue structure
+- It adapts to tone, format, instructions and **context**
+
+> <small>The conversational feeling comes from **strong** language patterning. It looks like memory and reasoning, but it’s really text continuation guided by context.</small>
+
+---
+
+#### Statelessness
+
+- The model does **not** remember past chats by itself
+- Each response depends on the **current** input
+- The application **must** resend relevant history
+
+> <small>This is one of the most important concepts. The application, not the model, provides **continuity**.</small>
+
+---
+
+#### Context Window
+
+- The model can only see a **limited** amount at once
+- Older context **can** be dropped
+- What is **included** matters
+
+> <small>This is why long conversations degrade and why summarization, retrieval, and prompt design matter.</small>
+
+---
+
+#### Prompt Anatomy
+
+- **System** message: highest-level instructions
+- **User** message: the task
+- **Context**: docs, history, examples, constraints, tools
+
+> <small>A prompt is **more** than a question. It is the **control surface** for the model.</small>
+
+---
+
+#### Light Prompt Engineering
+
+- Be explicit about **role** and **goal**
+- Specify **constraints** and **output format**
+- Use examples **when** useful
+- Ask for structured output **when** needed
+
+> <small>This is not magic wording. It’s just clearer instruction design for a probabilistic system.</small>
+
+---
+
+#### Where raw LLMs break down
+
+- They can **hallucinate**
+- They don’t know **fresh data** unless provided
+- They **can’t act** on external systems by themselves
+- They are **inconsistent** without **guardrails**
+
+> <small>This creates the need for the harness. The model is strong at language, weak at dependable execution.</small>
+
+---
+
+#### The harness concept
+
+Everything **around** the model that makes it **useful**: orchestration, memory, tools, routing, observability...
+
+> <small>The harness is the **product** layer around the model. It turns a language engine into a working application.</small>
+
+---
+
+#### Tools and function calling
+
+- The model can indicate it **needs** help
+- It outputs a **structured** request
+- The harness **executes** the function
+- The result is **passed back** to the model
+
+> <small>The model does not directly call tools. The harness interprets the request, runs the function, and feeds the result back.</small>
+
+---
+
+#### MCP and skills
+
+Both are ways to wrap **useful capability** around the model:
+- **MCP**: a standard way to expose capabilities
+- **Skills**: packaged task behaviors or reusable workflows
+
+---
+
+#### Practical mental model
+
+- LLM: language and reasoning engine
+- Prompts: instruction interface
+- Harness: application logic and execution layer
+- Tools: access to the outside world
+
+> <small>This is the main takeaway. The model is the core, but the harness is what makes it usable in a real product.</small>
+
+---
+
+#### Conclusion
+
+- LLMs are **not** products by themselves
+- The harness turns them into products
+- Good AI apps are mostly architecture, **not** just prompts
+
+> <small>The value is in the system around the model.</small>
 -->
 <script src="WUC_markdown.js"></script>
