@@ -30,14 +30,14 @@
 #### Why it feels conversational ?
 
 - It follows patterns in the **prompt**
-- It **imitates** dialogue structure
+- It **mimics** dialogue structure
 - It adapts to tone, format, instructions and **context**
 
 > <small>The conversational feeling comes from **strong** language patterning. It looks like memory and reasoning, but it’s really text continuation guided by context.</small>
 
 ---
 
-#### Statelessness
+#### Stateless
 
 - The model does **not** remember past chats by itself
 - Each response depends on the **current** input
@@ -53,7 +53,7 @@
 - Older context **can** be dropped *(by the caller)*
 - What is **included** matters
 
-> <small>This is why long conversations degrade and why summarization, retrieval, and prompt design matter.</small>
+> <small>This is why **long** conversations **degrade** and why summarization, retrieval, and prompt design matter.</small>
 
 ---
 
@@ -74,7 +74,7 @@
 - Use examples **when** useful
 - Ask for structured output **when** needed
 
-> <small>This is not magic wording. It’s just clearer instruction design for a probabilistic system.</small>
+> <small>This is not magic wording. It’s just clearer **instruction design** for a probabilistic system.</small>
 
 ---
 
@@ -85,7 +85,7 @@
 - They **can’t act** on external systems by themselves
 - They are **inconsistent** without **guardrails**
 
-> <small>This creates the need for the harness. The model is strong at language, weak at dependable execution.</small>
+> <small>This creates the **need** for the harness. The model is strong at language, weak at **dependable** execution.</small>
 
 ---
 
@@ -93,46 +93,46 @@
 
 Everything **around** the model that makes it **useful**: orchestration, memory, tools, routing, observability...
 
-> <small>The harness is the **product** layer around the model. It turns a language engine into a working application.</small>
+> <small>The harness is the **product** layer around the model. It turns a language engine into a **working** application.</small>
 
 ---
 
 #### Tools and function calling
 
-- The model can indicate it **needs** help
+- The model can detect and signal it **needs** help
 - It outputs a **structured** request
 - The harness **executes** the function
 - The result is **passed back** to the model
 
-> <small>The model does not directly call tools. The harness interprets the request, runs the function, and feeds the result back.</small>
+> <small>The model does not directly **call** tools. The **harness** interprets the request, runs the function, and feeds the result back.</small>
 
 ---
 
 #### MCP and skills
 
 Both are **standardized** ways to wrap **useful capability** around the model:
-- **MCP**: a standard way to expose capabilities<br><small>Learn more : [Model Context Protocol](https://modelcontextprotocol.io)</small>
+- **MCP**: a standard way for external systems to expose capabilities<br><small>Learn more : [Model Context Protocol](https://modelcontextprotocol.io)</small>
 - **Skills**: packaged task behaviors or reusable workflows<br><small>Learn more : [Agent Skills](https://agentskills.io)</small>
 
 ---
 
 #### Practical mental model
 
-- LLM: language and reasoning engine
-- Prompts: instruction interface
-- Harness: application logic and execution layer
-- Tools: access to the outside world
+- **LLM**: language and reasoning engine
+- **Prompts**: instruction interface
+- **Harness**: application logic and execution layer
+- **Tools**: access to the outside world
 
-> <small>This is the main takeaway. The model is the core, but the harness is what makes it usable in a real product.</small>
+> <small>This is the main takeaway. The model is the **core**, but the harness is what makes it **usable** in a **real product**.</small>
 
 ---
 
 #### Conclusion
 
 - LLMs are **not** products by themselves
-- The harness turns them into products
-- Good AI apps are mostly architecture, **not** just prompts
+- The harness **turns** them into products
+- Good AI apps are mostly **architecture**, not just prompts
 
-> <small>The value is in the system around the model.</small>
+> <small>The value is in the system **around** the model.</small>
 -->
 <script src="WUC_markdown.js"></script>
