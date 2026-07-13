@@ -33,14 +33,14 @@
 - It **mimics** dialogue structure
 - It adapts to tone, format, instructions and **context**
 
-> <small>The conversational feeling comes from **strong** language patterning. It looks like memory and reasoning, but it’s really text continuation guided by context.</small>
+> <small>The conversational feeling comes from **strong** language patterning. It **looks like** memory and reasoning, but it’s really **text continuation** guided by context.</small>
 
 ---
 
 #### Stateless
 
 - The model does **not** remember past chats by itself
-- Each response depends on the **current** input
+- Each response depends on the **conversation content**
 - The application **must** resend relevant history
 
 > <small>This is one of the most important concepts. The application, not the model, provides **continuity**.</small>
@@ -49,7 +49,7 @@
 
 #### Context Window
 
-- The model can only see a **limited** amount at once
+- The model can only process a **limited** amount of content at once
 - Older context **can** be dropped *(by the caller)*
 - What is **included** matters
 
@@ -59,9 +59,9 @@
 
 #### Prompt Anatomy
 
-- **System** message: highest-level instructions
-- **User** message: the task
-- **Context**: docs, history, examples, constraints, tools
+- **System** instructions: context with the **highest** precedence<br><small>*(May contain docs, history, examples, constraints, ...)*</small>
+- **User** instructions: the **task** / **intent**
+- **Tools**: functions to be **called** by the model
 
 > <small>A prompt is **more** than a question. It is the **control surface** for the model.</small>
 
@@ -85,7 +85,7 @@
 - They **can’t act** on external systems by themselves
 - They are **inconsistent** without **guardrails**
 
-> <small>This creates the **need** for the harness. The model is strong at language, weak at **dependable** execution.</small>
+> <small>This creates the **need** for the harness. The model is strong at natural language processing, weak at **reliable** task completion.</small>
 
 ---
 
@@ -93,13 +93,13 @@
 
 Everything **around** the model that makes it **useful**: orchestration, memory, tools, routing, observability...
 
-> <small>The harness is the **product** layer around the model. It turns a language engine into a **working** application.</small>
+> <small>The harness is the **product** layer around the model. It turns a natural language processing engine into a **working** application.</small>
 
 ---
 
 #### Tools and function calling
 
-- The model can detect and signal it **needs** help
+- The model can **map** user intention to available tools and **signal** it needs to call it
 - It outputs a **structured** request
 - The harness **executes** the function
 - The result is **passed back** to the model
@@ -121,9 +121,9 @@ Both are *almost* **standardized** ways to wrap **useful capability** around the
 - **LLM**: language and reasoning engine
 - **Prompts**: instruction interface
 - **Harness**: application logic and execution layer
-- **Tools**: access to the outside world
+    - **Tools**: access to the outside world
 
-> <small>This is the main takeaway. The model is the **core**, but the harness is what makes it **usable** in a **real product**.</small>
+> <small>This is the main takeaway. The model is the **brain**, but the harness is what makes it **usable** in a **real product**.</small>
 
 ---
 
