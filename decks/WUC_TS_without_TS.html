@@ -1,0 +1,193 @@
+<!doctype html>
+<meta charset="utf-8">
+<!--
+|key|value|
+|---|---|
+|title|TypeScript **without** TypeScript|
+
+### Overview
+
+**Running** TypeScript source in Node with **zero transpilation** during **development**.
+
+Reasons :
+
+* **Faster** code to test path
+* 🚫 Worker **threads**
+
+---
+
+#### Context
+
+[`ui5-test-runner`](https://github.com/ArnaudBuchholz/ui5-test-runner) is an old project **initially** developped with JavaScript
+
+Huge **rewrite** because of many issues :
+
+* Maintainability
+* Troubleshooting
+* Browsers evolution
+* Performance
+* ...
+
+---
+
+#### Classic TypeScript Development Loop
+
+- `tsc --watch` → a `dist/` that can go stale, a second process to babysit
+- `ts-node` / `bundler-in-dev` → slower startup, source-map juggling to debug
+- Edit ➰ wait for rebuild ➰ run ➰ repeat
+
+---
+
+#### Expectations
+
+Edit a `.ts` file, run it, **done**.
+
+Split in the project:
+- **Local dev**: `npm run cli`
+- **Published package**: `tsc` emits `dist/`
+
+Same source. Two paths. The build step exists only for the **shipped** artifact.
+
+---
+
+### Node Type Stripping
+
+`--experimental-strip-types`
+<small>(stable-ish on Node 24, `.nvmrc` pins `v24.18.0`, `engines` requires `>=24.11.1`)</small>
+
+What Node does:
+
+* **Parse** the TypeScript
+* **Erase** the type annotations *in place*
+* **Run** the result as JavaScript.
+
+---
+
+#### Stripping
+
+The key word is **strip**, not **transform**:
+
+- Annotations are **blanked out**, character positions preserved
+- **No** source maps needed: line/column numbers already match
+- Stack traces point at the **real `.ts`** line
+
+```ts
+function greet(name: string): string {   // as written
+function greet(name        )         {   // what V8 runs
+```
+
+The type information **never** reaches runtime
+
+---
+
+#### ⚠️ Limits
+
+* Does **not** work with `imports`
+
+* Only **erasable** syntax
+
+---
+
+### `erasableSyntaxOnly`
+
+From `tsconfig.base.json`:
+
+```jsonc
+{
+  "erasableSyntaxOnly": true
+}
+```
+
+Type stripping only works if **every** TS construct can be **removed** by erasing text.
+
+---
+
+#### ⚠️ Limits
+
+Some TS features **emit runtime code** and cannot simply be stripped:
+
+- `enum`: generates an object
+- `namespace` with a body: generates an IIFE
+- parameter properties (`constructor(private x)`): generate assignments
+- decorators...
+
+`erasableSyntaxOnly` makes the compiler **reject** all of these.
+
+---
+
+### Node Module Hooks
+
+`src/platform/js2ts.mjs`, loaded via `--import` *before* anything else runs. It calls `registerHooks` from `node:module` with two hooks:
+
+**`resolve`** — rewrites `./foo.js` import specifiers to `./foo.ts` when a sibling `.ts` exists:
+
+```js
+// import written as "./foo.js"  →  resolved to "./foo.ts"
+```
+
+Why? The source always imports with `.js` specifiers — that's what the *compiled* `dist/` needs. The hook lets dev mode map those back to `.ts` on the fly. **One import style, both worlds.**
+
+**`load`** — reads the `.ts` and strips its types before handing it to V8:
+
+```js
+const jsSource = stripTypeScriptTypes(source, { mode: 'strip' });
+return { format: 'module', source: jsSource, shortCircuit: true };
+```
+
+This is the piece Node's flag alone doesn't give you — the `.js → .ts` resolution.
+
+---
+
+## How the pieces fit together
+
+```
+node --import js2ts.mjs  src/cli.ts
+          │                   │
+          │                   └── entry point (real .ts)
+          │
+          ├── resolve hook:  "./x.js"  →  "./x.ts"
+          └── load hook:     read .ts  →  stripTypeScriptTypes()  →  plain JS
+                                              │
+                                              └── V8 runs it. No build artifact.
+
+tsconfig  ──(never in the runtime path)──►  guardrail only:
+                                            type-checks + forbids non-erasable syntax
+```
+
+The compiler is the **safety net**; the hook + flag are the **runtime**. They never touch each other at dev time.
+
+---
+
+### Trade-offs
+
+- **Experimental flag** → paired with `--no-warnings` to keep output clean.
+- **No type checking at runtime.** Stripping ignores type errors entirely. Types are enforced separately by `npm run lint` → `tsc --build --noEmit`. The dev loop *trusts* the editor + CI for correctness; the runtime only needs valid JavaScript.
+- **The published package still uses real `tsc`** (`tsconfig.cli.json` → `dist/`). This technique is for the *dev loop*, not the shipped artifact.
+- **Node ≥ 24 only.** Not an option on older runtimes.
+- **Discipline tax:** you give up `enum`, runtime `namespace`, parameter properties. In practice: easy, and arguably better style.
+
+---
+
+### Takeaways
+
+**What you need:**
+- Node ≥ 24
+- `erasableSyntaxOnly: true` in tsconfig
+- A ~40-line module hook (`resolve` + `load`)
+
+**What you get:**
+- Instant edit → run, no rebuild
+- No build artifacts cluttering the dev loop
+- A single source of truth — the `.ts` file *is* the program
+
+> Types are a *compile-time* and *editor* concern. At runtime, well-written TypeScript is just JavaScript wearing annotations — so let Node take the annotations off and run it.
+
+---
+
+### Worker Threads
+
+To be able to start a worker thread, Node.js `Worker` class requires a bootstrap file.
+
+
+-->
+<script src="WUC_markdown.js"></script>
