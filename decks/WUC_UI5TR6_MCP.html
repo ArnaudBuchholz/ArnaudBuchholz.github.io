@@ -1,0 +1,108 @@
+<!doctype html>
+<meta charset="utf-8">
+<!--
+|key|value|
+|---|---|
+|title|**MCP** use in `ui5-test-runner` **@6**|
+
+### Context
+
+* `ui5-test-runner` **v6** release
+* **Complete** rewrite in TypeScript
+* Major **breaking** changes
+
+---
+
+#### RTFM 😅
+
+In the AI era,<br>users don't want to **read** documentation
+
+---
+
+#### Documentation 💡
+
+* Documentation is still **required**
+* **Organize** it to make it **compatible** with AI
+
+---
+
+### Documentation **Structure**
+
+* Options are **first designed** with documentation
+    * [`/add-option`](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/.claude/skills/add-option/SKILL.md) 🛠
+  * Example: [`--start`](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/docs/options/start.md)
+* **markdown** + **frontmatter**
+    * `keywords` + `relations`
+* [v5 options](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/docs/v5_options.md) are **still** documented
+    * `breaking-in: v6`
+
+---
+
+#### Architecture **Design** Records 🏗
+
+* These [documents](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/docs/adr/index.md) keep track of **architecture decisions**
+* They are **reviewed** in conjunction with documentation
+  * [`/doc-reviews`](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/.claude/skills/doc-review/SKILL.md) 🛠
+
+---
+
+### **Exposing** Documentation
+
+* Cannot just **point** to [`ui5-test-runner/docs`](https://github.com/ArnaudBuchholz/ui5-test-runner/tree/main/docs)
+* Cannot **embed** an LLM in the runner
+* Need to expose the **structure** and the **content**
+
+---
+
+#### Model **Context** Protocol
+
+* `ui5-test-runner --mcp`
+* _Simple_ [**web server**](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/src/modes/mcp/reserve.ts)
+* Only two tools
+  1. [`listTopics`](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/src/modes/mcp/tools/listTopics.ts) returns **structure**
+  2. [`getTopic`](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/src/modes/mcp/tools/getTopic.ts) returns **content**
+* ➕ [**Instructions**](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/src/modes/mcp/reserve.ts#L20) to make this documentation **authoritative**
+
+---
+
+#### Testing 🧪
+
+How do we **validate**<br>the structure **actually** works?
+
+---
+
+#### Question ➕ **Expected** Answers
+
+* [`test/mcp/cases/.../config.toml`](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/test/mcp/cases/migration/reportGenerator/config.toml)
+  * `[user]` question
+  * `[files]` **simulated** file system
+  * `[expected]` criteria to validate
+
+---
+
+#### **2x** Harness
+
+1. [`query`](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/test/mcp/query.ts) **answers** the question
+2. [`judge`](https://github.com/ArnaudBuchholz/ui5-test-runner/blob/main/test/mcp/judge.ts) **evaluates** the answer
+
+Generates a **report** 📃
+
+---
+
+#### Feedback **Loop**
+
+* `ui5-test-runner --mcp --watch`
+* `npm run test:mcp --repeat 5`
+* 🧠 "Fix test cases failing **more than once**"
+
+---
+
+### Take**aways**
+
+* Document **for the AI**, not **just** humans
+* Expose them over **MCP**, make them **authoritative**
+* Let an **LLM judge** prove they work
+* Use a **feedback loop** to **improve**
+
+-->
+<script src="WUC_markdown.js"></script>
